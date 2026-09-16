@@ -4,7 +4,7 @@
     {
       "name": "rmr-preview",
       "runtimeExecutable": "sh",
-      "runtimeArgs": ["-c", "python3 -m http.server \"${PORT:-4173}\" --directory '/Users/izage/rmResident Portal/rmr-tenant-portal'"],
+      "runtimeArgs": ["-c", "python3 -m http.server \"${PORT:-4173}\" --directory 'rmr-tenant-portal'"],
       "port": 4173,
       "autoPort": true
     }
