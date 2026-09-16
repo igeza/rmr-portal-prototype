@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>rmResident Portal — Example Prototype</title>
+<link rel="stylesheet" href="assets/rmr.css?v=32" />
+<style>
+  body { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+  .launcher { max-width: 560px; width: 100%; padding: var(--spacing-2xl); background: var(--background-primary); border-radius: var(--spacing-xs); box-shadow: var(--dropshadow-sm); }
+  .launcher h1 { font-size: var(--font-size-xl); margin: 0 0 4px; }
+  .launcher p.sub { color: var(--text-secondary); margin: 0 0 var(--spacing-xl); font-size: var(--font-size-sm); }
+  .launcher ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--spacing-sm); }
+  .launcher li { display: flex; align-items: center; justify-content: space-between; padding: var(--spacing-md); border: 1px solid var(--border-border); border-radius: var(--spacing-xs); }
+  .launcher li a { color: var(--text-blue); font-weight: 700; font-size: var(--font-size-sm); }
+  .launcher li .status { font-size: 12px; padding: 2px 8px; border-radius: 999px; }
+  .status--ready { background: var(--interaction-selected-blue); color: var(--text-blue); }
+  .status--pending { background: var(--color-yellow-200); color: var(--text-primary); }
+</style>
+</head>
+<body>
+  <div class="launcher">
+    <h1>rmResident Portal — example prototype</h1>
+    <p class="sub">Tenant persona. Built from the real RMR Figma design system — see PROTOTYPE.md for sourcing notes.</p>
+    <ul>
+      <li>
+        <a href="screens/dashboard.html">Dashboard</a>
+        <span class="status status--ready">Built from Figma</span>
+      </li>
+      <li>
+        <a href="screens/payments.html">Charges &amp; Payments</a>
+        <span class="status status--ready">Built from Figma</span>
+      </li>
+      <li>
+        <a href="screens/payment-settings.html">Payment Settings</a>
+        <span class="status status--ready">Built from Figma</span>
+      </li>
+      <li>
+        <a href="screens/payment-methods.html">Payment Methods</a>
+        <span class="status status--ready">Built from Figma</span>
+      </li>
+      <li>
+        <a href="screens/autopay.html">AutoPay</a>
+        <span class="status status--ready">Built from Figma</span>
+      </li>
+      <li>
+        <a href="screens/account.html">Account Settings</a>
+        <span class="status status--ready">Built from Figma</span>
+      </li>
+      <li>
+        <a href="screens/maintenance.html">Service Issues / Maintenance</a>
+        <span class="status status--ready">Built from Figma</span>
+      </li>
+      <li>
+        <a href="screens/document-center.html">Document Center</a>
+        <span class="status status--ready">Built from Figma</span>
+      </li>
+      <li>
+        <span>Messages</span>
+        <span class="status status--pending">Pending Figma link</span>
+      </li>
+    </ul>
+  </div>
+</body>
+</html>

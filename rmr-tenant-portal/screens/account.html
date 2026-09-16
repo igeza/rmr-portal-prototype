@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Account — rmResident Portal</title>
+<link rel="stylesheet" href="../assets/rmr.css?v=32" />
+<link rel="stylesheet" href="../assets/proto.css" />
+</head>
+<body data-screen="account">
+<div class="rmr-app" data-component="3.1.0 Account Details / Contacts / Settings / Linked Accounts">
+
+  <header class="rmr-header" data-component="Header">
+    <div class="rmr-header__left">
+      <div class="rmr-header__logo" data-component="New Logo">
+        <img class="rmr-header__logo-icon" src="../assets/icons/logo-icon.svg" alt="" />
+        <img class="rmr-header__logo-text" src="../assets/icons/logo-text.svg" alt="rmResident" />
+      </div>
+    </div>
+    <div class="rmr-header__right" data-component="Header Right">
+      <div class="rmr-header__icon" data-component="RMP Icon">
+        <img src="../assets/icons/globe.svg" alt="Language" width="24" height="24" />
+      </div>
+      <span class="rmr-header__divider" aria-hidden="true"></span>
+      <div class="rmr-account" data-component="User Info">
+        <button class="rmr-header__user" type="button" data-action="toggle-account-menu">
+          <img class="rmr-header__avatar" src="../assets/images/avatar.png" alt="" width="24" height="24" />
+          <span class="rmr-header__username">Samantha Carpenter</span>
+          <img src="../assets/icons/chevron-down.svg" alt="" width="24" height="24" />
+        </button>
+        <div class="rmr-account-menu" data-account-menu hidden data-component="Dropdown Menu">
+          <a class="rmr-account-menu__item" href="account.html">
+            <span>View Account</span>
+            <img class="rmr-account-menu__chevron" src="../assets/icons/chevron-right.svg" alt="" />
+          </a>
+          <a class="rmr-account-menu__item" href="account.html#linked">
+            <span>Linked Accounts</span>
+            <img class="rmr-account-menu__chevron" src="../assets/icons/chevron-right.svg" alt="" />
+          </a>
+          <a class="rmr-account-menu__item" href="payment-settings.html">
+            <span>Payment Settings</span>
+            <img class="rmr-account-menu__chevron" src="../assets/icons/chevron-right.svg" alt="" />
+          </a>
+          <button class="rmr-account-menu__item" type="button" data-action="fake-submit" data-fake-message="Logout isn't wired up in this example.">
+            <span>Logout</span>
+            <img class="rmr-account-menu__chevron" src="../assets/icons/chevron-right.svg" alt="" />
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="rmr-body" data-component="Content">
+    <nav class="rmr-menu" data-component="Menu" aria-label="Primary">
+      <ul class="rmr-menu__list" data-component="Expanded Menu">
+        <li class="rmr-menu__item" data-nav="dashboard" data-component="Dashboard">
+          <a class="rmr-menu__link" href="dashboard.html">
+            <svg class="rmr-menu__icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M8.88889 5.33333V0H16V5.33333H8.88889ZM0 8.88889V0H7.11111V8.88889H0ZM8.88889 16V7.11111H16V16H8.88889ZM0 16V10.6667H7.11111V16H0Z" fill="currentColor"/>
+            </svg>
+            <span class="rmr-menu__label">Dashboard</span>
+          </a>
+        </li>
+        <li class="rmr-menu__item" data-nav="payments" data-component="Transactions">
+          <a class="rmr-menu__link" href="payments.html">
+            <svg class="rmr-menu__icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M15.1579 13.0526V13.8947C15.1579 14.8211 14.4 15.5789 13.4737 15.5789H1.68421C0.749474 15.5789 0 14.8211 0 13.8947V2.10526C0 1.17895 0.749474 0.421053 1.68421 0.421053H13.4737C14.4 0.421053 15.1579 1.17895 15.1579 2.10526V2.94737H7.57895C6.64421 2.94737 5.89474 3.70526 5.89474 4.63158V11.3684C5.89474 12.2947 6.64421 13.0526 7.57895 13.0526H15.1579ZM7.57895 11.3684H16V4.63158H7.57895V11.3684ZM10.9474 9.26316C10.2484 9.26316 9.68421 8.69895 9.68421 8C9.68421 7.30105 10.2484 6.73684 10.9474 6.73684C11.6463 6.73684 12.2105 7.30105 12.2105 8C12.2105 8.69895 11.6463 9.26316 10.9474 9.26316Z" fill="currentColor"/>
+            </svg>
+            <span class="rmr-menu__label">Charges & Payments</span>
+          </a>
+        </li>
+        <li class="rmr-menu__item" data-nav="maintenance" data-component="Maintenance">
+          <a class="rmr-menu__link" href="maintenance.html">
+            <svg class="rmr-menu__icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M15.7905 13.0471L9.18217 6.43876C9.83574 4.76853 9.47264 2.80783 8.09289 1.42807C6.64052 -0.0243004 4.46196 -0.314775 2.71911 0.48403L5.84171 3.60663L3.66315 5.78519L0.467935 2.66259C-0.403489 4.40544 -0.0403956 6.58399 1.41198 8.03637C2.79173 9.41612 4.75243 9.77921 6.42266 9.12565L13.031 15.7339C13.3214 16.0244 13.7571 16.0244 14.0476 15.7339L15.7178 14.0637C16.0809 13.7732 16.0809 13.2649 15.7905 13.0471Z" fill="currentColor"/>
+            </svg>
+            <span class="rmr-menu__label">Service Issues</span>
+          </a>
+        </li>
+        <li class="rmr-menu__item" data-nav="document-center" data-component="Documents">
+          <a class="rmr-menu__link" href="document-center.html">
+            <svg class="rmr-menu__icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M7.42857 6.57143V0H2.14286C2.02919 0 1.92018 0.0451529 1.83981 0.125526C1.75944 0.205898 1.71429 0.314907 1.71429 0.428571V15.5714C1.71429 15.6851 1.75944 15.7941 1.83981 15.8745C1.92018 15.9548 2.02919 16 2.14286 16H13.8571C13.9708 16 14.0798 15.9548 14.1602 15.8745C14.2406 15.7941 14.2857 15.6851 14.2857 15.5714V6.85714H7.71429C7.63851 6.85714 7.56584 6.82704 7.51225 6.77346C7.45867 6.71988 7.42857 6.6472 7.42857 6.57143Z" fill="currentColor"/>
+              <path d="M8.57143 0.346069V5.57143C8.57143 5.60931 8.58648 5.64565 8.61327 5.67244C8.64006 5.69923 8.6764 5.71428 8.71429 5.71428H13.9396C13.9538 5.71429 13.9676 5.71012 13.9793 5.7023C13.991 5.69447 14.0002 5.68334 14.0056 5.67031C14.0111 5.65728 14.0125 5.64294 14.0098 5.62909C14.0071 5.61524 14.0003 5.60251 13.9904 5.5925L8.69321 0.295355C8.6832 0.285404 8.67047 0.278643 8.65662 0.275923C8.64277 0.273203 8.62843 0.274647 8.6154 0.280073C8.60237 0.285498 8.59124 0.294662 8.58341 0.306408C8.57559 0.318154 8.57142 0.331955 8.57143 0.346069Z" fill="currentColor"/>
+            </svg>
+            <span class="rmr-menu__label">Document Center</span>
+          </a>
+        </li>
+      </ul>
+      <div class="rmr-menu__footer" data-component="Expanded Menu Item">
+        <div class="rmr-menu__item">
+          <button class="rmr-menu__link" type="button" data-action="toggle-menu" data-component="Collapse">
+            <img class="rmr-menu__icon" src="../assets/icons/collapse.svg" alt="" data-collapse-icon />
+            <span class="rmr-menu__label" data-collapse-label>Collapse</span>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <main class="rmr-main" data-component="Main Content">
+      <div class="rmr-settings-page" data-component="Account">
+
+        <div class="rmr-settings-hero" data-component="Context Bar">
+          <img class="rmr-settings-hero__bg" src="../assets/images/settings/account-hero.png" alt="" />
+          <div class="rmr-settings-hero__scrim"></div>
+          <p class="rmr-settings-hero__title">Account</p>
+        </div>
+
+        <div class="rmr-settings-card">
+
+          <div class="rmr-acct-tabs" role="tablist">
+            <button class="rmr-acct-tab rmr-acct-tab--selected" type="button" role="tab" aria-selected="true" data-action="acct-tab" data-acct-target="details">Details</button>
+            <button class="rmr-acct-tab" type="button" role="tab" aria-selected="false" data-action="acct-tab" data-acct-target="contacts">Contacts</button>
+            <button class="rmr-acct-tab" type="button" role="tab" aria-selected="false" data-action="acct-tab" data-acct-target="settings">Settings</button>
+            <button class="rmr-acct-tab" type="button" role="tab" aria-selected="false" data-action="acct-tab" data-acct-target="linked">Linked Accounts</button>
+          </div>
+
+          <!-- Details tab — node 2568:7276 -->
+          <div class="rmr-acct-panel" data-acct-panel="details">
+            <div class="rmr-acct-section">
+              <div class="rmr-acct-section-header">
+                <p class="rmr-acct-section-title">Account Details</p>
+                <div class="rmr-acct-kebab">
+                  <button type="button" data-action="toggle-kebab-menu" aria-label="Account Details actions">
+                    <img src="../assets/icons/account/more-vert.svg" alt="" width="24" height="24" />
+                  </button>
+                  <div class="rmr-acct-kebab-menu" data-kebab-menu hidden>
+                    <button type="button" data-action="open-modal" data-modal-target="change-username">Change Username</button>
+                    <button type="button" data-action="open-modal" data-modal-target="change-password">Change Password</button>
+                    <button type="button" data-action="open-modal" data-modal-target="delete-account">Delete Account</button>
+                  </div>
+                </div>
+              </div>
+              <div class="rmr-acct-field-row">
+                <div class="rmr-acct-field rmr-acct-field--fixed">
+                  <span class="rmr-acct-field__label">Username</span>
+                  <p class="rmr-acct-field__value">scarpenter@gmail.com</p>
+                </div>
+                <div class="rmr-acct-field rmr-acct-field--fixed">
+                  <span class="rmr-acct-field__label">Password</span>
+                  <p class="rmr-acct-field__value">***********</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="rmr-acct-section">
+              <div class="rmr-acct-section-header">
+                <p class="rmr-acct-section-title">Personal Information</p>
+                <button type="button" data-action="open-modal" data-modal-target="edit-personal-info" aria-label="Edit Personal Information">
+                  <img src="../assets/icons/payments/ap-edit.svg" alt="" width="24" height="24" />
+                </button>
+              </div>
+              <p class="rmr-acct-desc">This information is associated with your user login. The information provided can help with account recovery and verification.</p>
+              <div class="rmr-acct-field-row">
+                <div class="rmr-acct-field">
+                  <span class="rmr-acct-field__label">First Name</span>
+                  <p class="rmr-acct-field__value">Samantha</p>
+                </div>
+                <div class="rmr-acct-field">
+                  <span class="rmr-acct-field__label">Last Name</span>
+                  <p class="rmr-acct-field__value">Carpenter</p>
+                </div>
+                <div class="rmr-acct-field">
+                  <span class="rmr-acct-field__label">Phone Number</span>
+                  <p class="rmr-acct-field__value">324-543-2643</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contacts tab — node 2568:7497 -->
+          <div class="rmr-acct-panel" data-acct-panel="contacts" hidden>
+            <div class="rmr-acct-section">
+              <div class="rmr-acct-section-header">
+                <p class="rmr-acct-section-title">Contact Information</p>
+                <button type="button" data-action="open-modal" data-modal-target="edit-contact-info" aria-label="Edit Contact Information">
+                  <img src="../assets/icons/payments/ap-edit.svg" alt="" width="24" height="24" />
+                </button>
+              </div>
+              <p class="rmr-acct-desc">This contact information is for the primary contact and not your personal user login.</p>
+              <div class="rmr-acct-field-row">
+                <div class="rmr-acct-field">
+                  <span class="rmr-acct-field__label">Name</span>
+                  <p class="rmr-acct-field__value">Samantha Carpenter</p>
+                </div>
+                <div class="rmr-acct-field">
+                  <span class="rmr-acct-field__label">Email Address</span>
+                  <p class="rmr-acct-field__value">scarpenter@gmail.com</p>
+                </div>
+                <div class="rmr-acct-field">
+                  <span class="rmr-acct-field__label">Cell Phone</span>
+                  <p class="rmr-acct-field__value">324-543-2643 (primary)</p>
+                </div>
+                <div class="rmr-acct-field">
+                  <span class="rmr-acct-field__label">Employer</span>
+                  <p class="rmr-acct-field__value">T-Mobile</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Settings tab — node 2001:1039 -->
+          <div class="rmr-acct-panel" data-acct-panel="settings" hidden>
+            <div class="rmr-acct-section">
+              <p class="rmr-acct-section-title">Community Directory Settings</p>
+              <label class="rmr-toggle">
+                <input type="checkbox" checked data-action="acct-toggle-directory" />
+                <span class="rmr-toggle__track"><span class="rmr-toggle__handle"><img src="../assets/icons/payments/mp-checkbox-check.svg" alt="" /></span></span>
+                <span class="rmr-toggle__label">Display my name and address in community directory</span>
+              </label>
+              <div class="rmr-acct-subsettings" data-acct-directory-options>
+                <label class="rmr-acct-subrow">
+                  <span class="rmr-checkbox"><input type="checkbox" checked /><span class="rmr-checkbox-box"></span></span>
+                  <span class="rmr-acct-checkbox-text">Include Phone Number</span>
+                  <input class="rmr-modal__input" type="text" value="684-324-7845" />
+                </label>
+                <label class="rmr-acct-subrow">
+                  <span class="rmr-checkbox"><input type="checkbox" checked /><span class="rmr-checkbox-box"></span></span>
+                  <span class="rmr-acct-checkbox-text">Include Email</span>
+                  <input class="rmr-modal__input" type="text" value="scarpenter@gmail.com" />
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Linked Accounts tab — node 2003:4143 -->
+          <div class="rmr-acct-panel" data-acct-panel="linked" hidden>
+            <button class="rmr-btn rmr-btn--primary" type="button" style="height:32px; align-self:flex-start;" data-action="open-modal" data-modal-target="link-account">Link Additional Account</button>
+            <table class="rmr-pay-table">
+              <thead>
+                <tr>
+                  <th style="width:80px;">Default</th>
+                  <th style="width:120px;">Account #</th>
+                  <th>Account Name</th>
+                  <th>Display Name</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><button type="button" class="rmr-pmt-radio rmr-pmt-radio--selected" data-action="acct-select-default" aria-label="Set Account #841 as default"></button></td>
+                  <td>841</td>
+                  <td>Samantha Carpenter</td>
+                  <td><input class="rmr-modal__input" type="text" value="Samantha Carpenter" /></td>
+                </tr>
+                <tr>
+                  <td><button type="button" class="rmr-pmt-radio" data-action="acct-select-default" aria-label="Set Account #719 as default"></button></td>
+                  <td>719</td>
+                  <td>Samantha Carpenter</td>
+                  <td><input class="rmr-modal__input" type="text" value="719- Storage Unit" /></td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="rmr-acct-table-footer">2 Linked Accounts</p>
+          </div>
+
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Change Username — node 2179:10456 -->
+  <div class="rmr-modal-backdrop" data-modal-backdrop="change-username" hidden>
+    <div class="rmr-modal" role="dialog" aria-modal="true" aria-labelledby="modal-change-username-title" style="width:774px;" data-component="3.1.1 Change Username">
+      <div class="rmr-modal__header" data-component="Header">
+        <h2 class="rmr-modal__title" id="modal-change-username-title">Change Username</h2>
+        <button class="rmr-modal__close" type="button" data-action="close-modal">
+          <img src="../assets/icons/payments/mp-close.svg" alt="Close" width="24" height="24" />
+        </button>
+      </div>
+      <p class="rmr-acct-desc">Update the email address used to sign in to your account. You'll be signed out and asked to verify your new email.</p>
+      <div class="rmr-acct-field-row">
+        <span class="rmr-acct-field__label">Current Username Email:</span>
+        <p class="rmr-acct-field__value" style="font-weight:var(--font-weight-bold);">scarpenter@gmail.com</p>
+      </div>
+      <div class="rmr-modal__field">
+        <span class="rmr-modal__field-label">New Email Address</span>
+        <input class="rmr-modal__input" type="text" />
+      </div>
+      <div class="rmr-modal__field">
+        <span class="rmr-modal__field-label">Confirm Email Address</span>
+        <input class="rmr-modal__input" type="text" />
+      </div>
+      <div class="rmr-modal__field">
+        <span class="rmr-modal__field-label">Confirm Current Password</span>
+        <span class="rmr-acct-pw-wrap">
+          <input class="rmr-modal__input" type="password" />
+          <img class="rmr-acct-pw-icon" src="../assets/icons/account/visibility-off.svg" alt="" />
+        </span>
+      </div>
+      <div class="rmr-pmt-footer" data-component="Footer">
+        <span></span>
+        <span style="display:flex; gap:var(--spacing-md);">
+          <button class="rmr-btn rmr-btn--secondary" type="button" style="height:36px;" data-action="close-modal">Cancel</button>
+          <a class="rmr-btn rmr-btn--primary" style="height:36px;" href="verification-sent.html">Send Verification Email</a>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Change Password — node 2179:11729 -->
+  <div class="rmr-modal-backdrop" data-modal-backdrop="change-password" hidden>
+    <div class="rmr-modal" role="dialog" aria-modal="true" aria-labelledby="modal-change-password-title" style="width:726px;" data-component="3.1.3 Change Password">
+      <div class="rmr-modal__header" data-component="Header">
+        <h2 class="rmr-modal__title" id="modal-change-password-title">Change Password</h2>
+        <button class="rmr-modal__close" type="button" data-action="close-modal">
+          <img src="../assets/icons/payments/mp-close.svg" alt="Close" width="24" height="24" />
+        </button>
+      </div>
+      <div class="rmr-modal__field">
+        <span class="rmr-modal__field-label">Current Password</span>
+        <span class="rmr-acct-pw-wrap">
+          <input class="rmr-modal__input" type="password" />
+          <img class="rmr-acct-pw-icon" src="../assets/icons/account/visibility.svg" alt="" />
+        </span>
+      </div>
+      <div class="rmr-modal__field">
+        <span class="rmr-modal__field-label">New Password</span>
+        <span class="rmr-acct-pw-wrap">
+          <input class="rmr-modal__input" type="password" />
+          <img class="rmr-acct-pw-icon" src="../assets/icons/account/visibility.svg" alt="" />
+        </span>
+      </div>
+      <div class="rmr-modal__field">
+        <span class="rmr-modal__field-label">Confirm New Password</span>
+        <span class="rmr-acct-pw-wrap">
+          <input class="rmr-modal__input" type="password" />
+          <img class="rmr-acct-pw-icon" src="../assets/icons/account/visibility.svg" alt="" />
+        </span>
+      </div>
+      <div class="rmr-acct-requirements">
+        <p class="rmr-acct-requirements__title">Password must include:</p>
+        <ul>
+          <li><img src="../assets/icons/account/req-check.svg" alt="" />At least 8 characters</li>
+          <li><img src="../assets/icons/account/req-check.svg" alt="" />At least 1 numeric character</li>
+          <li><img src="../assets/icons/account/req-check.svg" alt="" />At least 1 uppercase alphabetic character</li>
+          <li><img src="../assets/icons/account/req-check.svg" alt="" />At least 1 lowercase alphabetic character</li>
+          <li><img src="../assets/icons/account/req-x.svg" alt="" />Passwords must match</li>
+        </ul>
+      </div>
+      <div class="rmr-pmt-footer" data-component="Footer">
+        <span></span>
+        <span style="display:flex; gap:var(--spacing-md);">
+          <button class="rmr-btn rmr-btn--secondary" type="button" style="height:36px;" data-action="close-modal">Cancel</button>
+          <button class="rmr-btn rmr-btn--primary" type="button" style="height:36px;" data-action="fake-submit" data-fake-message="Changing your password isn't included in this example.">Change Password</button>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Account — node 2179:12688, Modal Dialog component 2315:14882 -->
+  <div class="rmr-modal-backdrop" data-modal-backdrop="delete-account" hidden>
+    <div class="rmr-modal" role="dialog" aria-modal="true" aria-labelledby="modal-delete-account-title" style="width:568px;" data-component="Modal Dialog">
+      <div class="rmr-acct-confirm">
+        <div class="rmr-acct-confirm__lead">
+          <img src="../assets/icons/account/error-outline.svg" alt="" />
+          <p class="rmr-acct-confirm__title" id="modal-delete-account-title">Are you sure you want to permanently delete this account?</p>
+        </div>
+        <p class="rmr-acct-confirm__body">By deleting this account, you will no longer be able to log in. Any saved payment information will be deleted. If AutoPay and/or Flexible Rent have been set up, they will also be deleted and no future payments will be automatically processed.</p>
+        <div class="rmr-acct-confirm__field">
+          <div class="rmr-modal__field">
+            <span class="rmr-modal__field-label">Confirm Current Password</span>
+            <span class="rmr-acct-pw-wrap">
+              <input class="rmr-modal__input" type="password" />
+              <img class="rmr-acct-pw-icon" src="../assets/icons/account/visibility-off.svg" alt="" />
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="rmr-pmt-footer" data-component="Footer" style="justify-content:flex-end; gap:var(--spacing-md);">
+        <button class="rmr-btn rmr-btn--secondary" type="button" style="height:36px;" data-action="close-modal">Cancel</button>
+        <button class="rmr-btn rmr-btn--primary" type="button" style="height:36px;" data-action="fake-submit" data-fake-message="Deleting an account isn't included in this example.">Delete Account</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Personal Information edit — node 2548:8808 -->
+  <div class="rmr-modal-backdrop" data-modal-backdrop="edit-personal-info" hidden>
+    <div class="rmr-modal" role="dialog" aria-modal="true" aria-labelledby="modal-personal-info-title" style="width:774px;" data-component="3.1.1 Personal Information">
+      <div class="rmr-modal__header" data-component="Header">
+        <h2 class="rmr-modal__title" id="modal-personal-info-title">Personal Information</h2>
+        <button class="rmr-modal__close" type="button" data-action="close-modal">
+          <img src="../assets/icons/payments/mp-close.svg" alt="Close" width="24" height="24" />
+        </button>
+      </div>
+      <p class="rmr-acct-desc">This information is associated with your user login. The information provided can help with account recovery and verification.</p>
+      <div class="rmr-modal__field">
+        <span class="rmr-modal__field-label">First Name</span>
+        <input class="rmr-modal__input" type="text" value="Samantha" />
+      </div>
+      <div class="rmr-modal__field">
+        <span class="rmr-modal__field-label">Last Name</span>
+        <input class="rmr-modal__input" type="text" value="Carpenter" />
+      </div>
+      <div class="rmr-modal__field">
+        <span class="rmr-modal__field-label">Phone Number</span>
+        <input class="rmr-modal__input" type="text" value="324-543-2643" />
+      </div>
+      <div class="rmr-pmt-footer" data-component="Footer">
+        <span></span>
+        <span style="display:flex; gap:var(--spacing-md);">
+          <button class="rmr-btn rmr-btn--secondary" type="button" style="height:36px;" data-action="close-modal">Cancel</button>
+          <button class="rmr-btn rmr-btn--primary" type="button" style="height:36px;" data-action="fake-submit" data-fake-message="Saving Personal Information isn't included in this example.">Save</button>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contact Information edit — node 2179:12188 -->
+  <div class="rmr-modal-backdrop" data-modal-backdrop="edit-contact-info" hidden>
+    <div class="rmr-modal" role="dialog" aria-modal="true" aria-labelledby="modal-contact-info-title" style="width:821px;" data-component="Contact Information">
+      <div class="rmr-modal__header" data-component="Header">
+        <h2 class="rmr-modal__title" id="modal-contact-info-title">Contact Information</h2>
+        <button class="rmr-modal__close" type="button" data-action="close-modal">
+          <img src="../assets/icons/payments/mp-close.svg" alt="Close" width="24" height="24" />
+        </button>
+      </div>
+      <p class="rmr-acct-desc">This contact information is for the primary contact and not your personal user login.</p>
+      <div class="rmr-modal__field">
+        <span class="rmr-modal__field-label">Name</span>
+        <p class="rmr-pmm-value">Samantha Carpenter</p>
+      </div>
+      <div class="rmr-pmt-form-row">
+        <div class="rmr-modal__field">
+          <span class="rmr-modal__field-label">Email Address</span>
+          <input class="rmr-modal__input" type="text" value="scarpenter@gmail.com" />
+        </div>
+        <div class="rmr-modal__field">
+          <span class="rmr-modal__field-label">Employer</span>
+          <input class="rmr-modal__input" type="text" value="T-Mobile" />
+        </div>
+      </div>
+
+      <div class="rmr-pmt-billing-header">
+        <p class="rmr-pmt-billing-title">Phone Numbers</p>
+        <button class="rmr-modal__link-btn" type="button" data-action="fake-submit" data-fake-message="Adding a phone number isn't included in this example.">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block; vertical-align:middle; margin-right:4px;"><path d="M8 3V13M3 8H13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Add Phone Number
+        </button>
+      </div>
+      <table class="rmr-pay-table">
+        <thead>
+          <tr>
+            <th>Phone Number</th>
+            <th>Phone Type</th>
+            <th style="width:120px;">Primary Phone</th>
+            <th style="width:40px;"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><input class="rmr-modal__input" type="text" value="324-543-2643" /></td>
+            <td>
+              <div class="rmr-dropdown" data-dropdown>
+                <button type="button" class="rmr-modal__select rmr-dropdown__trigger" data-dropdown-trigger>
+                  <span data-dropdown-value>Cell Phone</span>
+                </button>
+                <div class="rmr-dropdown__menu" data-dropdown-menu hidden>
+                  <div class="rmr-dropdown__option rmr-dropdown__option--selected" data-dropdown-option>Cell Phone</div>
+                  <div class="rmr-dropdown__option" data-dropdown-option>Home Phone</div>
+                  <div class="rmr-dropdown__option" data-dropdown-option>Work Phone</div>
+                </div>
+              </div>
+            </td>
+            <td><button type="button" class="rmr-pmt-radio rmr-pmt-radio--selected" data-action="acct-select-default" aria-label="Set as primary phone"></button></td>
+            <td><button type="button" data-action="fake-submit" data-fake-message="Removing a phone number isn't included in this example." aria-label="Remove phone number"><img src="../assets/icons/settings/delete.svg" alt="" width="20" height="20" /></button></td>
+          </tr>
+          <tr>
+            <td><input class="rmr-modal__input" type="text" value="324-112-5678" /></td>
+            <td>
+              <div class="rmr-dropdown" data-dropdown>
+                <button type="button" class="rmr-modal__select rmr-dropdown__trigger" data-dropdown-trigger>
+                  <span data-dropdown-value>Home Phone</span>
+                </button>
+                <div class="rmr-dropdown__menu" data-dropdown-menu hidden>
+                  <div class="rmr-dropdown__option" data-dropdown-option>Cell Phone</div>
+                  <div class="rmr-dropdown__option rmr-dropdown__option--selected" data-dropdown-option>Home Phone</div>
+                  <div class="rmr-dropdown__option" data-dropdown-option>Work Phone</div>
+                </div>
+              </div>
+            </td>
+            <td><button type="button" class="rmr-pmt-radio" data-action="acct-select-default" aria-label="Set as primary phone"></button></td>
+            <td><button type="button" data-action="fake-submit" data-fake-message="Removing a phone number isn't included in this example." aria-label="Remove phone number"><img src="../assets/icons/settings/delete.svg" alt="" width="20" height="20" /></button></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="rmr-pmt-footer" data-component="Footer">
+        <span></span>
+        <span style="display:flex; gap:var(--spacing-md);">
+          <button class="rmr-btn rmr-btn--secondary" type="button" style="height:36px;" data-action="close-modal">Cancel</button>
+          <button class="rmr-btn rmr-btn--primary" type="button" style="height:36px;" data-action="fake-submit" data-fake-message="Saving Contact Information isn't included in this example.">Save</button>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Link Additional Account — node 2179:25080 -->
+  <div class="rmr-modal-backdrop" data-modal-backdrop="link-account" hidden>
+    <div class="rmr-modal" role="dialog" aria-modal="true" aria-labelledby="modal-link-account-title" style="width:669px;" data-component="3.3.2 Link Additional Account">
+      <div class="rmr-modal__header" data-component="Header">
+        <h2 class="rmr-modal__title" id="modal-link-account-title">Link Additional Account</h2>
+        <button class="rmr-modal__close" type="button" data-action="close-modal">
+          <img src="../assets/icons/payments/mp-close.svg" alt="Close" width="24" height="24" />
+        </button>
+      </div>
+      <p class="rmr-acct-desc">To link an additional account to <strong>scarpenter@gmail.com</strong>, please enter the following information about the new account:</p>
+      <div class="rmr-modal__field">
+        <span class="rmr-modal__field-label">Account #</span>
+        <input class="rmr-modal__input" type="text" />
+      </div>
+      <div class="rmr-pmt-footer" data-component="Footer">
+        <span></span>
+        <span style="display:flex; gap:var(--spacing-md);">
+          <button class="rmr-btn rmr-btn--secondary" type="button" style="height:36px;" data-action="close-modal">Cancel</button>
+          <button class="rmr-btn rmr-btn--primary" type="button" style="height:36px;" data-action="fake-submit" data-fake-message="Linking an additional account isn't included in this example.">Link</button>
+        </span>
+      </div>
+    </div>
+  </div>
+
+</div>
+<script src="../assets/app.js?v=13"></script>
+</body>
+</html>

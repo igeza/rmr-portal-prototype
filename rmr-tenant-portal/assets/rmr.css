@@ -1,0 +1,2758 @@
+/*
+  rmr.css — shared visual styles for the rmResident Portal (RMR) prototype.
+  Every value below is sourced from the real Figma design system via get_variable_defs
+  on the "2.0.0 Tenant Dashboard" frame (file hbQDUSRF1dLm35tCQAWeHQ, node 2162:4275).
+  Nothing here is hand-picked — a developer can delete this file's dependency on the
+  prototype and re-pull the same tokens straight from Figma.
+*/
+
+:root {
+  /* Color / text */
+  --text-primary: #313233;
+  --text-secondary: #616466;
+  --secondary-text: #747474; /* distinct "Secondary Text" token, e.g. table numeric cells */
+  --text-accent: #929699; /* placeholder/italic input text */
+  --text-tertiary: #747474; /* "Secondary Text" token */
+  --text-blue: #1b64bb;
+  --legacy-primary-text: #0a0a0a; /* "Primary Text" token — a separate, darker value used only in the Legacy History/Notes frame (node 2572:7198), not the design system's usual --text-primary */
+  --text-on-primary: #ffffff;
+  --white: #ffffff;
+
+  /* Color / icon */
+  --icon-primary: #1b64bb;
+  --icon-secondary: #313233;
+  --icon-tertiary: #616466;
+  --icon-accent: #5597e7;
+  --icon-disabled: #c2c8cc;
+  --icon-on-primary: #ffffff;
+
+  /* Color / background */
+  --background-primary: #ffffff;
+  --background-page: #f6fafe;
+  --background-secondary: #fbfcfc;
+  --background-element: rgba(20, 76, 143, 0.85);
+
+  /* Color / border */
+  --border: #d3d3d3;
+  --border-border: #dbe1e5;
+  --brand-primary-disabled: #008dd580; /* Timeline dot stroke, Legacy History/Notes */
+  --border-button-tertiary: #1b64bb;
+
+  /* Color / brand ramp */
+  --color-blue-50: #f6fafe;
+  --color-blue-100: #dbe9fa;
+  --color-blue-200: #afcef4;
+  --color-blue-400: #5597e7;
+  --color-blue-900: #081c36;
+  --color-yellow-200: #fbe5ac;
+  --color-yellow-300: #f9d57b;
+  --color-yellow-500: #f5b619;
+  --color-red-300: #e68686;
+  --color-blue-500: #2a7de1;
+  --color-blue-600: #1a64bc;
+  --color-blue-800: #0e3462;
+  --color-green-100: #f4faf3;
+  --color-green-200: #e4f2e1;
+  --status-success: #6f9965;
+  --interaction-selected-blue: #dbe9fa;
+  --interaction-hover-blue: #f6fafe;
+
+  /* Color / component */
+  --component-button-primary: #1b64bb;
+  --component-toggle-switch-disabled: #c2c8cc;
+  --border-accent: #82b3ed;
+  --component-button-secondary: #ffffff;
+  --component-button-accent: #5597e7;
+  --component-selector: #f6fafe; /* selected-card background, e.g. Make a Payment's selector cards */
+  --component-button-disabled: #82b3ed;
+  --component-footer: #f1f3f5; /* other-party comment bubble background, Issue Details' Messages panel */
+
+  /* Typography */
+  --font-family-main: 'Lato', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-weight-regular: 400;
+  --font-weight-bold: 700;
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-md: 16px;
+  --font-size-lg: 18px;
+  --font-size-xl: 20px;
+  --font-size-3xl: 24px;
+  --font-size-5xl: 32px;
+  --font-size-6xl: 48px;
+  --line-height-sm: 18px;
+  --line-height-md: 20px;
+  --line-height-lg: 24px;
+  --line-height-xl: 28px;
+  --line-height-2xl: 32px;
+  --line-height-3xl: 40px;
+
+  /* Spacing */
+  --spacing-none: 0px;
+  --spacing-xxxs: 2px;
+  --spacing-xxs: 4px;
+  --spacing-xs: 8px;
+  --spacing-sm: 12px;
+  --spacing-md: 16px;
+  --spacing-xl: 24px;
+  --spacing-2xl: 32px;
+
+  /* Radius */
+  --radius-sm: 4px;
+  --radius-xl: 16px;
+
+  /* Elevation */
+  --dropshadow-menu: 4px 0px 8.8px rgba(7, 109, 171, 0.15);
+  --dropshadow-around: 0px 0px 6px rgba(0, 0, 0, 0.1);
+  --dropshadow-sm: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  --dropshadow-dropdown: 0px 3px 6px rgba(0, 0, 0, 0.15);
+
+  /* "Ghosting" component (design-system file, node 386:1000) — the real
+     backdrop scrim for content underneath a popup/overlay. */
+  --background-backdrop: rgba(0, 0, 0, 0.5);
+}
+
+* { box-sizing: border-box; }
+
+ul, ol { margin: 0; padding: 0; list-style: none; }
+li { margin: 0; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: var(--background-page);
+  font-family: var(--font-family-main);
+  color: var(--text-primary);
+}
+
+img { display: block; max-width: 100%; }
+
+a { color: inherit; text-decoration: none; }
+
+button {
+  font-family: inherit;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+/* ---------- Scroll bar (shared) ----------
+   Real Figma "scroll bar" component (design system file W4wEUn8A4hkTdiAgEV8wSK,
+   node 134:2342): an 8px rounded track/thumb pair, no border — replaces every
+   browser's own OS-drawn bar across the app. `scrollbar-gutter: stable`
+   reserves that 8px permanently, whether or not a region is currently tall
+   enough to need it, so a region's content never shifts width the moment
+   scrolling starts or stops, and the region's own outer box never resizes
+   either way. The track itself has no fill or shape of its own — only the
+   thumb is visible — so the bar never reads as its own little boxed
+   container; it's just a line floating in the gap. That gap lives on the
+   scrollable content itself (e.g. `.rmr-pay-table`), not on the scrolling
+   wrap: a browser's scrollbar is drawn flush against the content edge,
+   *inside* any padding the wrap declares, so padding on the wrap would only
+   push the bar away from the wrap's own border — leaving it touching the
+   content with no gap at all. Selectors that already carry ≥8px of their own
+   edge padding (modals, the dropdown menu) don't need this, since their
+   content is already inset from where the bar sits. */
+.rmr-menu,
+.rmr-main,
+.rmr-tasks,
+.rmr-notif-list,
+.rmr-modal,
+.rmr-modal--pinned .rmr-modal__body,
+.rmr-pmt-body,
+.rmr-pmt-scroll,
+.rmr-pay-section,
+.rmr-pay-table-wrap,
+.rmr-pmt-table-wrap,
+.rmr-dropdown__menu {
+  scrollbar-width: thin;
+  scrollbar-color: var(--icon-disabled) transparent;
+}
+.rmr-menu::-webkit-scrollbar,
+.rmr-main::-webkit-scrollbar,
+.rmr-tasks::-webkit-scrollbar,
+.rmr-notif-list::-webkit-scrollbar,
+.rmr-modal::-webkit-scrollbar,
+.rmr-modal--pinned .rmr-modal__body::-webkit-scrollbar,
+.rmr-pmt-body::-webkit-scrollbar,
+.rmr-pmt-scroll::-webkit-scrollbar,
+.rmr-pay-section::-webkit-scrollbar,
+.rmr-pay-table-wrap::-webkit-scrollbar,
+.rmr-pmt-table-wrap::-webkit-scrollbar,
+.rmr-dropdown__menu::-webkit-scrollbar {
+  width: var(--spacing-xs);
+  height: var(--spacing-xs);
+}
+.rmr-menu::-webkit-scrollbar-track,
+.rmr-main::-webkit-scrollbar-track,
+.rmr-tasks::-webkit-scrollbar-track,
+.rmr-notif-list::-webkit-scrollbar-track,
+.rmr-modal::-webkit-scrollbar-track,
+.rmr-modal--pinned .rmr-modal__body::-webkit-scrollbar-track,
+.rmr-pmt-body::-webkit-scrollbar-track,
+.rmr-pmt-scroll::-webkit-scrollbar-track,
+.rmr-pay-section::-webkit-scrollbar-track,
+.rmr-pay-table-wrap::-webkit-scrollbar-track,
+.rmr-pmt-table-wrap::-webkit-scrollbar-track,
+.rmr-dropdown__menu::-webkit-scrollbar-track {
+  background: transparent;
+}
+.rmr-menu::-webkit-scrollbar-thumb,
+.rmr-main::-webkit-scrollbar-thumb,
+.rmr-tasks::-webkit-scrollbar-thumb,
+.rmr-notif-list::-webkit-scrollbar-thumb,
+.rmr-modal::-webkit-scrollbar-thumb,
+.rmr-modal--pinned .rmr-modal__body::-webkit-scrollbar-thumb,
+.rmr-pmt-body::-webkit-scrollbar-thumb,
+.rmr-pmt-scroll::-webkit-scrollbar-thumb,
+.rmr-pay-section::-webkit-scrollbar-thumb,
+.rmr-pay-table-wrap::-webkit-scrollbar-thumb,
+.rmr-pmt-table-wrap::-webkit-scrollbar-thumb,
+.rmr-dropdown__menu::-webkit-scrollbar-thumb {
+  background: var(--icon-disabled);
+  border-radius: var(--spacing-xs);
+}
+/* scrollbar-gutter only affects the vertical (block-axis) scrollbar, so it's
+   left off .rmr-pmt-table-wrap, which only ever scrolls horizontally. Also
+   left off the bare .rmr-modal (below) — see the "wasted gutter" note near
+   .rmr-modal--pinned for why. */
+.rmr-menu,
+.rmr-main,
+.rmr-tasks,
+.rmr-notif-list,
+.rmr-modal--pinned .rmr-modal__body,
+.rmr-pmt-body,
+.rmr-pmt-scroll,
+.rmr-pay-section,
+.rmr-pay-table-wrap,
+.rmr-dropdown__menu {
+  scrollbar-gutter: stable;
+}
+
+/* ---------- Layout shell (Header + Menu + Main Content) ---------- */
+
+.rmr-app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.rmr-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  padding: var(--spacing-xs) var(--spacing-2xl) var(--spacing-xs) var(--spacing-xs);
+  background: var(--background-primary);
+  border-bottom: 1px solid var(--border-border);
+  flex-shrink: 0;
+}
+
+.rmr-header__logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 32px;
+}
+
+.rmr-header__logo-icon { width: 25px; height: 32px; }
+.rmr-header__logo-text { width: 101px; height: 18px; }
+
+.rmr-header__right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.rmr-header__divider {
+  width: 1px;
+  height: 24px;
+  background: var(--border-border);
+}
+
+.rmr-account {
+  position: relative;
+}
+
+.rmr-header__user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rmr-header__avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.rmr-header__username {
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-lg);
+  letter-spacing: 0.32px;
+  white-space: nowrap;
+}
+
+/* ---------- Account dropdown (User Info popover) ----------
+   Sourced from the "2.0.2 Tasks on Linked Account" frame (node 2511:3289) —
+   shows the real Dropdown Menu anatomy. Every item here is display-only: it
+   opens/closes, but nothing inside navigates or performs a real account
+   action (see app.js). */
+
+.rmr-account-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 229px;
+  background: var(--background-primary);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--dropshadow-dropdown);
+  z-index: 20;
+}
+
+.rmr-account-menu[hidden] { display: none; }
+
+.rmr-account-menu__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+  width: 100%;
+  min-height: 40px;
+  padding: 8px 8px 8px 16px;
+  background: var(--background-primary);
+  color: var(--text-primary);
+  font-size: 14px;
+  line-height: 16px;
+  text-align: left;
+}
+
+.rmr-account-menu__item:first-child { border-top-left-radius: var(--radius-sm); border-top-right-radius: var(--radius-sm); }
+.rmr-account-menu__item:last-child { border-bottom-left-radius: var(--radius-sm); border-bottom-right-radius: var(--radius-sm); }
+
+.rmr-account-menu__item:hover {
+  background: var(--interaction-hover-blue);
+}
+
+.rmr-account-menu__chevron { width: 16px; height: 16px; flex-shrink: 0; }
+
+.rmr-body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  box-shadow: var(--dropshadow-sm);
+}
+
+/* ---------- Menu (sidebar nav) ---------- */
+
+.rmr-menu {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 264px;
+  flex-shrink: 0;
+  padding-top: var(--spacing-xxs);
+  background: var(--background-primary);
+  border-right: 1px solid var(--border-border);
+  box-shadow: var(--dropshadow-menu);
+  z-index: 3;
+  overflow-y: auto;
+}
+
+.rmr-menu__list {
+  display: flex;
+  flex-direction: column;
+}
+
+.rmr-menu__item {
+  display: block;
+  padding: var(--spacing-xxs) var(--spacing-xs);
+}
+
+.rmr-menu__link {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-xl);
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-md);
+  letter-spacing: 0.28px;
+  text-align: left;
+}
+
+.rmr-menu__link:hover { background: var(--background-page); }
+
+.rmr-menu__item--active .rmr-menu__link {
+  background: var(--interaction-selected-blue);
+  color: var(--text-blue);
+  font-weight: var(--font-weight-bold);
+}
+
+.rmr-menu__icon { width: 16px; height: 16px; flex-shrink: 0; }
+
+.rmr-menu__footer { border-top: 1px solid var(--border-border); }
+
+/* Collapsed state — Menu component, Expanded=False in the Figma library.
+   Sidebar width and the icon-only pill size come straight from that variant's
+   anatomy: outer item padding stays 8px/4px, the pill becomes a fixed 48x44
+   box with the icon centered and the label removed. */
+.rmr-menu--collapsed { width: 64px; }
+
+.rmr-menu--collapsed .rmr-menu__link {
+  width: 48px;
+  height: 44px;
+  padding: 0;
+  gap: 0;
+  justify-content: center;
+}
+
+.rmr-menu--collapsed .rmr-menu__label { display: none; }
+
+/* ---------- Main content ---------- */
+
+.rmr-main {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  overflow-y: auto;
+  z-index: 2;
+}
+
+.rmr-banner {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  width: 100%;
+  padding: var(--spacing-md) var(--spacing-2xl);
+  background: var(--color-blue-900);
+  color: var(--text-on-primary);
+  flex-shrink: 0;
+}
+
+.rmr-banner__icon { width: 24px; height: 24px; flex-shrink: 0; }
+
+.rmr-banner__text {
+  font-size: 14px;
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-md);
+  margin: 0;
+}
+
+.rmr-hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 32px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.rmr-hero__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+.rmr-hero__scrim {
+  position: absolute;
+  inset: 0;
+  background: var(--background-element);
+  z-index: 1;
+}
+
+.rmr-hero__content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.rmr-hero__balance-label {
+  margin: 0;
+  color: var(--white);
+  font-size: var(--font-size-xl);
+  line-height: var(--line-height-lg);
+  letter-spacing: 1px;
+}
+
+.rmr-hero__balance-amount {
+  margin: 24px 0 0;
+  color: var(--white);
+  font-size: var(--font-size-6xl);
+  line-height: normal;
+}
+
+.rmr-hero__actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Buttons — Type=Primary/Secondary/Text from the Figma library */
+
+.rmr-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  height: 32px;
+  min-width: 100px;
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--spacing-xs);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-md);
+  letter-spacing: 0.28px;
+  white-space: nowrap;
+}
+
+.rmr-btn--primary {
+  background: var(--component-button-primary);
+  color: var(--text-on-primary);
+}
+
+.rmr-btn--secondary {
+  background: var(--component-button-secondary);
+  color: var(--text-blue);
+  border: 1px solid var(--border-button-tertiary);
+}
+
+.rmr-btn--text {
+  background: transparent;
+  color: var(--text-on-primary);
+  min-width: 0;
+  height: 18px;
+  padding: 0;
+}
+
+.rmr-btn--text.rmr-btn--link { color: var(--text-blue); }
+
+.rmr-btn__icon { width: 20px; height: 20px; }
+
+/* ---------- Main section: message banner, tasks/notifications, footer ads ---------- */
+
+.rmr-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  flex: 1;
+  padding: var(--spacing-md) var(--spacing-2xl);
+}
+
+.rmr-msg-banner {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  width: 100%;
+  padding: var(--spacing-md);
+  background: var(--background-primary);
+  border-radius: var(--spacing-xs);
+  border-left: 7px solid var(--color-blue-400);
+  box-shadow: var(--dropshadow-around);
+}
+
+.rmr-msg-banner__icon { width: 32px; height: 32px; flex-shrink: 0; }
+
+.rmr-msg-banner__title {
+  margin: 0 0 4px;
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-lg);
+}
+
+.rmr-msg-banner__body {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: var(--line-height-md);
+  letter-spacing: 0.28px;
+}
+
+/* Payments & Charges uses a smaller Banner instance (node 2001:700): 24px
+   icon, 8px vertical / 16px horizontal padding — not the 32px/16px-all-sides
+   sizing the Dashboard's own Banner instance uses. Same component, different
+   instance-level overrides in Figma, so it gets its own modifier here rather
+   than changing the shared default. */
+.rmr-msg-banner--compact { padding: var(--spacing-xs) var(--spacing-md); }
+.rmr-msg-banner--compact .rmr-msg-banner__icon { width: 24px; height: 24px; }
+
+.rmr-columns {
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: stretch;
+  flex: 1;
+  min-height: 0;
+}
+
+.rmr-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+  width: 443px;
+  flex-shrink: 0;
+  padding: var(--spacing-xl);
+  background: var(--background-primary);
+  border-radius: var(--spacing-xs);
+  border-left: 5px solid var(--color-yellow-500);
+  box-shadow: var(--dropshadow-sm);
+}
+
+.rmr-card--notifications {
+  flex: 1;
+  width: auto;
+  border-left-color: var(--color-blue-400);
+}
+
+.rmr-card__title {
+  margin: 0;
+  font-size: var(--font-size-lg);
+  letter-spacing: 0.9px;
+}
+
+.rmr-tasks {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  overflow-y: auto;
+  padding-right: var(--spacing-xs);
+}
+
+.rmr-task {
+  display: flex;
+  gap: var(--spacing-xs);
+  align-items: flex-start;
+}
+
+.rmr-task__icon-wrap {
+  display: flex;
+  padding: 6.4px;
+  border-radius: 80px;
+  background: var(--color-yellow-200);
+  flex-shrink: 0;
+}
+
+.rmr-task__icon { width: 20px; height: 20px; }
+
+.rmr-task__body { flex: 1; min-width: 0; }
+
+.rmr-task__title {
+  margin: 0 0 4px;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-md);
+}
+
+.rmr-task__desc {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  letter-spacing: 0.28px;
+  line-height: var(--line-height-md);
+}
+
+.rmr-task__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--spacing-xs);
+}
+
+.rmr-task__time {
+  font-size: var(--font-size-xs);
+  color: var(--text-tertiary);
+  letter-spacing: 0.24px;
+}
+
+.rmr-divider { height: 1px; background: var(--border-border); width: 100%; border: none; margin: 0; }
+
+.rmr-notif-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  overflow-y: auto;
+  padding-right: var(--spacing-xs);
+}
+
+.rmr-notif {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.rmr-notif__icon-wrap {
+  display: flex;
+  padding: 6.4px;
+  border-radius: var(--spacing-xs);
+  flex-shrink: 0;
+}
+
+.rmr-notif__icon-wrap--yellow { background: var(--color-yellow-300); }
+.rmr-notif__icon-wrap--blue { background: var(--color-blue-200); }
+.rmr-notif__icon-wrap--red { background: var(--color-red-300); }
+
+.rmr-notif__icon { width: 20px; height: 20px; }
+
+.rmr-notif__body { flex: 1; min-width: 0; padding: 4px 0; }
+
+.rmr-notif__title {
+  margin: 0 0 4px;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-md);
+}
+
+.rmr-notif__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.rmr-notif__time {
+  font-size: var(--font-size-xs);
+  color: var(--text-tertiary);
+  letter-spacing: 0.24px;
+}
+
+.rmr-footer-ads {
+  display: flex;
+  gap: var(--spacing-xl);
+  align-items: center;
+  padding: var(--spacing-md);
+  background: var(--background-primary);
+  border-radius: var(--spacing-xs);
+  box-shadow: var(--dropshadow-sm);
+  flex-wrap: wrap;
+}
+
+.rmr-ad {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--spacing-xs);
+  border: 1px solid;
+  box-shadow: var(--dropshadow-sm);
+  text-align: left;
+  cursor: pointer;
+}
+
+.rmr-ad__label {
+  margin: 0;
+  font-size: var(--font-size-md);
+  letter-spacing: 0.32px;
+  white-space: nowrap;
+}
+
+.rmr-ad__image { height: 28px; }
+
+.rmr-ad--leasetrack { background: var(--color-blue-100); border-color: var(--icon-primary); }
+.rmr-ad--flex { background: #f2ebff; border-color: #6a3db8; }
+
+/* ---------- Portal footer (account bar) ---------- */
+
+.rmr-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 52px;
+  padding: var(--spacing-sm) var(--spacing-xl);
+  margin: 0 var(--spacing-2xl);
+  background: var(--background-primary);
+  border-top-left-radius: var(--spacing-xs);
+  border-top-right-radius: var(--spacing-xs);
+  box-shadow: var(--dropshadow-sm);
+  flex-shrink: 0;
+}
+
+.rmr-footer__account {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  white-space: nowrap;
+}
+
+.rmr-footer__company { font-weight: 500; font-size: 14px; margin: 0; }
+.rmr-footer__manager { font-size: 12px; letter-spacing: 0.6px; margin: 0; color: var(--text-secondary); }
+
+.rmr-footer__contact {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xl);
+}
+
+/* ---------- Modal overlays ----------
+   Sourced from the Dashboard section's overlay frames (file hbQDUSRF1dLm35tCQAWeHQ):
+   Lease Track (2164:6996), Flex (2164:6997), Contact Us (2167:7284),
+   Cash Pay (2241:1013), Email Property Manager (2279:15651). The backdrop
+   scrim uses the real "Ghosting" component (design-system file, node
+   386:1000 — "For use when underneath a pop up or overlay"), Background/Backdrop
+   token, rgba(0,0,0,0.5). */
+
+.rmr-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--background-backdrop);
+  z-index: 100;
+  padding: var(--spacing-md);
+}
+
+.rmr-modal-backdrop[hidden] { display: none; }
+
+/* Deliberately NOT in the shared scrollbar-gutter: stable group (see the
+   "Scroll bar (shared)" section near the top of this file): almost every
+   modal in this prototype is short, fixed content that never actually
+   scrolls at this outer level — the gutter was permanently reserving ~11px
+   of dead space next to the header's close button on all of them for a
+   scrollbar that would in practice never appear. `overflow-y: auto` below
+   still lets a modal scroll if its content genuinely runs long (and still
+   gets the shared thin/transparent scrollbar look when it does) — it just
+   won't pre-reserve the space for that rare case anymore. */
+.rmr-modal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xl);
+  width: 462px;
+  max-width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: var(--spacing-xl);
+  background: var(--background-primary);
+  border: 1px solid var(--border-border);
+  border-radius: var(--spacing-xs);
+  box-shadow: var(--dropshadow-sm);
+}
+
+.rmr-modal--wide { width: 624px; }
+
+.rmr-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.rmr-modal__title {
+  margin: 0;
+  font-size: var(--font-size-xl);
+  line-height: var(--line-height-lg);
+  letter-spacing: 1px;
+  color: var(--text-primary);
+  font-weight: var(--font-weight-regular);
+}
+
+.rmr-modal__close {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.rmr-modal__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  width: 100%;
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-md);
+  letter-spacing: 0.28px;
+  color: var(--text-primary);
+}
+
+.rmr-modal__body p { margin: 0; }
+
+.rmr-modal__footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--spacing-md);
+  width: 100%;
+}
+
+/* Pinned-header/footer modal variant: .rmr-modal__header and __footer stay
+   fixed, only __body scrolls — same fixed-chrome/scrolling-middle technique
+   already established for the Make a Payment flow's .rmr-modal--payment /
+   .rmr-pmt-body, generalized into a reusable modifier for any modal whose
+   own content can run long (e.g. Add Service Issue) rather than that flow's
+   own single fixed-size variant. The base .rmr-modal still caps overall
+   height at max-height: 90vh; this only moves where the resulting scroll
+   happens once that cap is hit. */
+/* A browser draws the scrollbar flush against its element's own border — it
+   never leaves a trailing gap on its own. Reusing .rmr-modal's full 24px
+   padding on the outer box (like every other modal) would put all of it
+   *after* the scrollbar as unclaimed space (content -> 8px -> scrollbar ->
+   24px of nothing -> true edge). Instead, the outer box's own right padding
+   is cut to 8px — becoming the trailing gap directly — and header/footer
+   (which don't scroll and aren't affected by any of this) get that 16px
+   back on their own padding, so they still sit the normal 24px from the
+   edge. __body then only needs its own 8px leading gap: content -> 8px ->
+   scrollbar -> [outer box's 8px padding] -> true edge, the same real 24px
+   split evenly into thirds instead of dumped entirely on one side. */
+.rmr-modal--pinned { overflow-y: hidden; scrollbar-gutter: auto; padding-right: var(--spacing-xs); }
+.rmr-modal--pinned .rmr-modal__header,
+.rmr-modal--pinned .rmr-modal__footer { flex-shrink: 0; padding-right: var(--spacing-md); }
+.rmr-modal--pinned .rmr-modal__body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: var(--spacing-xs);
+}
+/* The scroll boundary can land mid-field, so the footer needs its own clear
+   edge (border) rather than reading as leftover blank space below whatever
+   got cut off — .rmr-modal's own flex `gap` (24px, meant for its normal,
+   non-scrolling children) is cancelled here and replaced with a tighter,
+   intentional-looking pinned action bar. */
+.rmr-modal--pinned .rmr-modal__footer {
+  margin-top: calc(-1 * var(--spacing-xl));
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--border-border);
+}
+
+.rmr-modal__link-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  padding: 0 var(--spacing-xs);
+  color: var(--text-blue);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-md);
+  letter-spacing: 0.28px;
+}
+
+/* Powered-by lockup (Lease Track / Flex) */
+
+.rmr-modal__powered-by {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rmr-modal__powered-by-label {
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-sm);
+  letter-spacing: 0.24px;
+  color: var(--text-secondary);
+}
+
+.rmr-modal__powered-by-logo { height: 20px; }
+
+/* Checklist (Flex) */
+
+.rmr-modal__checklist {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.rmr-modal__check-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.rmr-modal__check-icon { width: 16px; height: 16px; flex-shrink: 0; }
+
+/* Two-column field grid (Contact Us) */
+
+.rmr-modal__grid {
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: flex-start;
+  width: 100%;
+}
+
+.rmr-modal__grid-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xxs);
+  flex: 1;
+  min-width: 0;
+}
+
+.rmr-modal__grid-label { margin: 0; font-weight: var(--font-weight-bold); }
+.rmr-modal__grid-value { margin: 0; }
+
+.rmr-modal__fine-print {
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-sm);
+  letter-spacing: 0.24px;
+  margin: 0;
+}
+
+/* Form fields (Email Property Manager) */
+
+.rmr-modal__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xxs);
+  width: 100%;
+}
+
+.rmr-modal__field-label {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+.rmr-modal__input {
+  width: 100%;
+  height: 32px;
+  padding: var(--spacing-xs);
+  border: 1px solid var(--border-border);
+  border-radius: var(--spacing-xs);
+  background: var(--background-primary);
+  font-family: var(--font-family-main);
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
+}
+
+.rmr-modal__textarea {
+  width: 100%;
+  height: 91px;
+  padding: var(--spacing-xs);
+  border: 1px solid var(--border-border);
+  border-radius: var(--spacing-xs);
+  background: var(--background-primary);
+  font-family: var(--font-family-main);
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
+  resize: none;
+}
+
+.rmr-modal__input:focus,
+.rmr-modal__textarea:focus,
+.rmr-modal__select:focus,
+.rmr-dropdown--open .rmr-dropdown__trigger {
+  outline: none;
+  background-color: var(--component-selector);
+  border-color: var(--border-button-tertiary);
+}
+
+.rmr-modal__select {
+  width: 100%;
+  height: 32px;
+  padding: var(--spacing-xs);
+  border: 1px solid var(--border-border);
+  border-radius: var(--spacing-xs);
+  background: var(--background-primary) url("icons/payments/mp-dropdown.svg") no-repeat right 8px center;
+  background-size: 20px;
+  appearance: none;
+  font-family: var(--font-family-main);
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
+}
+
+/* Custom dropdown — every closed-field visual above is untouched
+   (.rmr-modal__select is reused as-is for the trigger button, so its box,
+   border, chevron icon and focus/selected state all still apply); this adds
+   only the OPEN list, sourced from the design system's real "Dropdown"
+   component (file W4wEUn8A4hkTdiAgEV8wSK, node 12:1560/12:1637 — the same
+   Default/Hover/Selected row also used inside the Input Field's Year/Month
+   pickers). A native <select>'s option list can't be restyled to match this
+   — browsers render it with OS chrome, ignoring most CSS — so every select
+   in this prototype was rebuilt as a trigger button + this menu instead. */
+.rmr-dropdown { position: relative; width: 100%; }
+.rmr-dropdown__trigger { text-align: left; cursor: pointer; }
+.rmr-dropdown__menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 30;
+  max-height: 240px;
+  overflow-y: auto;
+  background: var(--background-primary);
+  border: 1px solid var(--border-border);
+  border-radius: var(--spacing-xs);
+  box-shadow: var(--dropshadow-dropdown);
+}
+.rmr-dropdown__menu[hidden] { display: none; }
+.rmr-dropdown--menu-up .rmr-dropdown__menu { top: auto; bottom: calc(100% + 4px); }
+.rmr-dropdown__option {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  min-height: 40px;
+  padding: var(--spacing-xs) var(--spacing-xs) var(--spacing-xs) 16px;
+  font-family: var(--font-family-main);
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
+  cursor: pointer;
+}
+.rmr-dropdown__option:hover { background: var(--interaction-hover-blue); }
+.rmr-dropdown__option--selected { background: var(--interaction-selected-blue); }
+
+/* ---------- Make a Payment flow ----------
+   Sourced from file fPSZy4e0NwJMiTs345xXGy, section "Make Payment" (node
+   2001:1352): 4.2.1 Select Amount (2001:1378) -> 4.3.1 CC Payment Method
+   (2043:15963) -> 4.2.4 Success (2001:1353). Per instruction, only one
+   payment method is ever on file — the pg2 "Your Payment Method" step is a
+   single Visa row with an edit pencil (.rmr-ap-method-row, shared with the
+   AutoPay flow below), not a radio choice between an existing card and
+   adding a new one. Its edit-in-place form is the same real, pre-filled
+   "Edit Saved Payment Method" content used by AutoPay (sourced from node
+   2045:7618), not the blank "New Payment Method" form an earlier pass built
+   from node 2043:17085 before this was corrected. The modal itself stays a
+   fixed height regardless — .rmr-pmt-body (header/footer's scrollable
+   sibling, below) scrolls internally instead of the modal growing taller. */
+
+/* Fixed-height modals whose own .rmr-modal box never scrolls — the flow's
+   own inner region (.rmr-pmt-body) handles all scrolling instead. Pins
+   overflow-y: hidden so the outer box can't become a second scroll
+   container of its own (scrollbar-gutter: auto is set defensively here too,
+   in case the bare .rmr-modal rule below this ever changes back to
+   reserving one — see that rule's own comment for why it currently doesn't). */
+.rmr-modal--payment,
+.rmr-modal--autopay {
+  overflow-y: hidden;
+  scrollbar-gutter: auto;
+}
+.rmr-modal--payment { width: 1168px; height: 608px; }
+.rmr-modal--narrow { width: 400px; }
+
+.rmr-pmt-intro {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  letter-spacing: 0.28px;
+}
+
+/* .rmr-pmt-body is the flow's one scrollable region — .rmr-modal__header and
+   .rmr-pmt-footer sit outside it (plain flex siblings in .rmr-modal's own
+   column), so the footer reads as a pinned bar with body content scrolling
+   underneath it, never overlapping it. */
+.rmr-pmt-body {
+  display: flex;
+  gap: var(--spacing-xl);
+  align-items: flex-start;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  overflow-y: auto;
+}
+
+.rmr-pmt-main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  flex: 1;
+  min-width: 0;
+}
+
+/* "Your Payment Method" step only (pay-method / autopay-method): the
+   summary sidebar and the Terms checkbox should read as part of the pinned
+   footer — always visible — with only the method row / expanded edit form
+   scrolling in the space above them. Every other step's .rmr-pmt-body keeps
+   scrolling as one whole block (its own footer has nothing that needs to
+   stay independently visible), so this is a modifier, not a change to the
+   shared rule above. .rmr-pmt-main needs a real height for .rmr-pmt-scroll's
+   `flex: 1` to compute against, since .rmr-pmt-body no longer does that job. */
+.rmr-pmt-body--split { overflow-y: visible; align-items: stretch; }
+.rmr-pmt-main--pinned-footer { height: 100%; min-height: 0; }
+.rmr-pmt-scroll {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: var(--spacing-xs);
+}
+/* This region's own `padding-right` above is the 8px gap between its
+   bordered content and the scrollbar — see the shared "Scroll bar" section
+   near the top of this file for the bar's own styling and anti-shift rule. */
+
+/* Amount selector cards (4.2.1) */
+
+.rmr-pmt-amount-cards { display: flex; gap: var(--spacing-xl); align-items: center; width: 100%; }
+
+.rmr-pmt-amount-card {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  width: 224px;
+  padding: var(--spacing-md);
+  background: var(--background-primary);
+  border: 1px solid var(--border-border);
+  border-radius: var(--spacing-xs);
+  text-align: left;
+  flex-shrink: 0;
+}
+
+.rmr-pmt-amount-card--selected {
+  background: var(--component-selector);
+  border-color: var(--border-button-tertiary);
+}
+
+.rmr-pmt-radio {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--icon-disabled);
+  flex-shrink: 0;
+  position: relative;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.rmr-pmt-radio--selected { border-color: var(--border-button-tertiary); }
+
+.rmr-pmt-radio--selected::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--icon-primary);
+}
+
+.rmr-pmt-amount-card__label {
+  margin: 0;
+  font-size: var(--font-size-md);
+  color: var(--text-primary);
+  letter-spacing: 0.32px;
+}
+
+.rmr-pmt-amount-card__sub {
+  margin: 0;
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+  letter-spacing: 0.24px;
+}
+
+.rmr-pmt-amount-card__value {
+  margin: var(--spacing-xxs) 0 0;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+}
+
+.rmr-pmt-amount-card__content { flex: 1; min-width: 0; }
+
+/* The register is the only thing in this flow allowed to scroll
+   horizontally — everything around it (.rmr-modal, .rmr-pmt-main) stays
+   clipped, so a narrow viewport scrolls just the table, not the whole
+   overlay. */
+.rmr-pmt-table-wrap { width: 100%; overflow-x: auto; padding-bottom: var(--spacing-xs); }
+
+.rmr-pmt-pay-input {
+  width: 100%;
+  height: 32px;
+  padding: var(--spacing-xs);
+  border: 1px solid var(--border-border);
+  border-radius: var(--spacing-xs);
+  background: var(--background-primary);
+  font-family: var(--font-family-main);
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
+  text-align: right;
+}
+
+.rmr-pmt-overpay-label { color: var(--secondary-text); }
+
+[data-pmt-table="other"] .rmr-pay-table th:first-child,
+[data-pmt-table="other"] .rmr-pay-table td:first-child {
+  width: 36px;
+  padding-right: 0;
+}
+
+.rmr-pmt-amount-input {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  margin-top: var(--spacing-xxs);
+}
+
+.rmr-pmt-amount-input__dollar { font-size: var(--font-size-lg); font-weight: var(--font-weight-bold); color: var(--text-primary); }
+
+.rmr-pmt-amount-input input {
+  flex: 1;
+  min-width: 0;
+  height: 32px;
+  padding: var(--spacing-xs);
+  border: 1px solid var(--border-border);
+  border-radius: var(--spacing-xs);
+  background: var(--background-primary);
+  font-family: var(--font-family-main);
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
+}
+
+/* Payment summary sidebar (shared by 4.2.1 / 4.3.1) */
+
+.rmr-pmt-summary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  width: 376px;
+  padding: var(--spacing-xl);
+  background: var(--background-secondary);
+  border: 1px solid var(--border-border);
+  border-radius: var(--spacing-xs);
+  box-shadow: var(--dropshadow-sm);
+  flex-shrink: 0;
+}
+
+.rmr-pmt-summary__title { margin: 0; font-size: var(--font-size-md); color: var(--text-primary); letter-spacing: 0.32px; }
+.rmr-pmt-summary__amount { margin: 0; font-size: var(--font-size-5xl); line-height: var(--line-height-3xl); color: var(--text-primary); }
+.rmr-pmt-summary__disclaimer { margin: 0; font-size: var(--font-size-sm); color: var(--text-secondary); letter-spacing: 0.28px; }
+.rmr-pmt-summary__disclaimer a { color: var(--text-blue); }
+
+.rmr-pmt-field { display: flex; flex-direction: column; gap: var(--spacing-xxs); width: 100%; }
+.rmr-pmt-field__label { display: flex; align-items: center; gap: var(--spacing-xs); font-size: var(--font-size-sm); color: var(--text-secondary); }
+.rmr-pmt-field__label img { width: 20px; height: 20px; }
+.rmr-pmt-field__value { font-size: var(--font-size-md); color: var(--text-primary); letter-spacing: 0.32px; }
+.rmr-pmt-field__total { font-size: var(--font-size-5xl); line-height: var(--line-height-3xl); color: var(--text-primary); }
+
+.rmr-pmt-flexad__title { margin: 0 0 var(--spacing-xs); font-size: var(--font-size-lg); color: var(--text-primary); }
+.rmr-pmt-flexad__powered { display: flex; align-items: center; gap: 8px; margin-bottom: var(--spacing-xs); }
+.rmr-pmt-flexad__powered-label { font-size: var(--font-size-xs); color: var(--text-secondary); letter-spacing: 0.24px; }
+.rmr-pmt-flexad__logo { display: inline-block; height: 20px; }
+.rmr-pmt-flexad__desc { margin: 0 0 var(--spacing-xs); font-size: var(--font-size-xs); color: var(--text-primary); letter-spacing: 0.24px; }
+.rmr-pmt-flexad__benefits { display: flex; flex-direction: column; gap: var(--spacing-xs); }
+.rmr-pmt-flexad__benefit { display: flex; align-items: center; gap: var(--spacing-xs); font-size: var(--font-size-xs); color: var(--text-primary); letter-spacing: 0.24px; }
+.rmr-pmt-flexad__benefit img { width: 16px; height: 16px; }
+.rmr-pmt-flexad__footer { display: flex; align-items: center; gap: var(--spacing-md); margin-top: var(--spacing-md); }
+
+/* Table (reuses .rmr-pay-table styling via the same class) */
+
+/* Payment Method list (4.3.1) */
+
+.rmr-pmt-method-title { margin: 0; font-size: var(--font-size-md); font-weight: var(--font-weight-bold); color: var(--text-primary); }
+
+.rmr-pmt-method__icon { width: 16px; height: 16px; flex-shrink: 0; }
+
+/* Per node 2045:7618, "Edit Saved Payment Method" is ONE continuous
+   bordered/tinted card (replacing the plain method row entirely, not an
+   expansion stacked below it) — same selected-card treatment as
+   .rmr-ap-method-row, just applied to the whole form. */
+.rmr-pmt-new-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  width: 100%;
+  padding: var(--spacing-xl);
+  background: var(--component-selector);
+  border: 1px solid var(--border-button-tertiary);
+  border-radius: var(--spacing-xs);
+}
+.rmr-pmt-new-form[hidden] { display: none; }
+
+.rmr-pmt-cvv-wrap { position: relative; width: 100%; }
+.rmr-pmt-cvv-input { padding-right: 32px; }
+.rmr-pmt-cvv-icon { position: absolute; right: var(--spacing-xs); top: 50%; transform: translateY(-50%); width: 20px; height: 20px; pointer-events: none; }
+
+.rmr-pmt-new-form__header { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+.rmr-pmt-new-form__title { margin: 0; font-size: var(--font-size-md); font-weight: var(--font-weight-bold); color: var(--text-primary); }
+
+.rmr-pmt-checkbox { display: flex; align-items: center; gap: var(--spacing-xs); font-size: var(--font-size-sm); color: var(--text-secondary); letter-spacing: 0.28px; }
+
+/* Custom Checkbox component (design system node 3006:34891/34889) — a native
+   <input type="checkbox"> can only be tinted via accent-color, which just
+   recolors the browser/OS's own checkbox glyph and shape, not the real
+   design-system icon. Instead the input is layered transparently over a
+   styled box and the box swaps to the real check asset via :checked. */
+.rmr-checkbox { position: relative; display: inline-flex; width: 20px; height: 20px; flex-shrink: 0; }
+.rmr-checkbox input { position: absolute; inset: 0; margin: 0; opacity: 0; cursor: pointer; }
+.rmr-checkbox-box {
+  display: block;
+  width: 20px;
+  height: 20px;
+  background: var(--background-primary);
+  border: 2px solid var(--border-border);
+  border-radius: var(--spacing-xxxs);
+}
+.rmr-checkbox input:checked + .rmr-checkbox-box {
+  background: var(--icon-primary) url("icons/payments/mp-checkbox-check.svg") no-repeat center / 20px 20px;
+  border: none;
+}
+
+.rmr-pmt-form-row { display: flex; gap: var(--spacing-md); width: 100%; }
+.rmr-pmt-form-row > * { flex: 1; min-width: 0; }
+.rmr-pmt-form-row[hidden] { display: none; }
+
+.rmr-pmt-billing-header { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+.rmr-pmt-billing-title { margin: 0; font-size: var(--font-size-md); font-weight: var(--font-weight-bold); color: var(--text-primary); }
+
+.rmr-pmt-terms {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  width: 100%;
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--border-border);
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  letter-spacing: 0.28px;
+}
+
+.rmr-pmt-terms a { color: var(--text-blue); }
+
+.rmr-pmt-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.rmr-pmt-footer__right { display: flex; align-items: center; gap: var(--spacing-md); }
+
+/* ---------- AutoPay setup flow ----------
+   Sourced from file fPSZy4e0NwJMiTs345xXGy, section "Autopay setup" (node
+   2001:1682): pg1 "Payment Amount" + "Autopay Schedule" (node 2044:20657,
+   its "Specific Amount" radio state from 2044:22220) -> pg2 "Your Payment
+   Method" (node 2044:22955, its edit-in-place form from "Reference:
+   Schedule Autopay - pg 2 Replace Pay Method", node 2045:7618) -> Success
+   (node 2005:4482). The ACH and "no card on file" pg2 variants, and the
+   standalone "Autopay is disabled" toggle frame, were out of scope — the
+   empty AutoPay banner's own "Set Up" button already starts the wizard
+   directly. Reuses the Make a Payment flow's .rmr-pmt-body/-main/-summary/
+   -field/-footer/-new-form/-success scaffolding throughout (same 2-column
+   layout, same fixed-width-card + editable-form pattern), since both flows
+   share the same underlying design-system components. */
+
+/* Fixed height (matching the Figma frames' own 560-566px), not auto —
+   .rmr-pmt-body's `flex: 1` needs a parent with a real (non-auto) height to
+   grow into so it reliably fills the space down to the footer; against an
+   auto-sized modal that math is ambiguous (no leftover space to distribute
+   when the parent sizes to content), which left short-content steps like
+   "Your Payment Method" with the footer sitting right under the content
+   instead of anchored at a consistent bottom position. A fixed height
+   removes the ambiguity outright, and content taller than it (e.g. the
+   expanded edit form) still scrolls internally exactly as before. */
+.rmr-modal--autopay { width: 948px; height: 566px; }
+
+.rmr-ap-amount-options { display: flex; gap: var(--spacing-2xl); align-items: flex-start; }
+
+.rmr-ap-amount-option {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background: none;
+  border: none;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
+  font-family: var(--font-family-main);
+}
+
+.rmr-ap-amount-option__row { display: flex; align-items: center; gap: var(--spacing-xs); }
+
+.rmr-ap-amount-option__label {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  letter-spacing: 0.28px;
+}
+
+.rmr-ap-amount-option__sub {
+  margin: 0;
+  padding-left: 28px;
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+  letter-spacing: 0.24px;
+}
+
+.rmr-ap-footnote {
+  margin: 0;
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+  letter-spacing: 0.24px;
+}
+
+.rmr-ap-schedule-title { margin: 0; font-size: var(--font-size-md); font-weight: var(--font-weight-bold); color: var(--text-primary); }
+.rmr-ap-schedule-desc { margin: 0; font-size: var(--font-size-sm); color: var(--text-secondary); }
+
+.rmr-ap-date-wrap { position: relative; width: 100%; }
+.rmr-ap-date-input { padding-right: 32px; }
+.rmr-ap-date-icon { position: absolute; right: var(--spacing-xs); top: 50%; transform: translateY(-50%); width: 20px; height: 20px; pointer-events: none; }
+
+.rmr-ap-method-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  width: 100%;
+  padding: var(--spacing-md);
+  background: var(--component-selector);
+  border: 1px solid var(--border-button-tertiary);
+  border-radius: var(--spacing-xs);
+}
+.rmr-ap-method-row[hidden] { display: none; }
+.rmr-ap-method-row__info { display: flex; align-items: center; gap: var(--spacing-xs); }
+.rmr-ap-method-row__label { margin: 0; font-size: var(--font-size-md); font-weight: var(--font-weight-bold); color: var(--text-primary); }
+.rmr-ap-method-row__edit { display: block; width: 20px; height: 20px; flex-shrink: 0; cursor: pointer; }
+
+.rmr-ap-form-footer { display: flex; justify-content: flex-end; gap: var(--spacing-md); width: 100%; }
+
+/* ---------- Payment Settings page ----------
+   Sourced from file fPSZy4e0NwJMiTs345xXGy, section "Payment Methods" (node
+   2001:1751), frame "3.1.2 Payment Settings - Entered" (node 2039:14660) for
+   the landing page (compact photo hero + Payment Methods/AutoPay card).
+   That section also contains full separate pages for payment-method
+   add/edit/entered states, autopay disabled/new/scheduled/edit-scheduled
+   states, and unsaved-changes/delete confirmation dialogs (16 frames total)
+   — out of scope here; this prototype instead reuses the Make a Payment /
+   AutoPay setup flow's own edit-in-place and modal patterns for those
+   actions (see screens/payment-settings.html), documented fully in
+   PROTOTYPE.md. */
+
+.rmr-settings-page { display: flex; flex-direction: column; gap: var(--spacing-2xl); padding: var(--spacing-2xl); }
+
+.rmr-settings-hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  padding: var(--spacing-xl);
+  border-radius: var(--spacing-xs);
+  overflow: hidden;
+}
+.rmr-settings-hero__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.rmr-settings-hero__scrim { position: absolute; inset: 0; background: var(--background-element); }
+.rmr-settings-hero__title {
+  position: relative;
+  margin: 0;
+  font-size: var(--font-size-3xl);
+  line-height: var(--line-height-xl);
+  letter-spacing: 1.2px;
+  color: var(--white);
+}
+
+.rmr-settings-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+  width: 1160px;
+  max-width: 100%;
+  padding: var(--spacing-xl);
+  background: var(--background-primary);
+  border-radius: var(--spacing-xs);
+  box-shadow: var(--dropshadow-sm);
+}
+.rmr-settings-card[hidden] { display: none; }
+
+.rmr-settings-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
+  font-family: var(--font-family-main);
+}
+.rmr-settings-row[hidden] { display: none; }
+.rmr-settings-row__text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.rmr-settings-row__title-row { display: flex; align-items: center; gap: var(--spacing-xs); }
+.rmr-settings-row__title { font-size: var(--font-size-md); font-weight: var(--font-weight-bold); color: var(--text-primary); }
+.rmr-settings-row__desc { font-size: var(--font-size-sm); color: var(--text-secondary); letter-spacing: 0.28px; }
+.rmr-settings-row__chevron { width: 24px; height: 24px; flex-shrink: 0; }
+
+.rmr-settings-lozenge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xxs) var(--spacing-xs);
+  background: var(--color-green-200);
+  border-radius: var(--spacing-xxs);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+}
+
+/* Toggle Slider — design system component, node 3006:32095 (off) /
+   3006:32096 (on). Off: track var(--component-toggle-switch-disabled),
+   handle left with no icon. On: track var(--component-button-primary),
+   handle right (18px) on var(--background-page), with a check icon. */
+.rmr-toggle { display: inline-flex; align-items: center; gap: var(--spacing-xs); cursor: pointer; }
+.rmr-toggle input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.rmr-toggle__track {
+  position: relative;
+  width: 36px;
+  height: 20px;
+  border-radius: 12px;
+  background: var(--component-toggle-switch-disabled);
+  flex-shrink: 0;
+  transition: background 0.15s ease;
+}
+.rmr-toggle__handle {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--background-primary);
+  box-shadow: var(--dropshadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: left 0.15s ease, background 0.15s ease;
+}
+.rmr-toggle__handle img { display: none; width: 12px; height: 12px; }
+.rmr-toggle input:checked ~ .rmr-toggle__track { background: var(--component-button-primary); }
+.rmr-toggle input:checked ~ .rmr-toggle__track .rmr-toggle__handle { left: 18px; background: var(--background-page); }
+.rmr-toggle input:checked ~ .rmr-toggle__track .rmr-toggle__handle img { display: block; }
+.rmr-toggle__label { font-family: var(--font-family-main); font-size: var(--font-size-sm); color: var(--text-secondary); }
+
+/* ---------- Payment Methods page ----------
+   Sourced from file fPSZy4e0NwJMiTs345xXGy, section "Payment Methods" (node
+   3272:27066): "3.2.2 Tenant Payment Methods - Entered" (node 2099:7654, the
+   read-only view) and "3.2.3 ... - Edit Entered" (node 2045:418393, the
+   editable form with its Bank Account/Card method-type choice). Reachable
+   from the Balance Due gear icon and the Payment Settings page's "Payment
+   Methods" row — replaces the earlier simplified modal built for that entry
+   point, since this is a real full page in the source file, not an overlay. */
+
+.rmr-pmm-card-header { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+.rmr-pmm-card-title { margin: 0; font-size: var(--font-size-md); font-weight: var(--font-weight-bold); color: var(--text-primary); }
+.rmr-pmm-card-actions { display: flex; align-items: center; gap: var(--spacing-md); }
+.rmr-pmm-card-actions img, .rmr-pmm-card-actions button { display: block; width: 24px; height: 24px; }
+.rmr-pmm-card-actions button { cursor: pointer; }
+
+.rmr-pmm-type-cards { display: flex; gap: var(--spacing-xl); width: 496px; max-width: 100%; }
+
+.rmr-pmm-type-card {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--spacing-md);
+  min-width: 0;
+  padding: var(--spacing-md);
+  background: var(--background-primary);
+  border: 1px solid var(--border-border);
+  border-radius: var(--spacing-xs);
+  text-align: left;
+  cursor: pointer;
+  font-family: var(--font-family-main);
+}
+.rmr-pmm-type-card--selected { background: var(--component-selector); border-color: var(--border-button-tertiary); }
+.rmr-pmm-type-card__icon { width: 24px; height: 24px; flex-shrink: 0; }
+.rmr-pmm-type-card__label { margin: 0; font-size: var(--font-size-md); font-weight: var(--font-weight-bold); color: var(--text-primary); }
+
+.rmr-pmm-footer { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+.rmr-pmm-footer__actions { display: flex; align-items: center; gap: var(--spacing-md); }
+
+.rmr-btn[disabled] { background: var(--component-button-disabled); cursor: not-allowed; }
+
+/* The view state's fields (node 2099:7654) are plain label+value text, no
+   border or box — unlike the edit state's real bordered `.rmr-modal__input`
+   fields (node 2045:418393, which does have its own bg/border classes). An
+   earlier pass used the same boxed-input look for both, which doesn't match
+   the source for the read-only state. */
+.rmr-pmm-value { margin: 0; font-size: var(--font-size-sm); color: var(--text-primary); letter-spacing: 0.28px; }
+
+/* Success screen (4.2.4) */
+
+.rmr-pmt-success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xl);
+  width: 100%;
+}
+
+.rmr-pmt-success__icon { width: 64px; height: 64px; }
+
+.rmr-pmt-success__message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md);
+  text-align: center;
+}
+
+.rmr-pmt-success__title { margin: 0; font-size: var(--font-size-xl); letter-spacing: 1px; color: var(--text-primary); }
+.rmr-pmt-success__body { margin: 0; font-size: var(--font-size-md); color: var(--text-secondary); letter-spacing: 0.32px; }
+
+.rmr-pmt-success__details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  width: 100%;
+  padding: var(--spacing-xl) var(--spacing-2xl);
+  background: var(--background-secondary);
+  border: 1px solid var(--border-border);
+  border-radius: var(--spacing-xs);
+  box-shadow: var(--dropshadow-sm);
+}
+
+.rmr-pmt-success__row { display: flex; align-items: center; justify-content: space-between; }
+.rmr-pmt-success__row-label { margin: 0; font-size: var(--font-size-md); color: var(--text-secondary); letter-spacing: 0.32px; }
+.rmr-pmt-success__row-value { margin: 0; font-size: var(--font-size-lg); line-height: var(--line-height-xl); font-weight: var(--font-weight-bold); color: var(--text-primary); }
+
+/* ---------- Placeholder / pending-screen state ---------- */
+
+.rmr-pending {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  flex: 1;
+  padding: var(--spacing-2xl);
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.rmr-pending__title {
+  margin: 0;
+  font-size: var(--font-size-xl);
+  color: var(--text-primary);
+}
+
+.rmr-pending__body { max-width: 480px; margin: 0; font-size: var(--font-size-sm); line-height: var(--line-height-md); }
+
+/* ---------- Payments & Charges screen ----------
+   Sourced from file fPSZy4e0NwJMiTs345xXGy: frame "4.1.2 Charges & Payments -
+   Balance" (node 2001:689) is the default view; the table panel toggles to
+   frame "4.1.3 Charges & Payments - All Activity" (node 2001:1094) content
+   via the real Option Toggle control. */
+
+.rmr-pay-hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  padding: var(--spacing-xl);
+  margin: var(--spacing-2xl) var(--spacing-2xl) 0;
+  border-radius: var(--spacing-xs);
+  overflow: hidden;
+  min-height: 64px;
+  flex-shrink: 0;
+}
+
+.rmr-pay-hero__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+.rmr-pay-hero__scrim {
+  position: absolute;
+  inset: 0;
+  background: var(--background-element);
+  z-index: 1;
+}
+
+.rmr-pay-hero__title {
+  position: relative;
+  z-index: 2;
+  margin: 0;
+  flex: 1;
+  color: var(--white);
+  font-size: var(--font-size-3xl);
+  line-height: var(--line-height-xl);
+  letter-spacing: 1.2px;
+  font-weight: var(--font-weight-regular);
+}
+
+.rmr-pay-hero__address {
+  position: relative;
+  z-index: 2;
+  color: var(--text-on-primary);
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-lg);
+  letter-spacing: 0.32px;
+  white-space: nowrap;
+}
+
+.rmr-pay-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  flex: 1;
+  min-height: 0;
+  padding: var(--spacing-md) var(--spacing-2xl);
+  overflow-y: auto;
+}
+
+.rmr-pay-columns {
+  display: flex;
+  gap: var(--spacing-xl);
+  align-items: flex-start;
+  flex: 1;
+  min-height: 0;
+}
+
+.rmr-pay-left {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+  width: 428px;
+  flex-shrink: 0;
+}
+
+.rmr-pay-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+  width: 100%;
+  padding: var(--spacing-xl);
+  background: var(--background-primary);
+  border-radius: var(--spacing-xs);
+  box-shadow: var(--dropshadow-sm);
+}
+
+.rmr-pay-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.rmr-pay-card__title {
+  margin: 0;
+  font-size: var(--font-size-xl);
+  color: var(--text-primary);
+}
+
+.rmr-pay-card__date {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+.rmr-pay-credits {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  height: 40px;
+  padding: 0 var(--spacing-md);
+  background: var(--color-green-100);
+  border-radius: var(--spacing-xs);
+}
+
+.rmr-pay-credits__label {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-secondary);
+}
+
+.rmr-pay-credits__icon { width: 24px; height: 24px; }
+
+.rmr-pay-credits__amount {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+}
+
+.rmr-pay-chart-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xl);
+}
+
+.rmr-pay-donut {
+  position: relative;
+  width: 222px;
+  height: 222px;
+  flex-shrink: 0;
+}
+
+/* Each arc is a separately-exported SVG shaped to its own slice of the ring —
+   it must sit at its exact Figma inset (not stretched to fill the circle) or
+   the slices distort and overlap. Insets from node 3013:44115. */
+.rmr-pay-donut__seg { position: absolute; }
+.rmr-pay-donut__seg img { display: block; width: 100%; height: 100%; }
+.rmr-pay-donut__seg--1 { inset: 0 0 0.16% 0; }
+.rmr-pay-donut__seg--2 { inset: 52.89% 0.15% 28.76% 83.95%; }
+.rmr-pay-donut__seg--3 { inset: 85.88% 35.44% 0 47.5%; }
+.rmr-pay-donut__seg--4 { inset: 66.81% 5.3% 2.55% 61.82%; }
+
+.rmr-pay-donut__center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+  width: 158px;
+  text-align: center;
+  color: var(--text-primary);
+}
+
+.rmr-pay-donut__label {
+  margin: 0;
+  font-size: var(--font-size-lg);
+  letter-spacing: 0.9px;
+}
+
+.rmr-pay-donut__amount {
+  margin: 0;
+  font-size: var(--font-size-3xl);
+  line-height: var(--line-height-2xl);
+}
+
+.rmr-pay-charges-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  flex: 1;
+}
+
+.rmr-pay-charge-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-xs);
+}
+
+.rmr-pay-swatch {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+}
+
+.rmr-pay-swatch--rent { background: var(--color-blue-800); }
+.rmr-pay-swatch--utilities { background: var(--color-blue-400); }
+.rmr-pay-swatch--other { background: var(--color-blue-200); }
+
+.rmr-pay-charge-item__label {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
+}
+
+.rmr-pay-charge-item__amount {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+}
+
+.rmr-pay-payment-buttons {
+  display: flex;
+  gap: var(--spacing-xs);
+}
+
+.rmr-pay-payment-buttons .rmr-btn--primary { flex: 1; height: 36px; }
+
+.rmr-pay-icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  background: var(--component-button-primary);
+  border-radius: var(--spacing-xs);
+}
+
+.rmr-pay-icon-btn img { width: 20px; height: 20px; }
+
+.rmr-pay-autopay {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  border-radius: var(--spacing-xs);
+  overflow: hidden;
+  box-shadow: var(--dropshadow-sm);
+}
+
+.rmr-pay-autopay[hidden] { display: none; }
+
+.rmr-pay-autopay__bar { width: 7px; flex-shrink: 0; background: var(--status-success); }
+.rmr-pay-autopay__bar--empty { background: var(--icon-primary); }
+
+.rmr-pay-autopay__body {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  flex: 1;
+  min-width: 0;
+  padding: var(--spacing-xs) var(--spacing-md) var(--spacing-xs) var(--spacing-sm);
+  background: var(--background-primary);
+}
+
+.rmr-pay-autopay__icon { width: 24px; height: 24px; flex-shrink: 0; }
+
+.rmr-pay-autopay__text { flex: 1; min-width: 0; }
+
+.rmr-pay-autopay__title {
+  margin: 0 0 4px;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-md);
+}
+
+.rmr-pay-autopay__desc {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+.rmr-pay-right {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: var(--spacing-xl);
+  background: var(--background-primary);
+  border-radius: var(--spacing-xs);
+  box-shadow: var(--dropshadow-sm);
+}
+
+.rmr-pay-toggle {
+  display: inline-flex;
+  width: fit-content;
+}
+
+.rmr-pay-toggle__btn {
+  padding: var(--spacing-xs) var(--spacing-md);
+  height: 36px;
+  border: 1px solid var(--border-border);
+  background: var(--background-primary);
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.rmr-pay-toggle__btn:first-child { border-top-left-radius: var(--spacing-xs); border-bottom-left-radius: var(--spacing-xs); border-right: none; }
+.rmr-pay-toggle__btn:last-child { border-top-right-radius: var(--spacing-xs); border-bottom-right-radius: var(--spacing-xs); }
+
+.rmr-pay-toggle__btn--active {
+  background: var(--interaction-hover-blue);
+  border-color: var(--icon-primary);
+  color: var(--text-secondary);
+  font-weight: var(--font-weight-bold);
+  position: relative;
+  z-index: 1;
+}
+
+/* :first-child drops its right border so the two buttons don't double up a
+   gray divider line between them — but that also swallowed the active
+   state's own blue border on that side. Restore it here, on top of (higher
+   specificity than) the :first-child rule, so an active first button still
+   reads as a complete blue-outlined pill. */
+.rmr-pay-toggle__btn--active:first-child { border-right: 1px solid var(--icon-primary); }
+
+/* Real "Input Field" component (node 2087:627346): label sits above a
+   32px-tall bordered field, not merged into one taller box. */
+.rmr-pay-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xxs);
+  width: 226px;
+  flex-shrink: 0;
+}
+
+.rmr-pay-field__label {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  letter-spacing: 0.28px;
+}
+
+.rmr-pay-field__input {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  height: 32px;
+  padding: var(--spacing-xs);
+  background: var(--background-primary);
+  border: 1px solid var(--border-border);
+  border-radius: var(--spacing-xs);
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
+  letter-spacing: 0.28px;
+}
+
+.rmr-pay-field__divider { width: 4px; height: 1px; background: var(--border-border); flex-shrink: 0; }
+.rmr-pay-field__icon { width: 20px; height: 20px; margin-left: auto; flex-shrink: 0; }
+
+.rmr-pay-table-wrap {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding-right: var(--spacing-xs);
+  padding-bottom: var(--spacing-xs);
+}
+
+.rmr-pay-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.rmr-pay-table th {
+  position: sticky;
+  top: 0;
+  background: var(--background-primary);
+  border-bottom: 2px solid var(--border-border);
+  padding: var(--spacing-xxs) var(--spacing-xs);
+  height: 40px;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+  color: var(--text-secondary);
+  text-align: left;
+  letter-spacing: 0.28px;
+  white-space: nowrap;
+}
+
+.rmr-pay-table th[data-align="right"], .rmr-pay-table td[data-align="right"] { text-align: right; }
+
+.rmr-pay-table td {
+  border-bottom: 1px solid var(--border-border);
+  padding: var(--spacing-xs);
+  height: 40px;
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  letter-spacing: 0.28px;
+  white-space: nowrap;
+}
+
+.rmr-pay-table td[data-align="right"] { color: var(--secondary-text); }
+
+.rmr-pay-table td.rmr-pay-table__swatch-cell { white-space: normal; }
+.rmr-pay-table__row-link { cursor: pointer; }
+.rmr-pay-table__row-link:hover td { background: var(--interaction-hover-blue); }
+
+.rmr-pay-table-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: var(--spacing-xs);
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+[data-pay-view][hidden] { display: none; }
+
+/* ---------- Payments & Charges — tablet breakpoint ----------
+   Sourced from the "Payments Tablet" frame (node 2828:23259, same Figma
+   file): sidebar auto-collapses to icon-only, the Balance card and the
+   charges table stack into one column instead of sitting side by side, and
+   the ledger table drops its Late Fee column with "Reference Number"
+   shortening to "Ref #". The Figma frame itself doesn't state an exact
+   pixel breakpoint (it's a fixed-width tablet artboard), so 1024px — the
+   standard tablet-width cutoff — is used here to actually trigger the
+   adaptation responsively rather than at one fixed size. The desktop
+   Balance-card item count (4 charges, incl. Per Day Late Fees) is kept
+   rather than the tablet mock's own slightly different placeholder numbers,
+   since those aren't a deliberate content difference. The All Activity
+   table's Late Fee column is hidden the same way for consistency, though
+   the source tablet frame only shows the Open Charges state. */
+.rmr-pay-th-short { display: none; }
+
+@media (max-width: 1024px) {
+  .rmr-menu { width: 64px; }
+  .rmr-menu__link { width: 48px; height: 44px; padding: 0; gap: 0; justify-content: center; }
+  .rmr-menu__label { display: none; }
+
+  .rmr-pay-columns { flex-direction: column; }
+  .rmr-pay-left { width: 100%; }
+  .rmr-pay-right { width: 100%; }
+
+  .rmr-pay-th-full { display: none; }
+  .rmr-pay-th-short { display: inline; }
+  .rmr-pay-col-latefee { display: none; }
+
+  /* Make a Payment overlay (4.2.1/4.3.1/4.2.4) — sourced from the "Payments
+     Tablet" frame (node 3234:46495, same Figma file). Only the responsive
+     *layout* shown there was adopted — that frame's own 3-way balance picker
+     and Overpayment Amount field belong to the itemized/overpay variant that
+     was explicitly excluded from this prototype's Make a Payment scope
+     (the per-charge checkboxes + editable Pay Amount were separately added to
+     the "Other Amount" card only, from node 2175:11880, see above), so the
+     "My Total Balance" card stays out of scope, same precedent as the desktop
+     Balance card's tablet numbers above. The summary sidebar drops below the
+     main content instead of sitting beside it, and the modal reverts to a
+     naturally-scrolling height instead of the fixed 608px used on desktop to
+     keep the New Payment Method expansion from growing the modal — at this
+     width everything already stacks in one column, so there's no side-by-side
+     size to protect. .rmr-pmt-body (the header/footer's scrollable sibling,
+     see above) needs no override here: its `flex: 1; min-height: 0;
+     overflow-y: auto` already lets it become exactly "the content" that
+     scrolls behind the pinned header/footer at any modal height — true for
+     every step except "Your Payment Method" (see the --split override
+     directly below), which needs its own correction at this width. */
+  .rmr-modal--payment, .rmr-modal--autopay { width: 100%; height: auto; }
+  /* Correction: "Your Payment Method"'s own split-scroll setup
+     (.rmr-pmt-body--split / .rmr-pmt-main--pinned-footer / .rmr-pmt-scroll,
+     see above) exists so the two DESKTOP columns can each keep their own
+     height inside the fixed 608px modal — the method/edit-form column
+     scrolls internally while the summary column stretches to match it. Once
+     the columns stack into one at this width, that split stopped making
+     sense: the edit-form's own internal scrollbar was cutting it off after
+     a couple of fields while the (fully unclipped) summary sat underneath —
+     exactly backwards from "the summary should scroll too". Reverting all
+     three to the plain single-scroll-region behavior every other step
+     already gets from the base .rmr-pmt-body rule fixes it: the edit form
+     and summary flow and scroll together as one block, with the header and
+     Terms/footer staying pinned outside it. */
+  .rmr-pmt-body--split { overflow-y: auto; }
+  /* .rmr-pmt-main's own base rule carries `flex: 1` (flex-basis 0%) for the
+     desktop row layout, where it's dividing space with .rmr-pmt-summary
+     along a bounded row. Stacked into a column here, that flex-basis-0 +
+     flex-grow-1 has nothing to grow into once .rmr-pmt-summary's own natural
+     height already exceeds .rmr-pmt-body's height (no positive free space
+     left to distribute) — it was collapsing .rmr-pmt-main to 0px, rendering
+     its fields on top of the summary below instead of pushing it down.
+     `flex: none` makes it size to its own content, like a plain block. */
+  .rmr-pmt-main--pinned-footer { height: auto; flex: none; }
+  .rmr-pmt-scroll { flex: none; overflow-y: visible; }
+  /* align-items: flex-start (the desktop default, needed there so the row's
+     two columns don't stretch to match each other's height) sizes a column
+     flex container's children to their natural content width instead of the
+     container's width — meaning .rmr-pmt-main would size itself to fit the
+     register table's full intrinsic width rather than the modal's actual
+     available width, and since .rmr-modal clips horizontal overflow (so only
+     the register's own scroll container shows a scrollbar, not the whole
+     modal) that excess width would be silently clipped instead of reachable.
+     align-items: stretch here makes .rmr-pmt-main/.rmr-pmt-summary fill the
+     real available width, so it's their own inner .rmr-pmt-table-wrap that
+     ends up overflowing (and scrolling) — not the column itself. */
+  .rmr-pmt-body { flex-direction: column; align-items: stretch; }
+  .rmr-pmt-summary { width: 100%; }
+}
+
+/* ---------- Account Settings ----------
+   Sourced from file GHtjX6TVj9OpVUXTyShguj ("RMR Rewrite — Account
+   Settings"), section 1 (node 2693:6479). See PROTOTYPE.md for the full
+   node map and the note on four superseded "Account Details" draft
+   iterations (nodes 2528:5106/2529:5507/2539:5827/2548:6133) that this
+   build does not use. */
+
+.rmr-acct-tabs { display: flex; gap: var(--spacing-xl); align-items: flex-start; width: 100%; border-bottom: 1px solid var(--border-border); }
+.rmr-acct-tab {
+  padding: var(--spacing-xs);
+  border: none;
+  border-bottom: 1px solid var(--border-border);
+  background: none;
+  margin-bottom: -1px;
+  font-family: var(--font-family-main);
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+.rmr-acct-tab--selected {
+  border-bottom: 2px solid var(--border-accent);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+}
+.rmr-acct-panel { display: flex; flex-direction: column; gap: var(--spacing-xl); width: 100%; }
+.rmr-acct-panel[hidden] { display: none; }
+
+.rmr-acct-section { display: flex; flex-direction: column; gap: var(--spacing-md); width: 100%; }
+.rmr-acct-section-header { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+.rmr-acct-section-title { margin: 0; font-size: var(--font-size-md); font-weight: var(--font-weight-bold); color: var(--text-primary); }
+.rmr-acct-section-header button { background: none; border: none; padding: 0; cursor: pointer; line-height: 0; }
+.rmr-acct-desc { width: 100%; margin: 0; font-size: var(--font-size-sm); color: var(--text-primary); letter-spacing: 0.28px; text-align: left; }
+
+/* Read-only "Input Field" label+value pairs used throughout Account
+   Details/Contacts — same borderless pattern as .rmr-pmm-value. */
+.rmr-acct-field-row { display: flex; gap: var(--spacing-xs); align-items: flex-start; width: 100%; }
+.rmr-acct-field { display: flex; flex: 1; flex-direction: column; gap: var(--spacing-xxs); min-width: 0; }
+.rmr-acct-field--fixed { flex: none; width: 240px; }
+.rmr-acct-field__label { font-size: var(--font-size-sm); color: var(--text-secondary); letter-spacing: 0.28px; }
+.rmr-acct-field__value { margin: 0; font-size: var(--font-size-sm); color: var(--text-primary); letter-spacing: 0.28px; }
+
+/* Kebab ("more_vert") menu next to Account Details — same floating-card
+   shape as the header's account menu, positioned off the kebab button
+   instead of the avatar. */
+.rmr-acct-kebab { position: relative; }
+.rmr-acct-kebab-menu {
+  position: absolute;
+  top: calc(100% + var(--spacing-xxs));
+  right: 0;
+  z-index: 20;
+  min-width: 180px;
+  background: var(--background-primary);
+  border-radius: 4px;
+  box-shadow: var(--dropshadow-around);
+  padding: var(--spacing-xxs) 0;
+}
+.rmr-acct-kebab-menu[hidden] { display: none; }
+.rmr-acct-kebab-menu button {
+  display: block;
+  width: 100%;
+  padding: var(--spacing-xs);
+  border: none;
+  background: none;
+  text-align: left;
+  font-family: var(--font-family-main);
+  font-size: var(--font-size-sm);
+  color: var(--text-blue);
+  cursor: pointer;
+}
+.rmr-acct-kebab-menu button:hover { background: var(--interaction-hover-blue); }
+
+/* Settings tab — Community Directory toggle + indented sub-options. */
+.rmr-acct-subsettings { display: flex; flex-direction: column; gap: var(--spacing-md); align-items: flex-start; width: 100%; padding-left: 44px; }
+.rmr-acct-subsettings[hidden] { display: none; }
+.rmr-acct-subrow { display: flex; gap: var(--spacing-xs); align-items: center; cursor: pointer; }
+.rmr-acct-checkbox-text { width: 184px; flex-shrink: 0; font-size: var(--font-size-sm); color: var(--text-secondary); }
+.rmr-acct-subrow .rmr-modal__input { width: 240px; }
+
+/* Linked Accounts tab */
+.rmr-acct-table-footer { align-self: flex-end; font-size: var(--font-size-sm); color: var(--text-secondary); }
+
+/* Password requirements checklist (Change Password modal) */
+.rmr-acct-requirements { display: flex; flex-direction: column; gap: var(--spacing-xs); width: 100%; }
+.rmr-acct-requirements__title { margin: 0; font-size: var(--font-size-sm); color: var(--text-primary); }
+.rmr-acct-requirements ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--spacing-xxs); }
+.rmr-acct-requirements li { display: flex; align-items: center; gap: var(--spacing-xs); font-size: var(--font-size-xs); color: var(--text-secondary); }
+.rmr-acct-requirements img { width: 16px; height: 16px; }
+
+/* Trailing show/hide icon inside a password-style input — same "icon inside
+   the field" pattern as .rmr-pmt-cvv-wrap, generalized for reuse here. */
+.rmr-acct-pw-wrap { position: relative; width: 100%; }
+.rmr-acct-pw-wrap input { padding-right: 36px; }
+.rmr-acct-pw-icon { position: absolute; right: var(--spacing-xs); top: 50%; transform: translateY(-50%); width: 20px; height: 20px; }
+
+/* Delete Account confirmation — Modal Dialog component (node 2315:14882),
+   distinct from .rmr-modal (no header/close X, icon+text lead-in). */
+.rmr-acct-confirm { display: flex; flex-direction: column; gap: var(--spacing-md); width: 100%; }
+.rmr-acct-confirm__lead { display: flex; gap: var(--spacing-md); align-items: center; width: 100%; }
+.rmr-acct-confirm__lead img { width: 32px; height: 32px; flex-shrink: 0; }
+.rmr-acct-confirm__title { margin: 0; font-size: var(--font-size-md); font-weight: var(--font-weight-bold); color: var(--text-secondary); }
+.rmr-acct-confirm__body { margin: 0; padding-left: 48px; font-size: var(--font-size-md); color: var(--text-secondary); }
+.rmr-acct-confirm__field { padding-left: 48px; width: 100%; }
+
+/* Verification Email Sent — standalone page, no app chrome (login-style). */
+.rmr-verify-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xl);
+  min-height: 100vh;
+  background: var(--color-blue-50, var(--background-page));
+}
+.rmr-verify-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xl);
+  width: 574px;
+  max-width: 90vw;
+  padding: var(--spacing-2xl);
+  background: var(--background-primary);
+  border-radius: var(--spacing-xs);
+  box-shadow: var(--dropshadow-sm);
+  text-align: center;
+}
+.rmr-verify-card__logo { height: 32px; }
+.rmr-verify-card__title { margin: 0; font-size: var(--font-size-xl); color: var(--text-primary); }
+.rmr-verify-card__body { margin: 0; font-size: var(--font-size-md); line-height: var(--line-height-lg); color: var(--text-secondary); }
+.rmr-verify-card__footnote { margin: 0; font-size: var(--font-size-sm); color: var(--text-secondary); }
+.rmr-verify-footer { font-size: var(--font-size-sm); color: var(--text-secondary); }
+
+/* ---------- Service Issues ----------
+   Sourced from file 41cZMQjGcwZBmHWS8NggER ("rmR — Service Issues"), section
+   "Issues Register" (node 2351:21209). See PROTOTYPE.md for the full node
+   map. The register card/tabs/table/date-range reuse the same components
+   already built for Payments & Charges and Account Settings — only the
+   form-specific pieces below (question rows, attach dropzone) are new. */
+
+/* Register (maintenance.html) — the card fits within the viewport instead of
+   growing with row count, so only the register table itself scrolls (using
+   the same .rmr-pay-table-wrap treatment as the Payments & Charges register)
+   while the Date Range field, Add Service Issue button, and tabs stay put.
+   Modifiers rather than changes to the shared .rmr-settings-page/-card rules,
+   since every other page using those classes still wants the whole page to
+   grow and scroll via .rmr-main instead. */
+.rmr-settings-page--fit { flex: 1; min-height: 0; }
+.rmr-settings-card--fit { flex: 1; min-height: 0; }
+[data-svc-panel] { display: flex; flex-direction: column; gap: var(--spacing-md); flex: 1; min-height: 0; }
+[data-svc-panel][hidden] { display: none; }
+
+.rmr-svc-question { display: flex; align-items: center; justify-content: space-between; gap: var(--spacing-md); width: 100%; }
+.rmr-svc-question__label { flex: 1; font-size: var(--font-size-sm); color: var(--text-secondary); letter-spacing: 0.28px; }
+.rmr-svc-choices { display: flex; align-items: center; gap: var(--spacing-md); flex-shrink: 0; }
+.rmr-svc-choice { display: flex; align-items: center; gap: var(--spacing-xs); background: none; border: none; padding: 0; cursor: pointer; }
+.rmr-svc-choice__label { font-size: var(--font-size-sm); color: var(--text-secondary); letter-spacing: 0.28px; }
+
+.rmr-svc-attach { display: flex; flex-direction: column; gap: var(--spacing-xxs); width: 100%; }
+.rmr-svc-attach__label { font-size: var(--font-size-sm); color: var(--text-secondary); letter-spacing: 0.28px; }
+.rmr-svc-attach__zone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-md);
+  width: 100%;
+  padding: var(--spacing-md) var(--spacing-2xl);
+  background: var(--component-selector);
+  border: 1px dashed var(--border-border);
+  border-radius: var(--spacing-xs);
+}
+.rmr-svc-attach__text { margin: 0; font-size: var(--font-size-sm); color: var(--text-primary); }
+.rmr-svc-attach__text a { color: var(--text-blue); }
+
+/* Attach zone — filled state (example files already attached), sourced from
+   "3.3.1 Add Issue - w/ MS & custom form" (node 2407:6415). Same dashed box
+   as the empty state above, but stacked: a "Choose a file or drag it here."
+   + prev/next row, then a horizontally-clipped strip of thumbnails, each
+   with its own remove (x) badge. */
+.rmr-svc-attach__zone--filled { flex-direction: column; align-items: stretch; justify-content: flex-start; gap: var(--spacing-sm); padding: var(--spacing-md); }
+.rmr-svc-attach__zone-top { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+.rmr-svc-attach__nav { display: flex; align-items: center; }
+.rmr-svc-attach__nav[hidden] { display: none; }
+.rmr-svc-attach__nav img { width: 20px; height: 20px; }
+.rmr-svc-attach__nav-btn { background: none; border: none; padding: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.rmr-svc-attach__nav-btn[hidden] { display: none; }
+.rmr-svc-attach__thumbs { display: flex; gap: var(--spacing-md); align-items: flex-start; width: 100%; overflow: hidden; }
+.rmr-svc-attach__thumb { position: relative; width: 80px; height: 80px; border-radius: var(--spacing-xs); flex-shrink: 0; overflow: visible; }
+.rmr-svc-attach__thumb img.rmr-svc-attach__thumb-img { width: 100%; height: 100%; object-fit: cover; border-radius: var(--spacing-xs); display: block; }
+.rmr-svc-attach__thumb--file { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: var(--spacing-xs); width: 88px; height: 80px; }
+.rmr-svc-attach__thumb--file img.rmr-svc-attach__file-icon { width: 20px; height: 20px; }
+.rmr-svc-attach__thumb-name { margin: 0; font-size: var(--font-size-xs); color: var(--text-primary); text-align: center; line-height: var(--line-height-sm); letter-spacing: 0.24px; width: 100%; height: 40px; overflow: hidden; word-break: break-word; }
+/* Real anatomy (node 3007:15696 etc. in "3.3.1 Add Issue - w/ MS & custom
+   form"): a flat blue circle (Ellipse 130, #1a64bc / --color-blue-600) with
+   a plain white X centered on top — two separate layers, not a single
+   white-badge-with-dark-X like an earlier pass here used (which rendered as
+   a near-invisible white X on a white circle). */
+.rmr-svc-attach__thumb-remove { position: absolute; top: -6px; right: -6px; width: 20px; height: 20px; border-radius: 50%; background: var(--color-blue-600); border: none; padding: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.rmr-svc-attach__thumb-remove img { width: 16px; height: 16px; }
+
+/* ---------- Add Service Issue overlay + Schedule + Confirmation ----------
+   Sourced from file 41cZMQjGcwZBmHWS8NggER, section "Add Issue - w/
+   Maintenance Scheduling" (node 2792:94769): 3.3.1 Add Issue - w/ MS &
+   custom form -> 3.3.2/3.3.3 Add Issue - MS 1/2 (Schedule Service Issue) ->
+   3.3.4 Add Issue - MS Confirmation. Reuses the app's existing modal chrome
+   (.rmr-modal), form fields (.rmr-modal__field/__input/__textarea), banner,
+   and question/choice/attach classes above — only the schedule step's
+   calendar + time-slot picker is new. */
+
+.rmr-svc-schedule-intro { margin: 0; font-size: var(--font-size-sm); color: var(--text-secondary); letter-spacing: 0.28px; }
+
+.rmr-svc-schedule { display: flex; gap: var(--spacing-xl); width: 100%; align-items: flex-start; }
+
+.rmr-svc-cal { flex: 1; min-width: 0; border: 1px solid var(--border-border); border-radius: var(--spacing-xs); padding: var(--spacing-xl); }
+.rmr-svc-cal__header { margin: 0 0 var(--spacing-lg, 20px); font-size: var(--font-size-md); font-weight: var(--font-weight-bold); color: var(--text-primary); text-align: center; }
+.rmr-svc-cal__days { display: flex; flex: 1; gap: var(--spacing-lg, 20px); align-items: flex-start; }
+.rmr-svc-cal__col { flex: 1; min-width: 0; }
+.rmr-svc-cal__nav { background: none; border: none; padding: var(--spacing-xs); cursor: pointer; margin-top: var(--spacing-xl); flex-shrink: 0; }
+.rmr-svc-cal__nav img { width: 20px; height: 20px; }
+.rmr-svc-cal__day-head { display: flex; flex-direction: column; align-items: center; gap: var(--spacing-xxs); padding-bottom: var(--spacing-sm); border-bottom: 2px solid var(--border-accent); margin-bottom: var(--spacing-md); }
+.rmr-svc-cal__day-name { font-size: var(--font-size-sm); color: var(--text-primary); }
+.rmr-svc-cal__day-num { font-size: var(--font-size-xl); color: var(--text-primary); }
+.rmr-svc-cal__slots { display: flex; flex-direction: column; gap: var(--spacing-sm); }
+
+/* Slot buttons (calendar side) and the "Selected Time Slots" panel's cards
+   share the same real anatomy — re-verified against node 2438:33028 (panel)
+   and 2886:20902 (slot buttons): both use .component/selector as their
+   selected background, .border/button-tertiary for the border (2px for
+   Preferred, 1px for Alternate — not a uniform "selected" look), and the
+   same two-color Lozenge badge (blue/500 + white text for Preferred,
+   blue/200 + dark text for Alternate). Text is centered, not left-aligned. */
+.rmr-svc-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-md);
+  width: 100%;
+  height: 104px;
+  padding: var(--spacing-md);
+  border: 1px solid var(--border-border);
+  border-radius: var(--spacing-xs);
+  background: var(--component-input-default, var(--background-primary));
+  font-family: var(--font-family-main);
+  font-size: var(--font-size-md);
+  color: var(--text-primary);
+  letter-spacing: 0.32px;
+  cursor: pointer;
+}
+.rmr-svc-slot--preferred { background: var(--component-selector); border: 2px solid var(--border-button-tertiary); }
+.rmr-svc-slot--alternate { background: var(--component-selector); border: 1px solid var(--border-button-tertiary); }
+.rmr-svc-slot__badge { padding: var(--spacing-xxs) var(--spacing-xs); border-radius: var(--spacing-xxs); font-size: var(--font-size-xs); font-weight: var(--font-weight-regular); letter-spacing: 0.24px; }
+.rmr-svc-slot__badge--preferred { background: var(--color-blue-500); color: var(--text-on-primary); }
+.rmr-svc-slot__badge--alternate { background: var(--color-blue-200); color: var(--text-primary); }
+
+.rmr-svc-selected {
+  width: 280px;
+  flex-shrink: 0;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+  background: var(--background-secondary);
+  border: 1px solid var(--border-border);
+  border-radius: var(--spacing-xs);
+  padding: var(--spacing-lg, 20px);
+  box-shadow: var(--dropshadow-sm);
+}
+.rmr-svc-selected__title { margin: 0; font-size: var(--font-size-md); font-weight: var(--font-weight-bold); line-height: var(--line-height-lg); color: var(--text-primary); }
+.rmr-svc-selected__hint { margin: 0; font-size: var(--font-size-md); line-height: var(--line-height-lg); letter-spacing: 0.32px; color: var(--text-secondary); }
+.rmr-svc-selected__empty { margin: 0; font-size: var(--font-size-sm); color: var(--text-secondary); }
+/* Wraps just the Preferred card (node 2438:33031) with a divider below it,
+   separating it from the Alternate cards underneath — .rmr-svc-selected's
+   own 24px gap still applies above/below this wrapper like any other child. */
+.rmr-svc-selected__divider { width: 100%; padding-bottom: var(--spacing-xl); border-bottom: 2px solid var(--border-border); }
+.rmr-svc-selected__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+  width: 100%;
+  padding: var(--spacing-md);
+  border-radius: var(--spacing-xs);
+  background: var(--component-selector);
+  position: relative;
+}
+.rmr-svc-selected__card--preferred { border: 2px solid var(--border-button-tertiary); }
+.rmr-svc-selected__card--alternate { border: 1px solid var(--border-button-tertiary); }
+.rmr-svc-selected__card-day { margin: 0; font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); line-height: var(--line-height-sm); color: var(--text-primary); }
+.rmr-svc-selected__card-time { margin: 0; font-size: var(--font-size-md); line-height: var(--line-height-lg); letter-spacing: 0.32px; color: var(--text-primary); }
+.rmr-svc-selected__card-remove { position: absolute; top: 50%; right: 18px; transform: translateY(-50%); background: none; border: none; padding: 0; cursor: pointer; }
+.rmr-svc-selected__card-remove img { width: 16px; height: 16px; display: block; }
+
+/* Confirmation step reuses the Make a Payment success layout (.rmr-pmt-success*
+   in the Make a Payment section above) — same icon/title/body + details rows
+   pattern, just relabeled for scheduling instead of a payment receipt. Its
+   3-column row (Preferred/Alternate label + day + time) doesn't match
+   .rmr-pmt-success__row's 2-column (label/value) shape, so that one row
+   layout is new; the surrounding box is the same .rmr-pmt-success__details. */
+.rmr-svc-confirm-intro { margin: 0 0 var(--spacing-sm); font-size: var(--font-size-sm); font-weight: var(--font-weight-bold); color: var(--text-primary); }
+.rmr-svc-confirm-row { display: flex; align-items: center; gap: var(--spacing-lg, 20px); padding: var(--spacing-xs) 0; font-size: var(--font-size-sm); }
+.rmr-svc-confirm-row__label { width: 80px; flex-shrink: 0; font-style: italic; color: var(--text-secondary); }
+.rmr-svc-confirm-row__day { flex: 1; font-weight: var(--font-weight-bold); color: var(--text-primary); }
+.rmr-svc-confirm-row__time { color: var(--text-primary); }
+
+/* ---------- Issue Details overlay ----------
+   Sourced from the same file's "Issue Details" section (node 2792:94770):
+   six frames covering Open/Closed x one-way/two-way/disabled communication,
+   plus a legacy Notes-style variant. Built as one flexible modal template
+   (populated per-issue by app.js) rather than six separate static markups,
+   since every frame shares the same left-column anatomy and differs only in
+   which of these states the right-hand panel is in. */
+
+/* Re-verified against the real "idea - confirmed" node (2500:10133, inside
+   "3.5.2 Issue Details - w/ MS confirmed") — modal is ~1128px wide there
+   (618px left column + 24px gap + 438px right column), so the modal grows
+   up to that width and only narrows below it when the viewport itself is
+   too small, via max-width rather than a fixed px value. */
+.rmr-svc-details-modal { width: 1128px; max-width: min(1128px, 94vw); }
+
+.rmr-svc-details { display: flex; gap: var(--spacing-xl); width: 100%; align-items: flex-start; flex-wrap: wrap; }
+.rmr-svc-details__main { flex: 618 1 280px; min-width: 0; display: flex; flex-direction: column; gap: var(--spacing-md); }
+
+.rmr-svc-details__status { display: flex; align-items: center; gap: var(--spacing-xs); font-size: var(--font-size-md); letter-spacing: 0.32px; color: var(--text-primary); }
+.rmr-svc-status-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+.rmr-svc-status-dot--open { background: var(--color-yellow-500); }
+.rmr-svc-status-dot--closed { background: var(--color-blue-500); }
+
+.rmr-svc-details__title { margin: 0; font-size: var(--font-size-lg); font-weight: var(--font-weight-regular); line-height: var(--line-height-xl); color: var(--text-primary); }
+.rmr-svc-details__created { margin: 0; font-size: var(--font-size-sm); letter-spacing: 0.28px; color: var(--text-secondary); }
+
+.rmr-svc-details__field-label { margin: 0; font-size: var(--font-size-sm); color: var(--secondary-text); letter-spacing: 0.28px; }
+.rmr-svc-details__field-value { margin: 0; font-size: var(--font-size-sm); color: var(--text-primary); letter-spacing: 0.28px; }
+
+.rmr-svc-schedule-card { display: flex; align-items: center; gap: var(--spacing-lg, 20px); padding: var(--spacing-xs); border: 1px solid var(--border-border); border-radius: var(--spacing-xs); background: var(--background-primary); flex-wrap: wrap; }
+.rmr-svc-schedule-card__left { display: flex; align-items: center; gap: var(--spacing-lg, 20px); }
+.rmr-svc-schedule-card__badge { flex-shrink: 0; padding: var(--spacing-xxs) var(--spacing-xs); border-radius: var(--spacing-xxs); font-size: var(--font-size-xs); font-weight: var(--font-weight-regular); letter-spacing: 0.24px; }
+.rmr-svc-schedule-card__badge--pending { background: var(--interaction-selected-blue); color: var(--text-blue); }
+.rmr-svc-schedule-card__badge--confirmed { background: var(--color-green-200); color: var(--text-primary); }
+.rmr-svc-schedule-card__body { flex: 1; min-width: 0; font-size: var(--font-size-sm); color: var(--text-secondary); }
+.rmr-svc-schedule-card__body p { margin: 0; }
+.rmr-svc-schedule-card__confirmed-info { display: flex; flex-direction: column; gap: var(--spacing-xxs); }
+.rmr-svc-schedule-card__slot-row { display: flex; gap: 4px; align-items: center; font-size: var(--font-size-sm); }
+.rmr-svc-schedule-card__slot-day { font-weight: var(--font-weight-bold); color: var(--text-primary); }
+.rmr-svc-schedule-card__slot-time { color: var(--text-primary); letter-spacing: 0.28px; }
+.rmr-svc-schedule-card__link { color: var(--text-blue); font-size: var(--font-size-sm); letter-spacing: 0.28px; }
+.rmr-svc-schedule-card__slots { display: flex; gap: var(--spacing-xl); margin-top: var(--spacing-xs); }
+.rmr-svc-schedule-card__slot-label { font-style: italic; color: var(--text-secondary); }
+.rmr-svc-schedule-card__slot-value { font-weight: var(--font-weight-bold); color: var(--text-primary); }
+.rmr-svc-schedule-card__tech { display: flex; flex-direction: column; gap: var(--spacing-xs); flex: 1; min-width: 160px; padding-left: var(--spacing-lg, 20px); border-left: 1px solid var(--border-border); }
+.rmr-svc-schedule-card__tech-label { font-size: var(--font-size-xs); letter-spacing: 0.24px; color: var(--text-secondary); }
+.rmr-svc-schedule-card__tech-row { display: flex; align-items: center; gap: var(--spacing-sm); }
+.rmr-svc-schedule-card__tech-avatar { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; }
+.rmr-svc-schedule-card__tech-name { font-size: var(--font-size-sm); font-weight: var(--font-weight-bold); color: var(--text-secondary); }
+
+/* Attachments carousel — "Attachments" label + prev/next nav row above a
+   horizontally-clipped thumbnail strip, with a white fade over its right
+   edge signaling more content, matching the same carousel already built for
+   the Add Service Issue form's Attachments dropzone. */
+.rmr-svc-attach-carousel { position: relative; }
+.rmr-svc-attach-carousel__header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--spacing-xs); }
+.rmr-svc-attach-carousel__track { width: 100%; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; -ms-overflow-style: none; }
+.rmr-svc-attach-carousel__track::-webkit-scrollbar { display: none; }
+.rmr-svc-attach-carousel__fade { position: absolute; bottom: 0; right: 0; width: 71px; height: 80px; background: linear-gradient(to right, rgba(255, 255, 255, 0), var(--background-primary)); pointer-events: none; }
+.rmr-svc-attachments-row { display: flex; gap: var(--spacing-sm); align-items: flex-start; width: 100%; }
+.rmr-svc-attachments-row img.rmr-svc-attach__thumb-img { width: 80px; height: 80px; border-radius: var(--spacing-xs); object-fit: cover; flex-shrink: 0; }
+
+/* Right column ("Messages"/"Comments") — width matches the real 438px (out
+   of the modal's ~1128px total) via a flex-basis in the same ratio as
+   .rmr-svc-details__main above, rather than the fixed narrow 320px this had
+   before, and stretches to the left column's full height instead of being
+   capped at a fixed 360px. */
+.rmr-svc-comments { flex: 438 1 240px; min-width: 0; align-self: stretch; display: flex; flex-direction: column; gap: var(--spacing-xs); }
+.rmr-svc-comments[hidden] { display: none; }
+.rmr-svc-comments__title { margin: 0; font-size: var(--font-size-lg); line-height: var(--line-height-xl); color: var(--text-primary); }
+.rmr-svc-comments__panel {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  background: var(--background-secondary);
+  border: 1px solid var(--border-border);
+  border-radius: var(--spacing-xs);
+  box-shadow: 0px -1px 10px rgba(76, 76, 76, 0.02), 0px 4px 7.5px rgba(76, 76, 76, 0.08), 2px 2px 6px rgba(76, 76, 76, 0.08);
+}
+.rmr-svc-comments__thread { flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: var(--spacing-md); padding-right: var(--spacing-xs); }
+.rmr-svc-comments__msg { display: flex; flex-direction: column; gap: var(--spacing-xs); align-items: flex-start; }
+.rmr-svc-comments__msg--self { align-items: flex-end; }
+.rmr-svc-comments__meta { display: flex; gap: var(--spacing-xs); font-size: var(--font-size-xs); letter-spacing: 0.24px; }
+.rmr-svc-comments__meta-sender { color: var(--text-secondary); }
+.rmr-svc-comments__meta-time { color: var(--text-accent); }
+.rmr-svc-comments__meta--self { padding-right: 18px; }
+.rmr-svc-comments__bubble-row { display: flex; align-items: center; gap: 2px; }
+.rmr-svc-comments__bubble { max-width: 320px; padding: var(--spacing-sm) var(--spacing-md); border-radius: 16px; background: var(--component-footer, #f1f3f5); font-size: var(--font-size-sm); letter-spacing: 0.28px; color: var(--text-primary); }
+.rmr-svc-comments__msg--self .rmr-svc-comments__bubble { background: var(--color-blue-200); text-align: right; }
+.rmr-svc-comments__kebab { width: 16px; height: 16px; flex-shrink: 0; }
+.rmr-svc-comments__attachments { display: flex; gap: var(--spacing-xs); }
+.rmr-svc-comments__attachments img { width: 48px; height: 48px; border-radius: var(--spacing-xs); object-fit: cover; }
+.rmr-svc-comments__input-row { display: flex; align-items: center; gap: var(--spacing-xs); padding: var(--spacing-xs); border: 1px solid var(--border-border); background: var(--component-input-default, var(--background-primary)); border-radius: var(--spacing-xs); height: 32px; flex-shrink: 0; }
+.rmr-svc-comments__input { flex: 1; min-width: 0; border: none; background: none; font-family: var(--font-family-main); font-size: var(--font-size-sm); color: var(--text-primary); }
+.rmr-svc-comments__input::placeholder { color: var(--text-accent); font-style: italic; }
+.rmr-svc-comments__input-btn { background: none; border: none; padding: 0; cursor: pointer; flex-shrink: 0; }
+.rmr-svc-comments__input-btn img { width: 20px; height: 20px; }
+.rmr-svc-comments__disabled-bar { text-align: center; font-size: var(--font-size-sm); font-style: italic; color: var(--text-secondary); flex-shrink: 0; }
+
+/* Notes/Timeline variant of the Messages panel (node 2572:7198, "Legacy
+   History/Notes") — reuses .rmr-svc-comments/__title/__panel for the shared
+   label + card, swaps the chat thread for a vertical timeline of plain notes. */
+.rmr-svc-notes__entry { display: flex; gap: var(--spacing-xs); width: 100%; }
+.rmr-svc-notes__rail { display: flex; flex-direction: column; align-items: center; gap: 4px; width: 8px; flex-shrink: 0; align-self: stretch; }
+.rmr-svc-notes__rail-line { width: 1px; flex-shrink: 0; }
+.rmr-svc-notes__rail-line--stub { height: 4px; }
+.rmr-svc-notes__rail-line--fill { flex: 1 1 0; min-height: 1px; }
+.rmr-svc-notes__rail-line--visible { background: var(--border); }
+.rmr-svc-notes__dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; box-sizing: border-box; border: 1px solid var(--brand-primary-disabled); }
+.rmr-svc-notes__content { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: var(--spacing-xs); padding-bottom: var(--spacing-xl); }
+.rmr-svc-notes__entry:last-child .rmr-svc-notes__content { padding-bottom: 0; }
+.rmr-svc-notes__meta { display: flex; gap: var(--spacing-xl); align-items: center; }
+.rmr-svc-notes__meta-sender { font-size: var(--font-size-sm); color: var(--secondary-text); }
+.rmr-svc-notes__meta-time { font-size: var(--font-size-xs); letter-spacing: 0.6px; color: var(--secondary-text); }
+.rmr-svc-notes__body { margin: 0; font-size: var(--font-size-sm); line-height: var(--line-height-lg); color: var(--legacy-primary-text); }
+.rmr-svc-notes__attach-row { display: flex; align-items: center; gap: 9px; }
+.rmr-svc-notes__attach-icon { width: 24px; height: 24px; flex-shrink: 0; }
+
+/* ---------- Document Center (screens/document-center.html) ----------
+   Sourced from file Sip0wuWPnMa5duL1L39HDn, node 2786:46043 ("3.1.3
+   Document Center - Tenant View (DTS)"). Two side-by-side registers inside
+   the shared .rmr-settings-hero/.rmr-msg-banner chrome already used for
+   Service Issues — see PROTOTYPE.md for full sourcing/scope notes. */
+
+.rmr-doc-columns {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--spacing-xl);
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+}
+
+.rmr-doc-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  height: 712px;
+  max-height: 100%;
+  padding: var(--spacing-xl);
+  background: var(--background-primary);
+  border-radius: var(--spacing-xs);
+  box-shadow: var(--dropshadow-sm);
+}
+.rmr-doc-card--sign { width: 828px; max-width: 100%; }
+.rmr-doc-card--leases { width: 740px; max-width: 100%; flex: 1; min-width: 480px; }
+
+.rmr-doc-card__header { display: flex; flex-direction: column; gap: var(--spacing-xs); flex-shrink: 0; }
+.rmr-doc-card__title { margin: 0; font-size: var(--font-size-xl); line-height: var(--line-height-lg); font-weight: var(--font-weight-regular); color: var(--text-primary); }
+.rmr-doc-card__desc { margin: 0; font-size: var(--font-size-sm); color: var(--text-secondary); }
+
+.rmr-doc-table__name { margin: 0; font-size: var(--font-size-sm); color: var(--text-secondary); white-space: normal; }
+.rmr-doc-table__name-sub { margin: 0; font-size: 12px; font-style: italic; color: var(--text-secondary); white-space: normal; }
+.rmr-pay-table--doc td { height: 50px; white-space: normal; }
+
+.rmr-doc-table__actions { display: flex; align-items: center; justify-content: center; gap: var(--spacing-xxs); }
+.rmr-doc-table__actions button { background: none; border: none; padding: 0; cursor: pointer; line-height: 0; }
+
+.rmr-btn--table { height: 24px; min-width: 0; padding: 0 var(--spacing-xs); }
+
+.rmr-doc-filters { display: flex; align-items: flex-end; gap: var(--spacing-xs); flex-shrink: 0; }
+
+.rmr-doc-search {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  height: 32px;
+  padding: var(--spacing-xs);
+  border: 1px solid var(--border-border);
+  border-radius: var(--spacing-xs);
+  background: var(--background-primary);
+}
+.rmr-doc-search input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: none;
+  font-family: var(--font-family-main);
+  font-style: italic;
+  font-size: var(--font-size-sm);
+  color: var(--text-accent);
+}
+.rmr-doc-search input::placeholder { color: var(--text-accent); font-style: italic; }
+
+.rmr-checkbox-field { display: flex; align-items: center; gap: var(--spacing-xs); height: 32px; font-size: var(--font-size-sm); color: var(--text-secondary); white-space: nowrap; }
+
+/* Leases & Documents — a property/lease/document tree flattened into one
+   real <table> (matching the payments register's own translation of a
+   Figma per-column layout into semantic rows). Only the lease-period level
+   toggles between both a collapsed and expanded state in the source frame,
+   so only that level is wired up in app.js; the property level always
+   renders expanded (its own collapsed state was never shown in this mock). */
+.rmr-doc-tree { table-layout: fixed; }
+.rmr-doc-tree__row--lease td:nth-child(2),
+.rmr-doc-tree__row--doc td:nth-child(2) {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xxs);
+  padding-left: var(--spacing-sm);
+  padding-right: var(--spacing-sm);
+  overflow: visible;
+}
+.rmr-doc-tree__icon { flex-shrink: 0; }
+.rmr-doc-tree__spacer { display: inline-block; width: 20px; height: 20px; flex-shrink: 0; }
+.rmr-doc-tree__toggle { display: flex; align-items: center; justify-content: center; width: 20px; height: 20px; padding: 0; background: none; border: none; cursor: pointer; flex-shrink: 0; }
+.rmr-doc-tree__chevron { transition: transform 0.15s ease; }
+.rmr-doc-tree__row--lease[data-doc-tree-expanded="true"] .rmr-doc-tree__chevron { transform: rotate(90deg); }
+.rmr-doc-tree__link { color: var(--text-blue); font-size: var(--font-size-sm); text-decoration: none; }
+.rmr-doc-tree__link:hover { text-decoration: underline; }
+.rmr-svc-notes__attach-link { font-size: var(--font-size-sm); letter-spacing: 0.28px; color: var(--text-blue); }

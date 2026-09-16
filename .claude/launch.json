@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "rmr-preview",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": ["-c", "python3 -m http.server \"${PORT:-4173}\" --directory '/Users/izage/rmResident Portal/rmr-tenant-portal'"],
+      "port": 4173,
+      "autoPort": true
+    }
+  ]
+}

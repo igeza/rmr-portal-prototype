@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Service Issues — rmResident Portal</title>
+<link rel="stylesheet" href="../assets/rmr.css?v=32" />
+<link rel="stylesheet" href="../assets/proto.css" />
+</head>
+<body data-screen="maintenance">
+<div class="rmr-app" data-component="3.1.1 / 3.1.2 Service Issues Register">
+
+  <header class="rmr-header" data-component="Header">
+    <div class="rmr-header__left">
+      <div class="rmr-header__logo" data-component="New Logo">
+        <img class="rmr-header__logo-icon" src="../assets/icons/logo-icon.svg" alt="" />
+        <img class="rmr-header__logo-text" src="../assets/icons/logo-text.svg" alt="rmResident" />
+      </div>
+    </div>
+    <div class="rmr-header__right" data-component="Header Right">
+      <div class="rmr-header__icon" data-component="RMP Icon">
+        <img src="../assets/icons/globe.svg" alt="Language" width="24" height="24" />
+      </div>
+      <span class="rmr-header__divider" aria-hidden="true"></span>
+      <div class="rmr-account" data-component="User Info">
+        <button class="rmr-header__user" type="button" data-action="toggle-account-menu">
+          <img class="rmr-header__avatar" src="../assets/images/avatar.png" alt="" width="24" height="24" />
+          <span class="rmr-header__username">Samantha Carpenter</span>
+          <img src="../assets/icons/chevron-down.svg" alt="" width="24" height="24" />
+        </button>
+        <div class="rmr-account-menu" data-account-menu hidden data-component="Dropdown Menu">
+          <a class="rmr-account-menu__item" href="account.html">
+            <span>View Account</span>
+            <img class="rmr-account-menu__chevron" src="../assets/icons/chevron-right.svg" alt="" />
+          </a>
+          <a class="rmr-account-menu__item" href="account.html#linked">
+            <span>Linked Accounts</span>
+            <img class="rmr-account-menu__chevron" src="../assets/icons/chevron-right.svg" alt="" />
+          </a>
+          <a class="rmr-account-menu__item" href="payment-settings.html">
+            <span>Payment Settings</span>
+            <img class="rmr-account-menu__chevron" src="../assets/icons/chevron-right.svg" alt="" />
+          </a>
+          <button class="rmr-account-menu__item" type="button" data-action="fake-submit" data-fake-message="Logout isn't wired up in this example.">
+            <span>Logout</span>
+            <img class="rmr-account-menu__chevron" src="../assets/icons/chevron-right.svg" alt="" />
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="rmr-body" data-component="Content">
+    <nav class="rmr-menu" data-component="Menu" aria-label="Primary">
+      <ul class="rmr-menu__list" data-component="Expanded Menu">
+        <li class="rmr-menu__item" data-nav="dashboard" data-component="Dashboard">
+          <a class="rmr-menu__link" href="dashboard.html">
+            <svg class="rmr-menu__icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M8.88889 5.33333V0H16V5.33333H8.88889ZM0 8.88889V0H7.11111V8.88889H0ZM8.88889 16V7.11111H16V16H8.88889ZM0 16V10.6667H7.11111V16H0Z" fill="currentColor"/>
+            </svg>
+            <span class="rmr-menu__label">Dashboard</span>
+          </a>
+        </li>
+        <li class="rmr-menu__item" data-nav="payments" data-component="Transactions">
+          <a class="rmr-menu__link" href="payments.html">
+            <svg class="rmr-menu__icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M15.1579 13.0526V13.8947C15.1579 14.8211 14.4 15.5789 13.4737 15.5789H1.68421C0.749474 15.5789 0 14.8211 0 13.8947V2.10526C0 1.17895 0.749474 0.421053 1.68421 0.421053H13.4737C14.4 0.421053 15.1579 1.17895 15.1579 2.10526V2.94737H7.57895C6.64421 2.94737 5.89474 3.70526 5.89474 4.63158V11.3684C5.89474 12.2947 6.64421 13.0526 7.57895 13.0526H15.1579ZM7.57895 11.3684H16V4.63158H7.57895V11.3684ZM10.9474 9.26316C10.2484 9.26316 9.68421 8.69895 9.68421 8C9.68421 7.30105 10.2484 6.73684 10.9474 6.73684C11.6463 6.73684 12.2105 7.30105 12.2105 8C12.2105 8.69895 11.6463 9.26316 10.9474 9.26316Z" fill="currentColor"/>
+            </svg>
+            <span class="rmr-menu__label">Charges & Payments</span>
+          </a>
+        </li>
+        <li class="rmr-menu__item rmr-menu__item--active" data-nav="maintenance" data-component="Maintenance">
+          <a class="rmr-menu__link" href="maintenance.html">
+            <svg class="rmr-menu__icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M15.7905 13.0471L9.18217 6.43876C9.83574 4.76853 9.47264 2.80783 8.09289 1.42807C6.64052 -0.0243004 4.46196 -0.314775 2.71911 0.48403L5.84171 3.60663L3.66315 5.78519L0.467935 2.66259C-0.403489 4.40544 -0.0403956 6.58399 1.41198 8.03637C2.79173 9.41612 4.75243 9.77921 6.42266 9.12565L13.031 15.7339C13.3214 16.0244 13.7571 16.0244 14.0476 15.7339L15.7178 14.0637C16.0809 13.7732 16.0809 13.2649 15.7905 13.0471Z" fill="currentColor"/>
+            </svg>
+            <span class="rmr-menu__label">Service Issues</span>
+          </a>
+        </li>
+        <li class="rmr-menu__item" data-nav="document-center" data-component="Documents">
+          <a class="rmr-menu__link" href="document-center.html">
+            <svg class="rmr-menu__icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M7.42857 6.57143V0H2.14286C2.02919 0 1.92018 0.0451529 1.83981 0.125526C1.75944 0.205898 1.71429 0.314907 1.71429 0.428571V15.5714C1.71429 15.6851 1.75944 15.7941 1.83981 15.8745C1.92018 15.9548 2.02919 16 2.14286 16H13.8571C13.9708 16 14.0798 15.9548 14.1602 15.8745C14.2406 15.7941 14.2857 15.6851 14.2857 15.5714V6.85714H7.71429C7.63851 6.85714 7.56584 6.82704 7.51225 6.77346C7.45867 6.71988 7.42857 6.6472 7.42857 6.57143Z" fill="currentColor"/>
+              <path d="M8.57143 0.346069V5.57143C8.57143 5.60931 8.58648 5.64565 8.61327 5.67244C8.64006 5.69923 8.6764 5.71428 8.71429 5.71428H13.9396C13.9538 5.71429 13.9676 5.71012 13.9793 5.7023C13.991 5.69447 14.0002 5.68334 14.0056 5.67031C14.0111 5.65728 14.0125 5.64294 14.0098 5.62909C14.0071 5.61524 14.0003 5.60251 13.9904 5.5925L8.69321 0.295355C8.6832 0.285404 8.67047 0.278643 8.65662 0.275923C8.64277 0.273203 8.62843 0.274647 8.6154 0.280073C8.60237 0.285498 8.59124 0.294662 8.58341 0.306408C8.57559 0.318154 8.57142 0.331955 8.57143 0.346069Z" fill="currentColor"/>
+            </svg>
+            <span class="rmr-menu__label">Document Center</span>
+          </a>
+        </li>
+      </ul>
+      <div class="rmr-menu__footer" data-component="Expanded Menu Item">
+        <div class="rmr-menu__item">
+          <button class="rmr-menu__link" type="button" data-action="toggle-menu" data-component="Collapse">
+            <img class="rmr-menu__icon" src="../assets/icons/collapse.svg" alt="" data-collapse-icon />
+            <span class="rmr-menu__label" data-collapse-label>Collapse</span>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <main class="rmr-main" data-component="Main Content">
+      <div class="rmr-settings-page rmr-settings-page--fit" data-component="Account">
+
+        <div class="rmr-settings-hero" data-component="Context Bar">
+          <img class="rmr-settings-hero__bg" src="../assets/images/settings/account-hero.png" alt="" />
+          <div class="rmr-settings-hero__scrim"></div>
+          <p class="rmr-settings-hero__title">Service Issues</p>
+        </div>
+
+        <div class="rmr-msg-banner rmr-msg-banner--compact" data-component="Banner" style="width:1160px; max-width:100%;">
+          <img class="rmr-msg-banner__icon" src="../assets/icons/payments/campaign.svg" alt="" />
+          <p class="rmr-msg-banner__body">Office hours: Mon-Sat 8:30am-5:00pm</p>
+        </div>
+
+        <div class="rmr-settings-card rmr-settings-card--fit">
+          <div style="display:flex; align-items:flex-end; justify-content:space-between; width:100%; flex-shrink:0;">
+            <div class="rmr-pay-field" data-component="Input Field">
+              <span class="rmr-pay-field__label">Date Range</span>
+              <div class="rmr-pay-field__input">
+                <span>01/19/26</span>
+                <span class="rmr-pay-field__divider"></span>
+                <span>02/19/26</span>
+                <img class="rmr-pay-field__icon" src="../assets/icons/payments/calendar.svg" alt="" />
+              </div>
+            </div>
+            <button class="rmr-btn rmr-btn--primary" type="button" style="height:32px; display:flex; align-items:center; justify-content:center;" data-action="open-modal" data-modal-target="svc-add">Add Service Issue</button>
+          </div>
+
+          <div class="rmr-acct-tabs" role="tablist" style="flex-shrink:0;">
+            <button class="rmr-acct-tab rmr-acct-tab--selected" type="button" role="tab" aria-selected="true" data-action="svc-tab" data-svc-target="open">Open Issues</button>
+            <button class="rmr-acct-tab" type="button" role="tab" aria-selected="false" data-action="svc-tab" data-svc-target="closed">Closed Issues</button>
+          </div>
+
+          <div data-svc-panel="open">
+            <div class="rmr-pay-table-wrap">
+              <table class="rmr-pay-table">
+                <thead>
+                  <tr>
+                    <th style="width:72px;">#</th>
+                    <th style="width:158px;">Created</th>
+                    <th>Issue</th>
+                    <th style="width:225px;">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="rmr-pay-table__row-link" data-action="open-issue-details" data-svc-key="open-175">
+                    <td>175</td>
+                    <td>02/04/26</td>
+                    <td>Thermostat not working</td>
+                    <td>New</td>
+                  </tr>
+                  <tr class="rmr-pay-table__row-link" data-action="open-issue-details" data-svc-key="open-130">
+                    <td>130</td>
+                    <td>02/02/26</td>
+                    <td>Leaky faucet in kitchen</td>
+                    <td>New</td>
+                  </tr>
+                  <tr class="rmr-pay-table__row-link" data-action="open-issue-details" data-svc-key="open-97">
+                    <td>97</td>
+                    <td>01/31/26</td>
+                    <td>Water stain on ceiling</td>
+                    <td>New</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="rmr-acct-table-footer" style="flex-shrink:0;">Showing 3 of 3 Open Issues</p>
+          </div>
+
+          <div data-svc-panel="closed" hidden>
+            <div class="rmr-pay-table-wrap">
+              <table class="rmr-pay-table">
+                <thead>
+                  <tr>
+                    <th style="width:72px;">#</th>
+                    <th style="width:158px;">Closed</th>
+                    <th>Issue</th>
+                    <th>Resolution</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="rmr-pay-table__row-link" data-action="open-issue-details" data-svc-key="closed-175"><td>175</td><td>02/04/26</td><td>Closet door broken</td><td>Replaced with new door</td></tr>
+                  <tr class="rmr-pay-table__row-link" data-action="open-issue-details" data-svc-key="closed-130"><td>130</td><td>02/02/26</td><td>Kitchen sink leaking</td><td>Installed new valve</td></tr>
+                  <tr class="rmr-pay-table__row-link" data-action="open-issue-details" data-svc-key="closed-97"><td>97</td><td>01/31/26</td><td>Living room light flickering</td><td>New lightbulbs</td></tr>
+                  <tr class="rmr-pay-table__row-link" data-action="open-issue-details" data-svc-key="closed-86"><td>86</td><td>12/15/25</td><td>Bathroom faucet dripping</td><td>Tightened connections</td></tr>
+                  <tr class="rmr-pay-table__row-link" data-action="open-issue-details" data-svc-key="closed-75"><td>75</td><td>11/28/25</td><td>Garage door not opening</td><td>Replaced battery in remote</td></tr>
+                  <tr class="rmr-pay-table__row-link" data-action="open-issue-details" data-svc-key="closed-62"><td>62</td><td>10/10/25</td><td>Bedroom window stuck</td><td>New layer of paint on windowframe</td></tr>
+                  <tr class="rmr-pay-table__row-link" data-action="open-issue-details" data-svc-key="closed-54"><td>54</td><td>09/05/25</td><td>Dining room heater malfunctioning</td><td>Enhanced insulation in the attic</td></tr>
+                  <tr class="rmr-pay-table__row-link" data-action="open-issue-details" data-svc-key="closed-43"><td>43</td><td>08/20/25</td><td>Front yard fence damaged</td><td>Replaced damaged section</td></tr>
+                  <tr class="rmr-pay-table__row-link" data-action="open-issue-details" data-svc-key="closed-29"><td>29</td><td>07/15/25</td><td>Back porch light out</td><td>New lightbulbs</td></tr>
+                  <tr class="rmr-pay-table__row-link" data-action="open-issue-details" data-svc-key="closed-12"><td>12</td><td>06/30/25</td><td>Laundry machine making noise</td><td>Fixed connection to dryer hookup</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="rmr-acct-table-footer" style="flex-shrink:0;">Showing 15 of 15 Closed Issues</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Add Service Issue flow — sourced from file 41cZMQjGcwZBmHWS8NggER,
+       section "Add Issue - w/ Maintenance Scheduling" (node 2792:94769):
+       3.3.1 Add Issue - w/ MS & custom form -> 3.3.2/3.3.3 Add Issue - MS 1/2
+       (Schedule Service Issue, before/after slots are picked) -> 3.3.4 Add
+       Issue - MS Confirmation. Replaces the earlier "3.2.5 Add Only" standalone
+       page — see PROTOTYPE.md for why. -->
+  <div class="rmr-modal-backdrop" data-modal-backdrop="svc-add" hidden>
+    <div class="rmr-modal rmr-modal--wide" role="dialog" aria-modal="true" aria-labelledby="modal-svc-add-title" data-component="3.3.1 Add Issue - w/ MS & custom form">
+      <div class="rmr-modal__header" data-component="Header">
+        <h2 class="rmr-modal__title" id="modal-svc-add-title">Add Service Issue</h2>
+        <button class="rmr-modal__close" type="button" data-action="close-modal">
+          <img src="../assets/icons/modal-close.svg" alt="Close" width="24" height="24" />
+        </button>
+      </div>
+      <div class="rmr-modal__body" data-component="Submit new">
+        <div class="rmr-msg-banner rmr-msg-banner--compact" data-component="Banner">
+          <img class="rmr-msg-banner__icon" src="../assets/icons/payments/campaign.svg" alt="" />
+          <p class="rmr-msg-banner__body">If this is an emergency, please call the <strong>24 hour number:</strong> (513)-123-4567</p>
+        </div>
+
+        <label class="rmr-modal__field">
+          <span class="rmr-modal__field-label">Issue *</span>
+          <input class="rmr-modal__input" type="text" value="" />
+        </label>
+
+        <div class="rmr-modal__field">
+          <span class="rmr-modal__field-label">Category *</span>
+          <button type="button" class="rmr-modal__select" style="text-align:left; color:var(--text-accent);" data-action="fake-submit" data-fake-message="Categories aren't included in this example.">Select a Category</button>
+        </div>
+
+        <label class="rmr-modal__field">
+          <span class="rmr-modal__field-label">Description</span>
+          <textarea class="rmr-modal__textarea" data-component="Description"></textarea>
+        </label>
+
+        <div class="rmr-svc-question" data-component="Has this happened before?">
+          <span class="rmr-svc-question__label">Has this happened before? *</span>
+          <div class="rmr-svc-choices" role="radiogroup" aria-label="Has this happened before?">
+            <button class="rmr-svc-choice" type="button" data-action="svc-select-choice" data-svc-question="add-repeat" data-svc-value="yes">
+              <span class="rmr-pmt-radio"></span>
+              <span class="rmr-svc-choice__label">Yes</span>
+            </button>
+            <button class="rmr-svc-choice" type="button" data-action="svc-select-choice" data-svc-question="add-repeat" data-svc-value="no">
+              <span class="rmr-pmt-radio"></span>
+              <span class="rmr-svc-choice__label">No</span>
+            </button>
+          </div>
+        </div>
+
+        <p class="rmr-acct-desc">Please include photos of any damage, serial/model numbers, or error codes.</p>
+
+        <div class="rmr-svc-attach" data-component="Attach file">
+          <span class="rmr-svc-attach__label">Attachments *</span>
+          <div class="rmr-svc-attach__zone">
+            <p class="rmr-svc-attach__text"><a href="#" data-action="fake-submit" data-fake-message="Attaching a file isn't included in this example.">Choose a file</a> or drag it here.</p>
+          </div>
+        </div>
+
+        <div class="rmr-svc-question" data-component="Will there be pets or service animals on the premises?">
+          <span class="rmr-svc-question__label">Will there be pets or service animals on the premises? *</span>
+          <div class="rmr-svc-choices" role="radiogroup" aria-label="Will there be pets or service animals on the premises?">
+            <button class="rmr-svc-choice" type="button" data-action="svc-select-choice" data-svc-question="add-pets" data-svc-value="yes">
+              <span class="rmr-pmt-radio"></span>
+              <span class="rmr-svc-choice__label">Yes</span>
+            </button>
+            <button class="rmr-svc-choice" type="button" data-action="svc-select-choice" data-svc-question="add-pets" data-svc-value="no">
+              <span class="rmr-pmt-radio"></span>
+              <span class="rmr-svc-choice__label">No</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="rmr-svc-question" data-component="Is technician allowed to enter if tenant is not present?">
+          <span class="rmr-svc-question__label">Is technician allowed to enter if tenant is not present? *</span>
+          <div class="rmr-svc-choices" role="radiogroup" aria-label="Is technician allowed to enter if tenant is not present?">
+            <button class="rmr-svc-choice" type="button" data-action="svc-select-choice" data-svc-question="add-entry" data-svc-value="yes">
+              <span class="rmr-pmt-radio"></span>
+              <span class="rmr-svc-choice__label">Yes</span>
+            </button>
+            <button class="rmr-svc-choice" type="button" data-action="svc-select-choice" data-svc-question="add-entry" data-svc-value="no">
+              <span class="rmr-pmt-radio"></span>
+              <span class="rmr-svc-choice__label">No</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="rmr-modal__footer" data-component="Footer">
+        <button class="rmr-btn rmr-btn--primary" type="button" style="height:32px;" data-action="switch-modal" data-modal-target="svc-schedule" data-modal-close-current="svc-add">Schedule</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="rmr-modal-backdrop" data-modal-backdrop="svc-schedule" hidden>
+    <div class="rmr-modal" style="width:920px;" role="dialog" aria-modal="true" aria-labelledby="modal-svc-schedule-title" data-component="3.3.2/3.3.3 Add Issue - MS 1/2">
+      <div class="rmr-modal__header" data-component="Header">
+        <h2 class="rmr-modal__title" id="modal-svc-schedule-title">Schedule Service Issue</h2>
+        <button class="rmr-modal__close" type="button" data-action="close-modal">
+          <img src="../assets/icons/modal-close.svg" alt="Close" width="24" height="24" />
+        </button>
+      </div>
+      <p class="rmr-svc-schedule-intro">Select up to 3 time slots for the Maintenance Tech to arrive.</p>
+      <div class="rmr-svc-schedule" data-component="Calendar + Selected">
+        <div class="rmr-svc-cal">
+          <p class="rmr-svc-cal__header">February 2026</p>
+          <div style="display:flex; align-items:flex-start; gap:var(--spacing-sm);">
+            <button class="rmr-svc-cal__nav" type="button" data-action="fake-submit" data-fake-message="More availability isn't included in this example.">
+              <img src="../assets/icons/service-issues/chevron-left-20.svg" alt="Previous days" />
+            </button>
+            <div class="rmr-svc-cal__days">
+              <div class="rmr-svc-cal__col">
+                <div class="rmr-svc-cal__day-head">
+                  <span class="rmr-svc-cal__day-name">Wed</span>
+                  <span class="rmr-svc-cal__day-num">04</span>
+                </div>
+                <div class="rmr-svc-cal__slots">
+                  <button class="rmr-svc-slot" type="button" data-action="svc-select-slot" data-slot-day="Wednesday, February 4" data-slot-time="12:00 PM - 4:00 PM">12:00 PM - 4:00 PM</button>
+                </div>
+              </div>
+              <div class="rmr-svc-cal__col">
+                <div class="rmr-svc-cal__day-head">
+                  <span class="rmr-svc-cal__day-name">Thurs</span>
+                  <span class="rmr-svc-cal__day-num">05</span>
+                </div>
+                <div class="rmr-svc-cal__slots">
+                  <button class="rmr-svc-slot" type="button" data-action="svc-select-slot" data-slot-day="Thursday, February 5" data-slot-time="8:00 AM - 12:00 PM">8:00 AM - 12:00 PM</button>
+                  <button class="rmr-svc-slot" type="button" data-action="svc-select-slot" data-slot-day="Thursday, February 5" data-slot-time="12:00 PM - 4:00 PM">12:00 PM - 4:00 PM</button>
+                </div>
+              </div>
+              <div class="rmr-svc-cal__col">
+                <div class="rmr-svc-cal__day-head">
+                  <span class="rmr-svc-cal__day-name">Fri</span>
+                  <span class="rmr-svc-cal__day-num">06</span>
+                </div>
+                <div class="rmr-svc-cal__slots">
+                  <button class="rmr-svc-slot" type="button" data-action="svc-select-slot" data-slot-day="Friday, February 6" data-slot-time="8:00 AM - 12:00 PM">8:00 AM - 12:00 PM</button>
+                  <button class="rmr-svc-slot" type="button" data-action="svc-select-slot" data-slot-day="Friday, February 6" data-slot-time="12:00 PM - 4:00 PM">12:00 PM - 4:00 PM</button>
+                </div>
+              </div>
+            </div>
+            <button class="rmr-svc-cal__nav" type="button" data-action="fake-submit" data-fake-message="More availability isn't included in this example.">
+              <img src="../assets/icons/service-issues/chevron-right-20.svg" alt="Next days" />
+            </button>
+          </div>
+        </div>
+        <div class="rmr-svc-selected">
+          <p class="rmr-svc-selected__title">Selected Time Slots</p>
+          <p class="rmr-svc-selected__hint" data-svc-selected-hint hidden>Drag to rearrange preferences</p>
+          <p class="rmr-svc-selected__empty" data-svc-selected-empty>No time slots selected</p>
+          <div data-svc-selected-list></div>
+        </div>
+      </div>
+      <div class="rmr-modal__footer" data-component="Footer" style="justify-content:space-between;">
+        <button class="rmr-btn rmr-btn--secondary" type="button" style="height:32px;" data-action="switch-modal" data-modal-target="svc-add" data-modal-close-current="svc-schedule">Back</button>
+        <button class="rmr-btn rmr-btn--primary" type="button" style="height:32px;" data-action="svc-submit-schedule" disabled data-svc-submit-schedule>Submit</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="rmr-modal-backdrop" data-modal-backdrop="svc-confirm" hidden>
+    <div class="rmr-modal rmr-modal--narrow" style="width:490px;" role="dialog" aria-modal="true" aria-labelledby="modal-svc-confirm-title" data-component="3.3.4 Add Issue - MS Confirmation">
+      <button class="rmr-modal__close" type="button" data-action="close-modal" style="align-self:flex-end;">
+        <img src="../assets/icons/modal-close.svg" alt="Close" width="24" height="24" />
+      </button>
+      <div class="rmr-pmt-success">
+        <img class="rmr-pmt-success__icon" src="../assets/icons/payments/mp-check-circle-filled.svg" alt="" />
+        <div class="rmr-pmt-success__message">
+          <h2 class="rmr-pmt-success__title" id="modal-svc-confirm-title">Issue Scheduled</h2>
+          <p class="rmr-pmt-success__body">Thank you for submitting an issue. We will review your request within 1-2 business days. If this is an emergency, please contact the 24 hour emergency number.</p>
+        </div>
+      </div>
+      <div class="rmr-pmt-success__details">
+        <p class="rmr-svc-confirm-intro">Your service request has been submitted. You will receive a notification once confirmed.</p>
+        <div data-svc-confirm-rows></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Issue Details overlay — sourced from the same file's "Issue Details"
+       section (node 2792:94770). One flexible modal, populated per-issue by
+       app.js (SVC_ISSUES map), rather than six separate static markups —
+       every frame in that section shares this same left-column anatomy and
+       differs only in which comments/schedule state the right side is in.
+       See PROTOTYPE.md for the full node map and which frame backs which
+       example row. -->
+  <div class="rmr-modal-backdrop" data-modal-backdrop="svc-details" hidden>
+    <div class="rmr-modal rmr-svc-details-modal" role="dialog" aria-modal="true" aria-labelledby="modal-svc-details-title" data-component="Issue Details">
+      <div class="rmr-modal__header" data-component="Header">
+        <div style="display:flex; align-items:center; gap:var(--spacing-md);">
+          <h2 class="rmr-modal__title" id="modal-svc-details-title" data-svc-detail-number>Issue #—</h2>
+          <span class="rmr-svc-details__status">
+            <span class="rmr-svc-status-dot" data-svc-detail-status-dot></span>
+            <span data-svc-detail-status-text></span>
+          </span>
+        </div>
+        <button class="rmr-modal__close" type="button" data-action="close-modal">
+          <img src="../assets/icons/modal-close.svg" alt="Close" width="24" height="24" />
+        </button>
+      </div>
+      <div class="rmr-svc-details">
+        <div class="rmr-svc-details__main">
+          <h3 class="rmr-svc-details__title" data-svc-detail-title></h3>
+          <p class="rmr-svc-details__created" data-svc-detail-created></p>
+          <div data-svc-detail-schedule></div>
+          <div data-svc-detail-category-wrap>
+            <p class="rmr-svc-details__field-label">Category</p>
+            <p class="rmr-svc-details__field-value" data-svc-detail-category></p>
+          </div>
+          <div data-svc-detail-description-wrap>
+            <p class="rmr-svc-details__field-label">Description</p>
+            <p class="rmr-svc-details__field-value" data-svc-detail-description></p>
+          </div>
+          <div data-svc-detail-repeat-wrap>
+            <p class="rmr-svc-details__field-label">Has this happened before?</p>
+            <p class="rmr-svc-details__field-value" data-svc-detail-repeat></p>
+          </div>
+          <div>
+            <p class="rmr-svc-details__field-label">Will there be pets or service animals on the premises?</p>
+            <p class="rmr-svc-details__field-value" data-svc-detail-pets></p>
+          </div>
+          <div>
+            <p class="rmr-svc-details__field-label">Is technician allowed to enter if tenant is not present?</p>
+            <p class="rmr-svc-details__field-value" data-svc-detail-entry></p>
+          </div>
+          <div data-svc-detail-resolution-wrap>
+            <p class="rmr-svc-details__field-label">Resolution</p>
+            <p class="rmr-svc-details__field-value" data-svc-detail-resolution></p>
+          </div>
+          <div data-svc-detail-attachments-wrap class="rmr-svc-attach-carousel">
+            <div class="rmr-svc-attach-carousel__header">
+              <p class="rmr-svc-details__field-label">Attachments</p>
+              <div class="rmr-svc-attach__nav" data-svc-attach-nav>
+                <button type="button" class="rmr-svc-attach__nav-btn" data-svc-attach-prev aria-label="Previous attachments"><img src="../assets/icons/service-issues/chevron-left-20.svg" alt="Previous" /></button>
+                <button type="button" class="rmr-svc-attach__nav-btn" data-svc-attach-next aria-label="Next attachments"><img src="../assets/icons/service-issues/chevron-right-20.svg" alt="Next" /></button>
+              </div>
+            </div>
+            <div class="rmr-svc-attach-carousel__track" data-svc-attach-track>
+              <div class="rmr-svc-attachments-row" data-svc-detail-attachments></div>
+            </div>
+            <div class="rmr-svc-attach-carousel__fade" data-svc-attach-fade></div>
+          </div>
+        </div>
+        <div class="rmr-svc-comments" data-svc-detail-comments-wrap>
+          <p class="rmr-svc-comments__title" data-svc-detail-comments-title>Messages</p>
+          <div class="rmr-svc-comments__panel">
+            <div class="rmr-svc-comments__thread" data-svc-detail-thread></div>
+            <div data-svc-detail-comments-footer></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<script src="../assets/app.js?v=13"></script>
+</body>
+</html>
