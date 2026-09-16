@@ -18,6 +18,21 @@ function rmrSetAutopayScheduled(value) {
   } catch (e) { /* private browsing, etc. — demo state just won't persist */ }
 }
 
+// Shared between document-center.html's Renewal Available banner and
+// document-sign.html's own Finish Signing flow — once the lease renewal
+// document has been signed, the banner is done its job and shouldn't invite
+// re-review of an already-completed renewal. Same pattern as the AutoPay flag.
+const RMR_RENEWAL_SIGNED_KEY = 'rmr-renewal-signed';
+function rmrIsRenewalSigned() {
+  try { return localStorage.getItem(RMR_RENEWAL_SIGNED_KEY) === '1'; } catch (e) { return false; }
+}
+function rmrSetRenewalSigned(value) {
+  try {
+    if (value) localStorage.setItem(RMR_RENEWAL_SIGNED_KEY, '1');
+    else localStorage.removeItem(RMR_RENEWAL_SIGNED_KEY);
+  } catch (e) { /* private browsing, etc. — demo state just won't persist */ }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   // Collapse/expand the left nav — mirrors the real Menu component's
   // Expanded=True/False variants from the RMR design system (icon-only pills,
@@ -279,6 +294,82 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('[data-modal-backdrop]').forEach((backdrop) => {
       if (!backdrop.hidden) closeModal(backdrop);
     });
+  });
+
+  // Document Center — Renewal Available banner hides itself once the lease
+  // renewal document has already been signed via document-sign.html (see
+  // sign-complete/submit-signed-doc below), the same "already done, don't
+  // invite re-review" pattern as the AutoPay banner's own persisted state.
+  if (rmrIsRenewalSigned()) {
+    document.querySelectorAll('[data-renewal-banner]').forEach((banner) => { banner.hidden = true; });
+  }
+
+  // Review Multiple Term Offers — selecting a different term card, same
+  // radio-card pattern as pmt-select-amount (visual selection only; each
+  // card's own numbers are fixed, real content from the source frame).
+  document.querySelectorAll('[data-action="offer-select"]').forEach((card) => {
+    card.addEventListener('click', () => {
+      card.parentElement.querySelectorAll('[data-action="offer-select"]').forEach((c) => {
+        const selected = c === card;
+        c.classList.toggle('rmr-offer-card--selected', selected);
+        c.querySelector('.rmr-pmt-radio').classList.toggle('rmr-pmt-radio--selected', selected);
+      });
+    });
+  });
+
+  // Decline All Offers — closes both the Decline All Offers modal and the
+  // Review Multiple Term Offers modal underneath it (the generic fake-submit
+  // handler only closes the one ancestor backdrop, which isn't enough here
+  // since these are two separate, non-nested overlays).
+  document.querySelectorAll('[data-action="decline-all-submit"]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const declineAll = document.querySelector('[data-modal-backdrop="decline-all-offers"]');
+      const review = document.querySelector('[data-modal-backdrop="review-offers"]');
+      if (declineAll) closeModal(declineAll);
+      if (review) closeModal(review);
+      showToast('Your renewal offers have been declined.');
+    });
+  });
+
+  // Sign Document (Lease Renewal Request) — "Sign" in the Document Signature
+  // preview step finishes the wizard: fills in the document's own embedded
+  // lease-preference value and cursive signature line, and marks the sidebar
+  // Sign button as done so Finish Signing can proceed straight to Submit.
+  document.querySelectorAll('[data-action="sign-complete"]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const wizard = document.querySelector('[data-modal-backdrop="document-signature"]');
+      if (wizard) closeModal(wizard);
+      const leaseValue = document.querySelector('[data-sign-lease-value]');
+      if (leaseValue) leaseValue.textContent = '12-month lease renewal';
+      const signatureLine = document.querySelector('[data-sign-signature-line]');
+      if (signatureLine) signatureLine.hidden = false;
+      const signBtn = document.querySelector('[data-sign-btn]');
+      if (signBtn) {
+        signBtn.classList.add('rmr-sign-tools__action--done');
+        signBtn.dataset.signed = 'true';
+        const label = signBtn.querySelector('[data-sign-btn-label]');
+        if (label) label.textContent = 'Signed';
+      }
+    });
+  });
+
+  // Finish Signing — if the document hasn't been signed yet, show the real
+  // Missing Required Fields error (matching the source content exactly,
+  // "Add Signature" listed as the missing field on Page 1); otherwise go
+  // straight to the Submit Signed Document confirmation.
+  document.querySelectorAll('[data-action="sign-finish"]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const signBtn = document.querySelector('[data-sign-btn]');
+      const signed = signBtn && signBtn.dataset.signed === 'true';
+      const target = document.querySelector(`[data-modal-backdrop="${signed ? 'submit-signed-doc' : 'missing-fields'}"]`);
+      if (target) target.hidden = false;
+    });
+  });
+
+  // Submit Signed Document — Submit persists the "already signed" flag so
+  // the Document Center banner reflects it on return.
+  document.querySelectorAll('[data-modal-target="document-signed-success"]').forEach((btn) => {
+    btn.addEventListener('click', () => { rmrSetRenewalSigned(true); });
   });
 
   // Account dropdown (User Info popover) — from the "2.0.2 Tasks on Linked
@@ -903,20 +994,30 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Document Center — Leases & Documents tree. Only the lease-period level
-  // toggles between collapsed/expanded in the source frame (node 2786:46043
-  // shows both states there), so only that level is wired up; the
-  // property-level chevron is static (see rmr.css for why). Toggling a
-  // lease row shows/hides its own document rows via data-doc-tree-parent.
+  // Document Center — Leases & Documents tree. Both the property level and
+  // the lease-period level toggle collapsed/expanded (same real chevron
+  // component at each level); a doc row never has children of its own.
+  // Collapsing a row always hides every descendant regardless of that
+  // descendant's own expanded state; expanding a row only reveals its
+  // immediate children, each still respecting its own remembered state —
+  // so re-expanding a property doesn't also force open a lease row you'd
+  // deliberately left collapsed.
+  function docTreeSetDescendantsHidden(parentId, hide) {
+    document.querySelectorAll(`[data-doc-tree-parent="${parentId}"]`).forEach((child) => {
+      child.hidden = hide;
+      if (child.dataset.docTreeId) {
+        const childExpanded = child.dataset.docTreeExpanded === 'true';
+        docTreeSetDescendantsHidden(child.dataset.docTreeId, hide ? true : !childExpanded);
+      }
+    });
+  }
   document.querySelectorAll('[data-action="doc-tree-toggle"]').forEach((btn) => {
     btn.addEventListener('click', () => {
       const row = btn.closest('[data-doc-tree-id]');
       if (!row) return;
       const expanded = row.dataset.docTreeExpanded === 'true';
       row.dataset.docTreeExpanded = String(!expanded);
-      document.querySelectorAll(`[data-doc-tree-parent="${row.dataset.docTreeId}"]`).forEach((child) => {
-        child.hidden = expanded;
-      });
+      docTreeSetDescendantsHidden(row.dataset.docTreeId, expanded);
     });
   });
 });

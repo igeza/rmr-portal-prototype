@@ -1043,6 +1043,23 @@ button {
   border-color: var(--border-button-tertiary);
 }
 
+/* Suppresses the browser's own yellow autofill tint (Chrome/Safari fill
+   recognized fields like email/name/address with a pale-yellow background
+   the instant the page loads, independent of :focus) so the design
+   system's own Selected state above is always the only "selected" look a
+   field can show. */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--text-primary);
+  -webkit-box-shadow: 0 0 0px 1000px var(--background-primary) inset;
+  box-shadow: 0 0 0px 1000px var(--background-primary) inset;
+  transition: background-color 999999s ease-in-out 0s;
+}
+
 .rmr-modal__select {
   width: 100%;
   height: 32px;
@@ -1254,6 +1271,12 @@ button {
    overlay. */
 .rmr-pmt-table-wrap { width: 100%; overflow-x: auto; padding-bottom: var(--spacing-xs); }
 
+.rmr-pmt-pay-input:focus {
+  outline: none;
+  background-color: var(--component-selector);
+  border-color: var(--border-button-tertiary);
+}
+
 .rmr-pmt-pay-input {
   width: 100%;
   height: 32px;
@@ -1284,6 +1307,12 @@ button {
 }
 
 .rmr-pmt-amount-input__dollar { font-size: var(--font-size-lg); font-weight: var(--font-weight-bold); color: var(--text-primary); }
+
+.rmr-pmt-amount-input input:focus {
+  outline: none;
+  background-color: var(--component-selector);
+  border-color: var(--border-button-tertiary);
+}
 
 .rmr-pmt-amount-input input {
   flex: 1;
@@ -1385,6 +1414,10 @@ button {
 .rmr-checkbox input:checked + .rmr-checkbox-box {
   background: var(--icon-primary) url("icons/payments/mp-checkbox-check.svg") no-repeat center / 20px 20px;
   border: none;
+}
+.rmr-checkbox input:focus-visible + .rmr-checkbox-box {
+  outline: 2px solid var(--border-button-tertiary);
+  outline-offset: 2px;
 }
 
 .rmr-pmt-form-row { display: flex; gap: var(--spacing-md); width: 100%; }
@@ -1517,7 +1550,7 @@ button {
    actions (see screens/payment-settings.html), documented fully in
    PROTOTYPE.md. */
 
-.rmr-settings-page { display: flex; flex-direction: column; gap: var(--spacing-2xl); padding: var(--spacing-2xl); }
+.rmr-settings-page { display: flex; flex-direction: column; gap: var(--spacing-md); padding: var(--spacing-2xl); }
 
 .rmr-settings-hero {
   position: relative;
@@ -1743,7 +1776,7 @@ button {
   margin: var(--spacing-2xl) var(--spacing-2xl) 0;
   border-radius: var(--spacing-xs);
   overflow: hidden;
-  min-height: 64px;
+  height: 64px;
   flex-shrink: 0;
 }
 
@@ -2638,7 +2671,8 @@ button {
 .rmr-svc-comments__attachments { display: flex; gap: var(--spacing-xs); }
 .rmr-svc-comments__attachments img { width: 48px; height: 48px; border-radius: var(--spacing-xs); object-fit: cover; }
 .rmr-svc-comments__input-row { display: flex; align-items: center; gap: var(--spacing-xs); padding: var(--spacing-xs); border: 1px solid var(--border-border); background: var(--component-input-default, var(--background-primary)); border-radius: var(--spacing-xs); height: 32px; flex-shrink: 0; }
-.rmr-svc-comments__input { flex: 1; min-width: 0; border: none; background: none; font-family: var(--font-family-main); font-size: var(--font-size-sm); color: var(--text-primary); }
+.rmr-svc-comments__input-row:focus-within { background-color: var(--component-selector); border-color: var(--border-button-tertiary); }
+.rmr-svc-comments__input { flex: 1; min-width: 0; border: none; background: none; outline: none; font-family: var(--font-family-main); font-size: var(--font-size-sm); color: var(--text-primary); }
 .rmr-svc-comments__input::placeholder { color: var(--text-accent); font-style: italic; }
 .rmr-svc-comments__input-btn { background: none; border: none; padding: 0; cursor: pointer; flex-shrink: 0; }
 .rmr-svc-comments__input-btn img { width: 20px; height: 20px; }
@@ -2718,11 +2752,16 @@ button {
   border-radius: var(--spacing-xs);
   background: var(--background-primary);
 }
+.rmr-doc-search:focus-within {
+  background-color: var(--component-selector);
+  border-color: var(--border-button-tertiary);
+}
 .rmr-doc-search input {
   flex: 1;
   min-width: 0;
   border: none;
   background: none;
+  outline: none;
   font-family: var(--font-family-main);
   font-style: italic;
   font-size: var(--font-size-sm);
@@ -2752,7 +2791,154 @@ button {
 .rmr-doc-tree__spacer { display: inline-block; width: 20px; height: 20px; flex-shrink: 0; }
 .rmr-doc-tree__toggle { display: flex; align-items: center; justify-content: center; width: 20px; height: 20px; padding: 0; background: none; border: none; cursor: pointer; flex-shrink: 0; }
 .rmr-doc-tree__chevron { transition: transform 0.15s ease; }
-.rmr-doc-tree__row--lease[data-doc-tree-expanded="true"] .rmr-doc-tree__chevron { transform: rotate(90deg); }
+.rmr-doc-tree__row[data-doc-tree-expanded="true"] .rmr-doc-tree__chevron { transform: rotate(90deg); }
 .rmr-doc-tree__link { color: var(--text-blue); font-size: var(--font-size-sm); text-decoration: none; }
 .rmr-doc-tree__link:hover { text-decoration: underline; }
 .rmr-svc-notes__attach-link { font-size: var(--font-size-sm); letter-spacing: 0.28px; color: var(--text-blue); }
+
+/* ---------- Lease Renewal flow ----------
+   Sourced from file Sip0wuWPnMa5duL1L39HDn, the "3.3.x" Renewal section
+   (Document Center w/ Renewal Available 3026:59418, Review Multiple Term
+   Offers 3047:16295, Decline All Offers 3047:18766, Decline Renewal
+   3005:21502) and the "3.2.1.x" Document Signature wizard (Lease Preference
+   2667:18935, Add Signature 3039:13795, Document Signature 3012:22514,
+   Missing Required Fields 3039:13767, Submit Signed Document 3039:13850,
+   Document Signed Successfully 3293:13617). See PROTOTYPE.md for the scope
+   decisions connecting these two sourced-but-separate flows into one
+   click-through path. */
+
+/* Renewal Available banner reuses .rmr-pay-autopay's bar+icon+text+button
+   shape verbatim (same real component, same layout) — only the icon/copy
+   change, so no new structural classes were needed here. */
+
+/* Missing Required Fields' bulleted list of incomplete fields — the only
+   place in this prototype's .rmr-acct-confirm body content that needs a
+   real list-disc bullet instead of the global ul/li reset. */
+.rmr-acct-confirm__list { list-style: disc; padding-left: 20px; margin: 0; }
+.rmr-acct-confirm__list a { color: var(--text-blue); text-decoration: none; }
+.rmr-acct-confirm__list a:hover { text-decoration: underline; }
+
+/* Document Signed Successfully (3293:13617) reuses .rmr-modal--narrow +
+   .rmr-pmt-success verbatim (same 400px component already built for the
+   Make a Payment success screen) — the one difference is this frame's own
+   close X, absolutely positioned over the content rather than a header row. */
+.rmr-modal--narrow { position: relative; }
+.rmr-modal--narrow .rmr-modal__close { position: absolute; top: 23px; right: 23px; }
+
+/* Review Multiple Term Offers (3047:16295) — Current Lease Information's
+   inline label:value banners. */
+.rmr-offers-info { display: flex; flex-wrap: wrap; align-items: center; gap: var(--spacing-md); width: 100%; }
+.rmr-offers-info__item { font-size: var(--font-size-sm); letter-spacing: 0.28px; color: var(--text-secondary); white-space: nowrap; }
+.rmr-offers-info__item strong { font-weight: var(--font-weight-regular); color: var(--text-primary); }
+
+/* Renewal Offer Selection — four selectable term cards, same selector-card
+   pattern as .rmr-pmt-amount-card (border + .rmr-component-selector tint
+   when selected) but wider, with each term's own recurring-charges table. */
+.rmr-offer-cards { display: flex; gap: var(--spacing-md); align-items: stretch; width: 100%; }
+.rmr-offer-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  width: 342px;
+  flex-shrink: 0;
+  padding: var(--spacing-xl);
+  background: var(--background-primary);
+  border: 2px solid var(--border-border);
+  border-radius: var(--spacing-xs);
+  box-shadow: var(--dropshadow-sm);
+  text-align: left;
+  cursor: pointer;
+}
+.rmr-offer-card--selected { background: var(--component-selector); border-color: var(--border-button-tertiary); }
+.rmr-offer-card__head { display: flex; align-items: center; gap: var(--spacing-xs); }
+.rmr-offer-card__term { flex: 1; min-width: 0; margin: 0; padding-left: var(--spacing-2xl); font-size: var(--font-size-xl); line-height: var(--line-height-lg); letter-spacing: 1px; color: var(--text-primary); }
+.rmr-offer-card__price { margin: 0 0 0 var(--spacing-2xl); font-size: var(--font-size-lg); line-height: var(--line-height-xl); font-weight: var(--font-weight-bold); color: var(--text-primary); }
+.rmr-offer-card__dates { margin: 0; font-size: var(--font-size-sm); letter-spacing: 0.28px; color: var(--text-secondary); }
+.rmr-offer-card__dates strong { font-weight: var(--font-weight-regular); color: var(--text-primary); }
+.rmr-offer-card__table { display: flex; align-items: flex-start; width: 100%; }
+.rmr-offer-card__col { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.rmr-offer-card__col--amt { align-items: flex-end; }
+.rmr-offer-card__cell { height: 40px; display: flex; align-items: center; padding: var(--spacing-xxs) var(--spacing-xs); border-bottom: 1px solid var(--border-border); font-size: var(--font-size-sm); color: var(--text-secondary); width: 100%; }
+.rmr-offer-card__col--amt .rmr-offer-card__cell { justify-content: flex-end; }
+
+/* Decline All Offers / Decline Renewal — both reuse .rmr-modal__field /
+   .rmr-modal__input / .rmr-modal__textarea already built for every other
+   form field in this prototype; only the date-icon wrapper is new. */
+.rmr-offers-date { position: relative; }
+.rmr-offers-date input { padding-right: 32px; }
+.rmr-offers-date__icon { position: absolute; right: var(--spacing-xs); top: 50%; transform: translateY(-50%); pointer-events: none; }
+
+/* ---------- Sign Document — Lease Renewal Request ----------
+   Sourced from "Sign Document - Lease renewal" (node 3011:22250, same
+   file) — a document viewer page: a slim tool sidebar (page nav, Sign,
+   Finish Signing) beside the actual letter, styled as a plain printed page
+   rather than any app chrome. */
+.rmr-sign-layout { display: flex; align-items: flex-start; gap: var(--spacing-md); width: 100%; }
+.rmr-sign-tools { display: flex; flex-direction: column; align-items: center; gap: var(--spacing-md); flex-shrink: 0; width: 64px; }
+.rmr-sign-tools__nav { display: flex; flex-direction: column; align-items: center; gap: var(--spacing-xs); width: 100%; padding: var(--spacing-sm) 0; background: var(--background-primary); border: 1px solid var(--border-border); border-radius: var(--spacing-xs); box-shadow: var(--dropshadow-sm); }
+.rmr-sign-tools__nav-row { display: flex; align-items: center; gap: var(--spacing-xxs); }
+.rmr-sign-tools__nav button { display: flex; align-items: center; justify-content: center; width: 20px; height: 20px; padding: 0; background: none; border: none; color: var(--icon-disabled); cursor: default; }
+.rmr-sign-tools__page { font-size: var(--font-size-xs); color: var(--text-secondary); }
+.rmr-sign-tools__action {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xxs);
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-xxs);
+  background: var(--background-primary);
+  border: 1px solid var(--border-border);
+  border-radius: var(--spacing-xs);
+  box-shadow: var(--dropshadow-sm);
+  font-size: var(--font-size-xs);
+  color: var(--text-blue);
+  cursor: pointer;
+}
+.rmr-sign-tools__action--done { color: var(--status-success); }
+.rmr-sign-tools__action[disabled] { color: var(--icon-disabled); cursor: not-allowed; }
+.rmr-sign-doc-wrap { flex: 1; min-width: 0; display: flex; justify-content: center; }
+.rmr-sign-doc {
+  width: 100%;
+  max-width: 612px;
+  min-height: 792px;
+  padding: 56px 48px;
+  background: var(--background-primary);
+  border: 1px solid var(--border-border);
+  box-shadow: var(--dropshadow-sm);
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #1a1a1a;
+}
+.rmr-sign-doc h1 { text-align: center; font-size: 15px; letter-spacing: 0.5px; margin: 0 0 4px; }
+.rmr-sign-doc__date { text-align: center; margin: 0 0 24px; }
+.rmr-sign-doc p { margin: 0 0 16px; }
+.rmr-sign-doc__select { display: flex; justify-content: center; margin: 0 0 16px; }
+.rmr-sign-doc__select .rmr-modal__select { width: 260px; font-family: var(--font-family-main); }
+.rmr-sign-doc__signed { margin: 24px 0 0; font-family: 'Alex Brush', 'Segoe Script', 'Brush Script MT', cursive; font-size: 28px; color: var(--text-primary); }
+.rmr-sign-tools-fixed { display: flex; flex-direction: column; gap: var(--spacing-sm); position: sticky; top: var(--spacing-xl); }
+.rmr-sign-doc-toolbar { display: flex; flex-direction: column; gap: var(--spacing-xs); flex-shrink: 0; }
+.rmr-sign-doc-toolbar button { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; padding: 0; background: var(--background-primary); border: 1px solid var(--border-border); border-radius: var(--spacing-xs); box-shadow: var(--dropshadow-sm); cursor: pointer; }
+
+/* Add Signature / Document Signature wizard steps — the typed-signature
+   input reuses .rmr-modal__input; the cursive preview is new. */
+.rmr-sign-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+  width: 100%;
+  padding: var(--spacing-md) var(--spacing-sm);
+  border: 1px solid var(--border-border);
+  border-radius: 2.4px;
+}
+.rmr-sign-preview__name {
+  width: 100%;
+  padding-bottom: var(--spacing-xxs);
+  border-bottom: 1px solid var(--text-primary);
+  text-align: center;
+  font-family: 'Alex Brush', 'Segoe Script', 'Brush Script MT', cursive;
+  font-size: 32px;
+  color: var(--text-primary);
+}
+.rmr-sign-preview__link { align-self: flex-start; background: none; border: none; padding: 0; font-family: var(--font-family-main); font-size: var(--font-size-xs); color: var(--text-blue); cursor: pointer; }

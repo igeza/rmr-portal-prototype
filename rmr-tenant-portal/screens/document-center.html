@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Document Center — rmResident Portal</title>
-<link rel="stylesheet" href="../assets/rmr.css?v=32" />
+<link rel="stylesheet" href="../assets/rmr.css?v=34" />
 <link rel="stylesheet" href="../assets/proto.css" />
 </head>
 <body data-screen="document-center">
@@ -109,6 +109,18 @@
         <div class="rmr-msg-banner rmr-msg-banner--compact" data-component="Banner">
           <img class="rmr-msg-banner__icon" src="../assets/icons/payments/campaign.svg" alt="" />
           <p class="rmr-msg-banner__body">If you have a renewal this leasing period, they must be signed by 04/31/26.</p>
+        </div>
+
+        <div class="rmr-pay-autopay" data-component="Banner" data-renewal-banner>
+          <div class="rmr-pay-autopay__bar rmr-pay-autopay__bar--empty"></div>
+          <div class="rmr-pay-autopay__body">
+            <img class="rmr-pay-autopay__icon" src="../assets/icons/documents/description.svg" alt="" />
+            <div class="rmr-pay-autopay__text">
+              <p class="rmr-pay-autopay__title">Renewal Available</p>
+              <p class="rmr-pay-autopay__desc">You have a Renewal Offer that is ready to be reviewed &amp; signed.</p>
+            </div>
+            <button class="rmr-btn rmr-btn--secondary" type="button" style="height:32px;" data-action="open-modal" data-modal-target="review-offers">Review &amp; Sign</button>
+          </div>
         </div>
 
         <div class="rmr-doc-columns">
@@ -288,17 +300,21 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr class="rmr-doc-tree__row rmr-doc-tree__row--property">
-                    <td><img class="rmr-doc-tree__icon" src="../assets/icons/chevron-down.svg" alt="" width="20" height="20" /></td>
+                  <tr class="rmr-doc-tree__row rmr-doc-tree__row--property" data-doc-tree-id="p1" data-doc-tree-expanded="true">
+                    <td>
+                      <button class="rmr-doc-tree__toggle" type="button" data-action="doc-tree-toggle" aria-label="Collapse Riverview Apartments - Unit #4">
+                        <img class="rmr-doc-tree__chevron" src="../assets/icons/documents/keyboard-arrow-right.svg" alt="" width="20" height="20" />
+                      </button>
+                    </td>
                     <td>Riverview Apartments - Unit #4</td>
                     <td>04/01/23</td>
                     <td>06/14/25 – 06/13/26</td>
                     <td>12 months</td>
                   </tr>
-                  <tr class="rmr-doc-tree__row rmr-doc-tree__row--lease" data-doc-tree-id="p1-l1" data-doc-tree-expanded="false">
+                  <tr class="rmr-doc-tree__row rmr-doc-tree__row--lease" data-doc-tree-id="p1-l1" data-doc-tree-parent="p1" data-doc-tree-expanded="false">
                     <td></td>
                     <td>
-                      <button class="rmr-doc-tree__toggle" type="button" data-action="doc-tree-toggle" data-doc-tree-target="p1-l1" aria-label="Expand June 2026 – June 2027 Lease">
+                      <button class="rmr-doc-tree__toggle" type="button" data-action="open-modal" data-modal-target="doc-not-ready" aria-label="June 2026 – June 2027 Lease (Upcoming) — document not ready">
                         <img class="rmr-doc-tree__chevron" src="../assets/icons/documents/keyboard-arrow-right.svg" alt="" width="20" height="20" />
                       </button>
                       <img class="rmr-doc-tree__icon" src="../assets/icons/documents/folder.svg" alt="" width="20" height="20" />
@@ -306,7 +322,7 @@
                     </td>
                     <td></td><td></td><td></td>
                   </tr>
-                  <tr class="rmr-doc-tree__row rmr-doc-tree__row--lease" data-doc-tree-id="p1-l2" data-doc-tree-expanded="true">
+                  <tr class="rmr-doc-tree__row rmr-doc-tree__row--lease" data-doc-tree-id="p1-l2" data-doc-tree-parent="p1" data-doc-tree-expanded="true">
                     <td></td>
                     <td>
                       <button class="rmr-doc-tree__toggle" type="button" data-action="doc-tree-toggle" data-doc-tree-target="p1-l2" aria-label="Collapse June 2025 – June 2026 Lease">
@@ -335,14 +351,18 @@
                     </td>
                     <td></td><td></td><td></td>
                   </tr>
-                  <tr class="rmr-doc-tree__row rmr-doc-tree__row--property">
-                    <td><img class="rmr-doc-tree__icon" src="../assets/icons/chevron-down.svg" alt="" width="20" height="20" /></td>
+                  <tr class="rmr-doc-tree__row rmr-doc-tree__row--property" data-doc-tree-id="p2" data-doc-tree-expanded="true">
+                    <td>
+                      <button class="rmr-doc-tree__toggle" type="button" data-action="doc-tree-toggle" aria-label="Collapse Safe &amp; Secure Storage - Unit SS1">
+                        <img class="rmr-doc-tree__chevron" src="../assets/icons/documents/keyboard-arrow-right.svg" alt="" width="20" height="20" />
+                      </button>
+                    </td>
                     <td>Safe &amp; Secure Storage - Unit SS1</td>
                     <td>06/14/25</td>
                     <td>06/14/25 – 06/13/26</td>
                     <td>12 months</td>
                   </tr>
-                  <tr class="rmr-doc-tree__row rmr-doc-tree__row--lease" data-doc-tree-id="p2-l1" data-doc-tree-expanded="true">
+                  <tr class="rmr-doc-tree__row rmr-doc-tree__row--lease" data-doc-tree-id="p2-l1" data-doc-tree-parent="p2" data-doc-tree-expanded="true">
                     <td></td>
                     <td>
                       <button class="rmr-doc-tree__toggle" type="button" data-action="doc-tree-toggle" data-doc-tree-target="p2-l1" aria-label="Collapse June 2025 – June 2026 Lease">
@@ -373,6 +393,163 @@
     </main>
   </div>
 </div>
-<script src="../assets/app.js?v=13"></script>
+
+<!-- Review Multiple Term Offers — node 3047:16295 -->
+<div class="rmr-modal-backdrop" data-modal-backdrop="review-offers" hidden>
+  <div class="rmr-modal" role="dialog" aria-modal="true" aria-labelledby="modal-review-offers-title" style="width:1462px;" data-component="3.3.6 Review Multiple Term Offers (Accept & Sign)">
+    <div class="rmr-modal__header" data-component="Header">
+      <h2 class="rmr-modal__title" id="modal-review-offers-title">Riverview Apartments | Unit #4 - Renewal Offer</h2>
+      <button class="rmr-modal__close" type="button" data-action="close-modal">
+        <img src="../assets/icons/payments/mp-close.svg" alt="Close" width="24" height="24" />
+      </button>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:var(--spacing-sm); width:100%;">
+      <p style="margin:0; font-size:var(--font-size-md); font-weight:var(--font-weight-bold); color:var(--text-primary);">Current Lease Information</p>
+      <div class="rmr-offers-info">
+        <p class="rmr-offers-info__item">Term: <strong>12 Months</strong></p>
+        <p class="rmr-offers-info__item">Lease Expiration: <strong>03/31/26</strong></p>
+        <p class="rmr-offers-info__item">Rent Amount: <strong>$1,385.00</strong></p>
+        <p class="rmr-offers-info__item">Monthly Other: <strong>$165.00</strong></p>
+        <p class="rmr-offers-info__item">Additional Items: <strong>SW001</strong></p>
+      </div>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:var(--spacing-sm); width:100%;">
+      <p style="margin:0; font-size:var(--font-size-md); font-weight:var(--font-weight-bold); color:var(--text-primary);">Renewal Offer Selection</p>
+      <div style="display:flex; justify-content:space-between; width:100%; font-size:var(--font-size-sm); letter-spacing:0.28px;">
+        <p style="margin:0; color:var(--text-primary);">Once you select a new term, click Accept &amp; Sign.</p>
+        <p style="margin:0;"><span style="color:var(--text-secondary);">Offer Expiration:</span> June 13, 2026</p>
+      </div>
+    </div>
+    <div class="rmr-offer-cards" data-component="Renewals">
+      <button class="rmr-offer-card" type="button" data-action="offer-select">
+        <div class="rmr-offer-card__head"><span class="rmr-pmt-radio"></span><p class="rmr-offer-card__term">6 Months</p></div>
+        <p class="rmr-offer-card__dates" style="margin-left:32px;">Lease Renewal Dates: <strong>06/14/26 - 06/13/28</strong></p>
+        <p class="rmr-offer-card__price">$1,715.00</p>
+        <div class="rmr-offer-card__table">
+          <div class="rmr-offer-card__col">
+            <div class="rmr-offer-card__cell">Rent</div>
+            <div class="rmr-offer-card__cell">Utilities</div>
+            <div class="rmr-offer-card__cell">Trash</div>
+            <div class="rmr-offer-card__cell">Condominium Fee</div>
+          </div>
+          <div class="rmr-offer-card__col rmr-offer-card__col--amt">
+            <div class="rmr-offer-card__cell">$1,550.00</div>
+            <div class="rmr-offer-card__cell">$120.00</div>
+            <div class="rmr-offer-card__cell">$5.00</div>
+            <div class="rmr-offer-card__cell">$40.00</div>
+          </div>
+        </div>
+      </button>
+      <button class="rmr-offer-card rmr-offer-card--selected" type="button" data-action="offer-select">
+        <div class="rmr-offer-card__head"><span class="rmr-pmt-radio rmr-pmt-radio--selected"></span><p class="rmr-offer-card__term">12 Months</p></div>
+        <p class="rmr-offer-card__dates" style="margin-left:32px;">Lease Renewal Dates: <strong>06/14/26 - 06/13/27</strong></p>
+        <p class="rmr-offer-card__price">$1,615.00</p>
+        <div class="rmr-offer-card__table">
+          <div class="rmr-offer-card__col">
+            <div class="rmr-offer-card__cell">Rent</div>
+            <div class="rmr-offer-card__cell">Utilities</div>
+            <div class="rmr-offer-card__cell">Trash</div>
+            <div class="rmr-offer-card__cell">Condominium Fee</div>
+          </div>
+          <div class="rmr-offer-card__col rmr-offer-card__col--amt">
+            <div class="rmr-offer-card__cell">$1,450.00</div>
+            <div class="rmr-offer-card__cell">$120.00</div>
+            <div class="rmr-offer-card__cell">$5.00</div>
+            <div class="rmr-offer-card__cell">$40.00</div>
+          </div>
+        </div>
+      </button>
+      <button class="rmr-offer-card" type="button" data-action="offer-select">
+        <div class="rmr-offer-card__head"><span class="rmr-pmt-radio"></span><p class="rmr-offer-card__term">24 Months</p></div>
+        <p class="rmr-offer-card__dates" style="margin-left:32px;">Lease Renewal Dates: <strong>06/14/26 - 06/13/28</strong></p>
+        <p class="rmr-offer-card__price">$1,415.00</p>
+        <div class="rmr-offer-card__table">
+          <div class="rmr-offer-card__col">
+            <div class="rmr-offer-card__cell">Rent</div>
+            <div class="rmr-offer-card__cell">Utilities</div>
+            <div class="rmr-offer-card__cell">Trash</div>
+            <div class="rmr-offer-card__cell">Condominium Fee</div>
+          </div>
+          <div class="rmr-offer-card__col rmr-offer-card__col--amt">
+            <div class="rmr-offer-card__cell">$1,250.00</div>
+            <div class="rmr-offer-card__cell">$120.00</div>
+            <div class="rmr-offer-card__cell">$5.00</div>
+            <div class="rmr-offer-card__cell">$40.00</div>
+          </div>
+        </div>
+      </button>
+      <button class="rmr-offer-card" type="button" data-action="offer-select">
+        <div class="rmr-offer-card__head"><span class="rmr-pmt-radio"></span><p class="rmr-offer-card__term">Month-to-Month</p></div>
+        <p class="rmr-offer-card__price">$1,715.00</p>
+        <div class="rmr-offer-card__table">
+          <div class="rmr-offer-card__col">
+            <div class="rmr-offer-card__cell">Rent</div>
+            <div class="rmr-offer-card__cell">Utilities</div>
+            <div class="rmr-offer-card__cell">Trash</div>
+            <div class="rmr-offer-card__cell">Condominium Fee</div>
+          </div>
+          <div class="rmr-offer-card__col rmr-offer-card__col--amt">
+            <div class="rmr-offer-card__cell">$1,250.00</div>
+            <div class="rmr-offer-card__cell">$120.00</div>
+            <div class="rmr-offer-card__cell">$5.00</div>
+            <div class="rmr-offer-card__cell">$40.00</div>
+          </div>
+        </div>
+      </button>
+    </div>
+    <div class="rmr-modal__footer">
+      <button class="rmr-btn rmr-btn--text rmr-btn--link" type="button" data-action="open-modal" data-modal-target="decline-all-offers">Decline All Offers</button>
+      <a class="rmr-btn rmr-btn--primary" href="document-sign.html">Accept Offer</a>
+    </div>
+  </div>
+</div>
+
+<!-- Decline All Offers — node 3047:18766 (opens on top of Review Multiple Term Offers) -->
+<div class="rmr-modal-backdrop" data-modal-backdrop="decline-all-offers" hidden>
+  <div class="rmr-modal rmr-modal--wide" role="dialog" aria-modal="true" aria-labelledby="modal-decline-all-title" data-component="3.3.7 Decline All Offers">
+    <div class="rmr-modal__header" data-component="Header">
+      <h2 class="rmr-modal__title" id="modal-decline-all-title">Decline All Offers</h2>
+      <button class="rmr-modal__close" type="button" data-action="close-modal">
+        <img src="../assets/icons/payments/mp-close.svg" alt="Close" width="24" height="24" />
+      </button>
+    </div>
+    <div class="rmr-modal__field">
+      <span class="rmr-modal__field-label">Expected Move Out Date *</span>
+      <span class="rmr-offers-date">
+        <input class="rmr-modal__input" type="text" placeholder="mm/dd/yyyy" />
+        <img class="rmr-offers-date__icon" src="../assets/icons/payments/calendar.svg" alt="" width="20" height="20" />
+      </span>
+    </div>
+    <div class="rmr-modal__field">
+      <span class="rmr-modal__field-label">Comment *</span>
+      <textarea class="rmr-modal__textarea" rows="4"></textarea>
+    </div>
+    <div class="rmr-modal__footer" style="justify-content:space-between;">
+      <button class="rmr-btn rmr-btn--text rmr-btn--link" type="button" data-action="close-modal">Back to Renewal Offers</button>
+      <div style="display:flex; gap:var(--spacing-md);">
+        <button class="rmr-btn rmr-btn--secondary" type="button" data-action="close-modal">Cancel</button>
+        <button class="rmr-btn rmr-btn--primary" type="button" data-action="decline-all-submit">Decline All</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Document not ready — node 3047:18746, "Modal Dialog" component -->
+<div class="rmr-modal-backdrop" data-modal-backdrop="doc-not-ready" hidden>
+  <div class="rmr-modal" role="dialog" aria-modal="true" aria-labelledby="modal-doc-not-ready-title" style="width:568px;" data-component="3.3.1.1 Document not ready">
+    <div class="rmr-acct-confirm">
+      <div class="rmr-acct-confirm__lead">
+        <img src="../assets/icons/account/error-outline.svg" alt="" />
+        <p class="rmr-acct-confirm__title" id="modal-doc-not-ready-title">Document Pending</p>
+      </div>
+      <p class="rmr-acct-confirm__body">Once the signable document is ready, you'll receive an email to sign it.</p>
+    </div>
+    <div class="rmr-modal__footer">
+      <button class="rmr-btn rmr-btn--primary" type="button" data-action="close-modal">Ok</button>
+    </div>
+  </div>
+</div>
+
+<script src="../assets/app.js?v=15"></script>
 </body>
 </html>
