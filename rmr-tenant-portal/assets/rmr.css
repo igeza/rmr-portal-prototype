@@ -2724,8 +2724,15 @@ textarea:-webkit-autofill:focus {
   border-radius: var(--spacing-xs);
   box-shadow: var(--dropshadow-sm);
 }
-.rmr-doc-card--sign { width: 828px; max-width: 100%; }
-.rmr-doc-card--leases { width: 740px; max-width: 100%; flex: 1; min-width: 480px; }
+/* Split evenly on wide screens rather than the source frame's own fixed
+   828px/740px widths — a deliberate departure from those literal Figma
+   values, per direct instruction, so the two cards always share available
+   width 50/50 instead of "Sign" staying fixed while "Leases" absorbs the
+   remainder. Equal flex-basis + shared min-width means they still wrap to a
+   stacked single column at the same width either card would (480px) once
+   the viewport can't fit both side by side. */
+.rmr-doc-card--sign,
+.rmr-doc-card--leases { flex: 1 1 0; min-width: 480px; }
 
 .rmr-doc-card__header { display: flex; flex-direction: column; gap: var(--spacing-xs); flex-shrink: 0; }
 .rmr-doc-card__title { margin: 0; font-size: var(--font-size-xl); line-height: var(--line-height-lg); font-weight: var(--font-weight-regular); color: var(--text-primary); }

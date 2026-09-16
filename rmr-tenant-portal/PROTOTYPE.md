@@ -1160,19 +1160,28 @@ Two registers, both built (nothing skipped in this frame):
   2 properties (Riverview Apartments - Unit #4, Safe & Secure Storage - Unit SS1), matching the
   frame's own "Showing 2 of 2 Leases" footer.
 
-**Tree expand/collapse — only wired up where the frame actually shows both states.** The
-lease-period rows are the only level where the frame depicts both a collapsed state ("June 2026 –
-June 2027 Lease (Upcoming)", plain right-pointing chevron, no visible documents under it) and an
-expanded one ("June 2025 – June 2026 Lease", `rotate-90` chevron, Lease Agreement + Pet Policy rows
-visible beneath it) — so only that level got real click-to-toggle behavior in `app.js`
-(`data-action="doc-tree-toggle"`, scoped by `data-doc-tree-id`/`data-doc-tree-parent`, rotating
-`.rmr-doc-tree__chevron` via `[data-doc-tree-expanded="true"]`). The property level's own leftmost
-chevron (`chevron-down.svg`, reused rather than downloaded fresh since it's the same glyph already
-in the icon set) is static/always-expanded — the frame never shows a property row collapsed, so
-building that state would be inventing one. The collapsed "Upcoming" lease row's toggle is still
-live (it rotates on click), but reveals nothing, since the frame never exposes what documents (if
-any) sit under it while collapsed — showing invented documents there would violate the "nothing
-invented" rule more than a toggle that currently reveals nothing.
+**Correction: the two cards now split available width 50/50, not the frame's own fixed 828px/740px.**
+The source frame gives Documents to Sign a fixed 828px and lets Leases & Documents (`flex: 1`) absorb
+whatever's left — real, sourced values, but per direct instruction this is a deliberate departure
+from them: both cards are now `flex: 1 1 0` with a shared `min-width: 480px`, so they always share
+the row evenly on wide screens and still wrap to a stacked column at the same width either one would.
+The Documents to Sign table's fixed per-column widths (764px total) can now exceed its half of a
+narrower `.rmr-doc-columns`, which is fine — `.rmr-pay-table-wrap` already scrolls horizontally for
+exactly this case, the same as the Payments/All Activity registers.
+
+**Tree expand/collapse — only wired up where the frame actually shows both states, at first.** The
+lease-period rows were originally the only level where the frame depicted both a collapsed state
+("June 2026 – June 2027 Lease (Upcoming)", plain right-pointing chevron, no visible documents under
+it) and an expanded one ("June 2025 – June 2026 Lease", `rotate-90` chevron, Lease Agreement + Pet
+Policy rows visible beneath it) — so only that level first got real click-to-toggle behavior in
+`app.js` (`data-action="doc-tree-toggle"`, scoped by `data-doc-tree-id`/`data-doc-tree-parent`,
+rotating `.rmr-doc-tree__chevron` via `[data-doc-tree-expanded="true"]`), while the property level's
+own leftmost chevron stayed static/always-expanded, since the frame itself never shows a property
+row collapsed. **Since corrected, per direct instruction, to a real working toggle at the property
+level too** — see "Correction: the property-level chevron..." further below for the generalized
+recursive collapse/expand this needed in `app.js`. The collapsed "Upcoming" lease row's toggle is
+still live (it rotates on click) but reveals nothing on its own — see "Document not ready" in the
+Lease Renewal flow section, which gave that empty toggle a real destination instead.
 
 **Scope/deviation notes**:
 - The frame's own left nav shows the full 11-item Tenant menu (Architectural Requests, Meter
