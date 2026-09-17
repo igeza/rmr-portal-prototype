@@ -2907,14 +2907,27 @@ textarea:-webkit-autofill:focus {
    so only that level is wired up in app.js; the property level always
    renders expanded (its own collapsed state was never shown in this mock). */
 .rmr-doc-tree { table-layout: fixed; }
+/* table-layout: fixed takes every column's width from the header row, but
+   only for cells that stay display: table-cell — a <td> switched straight
+   to display: flex (for the toggle/icon/name row below) drops out of that
+   algorithm entirely and the browser instead shrinks it to fit just the
+   toggle button, clipping the icon and name at any container width narrow
+   enough to make the difference visible (e.g. Document Center's two-column
+   layout). .rmr-doc-tree__row-inner keeps the <td> itself a plain,
+   properly-sized table cell and does the flex layout one level in instead. */
 .rmr-doc-tree__row--lease td:nth-child(2),
 .rmr-doc-tree__row--doc td:nth-child(2) {
+  padding: 0;
+  overflow: hidden;
+}
+.rmr-doc-tree__row-inner {
   display: flex;
   align-items: center;
+  height: 100%;
   gap: var(--spacing-xxs);
   padding-left: var(--spacing-sm);
   padding-right: var(--spacing-sm);
-  overflow: hidden;
+  box-sizing: border-box;
 }
 .rmr-doc-tree__icon { flex-shrink: 0; }
 .rmr-doc-tree__spacer { display: inline-block; width: 20px; height: 20px; flex-shrink: 0; }
@@ -2924,12 +2937,11 @@ textarea:-webkit-autofill:focus {
 .rmr-doc-tree__link { color: var(--text-blue); font-size: var(--font-size-sm); text-decoration: none; }
 .rmr-doc-tree__link:hover { text-decoration: underline; }
 /* The lease/doc name itself (plain <span> or .rmr-doc-tree__link, always the
-   flex row's last child, after the fixed-size toggle/spacer + icon) is the
-   one part of this row that can be arbitrarily long — shrink and truncate
-   just that piece instead of letting it push the row past the fixed 37%
-   column width above. */
-.rmr-doc-tree__row--lease td:nth-child(2) > :last-child,
-.rmr-doc-tree__row--doc td:nth-child(2) > :last-child {
+   inner flex row's last child, after the fixed-size toggle/spacer + icon) is
+   the one part of this row that can be arbitrarily long — shrink and
+   truncate just that piece instead of letting it push the row past the
+   fixed 37% column width above. */
+.rmr-doc-tree__row-inner > :last-child {
   flex: 1;
   min-width: 0;
   overflow: hidden;

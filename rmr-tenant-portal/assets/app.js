@@ -1137,6 +1137,37 @@ document.addEventListener('DOMContentLoaded', () => {
       docTreeSetDescendantsHidden(row.dataset.docTreeId, expanded);
     });
   });
+
+  // Truncated-text tooltips — every register's ellipsis-truncated cells
+  // (Payments & Charges, Documents to Sign, the Leases & Documents tree's
+  // own names) get the full text as a native hover tooltip, but only while
+  // actually truncated (scrollWidth > clientWidth), so an untruncated cell
+  // doesn't get a redundant tooltip. Re-scans on resize (a container query
+  // can truncate a cell that wasn't before, or the reverse) and on any DOM
+  // change — tab switches, tree expand/collapse, Document Sign's own
+  // content swap — via MutationObserver rather than hand-wiring every
+  // action that can change which cells are truncated.
+  let rmrTooltipRaf = null;
+  function rmrRefreshTruncationTooltips() {
+    document.querySelectorAll('td, .rmr-doc-tree__row-inner > :last-child').forEach((el) => {
+      if (getComputedStyle(el).textOverflow !== 'ellipsis') return;
+      const text = el.textContent.trim();
+      if (el.scrollWidth > el.clientWidth + 1 && text) {
+        if (el.title !== text) el.title = text;
+      } else if (el.title) {
+        el.removeAttribute('title');
+      }
+    });
+  }
+  function rmrScheduleTruncationTooltips() {
+    if (rmrTooltipRaf) cancelAnimationFrame(rmrTooltipRaf);
+    rmrTooltipRaf = requestAnimationFrame(rmrRefreshTruncationTooltips);
+  }
+  rmrScheduleTruncationTooltips();
+  window.addEventListener('resize', rmrScheduleTruncationTooltips);
+  new MutationObserver(rmrScheduleTruncationTooltips).observe(document.body, {
+    childList: true, subtree: true, attributes: true, attributeFilter: ['hidden', 'class'],
+  });
 });
 
 function closeAccountMenu() {
