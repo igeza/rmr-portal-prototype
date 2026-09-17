@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Dashboard — rmResident Portal</title>
-<link rel="stylesheet" href="../assets/rmr.css?v=35" />
+<link rel="stylesheet" href="../assets/rmr.css?v=46" />
 <link rel="stylesheet" href="../assets/proto.css" />
 </head>
 <body data-screen="dashboard">
@@ -32,19 +32,16 @@
         <div class="rmr-account-menu" data-account-menu hidden data-component="Dropdown Menu">
           <a class="rmr-account-menu__item" href="account.html">
             <span>View Account</span>
-            <img class="rmr-account-menu__chevron" src="../assets/icons/chevron-right.svg" alt="" />
-          </a>
-          <a class="rmr-account-menu__item" href="account.html#linked">
-            <span>Linked Accounts</span>
-            <img class="rmr-account-menu__chevron" src="../assets/icons/chevron-right.svg" alt="" />
           </a>
           <a class="rmr-account-menu__item" href="payment-settings.html">
             <span>Payment Settings</span>
-            <img class="rmr-account-menu__chevron" src="../assets/icons/chevron-right.svg" alt="" />
           </a>
+          <button class="rmr-account-menu__item" type="button" data-action="fake-submit" data-fake-message="Switching accounts isn't included in this example.">
+            <span>Switch Accounts</span>
+            <span class="rmr-account-menu__arrow" aria-hidden="true"></span>
+          </button>
           <button class="rmr-account-menu__item" type="button" data-action="fake-submit" data-fake-message="Logout isn't wired up in this example.">
-            <span>Logout</span>
-            <img class="rmr-account-menu__chevron" src="../assets/icons/chevron-right.svg" alt="" />
+            <span>Log Out</span>
           </button>
         </div>
       </div>
@@ -109,8 +106,8 @@
       </div>
 
       <div class="rmr-hero" data-component="bg">
-        <img class="rmr-hero__bg" src="../assets/images/hero-photo-1.png" alt="" />
-        <img class="rmr-hero__bg" src="../assets/images/hero-photo-2.png" alt="" />
+        <img class="rmr-hero__bg" src="../assets/images/hero-photo-1.png?v=2" alt="" />
+        <img class="rmr-hero__bg" src="../assets/images/hero-photo-2.png?v=2" alt="" />
         <div class="rmr-hero__scrim"></div>
         <div class="rmr-hero__content" data-component="Balance Section">
           <div>
@@ -167,10 +164,10 @@
                   <img class="rmr-notif__icon" src="../assets/icons/notif-event-available.svg" alt="" />
                 </span>
                 <div class="rmr-notif__body">
-                  <p class="rmr-notif__title">Issue #375 has been scheduled for 03/19/26 at 4:30 PM.</p>
+                  <p class="rmr-notif__title">Issue #175 has been scheduled for Thursday, Feb 5, 8:00 AM - 12:00 PM.</p>
                   <div class="rmr-notif__footer">
                     <span class="rmr-notif__time">1hr ago</span>
-                    <a class="rmr-btn rmr-btn--text rmr-btn--link" href="maintenance.html" data-component="Button Left">View Issue</a>
+                    <a class="rmr-btn rmr-btn--text rmr-btn--link" href="maintenance.html?issue=open-175" data-component="Button Left">View Issue</a>
                   </div>
                 </div>
               </div>
@@ -181,10 +178,10 @@
                   <img class="rmr-notif__icon" src="../assets/icons/notif-message.svg" alt="" />
                 </span>
                 <div class="rmr-notif__body">
-                  <p class="rmr-notif__title">Alan Watson left a comment on Issue #300.</p>
+                  <p class="rmr-notif__title">Riverview Apartments left a note on Issue #130.</p>
                   <div class="rmr-notif__footer">
                     <span class="rmr-notif__time">8 hr ago</span>
-                    <a class="rmr-btn rmr-btn--text rmr-btn--link" href="maintenance.html" data-component="Button Left">View Comment</a>
+                    <a class="rmr-btn rmr-btn--text rmr-btn--link" href="maintenance.html?issue=open-130" data-component="Button Left">View Comment</a>
                   </div>
                 </div>
               </div>
@@ -195,10 +192,10 @@
                   <img class="rmr-notif__icon" src="../assets/icons/notif-event-available.svg" alt="" />
                 </span>
                 <div class="rmr-notif__body">
-                  <p class="rmr-notif__title">Issue #300 has been scheduled.</p>
+                  <p class="rmr-notif__title">Issue #130 has a proposed schedule.</p>
                   <div class="rmr-notif__footer">
                     <span class="rmr-notif__time">3 days ago</span>
-                    <a class="rmr-btn rmr-btn--text rmr-btn--link" href="maintenance.html" data-component="Button Left">View Issue</a>
+                    <a class="rmr-btn rmr-btn--text rmr-btn--link" href="maintenance.html?issue=open-130" data-component="Button Left">View Issue</a>
                   </div>
                 </div>
               </div>
@@ -833,6 +830,6 @@
   </div>
 
 </div>
-<script src="../assets/app.js?v=15"></script>
+<script src="../assets/app.js?v=21"></script>
 </body>
 </html>

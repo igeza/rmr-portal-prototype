@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Service Issues — rmResident Portal</title>
-<link rel="stylesheet" href="../assets/rmr.css?v=35" />
+<link rel="stylesheet" href="../assets/rmr.css?v=46" />
 <link rel="stylesheet" href="../assets/proto.css" />
 </head>
 <body data-screen="maintenance">
@@ -31,19 +31,16 @@
         <div class="rmr-account-menu" data-account-menu hidden data-component="Dropdown Menu">
           <a class="rmr-account-menu__item" href="account.html">
             <span>View Account</span>
-            <img class="rmr-account-menu__chevron" src="../assets/icons/chevron-right.svg" alt="" />
-          </a>
-          <a class="rmr-account-menu__item" href="account.html#linked">
-            <span>Linked Accounts</span>
-            <img class="rmr-account-menu__chevron" src="../assets/icons/chevron-right.svg" alt="" />
           </a>
           <a class="rmr-account-menu__item" href="payment-settings.html">
             <span>Payment Settings</span>
-            <img class="rmr-account-menu__chevron" src="../assets/icons/chevron-right.svg" alt="" />
           </a>
+          <button class="rmr-account-menu__item" type="button" data-action="fake-submit" data-fake-message="Switching accounts isn't included in this example.">
+            <span>Switch Accounts</span>
+            <span class="rmr-account-menu__arrow" aria-hidden="true"></span>
+          </button>
           <button class="rmr-account-menu__item" type="button" data-action="fake-submit" data-fake-message="Logout isn't wired up in this example.">
-            <span>Logout</span>
-            <img class="rmr-account-menu__chevron" src="../assets/icons/chevron-right.svg" alt="" />
+            <span>Log Out</span>
           </button>
         </div>
       </div>
@@ -101,7 +98,7 @@
       <div class="rmr-settings-page rmr-settings-page--fit" data-component="Account">
 
         <div class="rmr-settings-hero" data-component="Context Bar">
-          <img class="rmr-settings-hero__bg" src="../assets/images/settings/account-hero.png" alt="" />
+          <img class="rmr-settings-hero__bg" src="../assets/images/settings/account-hero.png?v=2" alt="" />
           <div class="rmr-settings-hero__scrim"></div>
           <p class="rmr-settings-hero__title">Service Issues</p>
         </div>
@@ -451,6 +448,6 @@
   </div>
 
 </div>
-<script src="../assets/app.js?v=15"></script>
+<script src="../assets/app.js?v=21"></script>
 </body>
 </html>

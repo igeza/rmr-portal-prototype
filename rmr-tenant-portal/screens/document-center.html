@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Document Center — rmResident Portal</title>
-<link rel="stylesheet" href="../assets/rmr.css?v=35" />
+<link rel="stylesheet" href="../assets/rmr.css?v=46" />
 <link rel="stylesheet" href="../assets/proto.css" />
 </head>
 <body data-screen="document-center">
@@ -31,19 +31,16 @@
         <div class="rmr-account-menu" data-account-menu hidden data-component="Dropdown Menu">
           <a class="rmr-account-menu__item" href="account.html">
             <span>View Account</span>
-            <img class="rmr-account-menu__chevron" src="../assets/icons/chevron-right.svg" alt="" />
-          </a>
-          <a class="rmr-account-menu__item" href="account.html#linked">
-            <span>Linked Accounts</span>
-            <img class="rmr-account-menu__chevron" src="../assets/icons/chevron-right.svg" alt="" />
           </a>
           <a class="rmr-account-menu__item" href="payment-settings.html">
             <span>Payment Settings</span>
-            <img class="rmr-account-menu__chevron" src="../assets/icons/chevron-right.svg" alt="" />
           </a>
+          <button class="rmr-account-menu__item" type="button" data-action="fake-submit" data-fake-message="Switching accounts isn't included in this example.">
+            <span>Switch Accounts</span>
+            <span class="rmr-account-menu__arrow" aria-hidden="true"></span>
+          </button>
           <button class="rmr-account-menu__item" type="button" data-action="fake-submit" data-fake-message="Logout isn't wired up in this example.">
-            <span>Logout</span>
-            <img class="rmr-account-menu__chevron" src="../assets/icons/chevron-right.svg" alt="" />
+            <span>Log Out</span>
           </button>
         </div>
       </div>
@@ -101,7 +98,7 @@
       <div class="rmr-settings-page rmr-settings-page--fit" data-component="Content">
 
         <div class="rmr-settings-hero" data-component="Context Bar">
-          <img class="rmr-settings-hero__bg" src="../assets/images/documents/hero.png" alt="" />
+          <img class="rmr-settings-hero__bg" src="../assets/images/documents/hero.png?v=2" alt="" />
           <div class="rmr-settings-hero__scrim"></div>
           <p class="rmr-settings-hero__title">Document Center</p>
         </div>
@@ -135,102 +132,21 @@
               <table class="rmr-pay-table rmr-pay-table--doc" data-component="Table">
                 <thead>
                   <tr>
-                    <th style="width:277px;">Document Name</th>
-                    <th style="width:106px;">Published</th>
-                    <th style="width:105px;">Expiration</th>
-                    <th style="width:140px;">Number of Signers</th>
-                    <th style="width:72px;" aria-label="Sign"></th>
-                    <th style="width:64px;" aria-label="Print / Download"></th>
+                    <th style="width:26%;">Document Name</th>
+                    <th style="width:12%;">Published</th>
+                    <th style="width:12%;">Expiration</th>
+                    <th style="width:18%;" class="rmr-doc-col-signers">Number of Signers</th>
+                    <th style="width:16%;" aria-label="Sign"></th>
+                    <th style="width:16%;" aria-label="Print / Download"></th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td>
-                      <p class="rmr-doc-table__name">Noise Complaint</p>
-                      <p class="rmr-doc-table__name-sub">A formal notice regarding noise violations...</p>
-                    </td>
-                    <td>04/15/26</td>
-                    <td>04/25/26</td>
-                    <td>0 of 1</td>
-                    <td><button class="rmr-btn rmr-btn--primary rmr-btn--table" type="button" data-action="fake-submit" data-fake-message="Signing a document isn't included in this example.">Sign</button></td>
-                    <td>
-                      <span class="rmr-doc-table__actions">
-                        <button type="button" data-action="fake-submit" data-fake-message="Printing isn't included in this example."><img src="../assets/icons/documents/print.svg" alt="Print" width="20" height="20" /></button>
-                        <button type="button" data-action="fake-submit" data-fake-message="Downloading isn't included in this example."><img src="../assets/icons/documents/file-download.svg" alt="Download" width="20" height="20" /></button>
-                      </span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td><p class="rmr-doc-table__name">NSF Notice</p></td>
-                    <td>04/15/26</td>
-                    <td>04/20/26</td>
-                    <td>0 of 1</td>
-                    <td><button class="rmr-btn rmr-btn--primary rmr-btn--table" type="button" data-action="fake-submit" data-fake-message="Signing a document isn't included in this example.">Sign</button></td>
-                    <td>
-                      <span class="rmr-doc-table__actions">
-                        <button type="button" data-action="fake-submit" data-fake-message="Printing isn't included in this example."><img src="../assets/icons/documents/print.svg" alt="Print" width="20" height="20" /></button>
-                        <button type="button" data-action="fake-submit" data-fake-message="Downloading isn't included in this example."><img src="../assets/icons/documents/file-download.svg" alt="Download" width="20" height="20" /></button>
-                      </span>
-                    </td>
-                  </tr>
-                  <tr>
                     <td><p class="rmr-doc-table__name">Parking Policy</p></td>
                     <td>04/15/26</td>
                     <td>04/20/26</td>
-                    <td>1 of 2</td>
-                    <td><button class="rmr-btn rmr-btn--primary rmr-btn--table" type="button" data-action="fake-submit" data-fake-message="Signing a document isn't included in this example.">Sign</button></td>
-                    <td>
-                      <span class="rmr-doc-table__actions">
-                        <button type="button" data-action="fake-submit" data-fake-message="Printing isn't included in this example."><img src="../assets/icons/documents/print.svg" alt="Print" width="20" height="20" /></button>
-                        <button type="button" data-action="fake-submit" data-fake-message="Downloading isn't included in this example."><img src="../assets/icons/documents/file-download.svg" alt="Download" width="20" height="20" /></button>
-                      </span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td><p class="rmr-doc-table__name">Utility Service Agreement</p></td>
-                    <td>04/20/26</td>
-                    <td>04/28/26</td>
-                    <td>0 of 2</td>
-                    <td><button class="rmr-btn rmr-btn--primary rmr-btn--table" type="button" data-action="fake-submit" data-fake-message="Signing a document isn't included in this example.">Sign</button></td>
-                    <td>
-                      <span class="rmr-doc-table__actions">
-                        <button type="button" data-action="fake-submit" data-fake-message="Printing isn't included in this example."><img src="../assets/icons/documents/print.svg" alt="Print" width="20" height="20" /></button>
-                        <button type="button" data-action="fake-submit" data-fake-message="Downloading isn't included in this example."><img src="../assets/icons/documents/file-download.svg" alt="Download" width="20" height="20" /></button>
-                      </span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td><p class="rmr-doc-table__name">Window Treatment Authorization</p></td>
-                    <td>05/25/26</td>
-                    <td>06/01/26</td>
-                    <td>1 of 2</td>
-                    <td><button class="rmr-btn rmr-btn--primary rmr-btn--table" type="button" data-action="fake-submit" data-fake-message="Signing a document isn't included in this example.">Sign</button></td>
-                    <td>
-                      <span class="rmr-doc-table__actions">
-                        <button type="button" data-action="fake-submit" data-fake-message="Printing isn't included in this example."><img src="../assets/icons/documents/print.svg" alt="Print" width="20" height="20" /></button>
-                        <button type="button" data-action="fake-submit" data-fake-message="Downloading isn't included in this example."><img src="../assets/icons/documents/file-download.svg" alt="Download" width="20" height="20" /></button>
-                      </span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td><p class="rmr-doc-table__name">Water Shutoff Notice</p></td>
-                    <td>05/30/26</td>
-                    <td>06/02/26</td>
-                    <td>0 of 1</td>
-                    <td><button class="rmr-btn rmr-btn--primary rmr-btn--table" type="button" data-action="fake-submit" data-fake-message="Signing a document isn't included in this example.">Sign</button></td>
-                    <td>
-                      <span class="rmr-doc-table__actions">
-                        <button type="button" data-action="fake-submit" data-fake-message="Printing isn't included in this example."><img src="../assets/icons/documents/print.svg" alt="Print" width="20" height="20" /></button>
-                        <button type="button" data-action="fake-submit" data-fake-message="Downloading isn't included in this example."><img src="../assets/icons/documents/file-download.svg" alt="Download" width="20" height="20" /></button>
-                      </span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td><p class="rmr-doc-table__name">Parking Violation</p></td>
-                    <td>05/30/26</td>
-                    <td>06/02/26</td>
-                    <td>0 of 1</td>
-                    <td><button class="rmr-btn rmr-btn--primary rmr-btn--table" type="button" data-action="fake-submit" data-fake-message="Signing a document isn't included in this example.">Sign</button></td>
+                    <td class="rmr-doc-col-signers">1 of 2</td>
+                    <td><a class="rmr-btn rmr-btn--primary rmr-btn--table" href="document-sign.html?doc=parking-policy">Sign</a></td>
                     <td>
                       <span class="rmr-doc-table__actions">
                         <button type="button" data-action="fake-submit" data-fake-message="Printing isn't included in this example."><img src="../assets/icons/documents/print.svg" alt="Print" width="20" height="20" /></button>
@@ -242,8 +158,8 @@
                     <td><p class="rmr-doc-table__name">Pet Policy Update</p></td>
                     <td>05/30/26</td>
                     <td>06/02/26</td>
-                    <td>0 of 1</td>
-                    <td><button class="rmr-btn rmr-btn--primary rmr-btn--table" type="button" data-action="fake-submit" data-fake-message="Signing a document isn't included in this example.">Sign</button></td>
+                    <td class="rmr-doc-col-signers">0 of 1</td>
+                    <td><a class="rmr-btn rmr-btn--primary rmr-btn--table" href="document-sign.html?doc=pet-policy">Sign</a></td>
                     <td>
                       <span class="rmr-doc-table__actions">
                         <button type="button" data-action="fake-submit" data-fake-message="Printing isn't included in this example."><img src="../assets/icons/documents/print.svg" alt="Print" width="20" height="20" /></button>
@@ -254,7 +170,7 @@
                 </tbody>
               </table>
             </div>
-            <p class="rmr-acct-table-footer" style="flex-shrink:0;">12 Total Documents</p>
+            <p class="rmr-acct-table-footer" style="flex-shrink:0;">2 Total Documents</p>
           </div>
 
           <div class="rmr-doc-card rmr-doc-card--leases" data-component="Cards">
@@ -292,11 +208,11 @@
               <table class="rmr-pay-table rmr-doc-tree" data-component="Table">
                 <thead>
                   <tr>
-                    <th style="width:28px;" aria-label="Expand"></th>
-                    <th style="width:255px;">Property &amp; Unit</th>
-                    <th style="width:142px;">Original Lease Start</th>
-                    <th style="width:159px;">Current Lease Dates</th>
-                    <th style="width:100px;">Term</th>
+                    <th style="width:4%;" aria-label="Expand"></th>
+                    <th style="width:37%;">Property &amp; Unit</th>
+                    <th style="width:21%;">Original Lease Start</th>
+                    <th style="width:23%;">Current Lease Dates</th>
+                    <th style="width:15%;">Term</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -499,7 +415,7 @@
     </div>
     <div class="rmr-modal__footer">
       <button class="rmr-btn rmr-btn--text rmr-btn--link" type="button" data-action="open-modal" data-modal-target="decline-all-offers">Decline All Offers</button>
-      <a class="rmr-btn rmr-btn--primary" href="document-sign.html">Accept Offer</a>
+      <a class="rmr-btn rmr-btn--primary" href="document-sign.html?doc=lease-renewal">Accept Offer</a>
     </div>
   </div>
 </div>
@@ -550,6 +466,6 @@
   </div>
 </div>
 
-<script src="../assets/app.js?v=15"></script>
+<script src="../assets/app.js?v=21"></script>
 </body>
 </html>

@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Charges &amp; Payments — rmResident Portal</title>
-<link rel="stylesheet" href="../assets/rmr.css?v=35" />
+<link rel="stylesheet" href="../assets/rmr.css?v=46" />
 <link rel="stylesheet" href="../assets/proto.css" />
 </head>
 <body data-screen="payments">
@@ -31,19 +31,16 @@
         <div class="rmr-account-menu" data-account-menu hidden data-component="Dropdown Menu">
           <a class="rmr-account-menu__item" href="account.html">
             <span>View Account</span>
-            <img class="rmr-account-menu__chevron" src="../assets/icons/chevron-right.svg" alt="" />
-          </a>
-          <a class="rmr-account-menu__item" href="account.html#linked">
-            <span>Linked Accounts</span>
-            <img class="rmr-account-menu__chevron" src="../assets/icons/chevron-right.svg" alt="" />
           </a>
           <a class="rmr-account-menu__item" href="payment-settings.html">
             <span>Payment Settings</span>
-            <img class="rmr-account-menu__chevron" src="../assets/icons/chevron-right.svg" alt="" />
           </a>
+          <button class="rmr-account-menu__item" type="button" data-action="fake-submit" data-fake-message="Switching accounts isn't included in this example.">
+            <span>Switch Accounts</span>
+            <span class="rmr-account-menu__arrow" aria-hidden="true"></span>
+          </button>
           <button class="rmr-account-menu__item" type="button" data-action="fake-submit" data-fake-message="Logout isn't wired up in this example.">
-            <span>Logout</span>
-            <img class="rmr-account-menu__chevron" src="../assets/icons/chevron-right.svg" alt="" />
+            <span>Log Out</span>
           </button>
         </div>
       </div>
@@ -100,8 +97,8 @@
     <main class="rmr-main" data-component="Main Content">
 
       <div class="rmr-pay-hero" data-component="Account image">
-        <img class="rmr-pay-hero__bg" src="../assets/images/payments/hero-1.png" alt="" />
-        <img class="rmr-pay-hero__bg" src="../assets/images/payments/hero-2.png" alt="" />
+        <img class="rmr-pay-hero__bg" src="../assets/images/hero-photo-1.png?v=2" alt="" />
+        <img class="rmr-pay-hero__bg" src="../assets/images/hero-photo-2.png?v=2" alt="" />
         <div class="rmr-pay-hero__scrim"></div>
         <p class="rmr-pay-hero__title">Charges &amp; Payments</p>
         <span class="rmr-pay-hero__address" data-component="User Info">742 Willow Crescent, Apt 3B</span>
@@ -241,58 +238,58 @@
                 <tbody>
                   <tr>
                     <td class="rmr-pay-table__swatch-cell"><span class="rmr-pay-swatch rmr-pay-swatch--rent"></span></td>
-                    <td>10/01/25</td>
-                    <td>Rent</td>
-                    <td></td>
-                    <td>22313</td>
-                    <td data-align="right">$1,338.75</td>
-                    <td data-align="right">$1,288.75</td>
-                    <td data-align="right" class="rmr-pay-col-latefee">$0.00</td>
-                    <td data-align="right">$50.00</td>
+                    <td data-label="Date">10/01/25</td>
+                    <td data-label="Type">Rent</td>
+                    <td data-label="Details"></td>
+                    <td data-label="Reference Number">22313</td>
+                    <td data-align="right" data-label="Charge Amount">$1,338.75</td>
+                    <td data-align="right" data-label="Paid">$1,288.75</td>
+                    <td data-align="right" class="rmr-pay-col-latefee" data-label="Late Fee">$0.00</td>
+                    <td data-align="right" data-label="Due">$50.00</td>
                   </tr>
                   <tr>
                     <td class="rmr-pay-table__swatch-cell"><span class="rmr-pay-swatch rmr-pay-swatch--rent"></span></td>
-                    <td>11/01/25</td>
-                    <td>Rent</td>
-                    <td></td>
-                    <td></td>
-                    <td data-align="right">$1,338.75</td>
-                    <td data-align="right"></td>
-                    <td data-align="right" class="rmr-pay-col-latefee">$20.00</td>
-                    <td data-align="right">$1,408.75</td>
+                    <td data-label="Date">11/01/25</td>
+                    <td data-label="Type">Rent</td>
+                    <td data-label="Details"></td>
+                    <td data-label="Reference Number"></td>
+                    <td data-align="right" data-label="Charge Amount">$1,338.75</td>
+                    <td data-align="right" data-label="Paid"></td>
+                    <td data-align="right" class="rmr-pay-col-latefee" data-label="Late Fee">$20.00</td>
+                    <td data-align="right" data-label="Due">$1,408.75</td>
                   </tr>
                   <tr>
                     <td class="rmr-pay-table__swatch-cell"><span class="rmr-pay-swatch rmr-pay-swatch--utilities"></span></td>
-                    <td>11/01/25</td>
-                    <td>Utilities</td>
-                    <td>Water 10/01/25-10/31/25</td>
-                    <td></td>
-                    <td data-align="right">$68.53</td>
-                    <td data-align="right"></td>
-                    <td data-align="right" class="rmr-pay-col-latefee">$0.00</td>
-                    <td data-align="right">$1,477.28</td>
+                    <td data-label="Date">11/01/25</td>
+                    <td data-label="Type">Utilities</td>
+                    <td data-label="Details">Water 10/01/25-10/31/25</td>
+                    <td data-label="Reference Number"></td>
+                    <td data-align="right" data-label="Charge Amount">$68.53</td>
+                    <td data-align="right" data-label="Paid"></td>
+                    <td data-align="right" class="rmr-pay-col-latefee" data-label="Late Fee">$0.00</td>
+                    <td data-align="right" data-label="Due">$1,477.28</td>
                   </tr>
                   <tr>
                     <td class="rmr-pay-table__swatch-cell"><span class="rmr-pay-swatch rmr-pay-swatch--rent"></span></td>
-                    <td>11/01/25</td>
-                    <td>Parking Garage</td>
-                    <td>1 lot spot</td>
-                    <td></td>
-                    <td data-align="right">$100.00</td>
-                    <td data-align="right"></td>
-                    <td data-align="right" class="rmr-pay-col-latefee">$0.00</td>
-                    <td data-align="right">$1,557.28</td>
+                    <td data-label="Date">11/01/25</td>
+                    <td data-label="Type">Parking Garage</td>
+                    <td data-label="Details">1 lot spot</td>
+                    <td data-label="Reference Number"></td>
+                    <td data-align="right" data-label="Charge Amount">$100.00</td>
+                    <td data-align="right" data-label="Paid"></td>
+                    <td data-align="right" class="rmr-pay-col-latefee" data-label="Late Fee">$0.00</td>
+                    <td data-align="right" data-label="Due">$1,557.28</td>
                   </tr>
                   <tr>
                     <td class="rmr-pay-table__swatch-cell"><span class="rmr-pay-swatch rmr-pay-swatch--other"></span></td>
-                    <td>11/12/25</td>
-                    <td>Clubhouse Rental Fee</td>
-                    <td>Credit Deposit for Grill Amenity</td>
-                    <td></td>
-                    <td data-align="right">$20.00</td>
-                    <td data-align="right"></td>
-                    <td data-align="right" class="rmr-pay-col-latefee">$0.00</td>
-                    <td data-align="right">$1,597.28</td>
+                    <td data-label="Date">11/12/25</td>
+                    <td data-label="Type">Clubhouse Rental Fee</td>
+                    <td data-label="Details">Credit Deposit for Grill Amenity</td>
+                    <td data-label="Reference Number"></td>
+                    <td data-align="right" data-label="Charge Amount">$20.00</td>
+                    <td data-align="right" data-label="Paid"></td>
+                    <td data-align="right" class="rmr-pay-col-latefee" data-label="Late Fee">$0.00</td>
+                    <td data-align="right" data-label="Due">$1,597.28</td>
                   </tr>
                 </tbody>
               </table>
@@ -311,103 +308,103 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <td>08/01/25</td>
-                    <td>AutoPay</td>
-                    <td>Payment</td>
-                    <td>20256</td>
-                    <td data-align="right">-$1,438.75</td>
-                    <td data-align="right" class="rmr-pay-col-latefee">$0.00</td>
-                    <td data-align="right">$0.00</td>
+                    <td data-label="Date">08/01/25</td>
+                    <td data-label="Type">AutoPay</td>
+                    <td data-label="Details">Payment</td>
+                    <td data-label="Reference Number">20256</td>
+                    <td data-align="right" data-label="Charge Amount">-$1,438.75</td>
+                    <td data-align="right" class="rmr-pay-col-latefee" data-label="Late Fee">$0.00</td>
+                    <td data-align="right" data-label="Balance">$0.00</td>
                   </tr>
                   <tr>
-                    <td>09/01/25</td>
-                    <td>Parking Garage</td>
-                    <td>1 lot spot</td>
-                    <td>21142</td>
-                    <td data-align="right">$100.00</td>
-                    <td data-align="right" class="rmr-pay-col-latefee">$0.00</td>
-                    <td data-align="right">$100.00</td>
+                    <td data-label="Date">09/01/25</td>
+                    <td data-label="Type">Parking Garage</td>
+                    <td data-label="Details">1 lot spot</td>
+                    <td data-label="Reference Number">21142</td>
+                    <td data-align="right" data-label="Charge Amount">$100.00</td>
+                    <td data-align="right" class="rmr-pay-col-latefee" data-label="Late Fee">$0.00</td>
+                    <td data-align="right" data-label="Balance">$100.00</td>
                   </tr>
                   <tr>
-                    <td>09/01/25</td>
-                    <td>Rent</td>
-                    <td></td>
-                    <td>21142</td>
-                    <td data-align="right">$1,338.75</td>
-                    <td data-align="right" class="rmr-pay-col-latefee">$0.00</td>
-                    <td data-align="right">$1,438.75</td>
+                    <td data-label="Date">09/01/25</td>
+                    <td data-label="Type">Rent</td>
+                    <td data-label="Details"></td>
+                    <td data-label="Reference Number">21142</td>
+                    <td data-align="right" data-label="Charge Amount">$1,338.75</td>
+                    <td data-align="right" class="rmr-pay-col-latefee" data-label="Late Fee">$0.00</td>
+                    <td data-align="right" data-label="Balance">$1,438.75</td>
                   </tr>
                   <tr>
-                    <td>09/01/25</td>
-                    <td>AutoPay</td>
-                    <td>Payment</td>
-                    <td>21142</td>
-                    <td data-align="right">-$1,438.75</td>
-                    <td data-align="right" class="rmr-pay-col-latefee">$0.00</td>
-                    <td data-align="right">$0.00</td>
+                    <td data-label="Date">09/01/25</td>
+                    <td data-label="Type">AutoPay</td>
+                    <td data-label="Details">Payment</td>
+                    <td data-label="Reference Number">21142</td>
+                    <td data-align="right" data-label="Charge Amount">-$1,438.75</td>
+                    <td data-align="right" class="rmr-pay-col-latefee" data-label="Late Fee">$0.00</td>
+                    <td data-align="right" data-label="Balance">$0.00</td>
                   </tr>
                   <tr>
-                    <td>10/01/25</td>
-                    <td>Parking Garage</td>
-                    <td>1 lot spot</td>
-                    <td>22345</td>
-                    <td data-align="right">$100.00</td>
-                    <td data-align="right" class="rmr-pay-col-latefee">$0.00</td>
-                    <td data-align="right">$100.00</td>
+                    <td data-label="Date">10/01/25</td>
+                    <td data-label="Type">Parking Garage</td>
+                    <td data-label="Details">1 lot spot</td>
+                    <td data-label="Reference Number">22345</td>
+                    <td data-align="right" data-label="Charge Amount">$100.00</td>
+                    <td data-align="right" class="rmr-pay-col-latefee" data-label="Late Fee">$0.00</td>
+                    <td data-align="right" data-label="Balance">$100.00</td>
                   </tr>
                   <tr>
-                    <td>10/01/25</td>
-                    <td>Rent</td>
-                    <td></td>
-                    <td>22345</td>
-                    <td data-align="right">$1,338.75</td>
-                    <td data-align="right" class="rmr-pay-col-latefee">$0.00</td>
-                    <td data-align="right">$1,438.75</td>
+                    <td data-label="Date">10/01/25</td>
+                    <td data-label="Type">Rent</td>
+                    <td data-label="Details"></td>
+                    <td data-label="Reference Number">22345</td>
+                    <td data-align="right" data-label="Charge Amount">$1,338.75</td>
+                    <td data-align="right" class="rmr-pay-col-latefee" data-label="Late Fee">$0.00</td>
+                    <td data-align="right" data-label="Balance">$1,438.75</td>
                   </tr>
                   <tr>
-                    <td>10/01/25</td>
-                    <td>AutoPay</td>
-                    <td>Payment</td>
-                    <td>211423</td>
-                    <td data-align="right">-$1,388.75</td>
-                    <td data-align="right" class="rmr-pay-col-latefee">$0.00</td>
-                    <td data-align="right">$50.00</td>
+                    <td data-label="Date">10/01/25</td>
+                    <td data-label="Type">AutoPay</td>
+                    <td data-label="Details">Payment</td>
+                    <td data-label="Reference Number">211423</td>
+                    <td data-align="right" data-label="Charge Amount">-$1,388.75</td>
+                    <td data-align="right" class="rmr-pay-col-latefee" data-label="Late Fee">$0.00</td>
+                    <td data-align="right" data-label="Balance">$50.00</td>
                   </tr>
                   <tr>
-                    <td>11/01/25</td>
-                    <td>Rent</td>
-                    <td></td>
-                    <td></td>
-                    <td data-align="right">$1,338.75</td>
-                    <td data-align="right" class="rmr-pay-col-latefee">$20.00</td>
-                    <td data-align="right">$1,408.75</td>
+                    <td data-label="Date">11/01/25</td>
+                    <td data-label="Type">Rent</td>
+                    <td data-label="Details"></td>
+                    <td data-label="Reference Number"></td>
+                    <td data-align="right" data-label="Charge Amount">$1,338.75</td>
+                    <td data-align="right" class="rmr-pay-col-latefee" data-label="Late Fee">$20.00</td>
+                    <td data-align="right" data-label="Balance">$1,408.75</td>
                   </tr>
                   <tr>
-                    <td>11/01/25</td>
-                    <td>Utilities</td>
-                    <td>Water 10/01/25-10/31/25</td>
-                    <td></td>
-                    <td data-align="right">$68.53</td>
-                    <td data-align="right" class="rmr-pay-col-latefee">$0.00</td>
-                    <td data-align="right">$1,477.28</td>
+                    <td data-label="Date">11/01/25</td>
+                    <td data-label="Type">Utilities</td>
+                    <td data-label="Details">Water 10/01/25-10/31/25</td>
+                    <td data-label="Reference Number"></td>
+                    <td data-align="right" data-label="Charge Amount">$68.53</td>
+                    <td data-align="right" class="rmr-pay-col-latefee" data-label="Late Fee">$0.00</td>
+                    <td data-align="right" data-label="Balance">$1,477.28</td>
                   </tr>
                   <tr>
-                    <td>11/01/25</td>
-                    <td>Parking Garage</td>
-                    <td>Parking Garage</td>
-                    <td></td>
-                    <td data-align="right">$100.00</td>
-                    <td data-align="right" class="rmr-pay-col-latefee">$0.00</td>
-                    <td data-align="right">$1,557.28</td>
+                    <td data-label="Date">11/01/25</td>
+                    <td data-label="Type">Parking Garage</td>
+                    <td data-label="Details">Parking Garage</td>
+                    <td data-label="Reference Number"></td>
+                    <td data-align="right" data-label="Charge Amount">$100.00</td>
+                    <td data-align="right" class="rmr-pay-col-latefee" data-label="Late Fee">$0.00</td>
+                    <td data-align="right" data-label="Balance">$1,557.28</td>
                   </tr>
                   <tr>
-                    <td>11/12/25</td>
-                    <td>Clubhouse Rental Fee</td>
-                    <td>Credit Deposit for Grill Amenity</td>
-                    <td></td>
-                    <td data-align="right">$20.00</td>
-                    <td data-align="right" class="rmr-pay-col-latefee">$0.00</td>
-                    <td data-align="right">$1,577.28</td>
+                    <td data-label="Date">11/12/25</td>
+                    <td data-label="Type">Clubhouse Rental Fee</td>
+                    <td data-label="Details">Credit Deposit for Grill Amenity</td>
+                    <td data-label="Reference Number"></td>
+                    <td data-align="right" data-label="Charge Amount">$20.00</td>
+                    <td data-align="right" class="rmr-pay-col-latefee" data-label="Late Fee">$0.00</td>
+                    <td data-align="right" data-label="Balance">$1,577.28</td>
                   </tr>
                 </tbody>
               </table>
@@ -1245,6 +1242,6 @@
     </div>
   </div>
 </div>
-<script src="../assets/app.js?v=15"></script>
+<script src="../assets/app.js?v=21"></script>
 </body>
 </html>

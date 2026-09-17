@@ -54,6 +54,78 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Sign Document — the document shown must match whichever Document Center
+  // "Sign" link was actually clicked, not always the hardcoded Lease Renewal
+  // Request text. document-sign.html?doc=parking-policy / ?doc=pet-policy
+  // swap in their own title/body here; the default (no ?doc, or
+  // ?doc=lease-renewal from the Renewal Offer's Accept Offer button) is left
+  // as the page's own static markup, since it's the only one with the
+  // lease-preference dropdown wizard step. Runs before the dropdown/open-modal
+  // wiring below so any swapped-in content is what gets bound.
+  const RMR_SIGN_DOCS = {
+    'parking-policy': {
+      title: 'Sign Document - Parking Policy',
+      bodyHTML: `
+        <h1>PARKING POLICY ACKNOWLEDGMENT</h1>
+        <p class="rmr-sign-doc__date">4/15/2026</p>
+        <p>Samantha Carpenter</p>
+        <p>Dear Samantha Carpenter:</p>
+        <p>Riverview Apartments is updating its parking policy effective 4/20/2026. Please review the details below.</p>
+        <p>Each unit is assigned one (1) reserved parking space, marked with your unit number. Guest parking is limited to designated visitor spots only. A vehicle parked in a reserved space without a valid permit, or left in a visitor spot for more than 48 hours, is subject to towing at the owner's expense.</p>
+        <p>By signing below, you acknowledge that you have read and agree to abide by the parking policy described above.</p>
+        <p>Please sign this letter electronically to confirm your acknowledgment.</p>
+        <p>Sincerely,</p>
+        <p>Carrie Loveland</p>
+        <div class="rmr-sign-doc__select rmr-field-attention" data-sign-field-attention data-sign-hide-on-sign>
+          <svg class="rmr-field-attention__pointer" width="24" height="22" viewBox="0 0 25 22" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M0.5 21V0.5H14.5L23.5 10.5L14.4643 21H0.5Z" fill="#F4F6A8" stroke="#616466"/>
+          </svg>
+          <button type="button" class="rmr-sign-doc__signhere rmr-field-attention__control" data-action="open-modal" data-modal-target="add-signature">Click to Sign</button>
+        </div>
+        <p data-sign-signature-line hidden class="rmr-sign-doc__signed">Samantha Carpenter</p>
+      `,
+    },
+    'pet-policy': {
+      title: 'Sign Document - Pet Policy Update',
+      bodyHTML: `
+        <h1>PET POLICY UPDATE</h1>
+        <p class="rmr-sign-doc__date">5/30/2026</p>
+        <p>Samantha Carpenter</p>
+        <p>Dear Samantha Carpenter:</p>
+        <p>Riverview Apartments is updating its pet policy effective 6/2/2026. Please review the details below.</p>
+        <p>Residents with an approved pet must provide current vaccination records annually and keep pets leashed at all times in common areas. A refundable pet deposit of $300 and monthly pet rent of $35 per pet apply to all units with an approved pet.</p>
+        <p>By signing below, you acknowledge that you have read and agree to the updated pet policy described above.</p>
+        <p>Please sign this letter electronically to confirm your acknowledgment.</p>
+        <p>Sincerely,</p>
+        <p>Carrie Loveland</p>
+        <div class="rmr-sign-doc__select rmr-field-attention" data-sign-field-attention data-sign-hide-on-sign>
+          <svg class="rmr-field-attention__pointer" width="24" height="22" viewBox="0 0 25 22" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M0.5 21V0.5H14.5L23.5 10.5L14.4643 21H0.5Z" fill="#F4F6A8" stroke="#616466"/>
+          </svg>
+          <button type="button" class="rmr-sign-doc__signhere rmr-field-attention__control" data-action="open-modal" data-modal-target="add-signature">Click to Sign</button>
+        </div>
+        <p data-sign-signature-line hidden class="rmr-sign-doc__signed">Samantha Carpenter</p>
+      `,
+    },
+  };
+  let rmrSignDocIsPolicy = false;
+  if (document.body.dataset.screen === 'document-sign') {
+    const doc = RMR_SIGN_DOCS[new URLSearchParams(location.search).get('doc')];
+    if (doc) {
+      rmrSignDocIsPolicy = true;
+      document.title = `${doc.title} — rmResident Portal`;
+      const heroTitle = document.querySelector('[data-sign-hero-title]');
+      if (heroTitle) heroTitle.textContent = doc.title;
+      const docContent = document.querySelector('[data-sign-doc-content]');
+      if (docContent) docContent.innerHTML = doc.bodyHTML;
+      // These policy docs are a plain acknowledgment + signature, not a
+      // lease-term choice, so Sign goes straight to Add Signature instead
+      // of opening the lease-preference modal.
+      const signBtn = document.querySelector('[data-sign-btn]');
+      if (signBtn) signBtn.dataset.modalTarget = 'add-signature';
+    }
+  }
+
   // Fake "Make a Payment" / "Start" / "Sign" actions with a toast instead of a
   // real transaction or document flow — there is no backend behind this
   // prototype. Delegated on document (rather than bound per-element) so it
@@ -63,7 +135,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const el = e.target.closest('[data-action="fake-submit"]');
     if (!el) return;
     e.preventDefault();
-    showToast(el.dataset.fakeMessage || 'Done (prototype only — no real action was taken).');
     const menu = el.closest('.rmr-account-menu');
     if (menu) closeAccountMenu();
     const modalBackdrop = el.closest('[data-modal-backdrop]');
@@ -331,21 +402,32 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Sign Document (Lease Renewal Request) — "Sign" in the Document Signature
-  // preview step finishes the wizard: fills in the document's own embedded
+  // Sign Document — "Sign" in the Add Signature modal finishes the wizard
+  // directly (no separate Document Signature preview step to confirm first —
+  // that's only needed for documents with more than one signature spot,
+  // which this prototype doesn't have): fills in the document's own embedded
   // lease-preference value and cursive signature line, and marks the sidebar
   // Sign button as done so Finish Signing can proceed straight to Submit.
   document.querySelectorAll('[data-action="sign-complete"]').forEach((btn) => {
     btn.addEventListener('click', () => {
-      const wizard = document.querySelector('[data-modal-backdrop="document-signature"]');
+      const wizard = btn.closest('[data-modal-backdrop]');
       if (wizard) closeModal(wizard);
       const leaseValue = document.querySelector('[data-sign-lease-value]');
       if (leaseValue) leaseValue.textContent = '12-month lease renewal';
+      const fieldAttention = document.querySelector('[data-sign-field-attention]');
+      if (fieldAttention) {
+        fieldAttention.classList.remove('rmr-field-attention');
+        // The lease-preference dropdown is a real answer that stays visible
+        // after signing; the Parking/Pet policy docs' own field-attention is
+        // just a "sign here" prompt with nothing to keep showing once the
+        // cursive signature below it takes over.
+        if ('signHideOnSign' in fieldAttention.dataset) fieldAttention.hidden = true;
+      }
       const signatureLine = document.querySelector('[data-sign-signature-line]');
       if (signatureLine) signatureLine.hidden = false;
       const signBtn = document.querySelector('[data-sign-btn]');
       if (signBtn) {
-        signBtn.classList.add('rmr-sign-tools__action--done');
+        signBtn.classList.add('rmr-sign-footer__action--done');
         signBtn.dataset.signed = 'true';
         const label = signBtn.querySelector('[data-sign-btn-label]');
         if (label) label.textContent = 'Signed';
@@ -367,9 +449,30 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Submit Signed Document — Submit persists the "already signed" flag so
-  // the Document Center banner reflects it on return.
+  // the Document Center banner reflects it on return. Only applies to the
+  // lease renewal itself; signing a Parking Policy or Pet Policy doc
+  // shouldn't hide the unrelated Renewal Available banner.
   document.querySelectorAll('[data-modal-target="document-signed-success"]').forEach((btn) => {
-    btn.addEventListener('click', () => { rmrSetRenewalSigned(true); });
+    btn.addEventListener('click', () => { if (!rmrSignDocIsPolicy) rmrSetRenewalSigned(true); });
+  });
+
+  // Submit Signed Document — Submit, node 2677:26211's "Loading overlay":
+  // closes the confirmation modal and shows the "document is being
+  // finalized" spinner over the document itself for a couple seconds before
+  // Document Signed Successfully opens, instead of switching modals
+  // instantly like every other step in this flow.
+  document.querySelectorAll('[data-action="sign-submit"]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const current = document.querySelector(`[data-modal-backdrop="${btn.dataset.modalCloseCurrent}"]`);
+      const next = document.querySelector(`[data-modal-backdrop="${btn.dataset.modalTarget}"]`);
+      const loading = document.querySelector('[data-sign-loading]');
+      if (current) closeModal(current);
+      if (loading) loading.hidden = false;
+      setTimeout(() => {
+        if (loading) loading.hidden = true;
+        if (next) next.hidden = false;
+      }, 2200);
+    });
   });
 
   // Account dropdown (User Info popover) — from the "2.0.2 Tasks on Linked
@@ -921,6 +1024,20 @@ document.addEventListener('DOMContentLoaded', () => {
       svcOpenIssueDetails(number, data);
     });
   });
+
+  // Deep-linking into a specific issue, e.g. from the Dashboard's "View
+  // Issue" / "View Comment" links (maintenance.html?issue=open-175) — switch
+  // to the row's Open/Closed tab first, then open its Issue Details modal.
+  const deepLinkIssueKey = new URLSearchParams(location.search).get('issue');
+  if (deepLinkIssueKey) {
+    const targetRow = document.querySelector(`[data-svc-key="${deepLinkIssueKey}"]`);
+    if (targetRow) {
+      const panelName = deepLinkIssueKey.startsWith('closed') ? 'closed' : 'open';
+      const tabBtn = document.querySelector(`[data-action="svc-tab"][data-svc-target="${panelName}"]`);
+      if (tabBtn) tabBtn.click();
+      targetRow.click();
+    }
+  }
 
   // AutoPay full page (autopay.html) — the Toggle Slider drives three states
   // (file fPSZy4e0NwJMiTs345xXGy, node 3276:27067): disabled, a compact

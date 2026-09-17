@@ -120,7 +120,11 @@ html, body {
   margin: 0;
   padding: 0;
   height: 100%;
-  background: var(--background-page);
+  background-color: var(--background-page);
+  background-image: url('images/rmrp-bg.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
   font-family: var(--font-family-main);
   color: var(--text-primary);
 }
@@ -164,8 +168,8 @@ button {
 .rmr-pmt-scroll,
 .rmr-pay-section,
 .rmr-pay-table-wrap,
-.rmr-pmt-table-wrap,
-.rmr-dropdown__menu {
+.rmr-dropdown__menu,
+.rmr-sign-stage {
   scrollbar-width: thin;
   scrollbar-color: var(--icon-disabled) transparent;
 }
@@ -179,8 +183,8 @@ button {
 .rmr-pmt-scroll::-webkit-scrollbar,
 .rmr-pay-section::-webkit-scrollbar,
 .rmr-pay-table-wrap::-webkit-scrollbar,
-.rmr-pmt-table-wrap::-webkit-scrollbar,
-.rmr-dropdown__menu::-webkit-scrollbar {
+.rmr-dropdown__menu::-webkit-scrollbar,
+.rmr-sign-stage::-webkit-scrollbar {
   width: var(--spacing-xs);
   height: var(--spacing-xs);
 }
@@ -194,8 +198,8 @@ button {
 .rmr-pmt-scroll::-webkit-scrollbar-track,
 .rmr-pay-section::-webkit-scrollbar-track,
 .rmr-pay-table-wrap::-webkit-scrollbar-track,
-.rmr-pmt-table-wrap::-webkit-scrollbar-track,
-.rmr-dropdown__menu::-webkit-scrollbar-track {
+.rmr-dropdown__menu::-webkit-scrollbar-track,
+.rmr-sign-stage::-webkit-scrollbar-track {
   background: transparent;
 }
 .rmr-menu::-webkit-scrollbar-thumb,
@@ -208,14 +212,16 @@ button {
 .rmr-pmt-scroll::-webkit-scrollbar-thumb,
 .rmr-pay-section::-webkit-scrollbar-thumb,
 .rmr-pay-table-wrap::-webkit-scrollbar-thumb,
-.rmr-pmt-table-wrap::-webkit-scrollbar-thumb,
-.rmr-dropdown__menu::-webkit-scrollbar-thumb {
+.rmr-dropdown__menu::-webkit-scrollbar-thumb,
+.rmr-sign-stage::-webkit-scrollbar-thumb {
   background: var(--icon-disabled);
   border-radius: var(--spacing-xs);
 }
 /* scrollbar-gutter only affects the vertical (block-axis) scrollbar, so it's
-   left off .rmr-pmt-table-wrap, which only ever scrolls horizontally. Also
-   left off the bare .rmr-modal (below) — see the "wasted gutter" note near
+   left off .rmr-pmt-table-wrap (no register scrolls horizontally anymore —
+   columns truncate instead — and this wrap never grows tall enough on its
+   own to need a vertical bar either, .rmr-pmt-body handles that). Also left
+   off the bare .rmr-modal (below) — see the "wasted gutter" note near
    .rmr-modal--pinned for why. */
 .rmr-menu,
 .rmr-main,
@@ -226,7 +232,8 @@ button {
 .rmr-pmt-scroll,
 .rmr-pay-section,
 .rmr-pay-table-wrap,
-.rmr-dropdown__menu {
+.rmr-dropdown__menu,
+.rmr-sign-stage {
   scrollbar-gutter: stable;
 }
 
@@ -336,7 +343,14 @@ button {
   background: var(--interaction-hover-blue);
 }
 
-.rmr-account-menu__chevron { width: 16px; height: 16px; flex-shrink: 0; }
+.rmr-account-menu__arrow {
+  width: 0;
+  height: 0;
+  flex-shrink: 0;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 6px solid var(--text-secondary);
+}
 
 .rmr-body {
   display: flex;
@@ -1265,11 +1279,21 @@ textarea:-webkit-autofill:focus {
 
 .rmr-pmt-amount-card__content { flex: 1; min-width: 0; }
 
-/* The register is the only thing in this flow allowed to scroll
-   horizontally — everything around it (.rmr-modal, .rmr-pmt-main) stays
-   clipped, so a narrow viewport scrolls just the table, not the whole
-   overlay. */
-.rmr-pmt-table-wrap { width: 100%; overflow-x: auto; padding-bottom: var(--spacing-xs); }
+.rmr-pmt-table-wrap { width: 100%; overflow-x: hidden; padding-bottom: var(--spacing-xs); }
+
+/* Column widths so table-layout: fixed (base .rmr-pay-table rule) has
+   something to divide the row by — Details is left unset so it absorbs
+   whatever's left over. [data-pmt-table="other"] has an extra checkbox
+   column ahead of Date (its own width is set below, near that table's other
+   overrides), which shifts every nth-child index by one versus "current". */
+[data-pmt-table="current"] th:nth-child(1) { width: 16%; }
+[data-pmt-table="current"] th:nth-child(2) { width: 20%; }
+[data-pmt-table="current"] th:nth-child(4) { width: 22%; }
+[data-pmt-table="current"] th:nth-child(5) { width: 22%; }
+[data-pmt-table="other"] th:nth-child(2) { width: 16%; }
+[data-pmt-table="other"] th:nth-child(3) { width: 18%; }
+[data-pmt-table="other"] th:nth-child(5) { width: 20%; }
+[data-pmt-table="other"] th:nth-child(6) { width: 22%; }
 
 .rmr-pmt-pay-input:focus {
   outline: none;
@@ -2129,14 +2153,23 @@ textarea:-webkit-autofill:focus {
 .rmr-pay-table-wrap {
   flex: 1;
   min-height: 0;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+  container-type: inline-size;
   padding-right: var(--spacing-xs);
   padding-bottom: var(--spacing-xs);
 }
 
+/* table-layout: fixed so a column's declared width (or, for Details/Type
+   columns left unset, an equal share of whatever's left) is authoritative —
+   with the default auto layout a column is free to grow past that width to
+   fit its content instead, which is what forced every register into
+   horizontal scroll. Every cell then truncates with an ellipsis (below)
+   instead of pushing the table wider than its wrap. */
 .rmr-pay-table {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed;
 }
 
 .rmr-pay-table th {
@@ -2145,13 +2178,15 @@ textarea:-webkit-autofill:focus {
   background: var(--background-primary);
   border-bottom: 2px solid var(--border-border);
   padding: var(--spacing-xxs) var(--spacing-xs);
-  height: 40px;
+  height: auto;
+  min-height: 40px;
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-regular);
   color: var(--text-secondary);
   text-align: left;
   letter-spacing: 0.28px;
-  white-space: nowrap;
+  white-space: normal;
+  line-height: 1.3;
 }
 
 .rmr-pay-table th[data-align="right"], .rmr-pay-table td[data-align="right"] { text-align: right; }
@@ -2164,6 +2199,8 @@ textarea:-webkit-autofill:focus {
   color: var(--text-secondary);
   letter-spacing: 0.28px;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .rmr-pay-table td[data-align="right"] { color: var(--secondary-text); }
@@ -2182,6 +2219,48 @@ textarea:-webkit-autofill:focus {
 }
 
 [data-pay-view][hidden] { display: none; }
+
+/* Column widths for the Payments & Charges register — Details (unset) is
+   the one column that absorbs whatever's left over once table-layout: fixed
+   (base .rmr-pay-table rule) divides the row by these. "open"'s Category
+   swatch and Paid column, and "all"'s different column order, mean the two
+   views need their own nth-child mapping rather than one shared rule. */
+[data-pay-view="open"] th:nth-child(1) { width: 3%; }
+[data-pay-view="open"] th:nth-child(2) { width: 10%; }
+[data-pay-view="open"] th:nth-child(3) { width: 12%; }
+[data-pay-view="open"] th:nth-child(5) { width: 8%; }
+[data-pay-view="open"] th:nth-child(6) { width: 11%; }
+[data-pay-view="open"] th:nth-child(7) { width: 11%; }
+[data-pay-view="open"] th:nth-child(8) { width: 10%; }
+[data-pay-view="open"] th:nth-child(9) { width: 11%; }
+[data-pay-view="all"] th:nth-child(1) { width: 10%; }
+[data-pay-view="all"] th:nth-child(2) { width: 13%; }
+[data-pay-view="all"] th:nth-child(4) { width: 8%; }
+[data-pay-view="all"] th:nth-child(5) { width: 12%; }
+[data-pay-view="all"] th:nth-child(6) { width: 10%; }
+[data-pay-view="all"] th:nth-child(7) { width: 12%; }
+
+/* At comfortable widths the register above truncates like any other. But
+   with 7-9 columns (several of them dollar amounts and dates, which
+   shouldn't get clipped to "10/…" or "$1,…") it needs real per-column
+   room — each cell's own 16px of left+right padding (base .rmr-pay-table td
+   rule) eats a big share of a narrow column, so the % widths above only
+   stay legible above roughly 820px of actual table width. .rmr-pay-right
+   (this register's own column on Payments & Charges) reliably has less than
+   that on a typical laptop-width window, not just an unusually narrow one.
+   It stays a register below the threshold too — rather than switching to a
+   stacked-card layout — by tightening cell padding and dropping to a
+   smaller font so each column keeps more of its share for actual content.
+   .rmr-pay-table-wrap carries container-type: inline-size (above) so this
+   reacts to the register's own available width, not the viewport as a
+   whole. */
+@container (max-width: 820px) {
+  [data-pay-view] th,
+  [data-pay-view] td {
+    padding: var(--spacing-xxs) var(--spacing-xxs);
+    font-size: var(--font-size-xs);
+  }
+}
 
 /* ---------- Payments & Charges — tablet breakpoint ----------
    Sourced from the "Payments Tablet" frame (node 2828:23259, same Figma
@@ -2211,6 +2290,13 @@ textarea:-webkit-autofill:focus {
   .rmr-pay-th-full { display: none; }
   .rmr-pay-th-short { display: inline; }
   .rmr-pay-col-latefee { display: none; }
+
+  /* Document Center — same column-dropping treatment as the Late Fee column
+     above: Documents to Sign's Number of Signers column is dropped at this
+     width rather than shortened, since there's no short label for it. (The
+     two cards' own column-stacking override lives further down, after their
+     base rule, so it wins the cascade — see the note there.) */
+  .rmr-doc-col-signers { display: none; }
 
   /* Make a Payment overlay (4.2.1/4.3.1/4.2.4) — sourced from the "Payments
      Tablet" frame (node 3234:46495, same Figma file). Only the responsive
@@ -2705,7 +2791,6 @@ textarea:-webkit-autofill:focus {
 
 .rmr-doc-columns {
   display: flex;
-  flex-wrap: wrap;
   align-items: flex-start;
   gap: var(--spacing-xl);
   width: 100%;
@@ -2728,11 +2813,23 @@ textarea:-webkit-autofill:focus {
    828px/740px widths — a deliberate departure from those literal Figma
    values, per direct instruction, so the two cards always share available
    width 50/50 instead of "Sign" staying fixed while "Leases" absorbs the
-   remainder. Equal flex-basis + shared min-width means they still wrap to a
-   stacked single column at the same width either card would (480px) once
-   the viewport can't fit both side by side. */
+   remainder. min-width: 0 (rather than a fixed floor like the tablet-stack
+   breakpoint below) lets both cards keep sitting side by side at any width
+   above that breakpoint, same as .rmr-pay-left/.rmr-pay-right on Payments &
+   Charges — each card's own register truncates its columns instead of
+   forcing a horizontal scrollbar or wrapping the row, so the split never
+   collapses to a stack just because the window isn't ultra-wide. */
 .rmr-doc-card--sign,
-.rmr-doc-card--leases { flex: 1 1 0; min-width: 480px; }
+.rmr-doc-card--leases { flex: 1 1 0; min-width: 0; }
+
+/* Same tablet breakpoint as .rmr-pay-columns above: below it the sidebar has
+   already collapsed and there isn't enough width left for two side-by-side
+   registers to be usable, so they stack full-width instead. */
+@media (max-width: 1024px) {
+  .rmr-doc-columns { flex-direction: column; }
+  .rmr-doc-card--sign,
+  .rmr-doc-card--leases { width: 100%; }
+}
 
 .rmr-doc-card__header { display: flex; flex-direction: column; gap: var(--spacing-xs); flex-shrink: 0; }
 .rmr-doc-card__title { margin: 0; font-size: var(--font-size-xl); line-height: var(--line-height-lg); font-weight: var(--font-weight-regular); color: var(--text-primary); }
@@ -2742,12 +2839,37 @@ textarea:-webkit-autofill:focus {
 .rmr-doc-table__name-sub { margin: 0; font-size: 12px; font-style: italic; color: var(--text-secondary); white-space: normal; }
 .rmr-pay-table--doc td { height: 50px; white-space: normal; }
 
+/* Percentage column widths (see the <th> style attributes) only add up to
+   100% reliably under table-layout: fixed — with the default auto layout,
+   a column's specified width is just a hint the browser can still grow
+   past based on content, which was letting this table overflow its card. */
+.rmr-pay-table--doc { table-layout: fixed; }
+
+/* Both registers on this page (Documents to Sign + Leases & Documents below)
+   need to fit their card's own width instead of overflowing it — these
+   cards get much narrower once the 50/50 split (above) is in effect. Headers
+   already wrap onto a second line by default (base .rmr-pay-table th rule);
+   .rmr-pay-table--doc's own td default is reset to white-space: normal
+   (above) to let Document Name wrap, so the narrow columns below need their
+   own nowrap+ellipsis truncation restored on top of that reset. Document
+   Name is excluded — its own two-line name/sub-label pattern (above) is
+   deliberate wrapping, not overflow to guard against. */
+.rmr-pay-table--doc td:nth-child(2),
+.rmr-pay-table--doc td:nth-child(3),
+.rmr-pay-table--doc td.rmr-doc-col-signers,
+.rmr-doc-tree td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 1px;
+}
+
 .rmr-doc-table__actions { display: flex; align-items: center; justify-content: center; gap: var(--spacing-xxs); }
 .rmr-doc-table__actions button { background: none; border: none; padding: 0; cursor: pointer; line-height: 0; }
 
 .rmr-btn--table { height: 24px; min-width: 0; padding: 0 var(--spacing-xs); }
 
-.rmr-doc-filters { display: flex; align-items: flex-end; gap: var(--spacing-xs); flex-shrink: 0; }
+.rmr-doc-filters { display: flex; flex-wrap: wrap; align-items: flex-end; gap: var(--spacing-xs); flex-shrink: 0; }
 
 .rmr-doc-search {
   display: flex;
@@ -2792,7 +2914,7 @@ textarea:-webkit-autofill:focus {
   gap: var(--spacing-xxs);
   padding-left: var(--spacing-sm);
   padding-right: var(--spacing-sm);
-  overflow: visible;
+  overflow: hidden;
 }
 .rmr-doc-tree__icon { flex-shrink: 0; }
 .rmr-doc-tree__spacer { display: inline-block; width: 20px; height: 20px; flex-shrink: 0; }
@@ -2801,6 +2923,19 @@ textarea:-webkit-autofill:focus {
 .rmr-doc-tree__row[data-doc-tree-expanded="true"] .rmr-doc-tree__chevron { transform: rotate(90deg); }
 .rmr-doc-tree__link { color: var(--text-blue); font-size: var(--font-size-sm); text-decoration: none; }
 .rmr-doc-tree__link:hover { text-decoration: underline; }
+/* The lease/doc name itself (plain <span> or .rmr-doc-tree__link, always the
+   flex row's last child, after the fixed-size toggle/spacer + icon) is the
+   one part of this row that can be arbitrarily long — shrink and truncate
+   just that piece instead of letting it push the row past the fixed 37%
+   column width above. */
+.rmr-doc-tree__row--lease td:nth-child(2) > :last-child,
+.rmr-doc-tree__row--doc td:nth-child(2) > :last-child {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .rmr-svc-notes__attach-link { font-size: var(--font-size-sm); letter-spacing: 0.28px; color: var(--text-blue); }
 
 /* ---------- Lease Renewal flow ----------
@@ -2816,7 +2951,12 @@ textarea:-webkit-autofill:focus {
 
 /* Renewal Available banner reuses .rmr-pay-autopay's bar+icon+text+button
    shape verbatim (same real component, same layout) — only the icon/copy
-   change, so no new structural classes were needed here. */
+   change, so no new structural classes were needed here. Its own mock calls
+   for an 80px body height though, taller than the AutoPay banner's
+   content-driven ~56.5px, so that one dimension is overridden per-instance
+   here rather than changing the shared .rmr-pay-autopay__body default (which
+   the AutoPay banner elsewhere still needs at its own height). */
+[data-renewal-banner] .rmr-pay-autopay__body { min-height: 80px; }
 
 /* Missing Required Fields' bulleted list of incomplete fields — the only
    place in this prototype's .rmr-acct-confirm body content that needs a
@@ -2876,37 +3016,25 @@ textarea:-webkit-autofill:focus {
 .rmr-offers-date__icon { position: absolute; right: var(--spacing-xs); top: 50%; transform: translateY(-50%); pointer-events: none; }
 
 /* ---------- Sign Document — Lease Renewal Request ----------
-   Sourced from "Sign Document - Lease renewal" (node 3011:22250, same
-   file) — a document viewer page: a slim tool sidebar (page nav, Sign,
-   Finish Signing) beside the actual letter, styled as a plain printed page
-   rather than any app chrome. */
-.rmr-sign-layout { display: flex; align-items: flex-start; gap: var(--spacing-md); width: 100%; }
-.rmr-sign-tools { display: flex; flex-direction: column; align-items: center; gap: var(--spacing-md); flex-shrink: 0; width: 64px; }
-.rmr-sign-tools__nav { display: flex; flex-direction: column; align-items: center; gap: var(--spacing-xs); width: 100%; padding: var(--spacing-sm) 0; background: var(--background-primary); border: 1px solid var(--border-border); border-radius: var(--spacing-xs); box-shadow: var(--dropshadow-sm); }
-.rmr-sign-tools__nav-row { display: flex; align-items: center; gap: var(--spacing-xxs); }
-.rmr-sign-tools__nav button { display: flex; align-items: center; justify-content: center; width: 20px; height: 20px; padding: 0; background: none; border: none; color: var(--icon-disabled); cursor: default; }
-.rmr-sign-tools__page { font-size: var(--font-size-xs); color: var(--text-secondary); }
-.rmr-sign-tools__action {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--spacing-xxs);
-  width: 100%;
-  padding: var(--spacing-sm) var(--spacing-xxs);
-  background: var(--background-primary);
-  border: 1px solid var(--border-border);
-  border-radius: var(--spacing-xs);
-  box-shadow: var(--dropshadow-sm);
-  font-size: var(--font-size-xs);
-  color: var(--text-blue);
-  cursor: pointer;
-}
-.rmr-sign-tools__action--done { color: var(--status-success); }
-.rmr-sign-tools__action[disabled] { color: var(--icon-disabled); cursor: not-allowed; }
-.rmr-sign-doc-wrap { flex: 1; min-width: 0; display: flex; justify-content: center; }
+   Sourced from "3.2.2 Document Center - sign document" (node 2460:13285,
+   file Sip0wuWPnMa5duL1L39HDn) — a document viewer page: the letter
+   centered on its own page, a print/download card beside it on the right,
+   an autosave status below the letter, and a full-bleed footer below
+   (page nav, Sign, Finish) rather than the tool sidebar of the previous
+   iteration. The footer is chrome, not page content — it must stay put
+   while the letter is read, so (paired with .rmr-settings-page--fit on
+   the page, the same "only the register scrolls" modifier Service Issues
+   uses) only .rmr-sign-stage scrolls; the footer and the hero above it
+   never move. The toolbar is a flex sibling of the doc frame (not
+   absolutely positioned outside it) so it can never overflow the stage
+   horizontally — it just shares the row and the frame yields width first. */
+body[data-screen="document-sign"] .rmr-settings-page--fit { padding-bottom: 0; }
+.rmr-sign-layout { display: flex; flex-direction: column; align-items: center; gap: var(--spacing-md); width: 100%; flex: 1; min-height: 0; }
+.rmr-sign-stage { display: flex; justify-content: center; width: 100%; flex: 1; min-height: 0; overflow: auto; padding-right: var(--spacing-xs); padding-bottom: var(--spacing-xs); }
+.rmr-sign-doc-wrap { display: flex; justify-content: center; align-items: flex-start; gap: var(--spacing-md); width: 100%; }
+.rmr-sign-doc-frame { position: relative; width: 100%; min-width: 0; max-width: 612px; }
 .rmr-sign-doc {
   width: 100%;
-  max-width: 612px;
   min-height: 792px;
   padding: 56px 48px;
   background: var(--background-primary);
@@ -2920,12 +3048,114 @@ textarea:-webkit-autofill:focus {
 .rmr-sign-doc h1 { text-align: center; font-size: 15px; letter-spacing: 0.5px; margin: 0 0 4px; }
 .rmr-sign-doc__date { text-align: center; margin: 0 0 24px; }
 .rmr-sign-doc p { margin: 0 0 16px; }
-.rmr-sign-doc__select { display: flex; justify-content: center; margin: 0 0 16px; }
+.rmr-sign-doc__select { position: relative; display: flex; align-items: center; justify-content: center; margin: 0 0 16px; }
+.rmr-sign-doc__select[hidden] { display: none; }
 .rmr-sign-doc__select .rmr-modal__select { width: 260px; font-family: var(--font-family-main); }
 .rmr-sign-doc__signed { margin: 24px 0 0; font-family: 'Alex Brush', 'Segoe Script', 'Brush Script MT', cursive; font-size: 28px; color: var(--text-primary); }
-.rmr-sign-tools-fixed { display: flex; flex-direction: column; gap: var(--spacing-sm); position: sticky; top: var(--spacing-xl); }
-.rmr-sign-doc-toolbar { display: flex; flex-direction: column; gap: var(--spacing-xs); flex-shrink: 0; }
-.rmr-sign-doc-toolbar button { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; padding: 0; background: var(--background-primary); border: 1px solid var(--border-border); border-radius: var(--spacing-xs); box-shadow: var(--dropshadow-sm); cursor: pointer; }
+/* Plain-acknowledgment docs (Parking Policy, Pet Policy Update) have no
+   dropdown field to flag — this is their own "sign here" prompt, styled as
+   a .rmr-modal__select-shaped control so it picks up the same
+   .rmr-field-attention highlight treatment below. Unlike the lease
+   preference dropdown, it's not a real answer to keep displaying once
+   signed, so sign-complete hides it outright rather than just clearing the
+   highlight (see [data-sign-hide-on-sign] in app.js). */
+.rmr-sign-doc__signhere {
+  width: 260px;
+  height: 32px;
+  padding: var(--spacing-xs);
+  border: 1px solid var(--border-border);
+  border-radius: var(--spacing-xs);
+  background: var(--background-primary);
+  font-family: var(--font-family-main);
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
+  cursor: pointer;
+}
+/* Fields requiring attention — yellow highlight + a margin pointer flagging
+   the field from the page's left edge, both sourced from node 3268:14803 /
+   3268:14804 (the source frame's own screenshot mock). The .rmr-field-attention
+   modifier is removed once the lease preference has been signed (see the
+   sign-complete handler in app.js), which hides the pointer and clears the
+   highlight below. */
+.rmr-field-attention__pointer { display: none; position: absolute; left: -72px; top: 50%; transform: translateY(-50%); }
+.rmr-field-attention .rmr-field-attention__pointer { display: block; }
+.rmr-field-attention .rmr-field-attention__control { background-color: #f4f6a8; border-color: var(--text-secondary); }
+
+/* Loading overlay — node 2677:26211. Sits over .rmr-sign-doc-frame (already
+   position: relative) while Submit Signed Document's Submit is "finalizing"
+   the document, right before Document Signed Successfully opens (see the
+   sign-submit handler in app.js). */
+.rmr-sign-loading {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xxs);
+  padding: var(--spacing-xl);
+  background: rgba(255, 255, 255, 0.85);
+  text-align: center;
+}
+.rmr-sign-loading[hidden] { display: none; }
+
+.rmr-sign-loading__spinner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  margin-bottom: var(--spacing-sm);
+}
+.rmr-sign-loading__spinner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 4px solid var(--interaction-selected-blue);
+  border-top-color: var(--text-blue);
+  animation: rmr-sign-loading-spin 0.9s linear infinite;
+}
+.rmr-sign-loading__spinner img { position: relative; z-index: 1; width: 24px; height: auto; }
+
+@keyframes rmr-sign-loading-spin {
+  to { transform: rotate(360deg); }
+}
+
+.rmr-sign-loading__title { margin: 0; font-size: var(--font-size-md); font-weight: var(--font-weight-bold); color: var(--text-primary); }
+.rmr-sign-loading__desc { margin: 0; font-size: var(--font-size-sm); color: var(--text-secondary); }
+
+.rmr-sign-doc-toolbar {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm) 7px;
+  background: var(--background-primary);
+  border-radius: var(--spacing-xs);
+  box-shadow: var(--dropshadow-sm);
+}
+.rmr-sign-doc-toolbar button { display: flex; align-items: center; justify-content: center; width: 20px; height: 20px; padding: 0; background: none; border: none; cursor: pointer; }
+.rmr-sign-autosave { display: flex; align-items: center; justify-content: center; gap: var(--spacing-xs); width: 100%; margin-top: var(--spacing-sm); font-size: var(--font-size-md); color: var(--text-secondary); white-space: nowrap; }
+.rmr-sign-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: calc(100% + var(--spacing-2xl) * 2);
+  margin: 0 calc(-1 * var(--spacing-2xl));
+  min-height: 63px;
+  background: var(--component-footer);
+}
+.rmr-sign-footer__center { display: flex; align-items: center; gap: var(--spacing-2xl); }
+.rmr-sign-footer__action { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; background: none; border: none; padding: 0; font-family: var(--font-family-main); font-size: var(--font-size-xs); letter-spacing: 0.24px; color: var(--text-blue); cursor: pointer; }
+.rmr-sign-footer__action--done { color: var(--status-success); }
+.rmr-sign-footer__nav { display: flex; align-items: center; gap: var(--spacing-xs); }
+.rmr-sign-footer__nav button { display: flex; align-items: center; justify-content: center; width: 20px; height: 20px; padding: 0; background: none; border: none; color: var(--icon-disabled); cursor: default; }
+.rmr-sign-footer__page { font-family: var(--font-family-main); font-weight: 700; font-size: var(--font-size-xs); color: var(--text-primary); }
 
 /* Add Signature / Document Signature wizard steps — the typed-signature
    input reuses .rmr-modal__input; the cursive preview is new. */
