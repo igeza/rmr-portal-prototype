@@ -1603,6 +1603,7 @@ textarea:-webkit-autofill:focus {
   gap: var(--spacing-xl);
   width: 1160px;
   max-width: 100%;
+  margin: 0 auto;
   padding: var(--spacing-xl);
   background: var(--background-primary);
   border-radius: var(--spacing-xs);
@@ -2368,7 +2369,7 @@ textarea:-webkit-autofill:focus {
 .rmr-acct-tab {
   padding: var(--spacing-xs);
   border: none;
-  border-bottom: 1px solid var(--border-border);
+  border-bottom: 1px solid transparent;
   background: none;
   margin-bottom: -1px;
   font-family: var(--font-family-main);
@@ -2693,18 +2694,25 @@ textarea:-webkit-autofill:focus {
 .rmr-svc-schedule-card { display: flex; align-items: center; gap: var(--spacing-lg, 20px); padding: var(--spacing-xs); border: 1px solid var(--border-border); border-radius: var(--spacing-xs); background: var(--background-primary); flex-wrap: wrap; }
 .rmr-svc-schedule-card__left { display: flex; align-items: center; gap: var(--spacing-lg, 20px); }
 .rmr-svc-schedule-card__badge { flex-shrink: 0; padding: var(--spacing-xxs) var(--spacing-xs); border-radius: var(--spacing-xxs); font-size: var(--font-size-xs); font-weight: var(--font-weight-regular); letter-spacing: 0.24px; }
-.rmr-svc-schedule-card__badge--pending { background: var(--interaction-selected-blue); color: var(--text-blue); }
+/* Pending Lozenge — node 2524:18128: a more saturated blue than the
+   generic "Selected" interaction tint the badge was borrowing before, with
+   dark (not blue) label text. */
+.rmr-svc-schedule-card__badge--pending { background: var(--color-blue-200); color: var(--text-primary); }
 .rmr-svc-schedule-card__badge--confirmed { background: var(--color-green-200); color: var(--text-primary); }
-.rmr-svc-schedule-card__body { flex: 1; min-width: 0; font-size: var(--font-size-sm); color: var(--text-secondary); }
+.rmr-svc-schedule-card__body { flex: 1; min-width: 0; font-size: var(--font-size-xs); color: var(--text-secondary); }
 .rmr-svc-schedule-card__body p { margin: 0; }
 .rmr-svc-schedule-card__confirmed-info { display: flex; flex-direction: column; gap: var(--spacing-xxs); }
 .rmr-svc-schedule-card__slot-row { display: flex; gap: 4px; align-items: center; font-size: var(--font-size-sm); }
 .rmr-svc-schedule-card__slot-day { font-weight: var(--font-weight-bold); color: var(--text-primary); }
-.rmr-svc-schedule-card__slot-time { color: var(--text-primary); letter-spacing: 0.28px; }
+.rmr-svc-schedule-card__slot-time { font-size: var(--font-size-sm); color: var(--text-primary); letter-spacing: 0.28px; }
 .rmr-svc-schedule-card__link { color: var(--text-blue); font-size: var(--font-size-sm); letter-spacing: 0.28px; }
-.rmr-svc-schedule-card__slots { display: flex; gap: var(--spacing-xl); margin-top: var(--spacing-xs); }
-.rmr-svc-schedule-card__slot-label { font-style: italic; color: var(--text-secondary); }
-.rmr-svc-schedule-card__slot-value { font-weight: var(--font-weight-bold); color: var(--text-primary); }
+/* Pending slots row — node 2524:18131/2524:18137/2524:18143: Preferred /
+   Alternate 1 / Alternate 2 are separated by real 1px dividers (not just
+   gap spacing), each spanning the full height of the row. */
+.rmr-svc-schedule-card__slots { display: flex; align-items: stretch; gap: var(--spacing-sm); margin-top: var(--spacing-xs); }
+.rmr-svc-schedule-card__slot-divider { align-self: stretch; width: 1px; background: var(--border-border); flex-shrink: 0; }
+.rmr-svc-schedule-card__slot-label { font-size: var(--font-size-xs); font-style: italic; color: var(--text-secondary); }
+.rmr-svc-schedule-card__slot-value { font-size: var(--font-size-sm); font-weight: var(--font-weight-bold); color: var(--text-primary); }
 .rmr-svc-schedule-card__tech { display: flex; flex-direction: column; gap: var(--spacing-xs); flex: 1; min-width: 160px; padding-left: var(--spacing-lg, 20px); border-left: 1px solid var(--border-border); }
 .rmr-svc-schedule-card__tech-label { font-size: var(--font-size-xs); letter-spacing: 0.24px; color: var(--text-secondary); }
 .rmr-svc-schedule-card__tech-row { display: flex; align-items: center; gap: var(--spacing-sm); }

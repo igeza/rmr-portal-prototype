@@ -879,11 +879,12 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="rmr-svc-schedule-card__body">
           <p>Has not been scheduled. You selected the below times when submitting this issue:</p>
           <div class="rmr-svc-schedule-card__slots">
-            ${schedule.slots.map((s) => `
+            ${schedule.slots.map((s, i) => `
+              ${i > 0 ? '<div class="rmr-svc-schedule-card__slot-divider"></div>' : ''}
               <div>
                 <div class="rmr-svc-schedule-card__slot-label">${s.label}</div>
                 <div class="rmr-svc-schedule-card__slot-value">${s.day}</div>
-                <div>${s.time}</div>
+                <div class="rmr-svc-schedule-card__slot-time">${s.time}</div>
               </div>
             `).join('')}
           </div>
