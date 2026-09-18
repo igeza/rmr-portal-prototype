@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Architectural Requests — rmResident Portal</title>
+<link rel="stylesheet" href="../assets/rmr.css?v=64" />
+<link rel="stylesheet" href="../assets/proto.css" />
+</head>
+<body data-screen="architectural-requests">
+<div class="rmr-app" data-component="2.2 / 3.2 Architectural Request">
+
+  <header class="rmr-header" data-component="Header">
+    <div class="rmr-header__left">
+      <div class="rmr-header__logo" data-component="New Logo">
+        <img class="rmr-header__logo-icon" src="../assets/icons/logo-icon.svg" alt="" />
+        <img class="rmr-header__logo-text" src="../assets/icons/logo-text.svg" alt="rmResident" />
+      </div>
+    </div>
+    <div class="rmr-header__right" data-component="Header Right">
+      <div class="rmr-header__icon" data-component="RMP Icon">
+        <img src="../assets/icons/globe.svg" alt="Language" width="24" height="24" />
+      </div>
+      <span class="rmr-header__divider" aria-hidden="true"></span>
+      <div class="rmr-account" data-component="User Info">
+        <button class="rmr-header__user" type="button" data-action="toggle-account-menu">
+          <img class="rmr-header__avatar" src="../assets/images/avatar.png" alt="" width="24" height="24" />
+          <span class="rmr-header__username">Samantha Carpenter</span>
+          <img src="../assets/icons/chevron-down.svg" alt="" width="24" height="24" />
+        </button>
+        <div class="rmr-account-menu" data-account-menu hidden data-component="Dropdown Menu">
+          <a class="rmr-account-menu__item" href="fp-account.html">
+            <span>View Account</span>
+          </a>
+          <button class="rmr-account-menu__item" type="button" data-action="fake-submit" data-fake-message="Payment Settings isn't included in this example.">
+            <span>Payment Settings</span>
+          </button>
+          <button class="rmr-account-menu__item" type="button" data-action="fake-submit" data-fake-message="Switching accounts isn't included in this example.">
+            <span>Switch Accounts</span>
+            <span class="rmr-account-menu__arrow" aria-hidden="true"></span>
+          </button>
+          <button class="rmr-account-menu__item" type="button" data-action="fake-submit" data-fake-message="Logout isn't wired up in this example.">
+            <span>Log Out</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="rmr-body" data-component="Content">
+    <nav class="rmr-menu" data-component="Menu" aria-label="Primary">
+      <ul class="rmr-menu__list" data-component="Expanded Menu">
+        <li class="rmr-menu__item" data-nav="community" data-component="Menu Items">
+          <a class="rmr-menu__link" href="community.html">
+            <svg class="rmr-menu__icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M8 8.5C9.08667 8.5 10.0467 8.76 10.8267 9.1C11.5467 9.42 12 10.14 12 10.92V12H4V10.9267C4 10.14 4.45333 9.42 5.17333 9.10667C5.95333 8.76 6.91333 8.5 8 8.5ZM2.66667 8.66667C3.4 8.66667 4 8.06667 4 7.33333C4 6.6 3.4 6 2.66667 6C1.93333 6 1.33333 6.6 1.33333 7.33333C1.33333 8.06667 1.93333 8.66667 2.66667 8.66667ZM3.42 9.4C3.17333 9.36 2.92667 9.33333 2.66667 9.33333C2.00667 9.33333 1.38 9.47333 0.813333 9.72C0.32 9.93333 0 10.4133 0 10.9533V12H3V10.9267C3 10.3733 3.15333 9.85333 3.42 9.4ZM13.3333 8.66667C14.0667 8.66667 14.6667 8.06667 14.6667 7.33333C14.6667 6.6 14.0667 6 13.3333 6C12.6 6 12 6.6 12 7.33333C12 8.06667 12.6 8.66667 13.3333 8.66667ZM16 10.9533C16 10.4133 15.68 9.93333 15.1867 9.72C14.62 9.47333 13.9933 9.33333 13.3333 9.33333C13.0733 9.33333 12.8267 9.36 12.58 9.4C12.8467 9.85333 13 10.3733 13 10.9267V12H16V10.9533ZM8 4C9.10667 4 10 4.89333 10 6C10 7.10667 9.10667 8 8 8C6.89333 8 6 7.10667 6 6C6 4.89333 6.89333 4 8 4Z" fill="currentColor"/>
+            </svg>
+            <span class="rmr-menu__label">Community</span>
+          </a>
+        </li>
+        <li class="rmr-menu__item" data-nav="reservations" data-component="Menu Items">
+          <a class="rmr-menu__link" href="reservations.html">
+            <svg class="rmr-menu__icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M11.624 8.04798L10.776 7.19998L6.872 11.104L5.176 9.40798L4.328 10.256L6.872 12.8L11.624 8.04798ZM13.6 1.59998H12.8V0H11.2V1.59998H4.8V0H3.2V1.59998H2.4C1.512 1.59998 0.808 2.31998 0.808 3.19998L0.8 14.4C0.8 15.28 1.512 16 2.4 16H13.6C14.48 16 15.2 15.28 15.2 14.4V3.19998C15.2 2.31998 14.48 1.59998 13.6 1.59998ZM13.6 14.4H2.4V5.59998H13.6V14.4Z" fill="currentColor"/>
+            </svg>
+            <span class="rmr-menu__label">Reservations</span>
+          </a>
+        </li>
+        <li class="rmr-menu__item rmr-menu__item--active" data-nav="architectural-requests" data-component="Menu Items">
+          <a class="rmr-menu__link" href="architectural-requests.html">
+            <svg class="rmr-menu__icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M3.33332 16L3.1111 14.0444L5.64443 7.06667C5.86666 7.27407 6.1074 7.44815 6.36666 7.58889C6.62592 7.72963 6.90369 7.83704 7.19999 7.91111L4.75555 14.6222L3.33332 16ZM12.6667 16L11.2444 14.6222L8.79999 7.91111C9.09629 7.83704 9.37406 7.72963 9.63332 7.58889C9.89258 7.44815 10.1333 7.27407 10.3555 7.06667L12.8889 14.0444L12.6667 16ZM7.99999 7.11111C7.25925 7.11111 6.62962 6.85185 6.1111 6.33333C5.59258 5.81481 5.33332 5.18519 5.33332 4.44444C5.33332 3.86667 5.49999 3.35185 5.83332 2.9C6.16666 2.44815 6.59258 2.13333 7.1111 1.95556V0H8.88888V1.95556C9.4074 2.13333 9.83332 2.44815 10.1667 2.9C10.5 3.35185 10.6667 3.86667 10.6667 4.44444C10.6667 5.18519 10.4074 5.81481 9.88888 6.33333C9.37036 6.85185 8.74073 7.11111 7.99999 7.11111ZM7.99999 5.33333C8.25184 5.33333 8.46295 5.24815 8.63332 5.07778C8.80369 4.90741 8.88888 4.6963 8.88888 4.44444C8.88888 4.19259 8.80369 3.98148 8.63332 3.81111C8.46295 3.64074 8.25184 3.55556 7.99999 3.55556C7.74814 3.55556 7.53703 3.64074 7.36666 3.81111C7.19629 3.98148 7.1111 4.19259 7.1111 4.44444C7.1111 4.6963 7.19629 4.90741 7.36666 5.07778C7.53703 5.24815 7.74814 5.33333 7.99999 5.33333Z" fill="currentColor"/>
+            </svg>
+            <span class="rmr-menu__label">Architectural Requests</span>
+          </a>
+        </li>
+        <li class="rmr-menu__item" data-nav="polls" data-component="Menu Items">
+          <a class="rmr-menu__link" href="polls.html">
+            <svg class="rmr-menu__icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M14.2222 0H1.77778C0.8 0 0 0.8 0 1.77778V14.2222C0 15.2 0.8 16 1.77778 16H14.2222C15.2 16 16 15.2 16 14.2222V1.77778C16 0.8 15.2 0 14.2222 0ZM5.33333 12.4444H3.55556V6.22222H5.33333V12.4444ZM8.88889 12.4444H7.11111V3.55556H8.88889V12.4444ZM12.4444 12.4444H10.6667V8.88889H12.4444V12.4444Z" fill="currentColor"/>
+            </svg>
+            <span class="rmr-menu__label">Polls</span>
+          </a>
+        </li>
+      </ul>
+      <div class="rmr-menu__footer" data-component="Expanded Menu Item">
+        <div class="rmr-menu__item">
+          <button class="rmr-menu__link" type="button" data-action="toggle-menu" data-component="Collapse">
+            <img class="rmr-menu__icon" src="../assets/icons/collapse.svg" alt="" data-collapse-icon />
+            <span class="rmr-menu__label" data-collapse-label>Collapse</span>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <main class="rmr-main" data-component="Main Content">
+
+      <div class="rmr-settings-page rmr-settings-page--fit" data-component="Content Container">
+
+      <div class="rmr-settings-hero" data-component="Header Image">
+        <img class="rmr-settings-hero__bg" src="../assets/images/architectural-requests/hero.png?v=2" alt="" />
+        <div class="rmr-settings-hero__scrim"></div>
+        <p class="rmr-settings-hero__title">Architectural Request</p>
+        <span class="rmr-pay-hero__address" style="position:relative;" data-component="User Info">742 Willow Crescent, Apt 3B</span>
+      </div>
+
+        <div class="rmr-msg-banner rmr-msg-banner--compact" data-component="Banner">
+          <img class="rmr-msg-banner__icon" src="../assets/icons/payments/campaign.svg" alt="" />
+          <p class="rmr-msg-banner__body">Please make sure you review our guidelines before you submit a request. Thank you!</p>
+        </div>
+
+        <div class="rmr-comm-layout" data-component="Main Content">
+
+          <div class="rmr-comm-card rmr-comm-main" style="min-height:0;" data-component="Cards">
+            <div style="display:flex; align-items:flex-end; justify-content:space-between; width:100%; flex-shrink:0;">
+              <div style="display:flex; gap:var(--spacing-xl); align-items:center;">
+                <div class="rmr-pay-field" data-component="Input Field">
+                  <span class="rmr-pay-field__label">Date Range</span>
+                  <div class="rmr-pay-field__input">
+                    <span>08/01/2025</span>
+                    <span class="rmr-pay-field__divider"></span>
+                    <span>11/27/2025</span>
+                    <img class="rmr-pay-field__icon" src="../assets/icons/payments/calendar.svg" alt="" />
+                  </div>
+                </div>
+                <div class="rmr-pay-field" style="width:240px;" data-component="Input Field">
+                  <span class="rmr-pay-field__label">Status</span>
+                  <div class="rmr-dropdown" data-dropdown>
+                    <button type="button" class="rmr-modal__select rmr-dropdown__trigger" data-dropdown-trigger>
+                      <span data-dropdown-value>All</span>
+                    </button>
+                    <div class="rmr-dropdown__menu" data-dropdown-menu hidden>
+                      <div class="rmr-dropdown__option rmr-dropdown__option--selected" data-dropdown-option>All</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Confirmed</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Pending</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>In Board Review</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Denied</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <button class="rmr-btn rmr-btn--primary" type="button" style="height:32px; display:flex; align-items:center; justify-content:center;" data-action="open-modal" data-modal-target="arq-add">Add Request</button>
+            </div>
+
+            <div class="rmr-acct-tabs" role="tablist" style="flex-shrink:0;">
+              <button class="rmr-acct-tab rmr-acct-tab--selected" type="button" role="tab" aria-selected="true" data-action="arq-tab" data-arq-target="my">My Requests (3)</button>
+              <button class="rmr-acct-tab" type="button" role="tab" aria-selected="false" data-action="arq-tab" data-arq-target="review">Requests to Review (17)</button>
+            </div>
+
+            <div data-arq-panel="my">
+              <div class="rmr-pay-table-wrap">
+                <table class="rmr-pay-table">
+                  <thead>
+                    <tr>
+                      <th style="width:80px;">Submitted</th>
+                      <th style="width:160px;">Status</th>
+                      <th>Request</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="rmr-pay-table__row-link" data-action="open-modal" data-modal-target="arq-details-paint">
+                      <td>10/13/25</td>
+                      <td><span class="rmr-rsv-lozenge rmr-rsv-lozenge--yellow">Pending</span></td>
+                      <td>Paint the door</td>
+                    </tr>
+                    <tr class="rmr-pay-table__row-link" data-action="fake-submit" data-fake-message="Request details for this item aren't included in this example.">
+                      <td>10/13/25</td>
+                      <td><span class="rmr-rsv-lozenge rmr-rsv-lozenge--yellow">Pending</span></td>
+                      <td>Add Fence</td>
+                    </tr>
+                    <tr class="rmr-pay-table__row-link" data-action="fake-submit" data-fake-message="Request details for this item aren't included in this example.">
+                      <td>10/13/25</td>
+                      <td><span class="rmr-rsv-lozenge rmr-rsv-lozenge--blue">In Board Review</span></td>
+                      <td>Add Patio</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p class="rmr-pay-table-footer">Showing 3 of 3 Requests</p>
+            </div>
+
+            <div data-arq-panel="review" hidden>
+              <div class="rmr-arq-info-banner">
+                <img class="rmr-arq-info-banner__icon" src="../assets/icons/architectural-requests/info-outline-24.svg" alt="" />
+                <p class="rmr-arq-info-banner__body">Please vote on requests promptly. If more discussion is needed, add it to the weekly meeting agenda.</p>
+              </div>
+              <div class="rmr-pay-table-wrap">
+                <table class="rmr-pay-table">
+                  <thead>
+                    <tr>
+                      <th style="width:80px;">Submitted</th>
+                      <th style="width:140px;">Submitted By</th>
+                      <th style="width:180px;">Address</th>
+                      <th>Request</th>
+                      <th style="width:130px;">Status</th>
+                      <th style="width:100px;">Vote</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="rmr-pay-table__row-link" data-action="open-modal" data-modal-target="arq-vote-paint">
+                      <td>10/13/25</td>
+                      <td>Samantha Carpenter</td>
+                      <td>500 Bradford Street Room 4A</td>
+                      <td>Paint the door</td>
+                      <td><span class="rmr-rsv-lozenge rmr-rsv-lozenge--yellow">Pending</span></td>
+                      <td>No Response</td>
+                    </tr>
+                    <tr class="rmr-pay-table__row-link" data-action="fake-submit" data-fake-message="Vote details for this item aren't included in this example.">
+                      <td>10/14/25</td>
+                      <td>Michael Thompson</td>
+                      <td>1234 Woodlands Dr #12</td>
+                      <td>Add Fence</td>
+                      <td><span class="rmr-rsv-lozenge rmr-rsv-lozenge--yellow">Pending</span></td>
+                      <td>No Response</td>
+                    </tr>
+                    <tr class="rmr-pay-table__row-link" data-action="fake-submit" data-fake-message="Vote details for this item aren't included in this example.">
+                      <td>10/15/25</td>
+                      <td>Olivia Martinez</td>
+                      <td>1234 Woodlands Dr #14</td>
+                      <td>Add Patio</td>
+                      <td><span class="rmr-rsv-lozenge rmr-rsv-lozenge--blue">In Board Review</span></td>
+                      <td>No Response</td>
+                    </tr>
+                    <tr class="rmr-pay-table__row-link" data-action="fake-submit" data-fake-message="Vote details for this item aren't included in this example.">
+                      <td>10/16/25</td>
+                      <td>Jacob Wilson</td>
+                      <td>500 Bradford Street Room 5B</td>
+                      <td>Install Outdoor Lighting</td>
+                      <td><span class="rmr-rsv-lozenge rmr-rsv-lozenge--yellow">Pending</span></td>
+                      <td>No Response</td>
+                    </tr>
+                    <tr class="rmr-pay-table__row-link" data-action="fake-submit" data-fake-message="Vote details for this item aren't included in this example.">
+                      <td>10/17/25</td>
+                      <td>Emma Johnson</td>
+                      <td>1234 Woodlands Dr #9</td>
+                      <td>Plant Flower Beds</td>
+                      <td><span class="rmr-rsv-lozenge rmr-rsv-lozenge--yellow">Pending</span></td>
+                      <td>No Response</td>
+                    </tr>
+                    <tr class="rmr-pay-table__row-link" data-action="fake-submit" data-fake-message="Vote details for this item aren't included in this example.">
+                      <td>10/18/25</td>
+                      <td>Ethan Brown</td>
+                      <td>1234 Woodlands Dr #19</td>
+                      <td>Create a Garden Pathway</td>
+                      <td><span class="rmr-rsv-lozenge rmr-rsv-lozenge--yellow">Pending</span></td>
+                      <td>No Response</td>
+                    </tr>
+                    <tr class="rmr-pay-table__row-link" data-action="fake-submit" data-fake-message="Vote details for this item aren't included in this example.">
+                      <td>10/19/25</td>
+                      <td>Ava Davis</td>
+                      <td>1234 Woodlands Dr #35</td>
+                      <td>Build a Deck</td>
+                      <td><span class="rmr-rsv-lozenge rmr-rsv-lozenge--yellow">Pending</span></td>
+                      <td>No Response</td>
+                    </tr>
+                    <tr class="rmr-pay-table__row-link" data-action="fake-submit" data-fake-message="Vote details for this item aren't included in this example.">
+                      <td>10/20/25</td>
+                      <td>Daniel Garcia</td>
+                      <td>500 Bradford Street Room 1A</td>
+                      <td>Set Up a Fire Pit</td>
+                      <td><span class="rmr-rsv-lozenge rmr-rsv-lozenge--blue">In Board Review</span></td>
+                      <td>No Response</td>
+                    </tr>
+                    <tr class="rmr-pay-table__row-link" data-action="fake-submit" data-fake-message="Vote details for this item aren't included in this example.">
+                      <td>10/21/25</td>
+                      <td>Sophia Rodriguez</td>
+                      <td>500 Bradford Street Room 13B</td>
+                      <td>Add a Water Feature</td>
+                      <td><span class="rmr-rsv-lozenge rmr-rsv-lozenge--red">Denied</span></td>
+                      <td>No Response</td>
+                    </tr>
+                    <tr class="rmr-pay-table__row-link" data-action="fake-submit" data-fake-message="Vote details for this item aren't included in this example.">
+                      <td>10/21/25</td>
+                      <td>Liam Anderson</td>
+                      <td>Liam Anderson</td>
+                      <td>Install a Trellis</td>
+                      <td><span class="rmr-rsv-lozenge rmr-rsv-lozenge--yellow">Pending</span></td>
+                      <td>Install a Trellis</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p class="rmr-pay-table-footer">Showing 17 of 17 Requests</p>
+            </div>
+          </div>
+
+          <div class="rmr-comm-sidebar">
+            <div class="rmr-comm-card" style="flex:0 0 auto; overflow:visible;" data-component="Cards">
+              <p class="rmr-comm-card__title">Request Guidelines</p>
+              <p class="rmr-comm-card__desc">Please make sure you review our guidelines before you submit a request. Thank you!</p>
+              <div style="display:flex; flex-direction:column; gap:var(--spacing-md);">
+                <a class="rmr-arq-guide-link" href="#" data-action="fake-submit" data-fake-message="HOA Rules isn't included in this example.">
+                  <img class="rmr-arq-guide-link__icon" src="../assets/icons/service-issues/file-paper.svg" alt="" />
+                  <span>
+                    <p class="rmr-arq-guide-link__title">HOA Rules</p>
+                    <p class="rmr-arq-guide-link__desc">Guidelines for requests</p>
+                  </span>
+                </a>
+                <a class="rmr-arq-guide-link" href="#" data-action="fake-submit" data-fake-message="Fees isn't included in this example.">
+                  <img class="rmr-arq-guide-link__icon" src="../assets/icons/service-issues/file-paper.svg" alt="" />
+                  <span>
+                    <p class="rmr-arq-guide-link__title">Fees</p>
+                    <p class="rmr-arq-guide-link__desc">Breakdown of fees</p>
+                  </span>
+                </a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Add Request overlay — sourced from file AsaQeq0Rbv6ubeIhdpYDiW, "2.5
+       Submit Request - Custom Form" (node 2026:7271, the "Property 1=Multiple
+       sections" variant of the same Overlays component as "2.4 Submit
+       Request - Simple Form," node 2020:1171). The Custom variant is a
+       strict superset of Simple (same Request/Description/Attachments
+       fields, plus a Details section) so only it was built — see
+       PROTOTYPE.md. -->
+  <div class="rmr-modal-backdrop" data-modal-backdrop="arq-add" hidden>
+    <div class="rmr-modal rmr-modal--arq" role="dialog" aria-modal="true" aria-labelledby="modal-arq-add-title" data-component="2.5 Submit Request - Custom Form">
+      <div class="rmr-modal__header" data-component="Header">
+        <h2 class="rmr-modal__title" id="modal-arq-add-title">Submit an Architectural Request</h2>
+        <button class="rmr-modal__close" type="button" data-action="close-modal">
+          <img src="../assets/icons/modal-close.svg" alt="Close" width="24" height="24" />
+        </button>
+      </div>
+      <div class="rmr-modal__body" data-component="Overlays">
+        <div class="rmr-msg-banner rmr-msg-banner--compact" data-component="Banner">
+          <img class="rmr-msg-banner__icon" src="../assets/icons/payments/campaign.svg" alt="" />
+          <p class="rmr-msg-banner__body">Please make sure you review our guidelines before you submit a request. Thank you!</p>
+        </div>
+
+        <p class="rmr-acct-section-title" style="width:100%;">Architectural Request Information</p>
+
+        <label class="rmr-modal__field">
+          <span class="rmr-modal__field-label">Request *</span>
+          <input class="rmr-modal__input" type="text" value="" />
+        </label>
+
+        <label class="rmr-modal__field">
+          <span class="rmr-modal__field-label">Description *</span>
+          <textarea class="rmr-modal__textarea"></textarea>
+        </label>
+
+        <div class="rmr-svc-attach" data-component="Attach">
+          <span class="rmr-svc-attach__label">Attachments</span>
+          <div class="rmr-svc-attach__zone">
+            <img src="../assets/icons/reservations/file-download-32.svg" alt="" width="32" height="32" />
+            <p class="rmr-svc-attach__text"><a href="#" data-action="fake-submit" data-fake-message="Attaching a file isn't included in this example.">Choose a file</a> or drag it here.</p>
+          </div>
+        </div>
+
+        <hr class="rmr-divider" />
+
+        <p class="rmr-acct-section-title" style="width:100%;">Details</p>
+
+        <div style="display:flex; gap:var(--spacing-xl); width:100%;">
+          <div class="rmr-modal__field">
+            <span class="rmr-modal__field-label">Has this been requested before?</span>
+            <button type="button" class="rmr-modal__select" style="text-align:left;" data-action="fake-submit" data-fake-message="Options for this field aren't included in this example.">Select an option</button>
+          </div>
+          <div class="rmr-modal__field">
+            <span class="rmr-modal__field-label">First Request Date</span>
+            <button type="button" class="rmr-rsv-date-btn" data-action="fake-submit" data-fake-message="Options for this field aren't included in this example.">
+              <span></span>
+              <img src="../assets/icons/payments/calendar.svg" alt="" width="20" height="20" />
+            </button>
+          </div>
+        </div>
+
+        <div class="rmr-modal__field">
+          <span class="rmr-modal__field-label">What's the priority?</span>
+          <button type="button" class="rmr-modal__select" style="text-align:left;" data-action="fake-submit" data-fake-message="Options for this field aren't included in this example.">Select an option</button>
+        </div>
+      </div>
+      <div class="rmr-modal__footer" data-component="Footer">
+        <button class="rmr-btn rmr-btn--primary" type="button" style="height:32px;" data-action="switch-modal" data-modal-target="arq-submitted" data-modal-close-current="arq-add">Submit</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirmation — "2.6 Submit Request - Submitted" (node 2040:4107)
+       reuses the same "Make A Payment - Success" component/classes as every
+       other confirmation popup in this prototype. Body copy says
+       "reservation" in the real Figma frame, not "request" — a genuine
+       copy-paste artifact from the Reservations flow, kept verbatim per this
+       project's standing rule against silently fixing source copy. -->
+  <div class="rmr-modal-backdrop" data-modal-backdrop="arq-submitted" hidden>
+    <div class="rmr-modal rmr-modal--narrow" role="dialog" aria-modal="true" aria-labelledby="modal-arq-submitted-title" data-component="2.6 Submit Request - Submitted">
+      <button class="rmr-modal__close" type="button" data-action="close-modal">
+        <img src="../assets/icons/modal-close.svg" alt="Close" width="24" height="24" />
+      </button>
+      <div class="rmr-pmt-success">
+        <img class="rmr-pmt-success__icon" src="../assets/icons/payments/mp-check-circle-filled.svg" alt="" />
+        <div class="rmr-pmt-success__message">
+          <h2 class="rmr-pmt-success__title" id="modal-arq-submitted-title">Request Submitted</h2>
+          <p class="rmr-pmt-success__body">Your reservation has been submitted, and will be reviewed soon.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Request Details overlay (My Requests tab) — "2.3 Architectural
+       Request" (node 2020:1267). Reuses Service Issues' own
+       .rmr-svc-details-modal / .rmr-svc-details / .rmr-svc-comments*
+       wholesale (confirmed to be the identical two-way "Messages" anatomy),
+       per direct instruction that these overlays should look like Service
+       Issues'. Only one real example exists in the source ("Paint the
+       door") — its own real status is "Pending," so the register row above
+       shows Pending too rather than the mismatched "Confirmed" the table's
+       own cell showed in Figma; see PROTOTYPE.md. Every other row is
+       fake-submit, same "only the sourced example is wired" precedent used
+       throughout this prototype (e.g. Amenity Reservations). -->
+  <div class="rmr-modal-backdrop" data-modal-backdrop="arq-details-paint" hidden>
+    <div class="rmr-modal rmr-svc-details-modal rmr-svc-details-modal--arq" role="dialog" aria-modal="true" aria-labelledby="modal-arq-details-paint-title" data-component="Request Details">
+      <div class="rmr-modal__header" data-component="Header">
+        <div style="display:flex; align-items:center; gap:var(--spacing-md);">
+          <h2 class="rmr-modal__title" id="modal-arq-details-paint-title">Request Details</h2>
+          <span class="rmr-svc-details__status">
+            <span class="rmr-svc-status-dot rmr-svc-status-dot--open"></span>
+            <span>Pending</span>
+          </span>
+        </div>
+        <button class="rmr-modal__close" type="button" data-action="close-modal">
+          <img src="../assets/icons/modal-close.svg" alt="Close" width="24" height="24" />
+        </button>
+      </div>
+      <div class="rmr-svc-details">
+        <div class="rmr-svc-details__main">
+          <div style="display:flex; flex-direction:column; gap:var(--spacing-xs);">
+            <h3 class="rmr-svc-details__title">Paint the door</h3>
+            <p class="rmr-svc-details__created">Submitted: 10/13/25</p>
+            <p class="rmr-svc-details__created">Submitted By: Samantha Carpenter</p>
+          </div>
+          <hr class="rmr-divider" />
+          <div>
+            <p class="rmr-svc-details__field-label">Description</p>
+            <p class="rmr-svc-details__field-value">I want to update the color of the front door</p>
+          </div>
+          <div>
+            <p class="rmr-svc-details__field-label">Attachments</p>
+            <div class="rmr-svc-attachments-row">
+              <img class="rmr-svc-attach__thumb-img" src="../assets/images/architectural-requests/attach-1.png" alt="" />
+              <img class="rmr-svc-attach__thumb-img" src="../assets/images/architectural-requests/attach-2.png" alt="" />
+            </div>
+          </div>
+          <div>
+            <p class="rmr-svc-details__field-label">Is it urgent?</p>
+            <p class="rmr-svc-details__field-value">Yes</p>
+          </div>
+        </div>
+        <div class="rmr-svc-comments">
+          <div class="rmr-svc-comments__panel">
+            <div class="rmr-svc-comments__thread">
+              <div class="rmr-svc-comments__msg rmr-svc-comments__msg--self">
+                <div class="rmr-svc-comments__meta">
+                  <span class="rmr-svc-comments__meta-sender">You</span>
+                  <span class="rmr-svc-comments__meta-time">02/17/36 10:37 AM</span>
+                </div>
+                <div class="rmr-svc-comments__bubble-row">
+                  <div class="rmr-svc-comments__bubble">Just checking on the status of this.</div>
+                </div>
+              </div>
+              <div class="rmr-svc-comments__msg">
+                <div class="rmr-svc-comments__meta">
+                  <span class="rmr-svc-comments__meta-sender">Riverview Apartments</span>
+                  <span class="rmr-svc-comments__meta-time">02/17/26 10:30 AM</span>
+                </div>
+                <div class="rmr-svc-comments__bubble-row">
+                  <div class="rmr-svc-comments__bubble">Hi, I&rsquo;ll update you soon.</div>
+                </div>
+              </div>
+            </div>
+            <div class="rmr-svc-comments__input-row">
+              <input class="rmr-svc-comments__input" type="text" placeholder="Type your comment here" />
+              <button class="rmr-svc-comments__input-btn" type="button" data-action="fake-submit" data-fake-message="Sending a comment isn't included in this example.">
+                <img src="../assets/icons/service-issues/send.svg" alt="Send" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Request to Review Details overlay (Requests to Review tab) — "3.3
+       Request to Review - Details" (node 2026:7517). Same left-column
+       anatomy as the Request Details overlay above (title/status,
+       Submitted/Submitted By, Description, Attachments, Is it urgent?), but
+       the right panel is the Vote Details panel (Approve/Deny + a real
+       Name/Vote/Notes table, node 2026:8065) instead of Messages — a
+       different, genuinely-sourced right-panel format, not a reskin. -->
+  <div class="rmr-modal-backdrop" data-modal-backdrop="arq-vote-paint" hidden>
+    <div class="rmr-modal rmr-svc-details-modal rmr-svc-details-modal--arq" role="dialog" aria-modal="true" aria-labelledby="modal-arq-vote-paint-title" data-component="Request Details">
+      <div class="rmr-modal__header" data-component="Header">
+        <div style="display:flex; align-items:center; gap:var(--spacing-md);">
+          <h2 class="rmr-modal__title" id="modal-arq-vote-paint-title">Request Details</h2>
+          <span class="rmr-svc-details__status">
+            <span class="rmr-svc-status-dot rmr-svc-status-dot--open"></span>
+            <span>Pending</span>
+          </span>
+        </div>
+        <button class="rmr-modal__close" type="button" data-action="close-modal">
+          <img src="../assets/icons/modal-close.svg" alt="Close" width="24" height="24" />
+        </button>
+      </div>
+      <div class="rmr-svc-details">
+        <div class="rmr-svc-details__main">
+          <div style="display:flex; flex-direction:column; gap:var(--spacing-xs);">
+            <h3 class="rmr-svc-details__title">Paint the door</h3>
+            <p class="rmr-svc-details__created">Submitted: 10/13/25</p>
+            <p class="rmr-svc-details__created">Submitted By: Samantha Carpenter</p>
+          </div>
+          <hr class="rmr-divider" />
+          <div>
+            <p class="rmr-svc-details__field-label">Description</p>
+            <p class="rmr-svc-details__field-value">I want to update the color of the front door</p>
+          </div>
+          <div>
+            <p class="rmr-svc-details__field-label">Attachments</p>
+            <div class="rmr-svc-attachments-row">
+              <img class="rmr-svc-attach__thumb-img" src="../assets/images/architectural-requests/attach-1.png" alt="" />
+              <img class="rmr-svc-attach__thumb-img" src="../assets/images/architectural-requests/attach-2.png" alt="" />
+            </div>
+          </div>
+          <div>
+            <p class="rmr-svc-details__field-label">Is it urgent?</p>
+            <p class="rmr-svc-details__field-value">Yes</p>
+          </div>
+        </div>
+        <div class="rmr-svc-comments">
+          <div class="rmr-svc-comments__panel">
+            <div class="rmr-arq-vote__header">
+              <p class="rmr-svc-details__title" style="margin:0;">Vote Details</p>
+              <div style="display:flex; gap:var(--spacing-xs);">
+                <button class="rmr-btn rmr-btn--primary" type="button" style="height:32px;" data-action="fake-submit" data-fake-message="Voting isn't included in this example.">Approve</button>
+                <button class="rmr-btn rmr-btn--primary" type="button" style="height:32px;" data-action="fake-submit" data-fake-message="Voting isn't included in this example.">Deny</button>
+              </div>
+            </div>
+            <hr class="rmr-divider" />
+            <table class="rmr-pay-table">
+              <thead>
+                <tr>
+                  <th style="width:35%;">Name</th>
+                  <th style="width:25%;">Vote</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Anna Moore</td><td>No Response</td><td></td></tr>
+                <tr><td>Diene Bailey</td><td>Approved</td><td></td></tr>
+                <tr><td>William Morgan</td><td>Denied</td><td>Not in the budget for this year.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<script src="../assets/app.js?v=27"></script>
+</body>
+</html>

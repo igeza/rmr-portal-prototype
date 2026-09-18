@@ -32,7 +32,7 @@ Apply the same pattern to any new sidebar item's icon.
 
 ## Full Product — scope
 
-**Full Product has three pages so far: `screens/community.html`, `screens/fp-account.html`, and `screens/reservations.html`.**
+**Full Product has five pages so far: `screens/community.html`, `screens/fp-account.html`, `screens/reservations.html`, `screens/architectural-requests.html`, and `screens/polls.html`.**
 Nothing on this track links to an MVP screen, and nothing on MVP links back — a first pass wired
 the Directory Overlay's gear icon straight to MVP's own `account.html#settings`, which worked but
 broke the "keep it separate from MVP" rule; corrected, per direct instruction, by forking a real
@@ -62,6 +62,17 @@ mechanism (`acctTabFromHash()` in `app.js`, shared by both tracks) as before.
 
 As more Full Product pages get built, grow `fp-account.html` and `community.html`'s shared nav to
 match (and cross-link between pages within this track), but keep not pointing at MVP's own screens.
+`architectural-requests.html` is the third page added this way (after Community, then Reservations) —
+its own source mock's full Tenant menu shows "Architectural Requests" *before* Community/Meter
+Readings/Reservations in menu order, but per the established "append as built, not by menu position"
+precedent (Reservations was itself appended after Community despite interleaving Maintenance/
+Architectural/Meter in the real menu), it was added as this track's third nav item rather than
+reordering the other two. `polls.html` is the fourth page added the same way — its own source mock's
+full Tenant menu shows "Polls" *between* Notes and Violations (neither of which exist on this track
+yet), so it was likewise appended as the fourth nav item rather than reordering or adding placeholder
+tabs for Notes/Violations/Meter Readings, which aren't built. All four Full Product pages'
+(`community.html`, `reservations.html`, `architectural-requests.html`, `fp-account.html`) shared nav
+lists were grown to include it, same as every prior addition.
 
 ## Source
 
@@ -139,6 +150,8 @@ match (and cross-link between pages within this track), but keep not pointing at
 | `screens/fp-account.html` | Real — a Full Product-owned duplicate of MVP's `account.html` (own chrome only, same real Details/Contacts/Settings/Linked Accounts content). Reached via `community.html`'s "View Account" and the Directory Overlay's gear icon. See "Full Product — scope" above. |
 | `screens/fp-verification-sent.html` | Real — duplicate of MVP's `verification-sent.html`, reached from `fp-account.html`'s Change Username modal. |
 | `screens/reservations.html` | Real — Month/Week/Day calendar + "My Reservations" (Upcoming/Past Requests), from file `NA7fceoWIE1dczLAJjYjSC`, node `2001:2844`. Opens the real New Reservation (payment-required) wizard and both Reservation Details states (Pending/Denied). Second page on the Full Product track — see "Amenity Reservations page" below. |
+| `screens/architectural-requests.html` | Real — My Requests / Requests to Review register, from file `AsaQeq0Rbv6ubeIhdpYDiW`, node `2218:4516`. Opens the real Add Request overlay, a Service-Issues-style Request Details overlay (two-way Messages), and a Vote Details overlay. Third page on the Full Product track — see "Architectural Requests page" below. |
+| `screens/polls.html` | Real — All Polls register (Board Meeting/Community Feedback/General Amenities), from file `H9lPveHrdlGnG3Xbw0c8xf`, node `2013:1330`. Opens the real 5-question "Take a Poll" wizard for Board Meeting (Yes/No, Dropdown, Star Rating, Text, Multiple Choice) and its Submitted confirmation. Fourth page on the Full Product track — see "Polls page" below. |
 
 ## Amenity Reservations page
 
@@ -1405,3 +1418,171 @@ Lease Renewal flow section, which gave that empty toggle a real destination inst
   photo). The check icon reuses the existing `assets/icons/check.svg` (already used for AutoPay's
   password-requirements checklist) rather than downloading a duplicate, since it's the same
   Material "check" glyph at the same 20px size.
+
+## Architectural Requests page
+
+Sourced from file `AsaQeq0Rbv6ubeIhdpYDiW` ("RMR UI Rewrite — Architectural Requests"), "Section 4"
+(node `2218:4516`), which has 7 frames: the register with its two tabs (`2020:1078` "2.2 My
+Requests" / `2025:2184` "3.2 Requests to Review"), two Request Details overlays (`2020:1267` "2.3
+Architectural Request" / `2026:7517` "3.3 Request to Review - Details," both nested under their own
+page frame's Ghosting layer), two Add Request overlay variants (`2020:1171` "2.4 Submit Request -
+Simple Form" / `2026:7271` "2.5 Submit Request - Custom Form"), and a confirmation toast (`2040:4107`
+"2.6 Submit Request - Submitted"). Third page on the Full Product track — see "Full Product — scope"
+above for the nav-ordering call.
+
+**Register** (`architectural-requests.html`): reuses `.rmr-pay-hero`-family styling via
+`.rmr-settings-hero` + a reused `.rmr-pay-hero__address` span (this page's own Header Image needed
+both a title *and* an address, which only Payments & Charges' hero pattern has — `.rmr-settings-hero`
+alone doesn't), `.rmr-comm-layout`/`.rmr-comm-card`/`.rmr-comm-main`/`.rmr-comm-sidebar` (the same
+1140px-content + 428px-sidebar two-column shape Community/Reservations already use, for the register
+card + "Request Guidelines" card), `.rmr-acct-tabs` (My Requests/Requests to Review), `.rmr-pay-table`
+(both tabs' columns), and `.rmr-rsv-lozenge` for the Status column fills (green/yellow/red already
+existed; blue — In Board Review — is this page's own real 4th color, `--color-blue-200`, added as
+`.rmr-rsv-lozenge--blue`). The wrapping `.rmr-settings-page`/`.rmr-settings-page--fit` +
+`.rmr-settings-card--fit`-equivalent (`min-height:0` on the `.rmr-comm-card.rmr-comm-main`) keeps the
+register fit to the viewport with only its own table scrolling — same "only inner containers scroll"
+standing rule as Service Issues/Reservations, not the whole-page-scrolls behavior Payments/Dashboard
+use.
+
+**Requests to Review tab's own 17-row table has only 10 real rows** — the frame's own footer text
+reads "Showing 17 of 17 Requests," matching the same "footer count doesn't match real row count"
+source-file pattern already documented for Service Issues' Closed register and Payments' Late Fee
+column; the 10 real rows are rendered as-is rather than inventing 7 more. Two more genuine source
+quirks on that same table's last row (Liam Anderson, "Install a Trellis," 10/21/25) were kept
+verbatim rather than corrected: its **Address** cell literally repeats "Liam Anderson" (not a street
+address), and its **Vote** cell literally repeats "Install a Trellis" (not a vote status) — both
+re-verified directly against the node, not extraction errors.
+
+**Correction: the "Paint the door" row's own real Details content says "Pending," not "Confirmed."**
+Both Request Details overlays' one real sourced example (`2020:1267`/`2026:7517`) is keyed to "Paint
+the door," Submitted 10/13/25, Samantha Carpenter — and that overlay's own Status Lozenge says
+**Pending**. The *register's* own "Paint the door" table cell, however, is sourced as **Confirmed**
+(green) — a genuine cross-frame mismatch in the source file, the same kind already resolved once in
+this prototype for Service Issues (see "Register's own row title changed... so it matches this
+frame's real Description text" under Service Issues above). Applying that same precedent again here:
+the register row now shows **Pending** (matching the richer, real Details content a user actually
+opens), rather than preserving a status a user would immediately see contradicted by the very modal
+that row opens. The two other My Requests rows (Add Fence/Pending, Add Patio/In Board Review) and the
+9 other Requests to Review rows have no real Details content of their own, so they stay exactly as
+the register itself sources them and are `fake-submit` rather than opening a fabricated modal — same
+"only the sourced example is wired" precedent as Amenity Reservations' calendar pills.
+
+**Request Details overlay (My Requests tab, `arq-details-paint`) reuses Service Issues' own
+`.rmr-svc-details-modal`/`.rmr-svc-details`/`.rmr-svc-comments*` wholesale** — per direct instruction
+that these overlays should look like Service Issues' — confirmed to genuinely be the same two-way
+"Messages" anatomy (status-dot header, Submitted/Submitted By, Description, Attachments, a Yes/No
+field, a Messages panel with self/other bubbles and a comment input row) rather than just a
+superficial resemblance. The one real message thread ("Just checking on the status of this." /
+"Hi, I'll update you soon.") — including its own `02/17/36` timestamp typo — is transcribed verbatim,
+same "don't silently fix apparent source mistakes" precedent as Service Issues' own identical typo.
+The two attachment photos (`assets/images/architectural-requests/attach-1.png`/`attach-2.png`) are
+this section's own real image fills, exported directly (and resized down from their multi-megabyte
+originals to match this project's existing thumbnail-sized convention, same as every other attachment
+image in the app).
+
+**Request to Review Details overlay (`arq-vote-paint`) reuses the same left column, but its right
+panel is the real Vote Details panel instead of Messages** — a genuinely different, real right-panel
+format (node `2026:8065`), not a reskin: `.rmr-svc-comments__panel`'s own bordered/tinted card is
+reused wholesale for the outer container (confirmed to be the identical real "card" anatomy as the
+Messages panel — background-secondary, 1px border, the same 3-layer drop shadow), with only the
+header row (title + Approve/Deny, `.rmr-arq-vote__header`, new) and the Name/Vote/Notes table inside
+being new — that table is a plain `.rmr-pay-table`, the same real "cell" component the main register
+uses. Approve and Deny are both the real Primary button style (Figma gives them equal styling, no
+stated visual distinction between approve/deny), wired `fake-submit` since voting isn't part of this
+build's scope.
+
+**Add Request overlay reuses the "Custom Form" variant (`2026:7271`) only** — a strict superset of
+"Simple Form" (`2020:1171`, same Request*/Description*/Attachments fields, nothing Custom omits), so
+building the one richer variant covers everything either sourced frame shows rather than needing two
+near-duplicate modals. `.rmr-modal--arq` (622px) matches this instance's own real width. Reuses
+`.rmr-msg-banner`/`.rmr-modal__field`/`.rmr-modal__textarea`/`.rmr-acct-section-title` (the
+"Architectural Request Information"/"Details" section headers — real Body/Large/Bold styling, 16px)
+and, wholesale, Amenity Reservations' own Attachments dropzone (`.rmr-svc-attach__zone` +
+`file-download-32.svg`) and `.rmr-rsv-date-btn` (First Request Date). "Has this been requested
+before?" and "What's the priority?" have no real option lists in the source (same situation as
+Service Issues' own Category field), so both stay `.rmr-modal__select`-styled `fake-submit` triggers
+rather than inventing option values. Submit switches to the Submitted confirmation via the same
+`switch-modal` mechanism as every other single-step-to-success flow in this app (no new JS needed).
+
+**Confirmation toast** (`arq-submitted`) reuses `.rmr-pmt-success`/`.rmr-modal--narrow` verbatim (the
+same "any future confirmation popup reuses this" standing rule as every other success screen in this
+prototype). Its body copy — "Your **reservation** has been submitted, and will be reviewed soon." —
+says "reservation," not "request," in the real Figma frame; kept verbatim as a genuine copy-paste
+artifact from the Reservations flow, same "don't silently fix source copy" precedent as the message
+thread's timestamp typo above.
+
+**New assets.** `assets/icons/architectural-requests/info-outline-24.svg` (the Requests to Review
+tab's own bordered info banner, `.rmr-arq-info-banner` — new, since the existing
+`assets/icons/payments/mp-info-outline.svg` is natively 20px and this instance's own node is 24px;
+per the project's standing "never render an icon below its own native size" rule, a new 24px export
+was pulled rather than upscaling the 20px one). `assets/icons/nav-architecture.svg` (already present
+in the repo from an earlier icon batch-export, unused until now) turned out to be an exact match for
+this page's own sidebar glyph — confirmed by diffing its path data against the freshly-fetched Figma
+asset byte-for-byte, so no new download was needed; inlined with `fill="currentColor"` per this app's
+standing sidebar-icon pattern. `assets/icons/service-issues/file-paper.svg`,
+`assets/icons/reservations/file-download-32.svg`, and `assets/icons/payments/campaign.svg` /
+`calendar.svg` are all reused as exact matches (confirmed by diffing path data against this file's
+own exported assets), not just close approximations.
+
+**One overlay from the source file was not built.** The overview screenshot of Section 4 shows an
+8th small popup ("Additional Notes" — a textarea + Submit, floating near the Add Request frames,
+presumably a follow-up note prompt for a Deny vote) that isn't part of any of the 7 named top-level
+frames' own metadata tree and couldn't be conclusively traced to a specific node within this
+session's research budget. Per the "nothing invented" rule, it was left out rather than guessed at —
+if this flow is wanted, it needs its own direct Figma link/node ID.
+
+**Not built (same as every other page's stated scope note): a property-manager-side "Requests to
+Review" administrative view.** The section's own frames are all genuinely tenant-facing (same full
+Tenant-menu chrome as every other frame in this file, same Samantha Carpenter persona) — "Requests to
+Review" is the tenant's own HOA-style neighbor-request voting queue, not a PM admin screen, so it
+belongs on this same tenant-facing page rather than being out of scope.
+
+## Polls page
+
+**Register** (`polls.html`): reuses `.rmr-comm-layout`/`.rmr-comm-card`/`.rmr-comm-main` (single
+column — this page's own source frame has no sidebar card, unlike Architectural Requests' "Request
+Guidelines") and `.rmr-pay-table` (Name/Publish Date/End Date/Submitted columns) wholesale — no new
+register-level classes needed. Only the one poll without a real Submitted date (Board Meeting) gets a
+"Start" button; the other two (Community Feedback, General Amenities) are already-submitted rows with
+no action cell, matching the source frame exactly. The footer's "3 Polls" count matches the real row
+count (no source mismatch to resolve here, unlike Service Issues'/Architectural Requests' registers).
+The Context Bar/hero photo intentionally does **not** use this page's own source-frame photo — per
+standing instruction, it's sourced from the MVP hero photo instead (`assets/images/settings/
+account-hero.png`, copied into this page's own `assets/images/polls/hero.png`), same as Community's
+and Reservations' hero photos were retroactively swapped to match. This page's own Header Image node
+also has no address line (unlike Community/Reservations/Architectural Requests, which all show "742
+Willow Crescent, Apt 3B" under the title) — kept as sourced rather than adding one by analogy.
+
+**Take a Poll wizard (Board Meeting).** The source file lays out 8 frames for this flow: an
+Introduction page (node `2019:1877`), six "Poll Question" variant frames (Yes/No, Dropdown, Star
+Rating, Numeric Rating, Text, Multiple Choice), and a Closing page. Each real question frame's own
+footer carries a "n/5" progress label — Yes/No through Multiple Choice read 1/5 through 5/5 in order,
+confirming a real 5-question sequence. Star Rating and Numeric Rating are **both labeled 3/5** and
+laid out side-by-side on the canvas (Numeric Rating is off in its own column, `2148:3658`, not inline
+with the other six sequential frames) — a documented alternative variant for that one slot, not a 6th
+real question, so only Star Rating was built. Each step is its own `.rmr-modal--wide` (624px, this
+instance's own real width) modal backdrop, chained via `switch-modal` (the same Back/Next
+modal-to-modal mechanism as Reservations' New Reservation wizard) rather than a single modal with a
+`data-step` counter, since no such counter pattern exists anywhere else in this prototype.
+
+Every control reuses an existing real component: `.rmr-svc-choice` + `.rmr-pmt-radio` (Yes/No — the
+plain circle-and-label anatomy, not the question label's own inline `.rmr-svc-question`/`.rmr-svc-
+choices` layout, since this source frame stacks its two options vertically rather than inline),
+`.rmr-dropdown` (the "biggest issues" question — a genuinely 4-option real dropdown, sourced from the
+adjacent `Frame 1618873639` node showing its open state: Trash/Parking/Lawn/Noise Issues, unlike every
+other dropdown in this prototype which has exactly one option), `.rmr-modal__field`/`__textarea`
+(Anything else? — no separate field label above it, since the question text itself is the label here,
+unlike Maintenance's Description field), and `.rmr-checkbox` (the food multi-select — Chipotle and
+Panera keep the source frame's own pre-checked example state; "Choose up to 2" is not enforced with a
+selection cap, same "skip validation that doesn't serve the demo" precedent as every other form in
+this prototype). Finish's confirmation reuses `.rmr-pmt-success`/`.rmr-modal--narrow` verbatim ("Poll
+Submitted" / "Your responses were submitted. Thank you!").
+
+**New assets.** No star icon or rating pattern existed anywhere else in this prototype, so
+`assets/icons/polls/star-filled.svg` and `star-outline.svg` were exported fresh from the Star Rating
+frame's own nodes (`2019:2652`/`2019:2656`) — real 96×96 image fills, kept at that native size per the
+project's standing "never render an icon below its own native size" rule rather than shrinking them to
+a more typical rating-icon size. The sidebar's own "Polls" glyph reused `assets/icons/nav-poll.svg`
+(already present in the repo, unused until now) — confirmed an exact path-data match for this frame's
+own icon — inlined with `fill="currentColor"` per the standing sidebar-icon pattern rather than
+referenced as an `<img>`.

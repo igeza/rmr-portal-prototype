@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Polls — rmResident Portal</title>
+<link rel="stylesheet" href="../assets/rmr.css?v=65" />
+<link rel="stylesheet" href="../assets/proto.css" />
+</head>
+<body data-screen="polls">
+<div class="rmr-app" data-component="All Polls">
+
+  <header class="rmr-header" data-component="Header">
+    <div class="rmr-header__left">
+      <div class="rmr-header__logo" data-component="New Logo">
+        <img class="rmr-header__logo-icon" src="../assets/icons/logo-icon.svg" alt="" />
+        <img class="rmr-header__logo-text" src="../assets/icons/logo-text.svg" alt="rmResident" />
+      </div>
+    </div>
+    <div class="rmr-header__right" data-component="Header Right">
+      <div class="rmr-header__icon" data-component="RMP Icon">
+        <img src="../assets/icons/globe.svg" alt="Language" width="24" height="24" />
+      </div>
+      <span class="rmr-header__divider" aria-hidden="true"></span>
+      <div class="rmr-account" data-component="User Info">
+        <button class="rmr-header__user" type="button" data-action="toggle-account-menu">
+          <img class="rmr-header__avatar" src="../assets/images/avatar.png" alt="" width="24" height="24" />
+          <span class="rmr-header__username">Samantha Carpenter</span>
+          <img src="../assets/icons/chevron-down.svg" alt="" width="24" height="24" />
+        </button>
+        <div class="rmr-account-menu" data-account-menu hidden data-component="Dropdown Menu">
+          <a class="rmr-account-menu__item" href="fp-account.html">
+            <span>View Account</span>
+          </a>
+          <button class="rmr-account-menu__item" type="button" data-action="fake-submit" data-fake-message="Payment Settings isn't included in this example.">
+            <span>Payment Settings</span>
+          </button>
+          <button class="rmr-account-menu__item" type="button" data-action="fake-submit" data-fake-message="Switching accounts isn't included in this example.">
+            <span>Switch Accounts</span>
+            <span class="rmr-account-menu__arrow" aria-hidden="true"></span>
+          </button>
+          <button class="rmr-account-menu__item" type="button" data-action="fake-submit" data-fake-message="Logout isn't wired up in this example.">
+            <span>Log Out</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="rmr-body" data-component="Content">
+    <nav class="rmr-menu" data-component="Menu" aria-label="Primary">
+      <ul class="rmr-menu__list" data-component="Expanded Menu">
+        <li class="rmr-menu__item" data-nav="community" data-component="Menu Items">
+          <a class="rmr-menu__link" href="community.html">
+            <svg class="rmr-menu__icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M8 8.5C9.08667 8.5 10.0467 8.76 10.8267 9.1C11.5467 9.42 12 10.14 12 10.92V12H4V10.9267C4 10.14 4.45333 9.42 5.17333 9.10667C5.95333 8.76 6.91333 8.5 8 8.5ZM2.66667 8.66667C3.4 8.66667 4 8.06667 4 7.33333C4 6.6 3.4 6 2.66667 6C1.93333 6 1.33333 6.6 1.33333 7.33333C1.33333 8.06667 1.93333 8.66667 2.66667 8.66667ZM3.42 9.4C3.17333 9.36 2.92667 9.33333 2.66667 9.33333C2.00667 9.33333 1.38 9.47333 0.813333 9.72C0.32 9.93333 0 10.4133 0 10.9533V12H3V10.9267C3 10.3733 3.15333 9.85333 3.42 9.4ZM13.3333 8.66667C14.0667 8.66667 14.6667 8.06667 14.6667 7.33333C14.6667 6.6 14.0667 6 13.3333 6C12.6 6 12 6.6 12 7.33333C12 8.06667 12.6 8.66667 13.3333 8.66667ZM16 10.9533C16 10.4133 15.68 9.93333 15.1867 9.72C14.62 9.47333 13.9933 9.33333 13.3333 9.33333C13.0733 9.33333 12.8267 9.36 12.58 9.4C12.8467 9.85333 13 10.3733 13 10.9267V12H16V10.9533ZM8 4C9.10667 4 10 4.89333 10 6C10 7.10667 9.10667 8 8 8C6.89333 8 6 7.10667 6 6C6 4.89333 6.89333 4 8 4Z" fill="currentColor"/>
+            </svg>
+            <span class="rmr-menu__label">Community</span>
+          </a>
+        </li>
+        <li class="rmr-menu__item" data-nav="reservations" data-component="Menu Items">
+          <a class="rmr-menu__link" href="reservations.html">
+            <svg class="rmr-menu__icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M11.624 8.04798L10.776 7.19998L6.872 11.104L5.176 9.40798L4.328 10.256L6.872 12.8L11.624 8.04798ZM13.6 1.59998H12.8V0H11.2V1.59998H4.8V0H3.2V1.59998H2.4C1.512 1.59998 0.808 2.31998 0.808 3.19998L0.8 14.4C0.8 15.28 1.512 16 2.4 16H13.6C14.48 16 15.2 15.28 15.2 14.4V3.19998C15.2 2.31998 14.48 1.59998 13.6 1.59998ZM13.6 14.4H2.4V5.59998H13.6V14.4Z" fill="currentColor"/>
+            </svg>
+            <span class="rmr-menu__label">Reservations</span>
+          </a>
+        </li>
+        <li class="rmr-menu__item" data-nav="architectural-requests" data-component="Menu Items">
+          <a class="rmr-menu__link" href="architectural-requests.html">
+            <svg class="rmr-menu__icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M3.33332 16L3.1111 14.0444L5.64443 7.06667C5.86666 7.27407 6.1074 7.44815 6.36666 7.58889C6.62592 7.72963 6.90369 7.83704 7.19999 7.91111L4.75555 14.6222L3.33332 16ZM12.6667 16L11.2444 14.6222L8.79999 7.91111C9.09629 7.83704 9.37406 7.72963 9.63332 7.58889C9.89258 7.44815 10.1333 7.27407 10.3555 7.06667L12.8889 14.0444L12.6667 16ZM7.99999 7.11111C7.25925 7.11111 6.62962 6.85185 6.1111 6.33333C5.59258 5.81481 5.33332 5.18519 5.33332 4.44444C5.33332 3.86667 5.49999 3.35185 5.83332 2.9C6.16666 2.44815 6.59258 2.13333 7.1111 1.95556V0H8.88888V1.95556C9.4074 2.13333 9.83332 2.44815 10.1667 2.9C10.5 3.35185 10.6667 3.86667 10.6667 4.44444C10.6667 5.18519 10.4074 5.81481 9.88888 6.33333C9.37036 6.85185 8.74073 7.11111 7.99999 7.11111ZM7.99999 5.33333C8.25184 5.33333 8.46295 5.24815 8.63332 5.07778C8.80369 4.90741 8.88888 4.6963 8.88888 4.44444C8.88888 4.19259 8.80369 3.98148 8.63332 3.81111C8.46295 3.64074 8.25184 3.55556 7.99999 3.55556C7.74814 3.55556 7.53703 3.64074 7.36666 3.81111C7.19629 3.98148 7.1111 4.19259 7.1111 4.44444C7.1111 4.6963 7.19629 4.90741 7.36666 5.07778C7.53703 5.24815 7.74814 5.33333 7.99999 5.33333Z" fill="currentColor"/>
+            </svg>
+            <span class="rmr-menu__label">Architectural Requests</span>
+          </a>
+        </li>
+        <li class="rmr-menu__item rmr-menu__item--active" data-nav="polls" data-component="Menu Items">
+          <a class="rmr-menu__link" href="polls.html">
+            <svg class="rmr-menu__icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M14.2222 0H1.77778C0.8 0 0 0.8 0 1.77778V14.2222C0 15.2 0.8 16 1.77778 16H14.2222C15.2 16 16 15.2 16 14.2222V1.77778C16 0.8 15.2 0 14.2222 0ZM5.33333 12.4444H3.55556V6.22222H5.33333V12.4444ZM8.88889 12.4444H7.11111V3.55556H8.88889V12.4444ZM12.4444 12.4444H10.6667V8.88889H12.4444V12.4444Z" fill="currentColor"/>
+            </svg>
+            <span class="rmr-menu__label">Polls</span>
+          </a>
+        </li>
+      </ul>
+      <div class="rmr-menu__footer" data-component="Expanded Menu Item">
+        <div class="rmr-menu__item">
+          <button class="rmr-menu__link" type="button" data-action="toggle-menu" data-component="Collapse">
+            <img class="rmr-menu__icon" src="../assets/icons/collapse.svg" alt="" data-collapse-icon />
+            <span class="rmr-menu__label" data-collapse-label>Collapse</span>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <main class="rmr-main" data-component="Main Content">
+
+      <div class="rmr-settings-page rmr-settings-page--fit" data-component="Content Container">
+
+      <div class="rmr-settings-hero" data-component="Header Image">
+        <img class="rmr-settings-hero__bg" src="../assets/images/polls/hero.png?v=2" alt="" />
+        <div class="rmr-settings-hero__scrim"></div>
+        <p class="rmr-settings-hero__title">Polls</p>
+      </div>
+
+        <div class="rmr-msg-banner rmr-msg-banner--compact" data-component="Banner">
+          <img class="rmr-msg-banner__icon" src="../assets/icons/payments/campaign.svg" alt="" />
+          <p class="rmr-msg-banner__body">Please complete the polls below.</p>
+        </div>
+
+        <div class="rmr-comm-layout" data-component="Main Content">
+          <div class="rmr-comm-card rmr-comm-main" style="min-height:0;" data-component="Cards">
+            <div class="rmr-pay-table-wrap">
+              <table class="rmr-pay-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th style="width:120px;">Publish Date</th>
+                    <th style="width:120px;">End Date</th>
+                    <th style="width:120px;">Submitted</th>
+                    <th style="width:140px;"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr data-component="cell">
+                    <td>Board Meeting</td>
+                    <td>08/01/25</td>
+                    <td>08/07/25</td>
+                    <td></td>
+                    <td><button class="rmr-btn rmr-btn--primary" type="button" style="height:24px; display:flex; align-items:center; justify-content:center;" data-action="open-modal" data-modal-target="poll-board-meeting-intro">Start</button></td>
+                  </tr>
+                  <tr data-component="cell">
+                    <td>Community Feedback</td>
+                    <td>08/01/25</td>
+                    <td>08/07/25</td>
+                    <td>08/03/25</td>
+                    <td></td>
+                  </tr>
+                  <tr data-component="cell">
+                    <td>General Amenities</td>
+                    <td>05/13/25</td>
+                    <td>05/20/25</td>
+                    <td>05/19/25</td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="rmr-pay-table-footer">3 Polls</p>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- Take a Poll — Board Meeting (node 2019:1877 onward). Real 5-question
+     sequence sourced from the frames whose own footer progress label reads
+     1/5–5/5 in order (Yes/No, Dropdown, Star Rating, Text, Multiple Choice).
+     The file also contains a "Numeric Rating" variant (node 2148:3658) laid
+     out beside the Star Rating frame and also labeled 3/5 — a documented
+     alternative for that same slot, not a 6th real question, so it isn't
+     included here. Each step is its own modal backdrop, chained with
+     switch-modal (Back/Next), same mechanism as Reservations' New
+     Reservation wizard. -->
+<div class="rmr-modal-backdrop" data-modal-backdrop="poll-board-meeting-intro" hidden>
+  <div class="rmr-modal rmr-modal--wide" role="dialog" aria-modal="true" aria-labelledby="modal-poll-intro-title" data-component="Introduction Poll Page">
+    <div class="rmr-modal__header" data-component="Header">
+      <h2 class="rmr-modal__title" id="modal-poll-intro-title">Board Meeting</h2>
+      <button class="rmr-modal__close" type="button" data-action="close-modal">
+        <img src="../assets/icons/modal-close.svg" alt="Close" width="24" height="24" />
+      </button>
+    </div>
+    <div class="rmr-modal__body">
+      <p>Help us plan the next board meeting! This should take about 4 minutes to complete.</p>
+    </div>
+    <div class="rmr-modal__footer">
+      <button type="button" class="rmr-btn rmr-btn--primary" data-action="switch-modal" data-modal-close-current="poll-board-meeting-intro" data-modal-target="poll-board-meeting-q1">Start Poll</button>
+    </div>
+  </div>
+</div>
+
+<div class="rmr-modal-backdrop" data-modal-backdrop="poll-board-meeting-q1" hidden>
+  <div class="rmr-modal rmr-modal--wide" role="dialog" aria-modal="true" aria-labelledby="modal-poll-q1-title" data-component="Yes/No Poll Question">
+    <div class="rmr-modal__header" data-component="Header">
+      <h2 class="rmr-modal__title" id="modal-poll-q1-title">Board Meeting</h2>
+      <button class="rmr-modal__close" type="button" data-action="close-modal">
+        <img src="../assets/icons/modal-close.svg" alt="Close" width="24" height="24" />
+      </button>
+    </div>
+    <div class="rmr-modal__body">
+      <p>Are you available this week?*</p>
+      <div style="display:flex; flex-direction:column; gap:var(--spacing-xs);" role="radiogroup" aria-label="Are you available this week?">
+        <button class="rmr-svc-choice" type="button" data-action="svc-select-choice" data-svc-question="poll-available" data-svc-value="yes">
+          <span class="rmr-pmt-radio"></span>
+          <span class="rmr-svc-choice__label">Yes</span>
+        </button>
+        <button class="rmr-svc-choice" type="button" data-action="svc-select-choice" data-svc-question="poll-available" data-svc-value="no">
+          <span class="rmr-pmt-radio"></span>
+          <span class="rmr-svc-choice__label">No</span>
+        </button>
+      </div>
+    </div>
+    <div class="rmr-modal__footer" style="justify-content:space-between;">
+      <button type="button" class="rmr-btn rmr-btn--secondary" data-action="switch-modal" data-modal-close-current="poll-board-meeting-q1" data-modal-target="poll-board-meeting-intro">Back</button>
+      <span style="font-size:var(--font-size-sm); color:var(--text-secondary); letter-spacing:0.28px;">1/5</span>
+      <button type="button" class="rmr-btn rmr-btn--primary" data-action="switch-modal" data-modal-close-current="poll-board-meeting-q1" data-modal-target="poll-board-meeting-q2">Next</button>
+    </div>
+  </div>
+</div>
+
+<div class="rmr-modal-backdrop" data-modal-backdrop="poll-board-meeting-q2" hidden>
+  <div class="rmr-modal rmr-modal--wide" role="dialog" aria-modal="true" aria-labelledby="modal-poll-q2-title" data-component="Dropdown Poll Question">
+    <div class="rmr-modal__header" data-component="Header">
+      <h2 class="rmr-modal__title" id="modal-poll-q2-title">Board Meeting</h2>
+      <button class="rmr-modal__close" type="button" data-action="close-modal">
+        <img src="../assets/icons/modal-close.svg" alt="Close" width="24" height="24" />
+      </button>
+    </div>
+    <div class="rmr-modal__body">
+      <p>What are the biggest issues that you’re noticing?</p>
+      <div class="rmr-modal__field" style="width:248px;">
+        <div class="rmr-dropdown" data-dropdown data-dropdown-no-flip>
+          <button type="button" class="rmr-modal__select rmr-dropdown__trigger" data-dropdown-trigger>
+            <span data-dropdown-value></span>
+          </button>
+          <div class="rmr-dropdown__menu" data-dropdown-menu hidden>
+            <div class="rmr-dropdown__option" data-dropdown-option>Trash Issues</div>
+            <div class="rmr-dropdown__option" data-dropdown-option>Parking Issues</div>
+            <div class="rmr-dropdown__option" data-dropdown-option>Lawn Issues</div>
+            <div class="rmr-dropdown__option" data-dropdown-option>Noise Issues</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="rmr-modal__footer" style="justify-content:space-between;">
+      <button type="button" class="rmr-btn rmr-btn--secondary" data-action="switch-modal" data-modal-close-current="poll-board-meeting-q2" data-modal-target="poll-board-meeting-q1">Back</button>
+      <span style="font-size:var(--font-size-sm); color:var(--text-secondary); letter-spacing:0.28px;">2/5</span>
+      <button type="button" class="rmr-btn rmr-btn--primary" data-action="switch-modal" data-modal-close-current="poll-board-meeting-q2" data-modal-target="poll-board-meeting-q3">Next</button>
+    </div>
+  </div>
+</div>
+
+<div class="rmr-modal-backdrop" data-modal-backdrop="poll-board-meeting-q3" hidden>
+  <div class="rmr-modal rmr-modal--wide" role="dialog" aria-modal="true" aria-labelledby="modal-poll-q3-title" data-component="Star Rating Poll Question">
+    <div class="rmr-modal__header" data-component="Header">
+      <h2 class="rmr-modal__title" id="modal-poll-q3-title">Board Meeting</h2>
+      <button class="rmr-modal__close" type="button" data-action="close-modal">
+        <img src="../assets/icons/modal-close.svg" alt="Close" width="24" height="24" />
+      </button>
+    </div>
+    <div class="rmr-modal__body">
+      <p>How satisfied are you?</p>
+      <div class="rmr-poll-stars" data-poll-stars role="radiogroup" aria-label="How satisfied are you?">
+        <button type="button" class="rmr-poll-star" data-poll-star aria-label="1 star"><img src="../assets/icons/polls/star-outline.svg" alt="" width="96" height="96" /></button>
+        <button type="button" class="rmr-poll-star" data-poll-star aria-label="2 stars"><img src="../assets/icons/polls/star-outline.svg" alt="" width="96" height="96" /></button>
+        <button type="button" class="rmr-poll-star" data-poll-star aria-label="3 stars"><img src="../assets/icons/polls/star-outline.svg" alt="" width="96" height="96" /></button>
+        <button type="button" class="rmr-poll-star" data-poll-star aria-label="4 stars"><img src="../assets/icons/polls/star-outline.svg" alt="" width="96" height="96" /></button>
+        <button type="button" class="rmr-poll-star" data-poll-star aria-label="5 stars"><img src="../assets/icons/polls/star-outline.svg" alt="" width="96" height="96" /></button>
+      </div>
+    </div>
+    <div class="rmr-modal__footer" style="justify-content:space-between;">
+      <button type="button" class="rmr-btn rmr-btn--secondary" data-action="switch-modal" data-modal-close-current="poll-board-meeting-q3" data-modal-target="poll-board-meeting-q2">Back</button>
+      <span style="font-size:var(--font-size-sm); color:var(--text-secondary); letter-spacing:0.28px;">3/5</span>
+      <button type="button" class="rmr-btn rmr-btn--primary" data-action="switch-modal" data-modal-close-current="poll-board-meeting-q3" data-modal-target="poll-board-meeting-q4">Next</button>
+    </div>
+  </div>
+</div>
+
+<div class="rmr-modal-backdrop" data-modal-backdrop="poll-board-meeting-q4" hidden>
+  <div class="rmr-modal rmr-modal--wide" role="dialog" aria-modal="true" aria-labelledby="modal-poll-q4-title" data-component="Text Poll Question">
+    <div class="rmr-modal__header" data-component="Header">
+      <h2 class="rmr-modal__title" id="modal-poll-q4-title">Board Meeting</h2>
+      <button class="rmr-modal__close" type="button" data-action="close-modal">
+        <img src="../assets/icons/modal-close.svg" alt="Close" width="24" height="24" />
+      </button>
+    </div>
+    <div class="rmr-modal__body">
+      <p>Anything else?</p>
+      <div class="rmr-modal__field">
+        <textarea class="rmr-modal__textarea" data-component="Description"></textarea>
+      </div>
+    </div>
+    <div class="rmr-modal__footer" style="justify-content:space-between;">
+      <button type="button" class="rmr-btn rmr-btn--secondary" data-action="switch-modal" data-modal-close-current="poll-board-meeting-q4" data-modal-target="poll-board-meeting-q3">Back</button>
+      <span style="font-size:var(--font-size-sm); color:var(--text-secondary); letter-spacing:0.28px;">4/5</span>
+      <button type="button" class="rmr-btn rmr-btn--primary" data-action="switch-modal" data-modal-close-current="poll-board-meeting-q4" data-modal-target="poll-board-meeting-q5">Next</button>
+    </div>
+  </div>
+</div>
+
+<div class="rmr-modal-backdrop" data-modal-backdrop="poll-board-meeting-q5" hidden>
+  <div class="rmr-modal rmr-modal--wide" role="dialog" aria-modal="true" aria-labelledby="modal-poll-q5-title" data-component="Multiple Choice Poll Question">
+    <div class="rmr-modal__header" data-component="Header">
+      <h2 class="rmr-modal__title" id="modal-poll-q5-title">Board Meeting</h2>
+      <button class="rmr-modal__close" type="button" data-action="close-modal">
+        <img src="../assets/icons/modal-close.svg" alt="Close" width="24" height="24" />
+      </button>
+    </div>
+    <div class="rmr-modal__body">
+      <p><span style="font-size:var(--font-size-md); color:var(--text-secondary);">What would you like for food?*</span> <span style="font-size:var(--font-size-sm); color:var(--text-accent);">(Choose up to 2)</span></p>
+      <div data-poll-max-choice="2" style="display:flex; flex-direction:column; gap:var(--spacing-md);">
+      <label class="rmr-pmt-checkbox">
+        <span class="rmr-checkbox">
+          <input type="checkbox" checked />
+          <span class="rmr-checkbox-box"><img src="../assets/icons/payments/mp-checkbox-check.svg" alt="" /></span>
+        </span>
+        Chipotle
+      </label>
+      <label class="rmr-pmt-checkbox">
+        <span class="rmr-checkbox">
+          <input type="checkbox" checked />
+          <span class="rmr-checkbox-box"><img src="../assets/icons/payments/mp-checkbox-check.svg" alt="" /></span>
+        </span>
+        Panera
+      </label>
+      <label class="rmr-pmt-checkbox">
+        <span class="rmr-checkbox">
+          <input type="checkbox" />
+          <span class="rmr-checkbox-box"><img src="../assets/icons/payments/mp-checkbox-check.svg" alt="" /></span>
+        </span>
+        Five Guys
+      </label>
+      <label class="rmr-pmt-checkbox">
+        <span class="rmr-checkbox">
+          <input type="checkbox" />
+          <span class="rmr-checkbox-box"><img src="../assets/icons/payments/mp-checkbox-check.svg" alt="" /></span>
+        </span>
+        Other
+      </label>
+      </div>
+    </div>
+    <div class="rmr-modal__footer" style="justify-content:space-between;">
+      <button type="button" class="rmr-btn rmr-btn--secondary" data-action="switch-modal" data-modal-close-current="poll-board-meeting-q5" data-modal-target="poll-board-meeting-q4">Back</button>
+      <span style="font-size:var(--font-size-sm); color:var(--text-secondary); letter-spacing:0.28px;">5/5</span>
+      <button type="button" class="rmr-btn rmr-btn--primary" data-action="switch-modal" data-modal-close-current="poll-board-meeting-q5" data-modal-target="poll-board-meeting-success">Finish</button>
+    </div>
+  </div>
+</div>
+
+<!-- Closing Poll Page (node 2015:2392) reuses the same "Make A Payment -
+     Success" component/classes as every other confirmation popup in this
+     prototype (see Architectural Requests' arq-submitted). -->
+<div class="rmr-modal-backdrop" data-modal-backdrop="poll-board-meeting-success" hidden>
+  <div class="rmr-modal rmr-modal--narrow" role="dialog" aria-modal="true" aria-labelledby="modal-poll-success-title" data-component="Closing Poll Page">
+    <button class="rmr-modal__close" type="button" data-action="close-modal">
+      <img src="../assets/icons/modal-close.svg" alt="Close" width="24" height="24" />
+    </button>
+    <div class="rmr-pmt-success">
+      <img class="rmr-pmt-success__icon" src="../assets/icons/payments/mp-check-circle-filled.svg" alt="" />
+      <div class="rmr-pmt-success__message">
+        <h2 class="rmr-pmt-success__title" id="modal-poll-success-title">Poll Submitted</h2>
+        <p class="rmr-pmt-success__body">Your responses were submitted. Thank you!</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="../assets/app.js?v=30"></script>
+</body>
+</html>

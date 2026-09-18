@@ -272,7 +272,16 @@ document.addEventListener('DOMContentLoaded', () => {
           ? scrollAncestor.getBoundingClientRect().bottom
           : window.innerHeight;
         const estimatedMenuHeight = Math.min(menu.querySelectorAll('[data-dropdown-option]').length * 40 + 2, 240);
-        const flip = trigger.getBoundingClientRect().bottom + estimatedMenuHeight > boundBottom;
+        // data-dropdown-no-flip opts a dropdown out of the flip check entirely
+        // — meant for one sitting inside a short, non-scrolling modal (like
+        // Polls' question steps) whose own overflow-y:auto is just a passive
+        // long-content safety net, not a real scroll region the menu needs to
+        // fit inside; the flip math above would otherwise measure that
+        // modal's current (pre-menu) bottom edge and almost always flip, even
+        // though the modal has plenty of headroom to grow and show the menu
+        // below the trigger.
+        const flip = !dd.hasAttribute('data-dropdown-no-flip')
+          && trigger.getBoundingClientRect().bottom + estimatedMenuHeight > boundBottom;
         dd.classList.toggle('rmr-dropdown--menu-up', flip);
       }
       menu.hidden = !willOpen;
@@ -640,6 +649,24 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       document.querySelectorAll('[data-rsv-panel]').forEach((panel) => {
         panel.hidden = panel.dataset.rsvPanel !== target;
+      });
+    });
+  });
+
+  // Architectural Requests (architectural-requests.html) — My Requests /
+  // Requests to Review tabs. Same real underline "Tabs" component/classes as
+  // Account Settings, Service Issues, and Amenity Reservations above
+  // (.rmr-acct-tab / .rmr-acct-tab--selected).
+  document.querySelectorAll('[data-action="arq-tab"]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.arqTarget;
+      document.querySelectorAll('[data-action="arq-tab"]').forEach((b) => {
+        const selected = b === btn;
+        b.classList.toggle('rmr-acct-tab--selected', selected);
+        b.setAttribute('aria-selected', String(selected));
+      });
+      document.querySelectorAll('[data-arq-panel]').forEach((panel) => {
+        panel.hidden = panel.dataset.arqPanel !== target;
       });
     });
   });
@@ -1365,6 +1392,38 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('resize', rmrScheduleTruncationTooltips);
   new MutationObserver(rmrScheduleTruncationTooltips).observe(document.body, {
     childList: true, subtree: true, attributes: true, attributeFilter: ['hidden', 'class'],
+  });
+
+  // Polls — Board Meeting's "What would you like for food?* (Choose up to
+  // 2)" question. Once `max` boxes are checked, every other unchecked box
+  // in the group is disabled (real disabled fill/label color, not just
+  // dimmed) until one is unchecked again — same real state the source frame
+  // itself shows for Five Guys/Other once Chipotle/Panera are checked.
+  document.querySelectorAll('[data-poll-max-choice]').forEach((group) => {
+    const max = parseInt(group.dataset.pollMaxChoice, 10);
+    const checkboxes = Array.from(group.querySelectorAll('input[type="checkbox"]'));
+    const update = () => {
+      const checkedCount = checkboxes.filter((c) => c.checked).length;
+      checkboxes.forEach((c) => { c.disabled = !c.checked && checkedCount >= max; });
+    };
+    checkboxes.forEach((c) => c.addEventListener('change', update));
+    update();
+  });
+
+  // Polls — Board Meeting's star rating question. Click-to-select only (no
+  // hover preview), same "final clicked value" level of fidelity as every
+  // other input in this prototype.
+  document.querySelectorAll('[data-poll-stars]').forEach((group) => {
+    const stars = Array.from(group.querySelectorAll('[data-poll-star]'));
+    stars.forEach((star, index) => {
+      star.addEventListener('click', () => {
+        stars.forEach((s, i) => {
+          s.querySelector('img').src = i <= index
+            ? '../assets/icons/polls/star-filled.svg'
+            : '../assets/icons/polls/star-outline.svg';
+        });
+      });
+    });
   });
 });
 

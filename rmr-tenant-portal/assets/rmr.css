@@ -71,6 +71,7 @@
   --component-button-accent: #5597e7;
   --component-selector: #f6fafe; /* selected-card background, e.g. Make a Payment's selector cards */
   --component-button-disabled: #82b3ed;
+  --component-input-disabled: #f1f3f5; /* same hex as --component-footer, kept as its own real token per that component's own source value */
   --component-footer: #f1f3f5; /* other-party comment bubble background, Issue Details' Messages panel */
 
   /* Typography */
@@ -1450,6 +1451,12 @@ textarea:-webkit-autofill:focus {
   outline: 2px solid var(--border-button-tertiary);
   outline-offset: 2px;
 }
+/* Disabled (e.g. Polls' "Choose up to 2" once 2 are already checked, node
+   2019:2130's own Five Guys/Other example) — its own real fill + label
+   color, not just a dimmed/opacity version of the default unchecked box. */
+.rmr-checkbox input:disabled { cursor: not-allowed; }
+.rmr-checkbox input:disabled + .rmr-checkbox-box { background: var(--component-input-disabled); }
+.rmr-pmt-checkbox:has(input:disabled) { color: var(--icon-disabled); cursor: not-allowed; }
 
 .rmr-pmt-form-row { display: flex; gap: var(--spacing-md); width: 100%; }
 .rmr-pmt-form-row > * { flex: 1; min-width: 0; }
@@ -3270,6 +3277,15 @@ body[data-screen="document-sign"] .rmr-settings-page--fit { padding-bottom: 0; }
 
 @media (max-width: 1024px) {
   .rmr-comm-layout { flex-direction: column; }
+  /* .rmr-comm-layout's own align-items: flex-start is cross-axis (height)
+     while flex-direction is row, so .rmr-comm-main/.rmr-comm-sidebar rely on
+     explicit height:100% instead of stretch above. Once this media query
+     flips the layout to column, that same align-items: flex-start now
+     governs the cross axis, which has become width — without an explicit
+     width here both items would shrink to their own content's width instead
+     of filling the stacked column, same reasoning as the explicit height on
+     the row-mode rule above. */
+  .rmr-comm-main { width: 100%; }
   .rmr-comm-sidebar { width: 100%; }
 }
 
@@ -3673,3 +3689,111 @@ body[data-screen="document-sign"] .rmr-settings-page--fit { padding-bottom: 0; }
   .rmr-rsv-form, .rmr-rsv-side { width: 100%; }
   .rmr-rsv-side { height: 400px; }
 }
+
+/* ---------- Architectural Requests page (architectural-requests.html, Full
+   Product track) ----------
+   Sourced from file AsaQeq0Rbv6ubeIhdpYDiW ("RMR UI Rewrite - Architectural
+   Requests"), Section 4 (node 2218:4516). The register ("2.2 My Requests" /
+   "3.2 Requests to Review", node 2020:1078 / 2025:2184) reuses
+   .rmr-pay-hero/.rmr-pay-section (hero + address), .rmr-comm-layout/-card
+   (register card + "Request Guidelines" sidebar — same 1140px-content +
+   428px-sidebar proportions as the source), .rmr-pay-table (both tabs'
+   columns), .rmr-acct-tabs (My Requests / Requests to Review), .rmr-msg-banner
+   (guideline banner) and .rmr-rsv-lozenge (Status column fills) wholesale —
+   no new register-level classes needed. The Request Details overlay ("2.3",
+   node 2020:1267) reuses Service Issues' own .rmr-svc-details-modal /
+   .rmr-svc-details / .rmr-svc-comments* wholesale (confirmed to be the same
+   real two-way-Messages anatomy), per direct instruction that these overlays
+   should look like Service Issues'. Only the Requests to Review tab's info
+   banner and the Vote Details panel's header row below are genuinely new.
+   See PROTOTYPE.md for full sourcing + the two rows' status-mismatch fix. */
+
+.rmr-arq-info-banner {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  width: 100%;
+  padding: var(--spacing-xs);
+  background: var(--background-primary);
+  border: 1px solid var(--border-button-tertiary);
+  border-radius: var(--spacing-xs);
+  box-shadow: var(--dropshadow-around);
+  flex-shrink: 0;
+}
+.rmr-arq-info-banner__icon { width: 24px; height: 24px; flex-shrink: 0; }
+.rmr-arq-info-banner__body { flex: 1; min-width: 0; margin: 0; font-size: var(--font-size-sm); color: var(--text-secondary); letter-spacing: 0.28px; }
+
+/* Status column fill (register): Confirmed/green, Pending/yellow, and
+   Denied/red already exist as .rmr-rsv-lozenge modifiers — In Board Review
+   is this page's own 4th real color (Component/Blue/200, node 2120:13575). */
+.rmr-rsv-lozenge--blue { background: var(--color-blue-200); }
+
+.rmr-arq-guide-link { display: flex; gap: var(--spacing-md); align-items: center; }
+.rmr-arq-guide-link__icon { width: 20px; height: 20px; flex-shrink: 0; }
+.rmr-arq-guide-link__title { margin: 0; font-weight: var(--font-weight-bold); font-size: var(--font-size-sm); color: var(--text-secondary); }
+.rmr-arq-guide-link__desc { margin: 0; font-size: var(--font-size-sm); color: var(--text-secondary); letter-spacing: 0.28px; }
+
+/* Vote Details panel (Requests to Review's own Request Details overlay,
+   "3.3", node 2026:7517) — the outer card reuses .rmr-svc-comments__panel
+   wholesale (same bordered/tinted anatomy as the Messages panel it stands in
+   for); only this header row (title + Approve/Deny) is new. The Name/Vote/
+   Notes table below is a plain .rmr-pay-table — the same real "cell"
+   component the main register uses. */
+.rmr-arq-vote__header { display: flex; align-items: center; justify-content: space-between; width: 100%; flex-shrink: 0; }
+
+/* My Requests / Requests to Review tab panels — same [hidden]-must-win
+   pattern as [data-svc-panel] (Service Issues): the panel's own display:flex
+   is declared here, with an explicit [hidden] override, rather than inline
+   on each panel, since an inline display would otherwise beat the browser's
+   default [hidden] { display:none } UA rule at equal specificity. */
+[data-arq-panel] { display: flex; flex-direction: column; gap: var(--spacing-md); flex: 1; min-height: 0; }
+[data-arq-panel][hidden] { display: none; }
+
+/* Add Request overlay ("2.5 Submit Request - Custom Form," node 2026:7271) —
+   622px, its own real instance width (echoed by .rmr-modal--resdetails
+   elsewhere, which happens to share the same figure for an unrelated flow). */
+.rmr-modal--arq { width: 622px; }
+
+/* Both Request Details overlays ("2.3" node 2020:1267 / "3.3" node
+   2026:7517) are their own real 1128x532 instance — taller than Service
+   Issues' own same-width Issue Details modal, which stays auto-height.
+   Scoped to .rmr-svc-details-modal--arq (not the shared .rmr-svc-details-modal
+   base) so Service Issues' own modal keeps its existing auto-height behavior.
+   .rmr-svc-details needs its own flex:1/min-height:0 here so the Messages/
+   Vote Details column's already-real align-self:stretch has a fixed-height
+   parent to stretch against, instead of just wrapping to content height. */
+.rmr-svc-details-modal--arq { height: 532px; }
+
+/* Polls — Take a Poll wizard (node 2019:1877 onward, "RMR-UI-Rewrite —
+   Polls/Surveys" file). Every step reuses the generic .rmr-modal--wide shell,
+   .rmr-svc-choice (Yes/No), .rmr-dropdown (biggest issues), .rmr-modal__field/
+   __textarea (Anything else?), and .rmr-checkbox (food multi-select) wholesale
+   — only the star rating is a genuinely new control, since no star icon or
+   rating pattern existed anywhere else in this prototype. Stars are their own
+   real 96x96 image fills (node 2019:2652 / 2019:2656 exported fresh from
+   Figma) rather than a smaller invented size, per the source frame. */
+.rmr-poll-stars { display: flex; gap: var(--spacing-xs); }
+.rmr-poll-star { background: none; border: none; padding: 0; cursor: pointer; width: 96px; height: 96px; flex-shrink: 0; }
+.rmr-poll-star img { display: block; width: 100%; height: 100%; }
+
+/* Register/banner cap at 1140px (this page's own real Figma
+   instance width for both) on wide screens, but stay full-width below that
+   so they never force horizontal scroll or leave dead space on a narrower
+   one. Scoped to this page since .rmr-msg-banner/.rmr-comm-layout are
+   shared width:100% classes used at their parent's own natural width
+   everywhere else — the Header Image/hero deliberately stays un-capped
+   here, matching its own wider (1592px) real instance. */
+body[data-screen="polls"] .rmr-msg-banner--compact,
+body[data-screen="polls"] .rmr-comm-layout {
+  max-width: 1140px;
+}
+
+/* A [data-dropdown-no-flip] dropdown (see app.js) is told to always open
+   downward rather than flip — but .rmr-modal's own overflow-y: auto still
+   clips the open menu at the modal's current (pre-menu) bottom edge, same
+   as it would clip any other overflowing content, since an absolutely
+   positioned menu doesn't push the modal's own box taller. Switching to
+   overflow: visible only while that menu is open lets the short modal show
+   it in full instead of requiring an internal scroll to see the rest. */
+.rmr-modal:has(.rmr-dropdown--open[data-dropdown-no-flip]) { overflow: visible; }
+.rmr-svc-details-modal--arq .rmr-svc-details { flex: 1; min-height: 0; }
