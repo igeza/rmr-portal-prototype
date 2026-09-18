@@ -2,7 +2,13 @@
 
 Presentation-only click-through built to the structure in the `rmr-prototyping` skill, so it can become a real dev-handoff starting point later without a rebuild.
 
-## Scope — deliberate deviation from the source mocks
+## Two separate tracks: MVP and Full Product
+
+`index.html` (the launcher) splits into two independent click-throughs that don't link into each
+other: **MVP** (`screens/dashboard.html` onward) and **Full Product** (`screens/community.html`
+onward). They're deliberately not one combined nav — see each track's own scope note below.
+
+## MVP — scope — deliberate deviation from the source mocks
 
 **The sidebar only ever shows 4 tabs, in this order: Dashboard, Charges & Payments, Service
 Issues, and Document Center.** (Labeled "Charges & Payments" to match the real nav component's
@@ -10,9 +16,11 @@ text in Figma — an earlier pass used "Payments & Charges" instead, since corre
 nav label, page `<title>`, hero title, and the launcher `index.html`.) This is a standing decision for this prototype, not something derived from
 any single Figma frame — real Tenant-menu mocks (like the Dashboard frame below) include more
 items (Architectural Requests, Meter Readings, Community, Reservations, Notes, Polls,
-Violations). Those are out of scope here on purpose and will be covered in a separate prototype
-later. When adding a new screen from a Figma mock that shows the full menu, trim its nav down to
-these same 4 items rather than reproducing every item the mock shows.
+Violations). Those are out of scope here on purpose — Community in particular now has its own real
+page, but it lives on the separate Full Product track (see below), not merged into MVP's nav; an
+earlier pass did add it as MVP's 5th tab, then removed it once told these are two separate
+branches. When adding a new MVP screen from a Figma mock that shows the full menu, trim its nav
+down to these same 4 items rather than reproducing every item the mock shows.
 
 **Sidebar icons use `fill="currentColor"`, inlined as `<svg>` (not `<img src>`).** In the real
 design system, the RMP Icon component's fill is bound to its `Color` variant, so the same glyph
@@ -21,6 +29,39 @@ both. Since a referenced `<img>` can't be recolored via CSS, the 4 sidebar icons
 `fill="currentColor"` so they inherit `.rmr-menu__link`'s `color` (`text-secondary` by default,
 `text-blue` when `.rmr-menu__item--active`) automatically — the icon always matches its label.
 Apply the same pattern to any new sidebar item's icon.
+
+## Full Product — scope
+
+**Full Product has three pages so far: `screens/community.html`, `screens/fp-account.html`, and `screens/reservations.html`.**
+Nothing on this track links to an MVP screen, and nothing on MVP links back — a first pass wired
+the Directory Overlay's gear icon straight to MVP's own `account.html#settings`, which worked but
+broke the "keep it separate from MVP" rule; corrected, per direct instruction, by forking a real
+`fp-account.html`/`fp-verification-sent.html` pair onto this track instead (see below) and
+repointing everything at those.
+
+**`fp-account.html` and `fp-verification-sent.html` are full duplicates of MVP's
+`account.html`/`verification-sent.html`** (same content: Details/Contacts/Settings/Linked Accounts
+tabs, all 6 modals, same Samantha Carpenter data), not new sourcing — Account isn't its own Figma
+mock, it's the same persona's same real account data either way, so duplicating the already-built
+markup onto this track (rather than re-fetching from Figma) is the correct "reuse existing
+components" call here, per the project's own rule. Two things changed from the MVP originals:
+- **Chrome only.** `fp-account.html`'s sidebar shows Full Product's own single "Community" item
+  (not MVP's 4 tabs) — same as MVP's own `account.html`, which shows its 4 tabs but none marked
+  `--active`, since Account has never been a sidebar item in any source mock on either track; it's
+  only ever reached via the header's "View Account". Its own header account-menu points "View
+  Account" at itself (`fp-account.html`) and leaves "Payment Settings" as fake-submit (not asked
+  for on this track). The Change Username modal's "Send Verification Email" button points at
+  `fp-verification-sent.html`, not MVP's `verification-sent.html`.
+- Everything else — every field, tab, and modal's real content — is untouched.
+
+`community.html`'s own header account-menu now points "View Account" at `fp-account.html` (still
+real navigation, not fake-submit); "Payment Settings" stays fake-submit since no Full Product
+Payment Settings page exists yet. The Directory Overlay's gear icon (`.rmr-comm-iconbtn`) now links
+to `fp-account.html#settings` (Full Product's own Settings tab), same `#settings`-hash deep-link
+mechanism (`acctTabFromHash()` in `app.js`, shared by both tracks) as before.
+
+As more Full Product pages get built, grow `fp-account.html` and `community.html`'s shared nav to
+match (and cross-link between pages within this track), but keep not pointing at MVP's own screens.
 
 ## Source
 
@@ -89,6 +130,164 @@ Apply the same pattern to any new sidebar item's icon.
 | `screens/document-center.html` | Real — Documents to Sign + Leases & Documents registers, from file `Sip0wuWPnMa5duL1L39HDn`, node `2786:46043`. See "Document Center" below. Replaces the old `lease-account.html` placeholder (deleted — its remaining unbuilt scope was "Messages", not Documents; Account is already covered by `account.html`). Now also has the Renewal Available banner + full renewal-review flow — see "Lease Renewal flow" below. |
 | `screens/document-sign.html` | Real — new page, "Sign Document - Lease renewal" (node 3011:22250) + the "3.2.1.x" document-signature wizard, same file. See "Lease Renewal flow" below. |
 | "Messages" | Not started. Needs a Figma link to the real Messages frame(s). No placeholder screen exists for it (the old combined `lease-account.html` stub was removed now that Documents has its own real screen). |
+
+### Full Product track
+
+| Screen | Status |
+|---|---|
+| `screens/community.html` | Real — Calendar + Directory/Helpful Resources cards, from file `dpx2KD3Fwy8Pf5GmhAfOto`, node `2183:15817`. Opens the real Directory Overlay, Helpful Resources Overlay, and Event Details overlays. First page on the Full Product track — see "Community page" below. |
+| `screens/fp-account.html` | Real — a Full Product-owned duplicate of MVP's `account.html` (own chrome only, same real Details/Contacts/Settings/Linked Accounts content). Reached via `community.html`'s "View Account" and the Directory Overlay's gear icon. See "Full Product — scope" above. |
+| `screens/fp-verification-sent.html` | Real — duplicate of MVP's `verification-sent.html`, reached from `fp-account.html`'s Change Username modal. |
+| `screens/reservations.html` | Real — Month/Week/Day calendar + "My Reservations" (Upcoming/Past Requests), from file `NA7fceoWIE1dczLAJjYjSC`, node `2001:2844`. Opens the real New Reservation (payment-required) wizard and both Reservation Details states (Pending/Denied). Second page on the Full Product track — see "Amenity Reservations page" below. |
+
+## Amenity Reservations page
+
+Sourced from a fourth Figma file (`NA7fceoWIE1dczLAJjYjSC`, "RMR UI Rewrite — Amenity Reservations"), section "V1" (node `1:94`). Per direct instruction: build the 3 calendar views (Month/Week/Day, same pattern as Community's own Month/Week/Day), all the overlays, the **payment-required** New Reservation flow specifically (not the sibling "payment not required" / "no fee" variants also on the same board), and add some Past Requests content to the "My Reservations" sidebar's second tab.
+
+**Sidebar: joins Community as this track's second real nav item.** This mock's own nav shows the full Tenant menu with "Reservations" highlighted — same situation as Community's own sourcing. Per the already-established Full Product convention (see "Full Product — scope" above, "grow `fp-account.html` and `community.html`'s shared nav to match" as more pages are added), `community.html` and `fp-account.html` both gained a second "Reservations" item, and this page's own nav shows both "Community" and "Reservations" (itself active) — still its own track, never pointing at MVP. The nav icon (`event_available`, 16×16, node `12:566`'s icon export, matching the existing `assets/icons/nav-event-available.svg`) is inlined with `fill="currentColor"`, same pattern as every other sidebar icon in this app.
+
+**Main page** (node `2001:2844`, "2.0.3 Amenity Reservations"): a 376px-wide "My Reservations" card (Add New button, real Upcoming/Past Requests Tabs component, a short list of `Reservation:` items with a colored icon circle + title + date + status Lozenge + kebab) beside the Month calendar, reusing Community's own `.rmr-comm-layout`/`.rmr-comm-card`/`.rmr-comm-cal__grid` etc. structural classes wholesale (those are layout-only, not page-specific) — only the reservation pill itself needed a new `.rmr-rsv-event` component, since this page's own pills color their *entire* border (0.5px top/bottom/right + 2px left, all one color) rather than Community's own left-edge-only accent. Every cell's color/text-muting was reproduced literally cell-by-cell from the real node data (this page's own source was internally consistent, so — unlike Community's own cross-checked inconsistencies — no normalization was needed here).
+
+**Week/Day calendar views** (nodes `2036:3290` / `2046:3704`) use the same flexbox-hour-cell simplification as Community's own Week/Day views (real hour range 11 AM–8 PM, one flex column per day) rather than the source's own absolute per-event pixel offsets — same precedent, same reasoning.
+
+**Only one calendar event across the whole page opens a real overlay**: the Month view's Oct 24 "Theater Room" pill (green/`--status-success`, the only `<button>` among the sourced reservation instances) opens the real Pending Reservation Details. Every other calendar pill — including the Week/Day views' own Wed-17 "Clubhouse Room 1" instances, which the source itself marks as an `<a>` — is fake-submit, since no sourced Reservation Details content exists for anything but the Theater Room (Pending) and a second, unrelated Theater Room (Denied) reservation. Same "only one sourced example is wired, everything else fake-submits" precedent as Community's own Oct 15 Doggie Hangout.
+
+**Reservation Details — two real states**, both full overlays (not a single overlay with swapped content), matching the two separate sourced frames exactly:
+- **Pending** (node `2027:2947`, "2.0.6 Reservation Details"): Theater Room, 10/24/25, 7–8 PM, `$15.00` + "View Fee Breakdown", an Amenity Images photo, Notes ("Party of 15"), one attachment (`reservation_form.docx`), and a real "Cancel Reservation" footer button. Reachable from the sidebar's "Theater Room" (Pending) item and from the Month view's Oct 24 pill.
+- **Denied** (node `2059:459901`, "2.0.7 Reservation Details"): Theater Room, 10/13/25, 7–8 PM, a real "Reason" field ("The clubhouse is getting painted and is no longer available during this time."), no Amenity Images, a much longer Notes paragraph, the same attachment, and **no footer button** (a resolved/read-only state — confirmed by re-checking the node directly, not assumed). Both use the real dot-style "Status Lozenge" component (`.rmr-rsv-status`, node `12:1278` in the design-system file — Yellow dot `#F5B619` for Pending, Red dot `--status-error` for Denied), distinct from the sidebar's own filled-background "Lozenge" badges (`.rmr-rsv-lozenge`).
+
+**Past Requests tab — one sourced item, one invented.** Per direct instruction to "add some Past requests," and since the Denied Theater Room reservation above (10/13/25) is real, sourced content that never appears anywhere in the Upcoming list or calendar, it was used as-is for the tab's first entry — genuinely sourced, not invented, just relocated to the tab it actually belongs in. A second entry ("Clubhouse Room 1", Fri Sep 26, a gray "Completed" Lozenge) was invented to make the tab read as more than one item, per instruction; it's fake-submit only, since no sourced "Completed" detail view exists to open. The gray Lozenge fill (`--color-neutrals-400: #dbe1e5`) and the red one (`--color-red-200: #f7d7d7`) both came from the real "Lozenge" component's Gray/Red `fill=yes` variants (design-system file, node `482:944` / `482:948`) — not picked arbitrarily.
+
+**New Reservation overlay — payment-required chain only** (3.0.2 → 3.0.3 → 3.0.4), per direct instruction; the sibling "payment not required" and "no fee" frames on the same board (3.0.5–3.0.8) weren't built:
+- **Step 1** (node `2008:2968`, "3.0.2 New Reservation Overlay - payment", 928×770 — taller than the source's own 684px so its content fits without an internal scroll in the common case, same "fixed but generous" sizing as `.rmr-modal--payment`/`--autopay`): Select Amenity (single-option dropdown, "Theater Room"), description, Total Reservation Fee + "View All Fees", an Amenity Images photo, a Date field, Notes, the real Attachments dropzone (reuses Service Issues' `.rmr-svc-attach` wholesale — exact same "Choose a file or drag it here." component), and a real side-panel day-schedule preview. The Terms checkbox sits inline with the Continue button in the pinned footer (rather than as its own row above it, which is where the source frame puts it) — a deliberate one-off placement per direct instruction, not a cross-page pattern change.
+
+  **Start Time / End Time and the day-schedule block are the same data, shown twice — per direct instruction, not a static preview.** The side panel is real, sourced content (node `2008:3115`), but per instruction it's now a genuinely interactive day-schedule: the block matching the reservation being created (`.rmr-rsv-side__slot--current`) is drag-to-move (grab the body) and drag-to-resize from **either** edge (`.rmr-rsv-side__resize--top` stretches the start time earlier/later while the end stays put; `--bottom` does the same for the end time), snapping to 15-minute increments, and all three gestures write straight into the Start Time / End Time fields (now plain display fields, `[data-rsv-field]`, not fake dropdowns — there's nothing left for them to independently offer once the calendar block is the source of truth). Implemented in `app.js` (`[data-rsv-current]` block, Pointer Events so it works with touch too).
+
+  Both blocks share one visual family — thin border, a thicker colored left edge, per direct instruction "just like on the regular calendar" (reusing the main calendar's own `.rmr-rsv-event` anatomy) — rather than the current-reservation block getting a different border shape. What distinguishes them is fill and color, both amenity-driven via two custom properties on `.rmr-rsv-side` (`--rsv-amenity-color`/`--rsv-amenity-tint`, currently Theater Room's green, so a future multi-amenity Select Amenity only has to update those two values): the OTHER block ("11:00 AM - 2:15 PM," reserved by someone else) stays white-filled and read-only; the current-reservation block gets the amenity's own light tint fill instead of white, so it reads as "yours" while still belonging to the same pill family — cursor:grab and the two resize handles are the only cues marking it as the movable one.
+
+  The hour range was widened from the source's own 12 PM–5 PM glimpse to 11 AM–9 PM (matching this app's existing Week/Day-view range) specifically so the grid needs its own internal scroll rather than always showing every hour at once, per instruction — a deliberate extrapolation past what the source frame itself shows, not a sourcing claim. The grid's own background was dropped (was `--background-primary` white; now transparent, so the gray `.rmr-rsv-side` shows through behind the hour rows — only the event blocks themselves are white/tinted) and the panel's own height is fixed (558px desktop) to land its bottom edge exactly on the left column's Attachments zone, rather than stretching to match whichever column is taller.
+
+  **Bug caught in testing**: the base `.rmr-rsv-side__slot` rule carried `overflow: hidden` (originally added just to truncate long labels), which silently clipped the two resize handles' hit-testing along with their paint — both extend a few px past the slot's own box on purpose (`top:-6px`/`bottom:-6px`) so they stay easy to grab, but a clipped-away area receives no pointer events in any browser, so drags aimed at either handle were being caught by the slot's own move-handler instead (confirmed by instrumenting `pointerdown` and watching `e.target` resolve to the slot, never the handle, until this was fixed). Changed to `overflow: visible` on the slot, with `text-overflow: ellipsis` moved onto the label/booked-block text directly so truncation still works.
+
+**Scroll architecture correction**: this step originally combined `.rmr-modal__body` and a custom `.rmr-rsv-content` class on the same element, which (per the CSS-cascades-per-property bug documented below) silently kept `.rmr-modal__body`'s own `flex-direction: column`, stacking the form and side panel instead of placing them side by side. Fixed by dropping `.rmr-modal__body` entirely and reusing Make a Payment's own `.rmr-pmt-body`/`.rmr-pmt-body--split` + `.rmr-pmt-main--pinned-footer` + `.rmr-pmt-scroll` scroll architecture verbatim, per direct instruction ("this should be similar to how payments overlays are in the MVP"): the outer overlay itself never scrolls, the gray side panel is a plain stretched sibling that never scrolls with the page, and only the left form's own `.rmr-pmt-scroll` region scrolls internally, as a last resort on short viewports.
+- **Step 2** (node `2001:3139`, "3.0.3 New Reservation - payment required", 928×572): "Your Payment Method." The source frame itself shows a 2-option radio choice (Visa / New Payment Method), and an earlier pass built it that way — corrected, per direct instruction, to match Make a Payment's own single-method-row pattern instead, since "a tenant only ever has one payment method on file" is a standing rule for this prototype (see the Make a Payment overlay section below), not something this one frame should re-litigate just because its own mock happened to show two options. Now reuses `.rmr-ap-method-row`/`.rmr-pmt-new-form` verbatim — the exact same edit-in-place pencil pattern, and the same real Samantha Carpenter billing data — as Make a Payment's own `pay-method` step. The summary sidebar (Amount Due/Platform Fee/Total Due) and footer (Back / Zego Privacy Policy / Submit) reuse the Make a Payment flow's own `.rmr-pmt-summary`/`.rmr-pmt-field`/`.rmr-pmt-footer` classes and `.rmr-pmt-main--pinned-footer`/`.rmr-pmt-scroll` scroll architecture verbatim.
+- **Step 3** (node `2001:3222`, "3.0.4 New Reservation Submitted"): reuses `.rmr-modal--narrow` + `.rmr-pmt-success` verbatim (the same "any future confirmation-style popup reuses this rather than a bespoke size" standing rule used for Document Signed Successfully), even though this frame's own footprint (401×456) differs slightly — Amenity/Date/Time/Reservation Fee rows, using this frame's own numbers (Theater Room, 10/15/25, 5–6 PM, `$15.00`) as-is rather than reconciling them with Step 1's own 2:30–3:30 PM selection, matching the established "don't force-merge data across independently-authored frames" precedent.
+
+**Settings page out of scope.** The board's own `4.0.2 Amenity Reservation Settings` frame (node `2346:10808`) is a property-manager-side admin config screen (RMX design system, "Rent Manager" chrome) for enabling/customizing this tenant page — a different persona and a different design system entirely, not part of the tenant-facing rmResident Portal this prototype builds. Not built, and not a gap in this track's own scope.
+
+**New assets.** `assets/icons/reservations/` (calendar-month, more-vert, calendar-today, file-download at its real 32×32 size) were exported fresh from this file's own nodes since no existing icon matched exactly; `assets/icons/community/cal-arrow-left.svg`/`cal-arrow-right.svg`, `assets/icons/documents/keyboard-arrow-right.svg`, `assets/icons/payments/{mp-close,mp-credit-card,mp-info-outline,mp-check-circle-filled,mp-checkbox-check,campaign}.svg`, and `assets/icons/service-issues/file-paper.svg` were all reused as exact matches (same glyph, same native size). `assets/images/reservations/hero.png` (the Context Bar photo) and `room-1.png`/`room-2.png` (the Amenity Images thumbnails) are this file's own real image fills, exported directly.
+
+**Two bugs caught in testing, both fixed by re-checking the actual rendered DOM:**
+- An accidental `*/` inside a CSS comment (the phrase "`__gutter*/__daycol*`", meant as a glob-style list) closed the comment early, silently dropping the entire `.rmr-rsv-event` base rule (every reservation pill rendered with default `<button>`/`<div>` styling — no color, `white-space: normal` instead of `nowrap` — until caught by inspecting `document.styleSheets` directly and finding the rule missing).
+- `.rmr-rsv-content` (combined on the same element as `.rmr-modal__body`) inherited `.rmr-modal__body`'s own `flex-direction: column` since it never declared `flex-direction` itself — CSS cascades per-property, not per-class, so adding a second class doesn't reset properties the first class already set. The New Reservation form and its side panel stacked vertically instead of sitting side-by-side until `flex-direction: row` was added explicitly. `.rmr-btn--text` alone (without the also-required `.rmr-btn--link` modifier) renders white-on-white by design-system convention — "View All Fees" and "View Fee Breakdown" were invisible for the same reason until `.rmr-btn--link` was added.
+
+## Community page
+
+Sourced from a different Figma file than the rest of this prototype — `dpx2KD3Fwy8Pf5GmhAfOto`
+("RMR Rewrite — Community Calendar and Directory Page Combined"), section `2183:15816` — which has
+several sibling frames (Calendar-only, Directory-only, both combined at various feature counts, an
+Account Settings variant). Per direct instruction, the built frame is **"3.1.1 Community Page - All
+Features Enabled"** (node `2183:15817`): a full Calendar (main column) plus stacked Directory and
+Helpful Resources cards (sidebar), each of which opens its own full-page overlay. Three overlays
+from the same section were also built, per direct instruction: **Directory Overlay** (`2183:21942`),
+**Helpful Resources Overlay** (`2428:97166`), and **Event Details** (`2183:15939`). The Calendar's
+own **Week View** (`2183:16063`, "3.1.3 ... Both - Week View") and **Day View** (`2183:16237`,
+"3.1.4 ... Both - Day View") were added later, real and switchable via the "View" dropdown — see
+below. Not built: Event Details' own sibling frames for the Calendar/Directory-only variants, the
+Account Settings variant, and the Open Folder overlay — none of those were asked for.
+
+**Week/Day calendar views.** Both are real time-grids (an hour-label gutter + one flex column per
+day), not the source's own per-event absolute-pixel positions — every event still sits in its real
+hour cell, just laid out with flexbox instead of reproducing exact px offsets (a deliberate
+simplification, same spirit as the Month view's own normalized cell-color rule above). The visible
+hour range, **11 AM–8 PM**, is the union of what the two sourced frames each actually show (Week's
+own frame starts at 12 PM; Day's own frame starts at 11 AM) — every hour label is real and sourced,
+just merged across both frames' coverage rather than picked or invented. Skipped: the Week view's
+own per-cell "early hours of Thursday are grayed out" detail (`--component-input-disabled`) — a
+per-column quirk with no clear rule tying it to anything else on the page (Monday, not Thursday, is
+the highlighted/"selected" day), so it reads as another source inconsistency rather than meaningful
+content, and was left out rather than reproduced literally.
+
+**The "View" control is the real RMR Dropdown component** (`.rmr-dropdown`/`.rmr-dropdown__trigger`/
+`.rmr-dropdown__menu`/`.rmr-dropdown__option`, same file `W4wEUn8A4hkTdiAgEV8wSK` node `12:1560` as
+every other custom dropdown in this prototype) — it was originally built as a plain single-option
+`<select>` (a shortcut used elsewhere in this app when a field only ever shows one value), but the
+source frame's own "View" field is the same real Input-Field-with-trailing-chevron component used
+for the Property/Search fields already rebuilt as `.rmr-dropdown` elsewhere, and this one has 3 real
+values (not 1), so it needed the real component. Selecting an option both updates the dropdown's own
+selected/value state (generic `[data-dropdown]` behavior, shared by every dropdown in the app) and
+switches the visible calendar panel + nav-row date label (new `[data-comm-view-select]` handler in
+`app.js`, scoped to just this one dropdown). Only Month's Oct 15 "Doggie Hangout" opens the real
+Event Details modal in every view (Week included) — every other event stays fake-submit, same
+scope as Month view.
+
+**Sidebar: just the one tab, on its own track.** This mock's own nav shows the full Tenant menu
+(Dashboard, Charges & Payments, Maintenance Requests, Architectural Requests, Meter Readings,
+Community, Reservations, Document Center, Notes, Violations). An earlier pass added "Community" as
+MVP's 5th tab (inserted between Service Issues and Document Center, matching the full menu's own
+relative order) and linked its header account menu out to MVP's Account/Payment Settings pages —
+since corrected, per direct instruction, to treat Full Product as its own separate track from MVP
+rather than merging into it (see "Full Product — scope" above): `community.html`'s sidebar now
+shows only its own "Community" item, and its account menu is fake-submit rather than pointing at
+MVP screens. The nav icon (`Groups`, 16×16, path from node `12:566`'s icon export) is inlined with
+`fill="currentColor"`, same pattern as MVP's own sidebar icons.
+
+**Calendar's per-cell background/text-color styling was normalized, not reproduced literally.**
+Re-checking node `2183:15817` cell-by-cell (via `get_design_context`) found the source itself isn't
+internally consistent — e.g. Oct 30 (row 6) has a gray `background/secondary` fill but *primary*
+(dark) day-number text, while Oct 31 right next to it has the same gray fill but *accent* (muted)
+text; Nov 2 (next month) renders with primary/dark text like an in-month day, while Nov 1 and Nov 3
+either side of it don't. Rather than encode every individual cell's own quirk, this build uses one
+coherent 3-zone rule that matches the overwhelming majority of real cells and reads correctly at a
+glance: **rows 1–2 (the two weeks before Oct 14) → `--background-secondary` + muted `--text-accent`
+numbers; Oct 14–31 → `--background-primary` + `--text-primary` numbers; the trailing Nov 1–3 →
+`--background-primary` + muted `--text-accent` numbers.** Oct 15 is further highlighted
+(`--component-selector` fill + `--border-button-tertiary` border) since it's the one date with a
+real, sourced Event Details popup wired to it.
+
+**Reservation-pill colors don't fully match the calendar's own legend.** The legend shows exactly 3
+entries (Community Events → `--status-success` green, Movie Night → `--color-red-400`, Board
+Meeting → `--color-blue-500` `#2a7de1`) but the calendar body actually uses **4** distinct border
+colors: green and red match their legend entries, but Oct 20's second event ("Community ", 7:30 PM)
+uses `--border-button-tertiary` (`#1a64bc`) — a different, if visually similar, blue than the
+legend's own `--color-blue-500` swatch — and Oct 29's "Halloween Contest" uses a 4th color,
+`--status-error` (`#ed4b52`, newly added to `:root`), which isn't in the legend at all. Both are
+real values pulled directly from their own reservation nodes, kept as-is rather than force-matched
+to the legend's 3 swatches. The "Community " event label's own trailing space and truncated wording
+are also exactly what the source layer contains, not a display artifact.
+
+**Directory card/overlay: a real duplicate row in the source data.** The Directory card's own
+contact list (and the Directory Overlay's Name column) both end with two back-to-back "Noah Brown"
+entries with identical phone/email/address — re-checked directly against the node, not an extraction
+error. Kept as two rows, matching the "don't silently fix apparent source mistakes" precedent used
+elsewhere in this file (e.g. the Payment Methods "Caprenter" typo).
+
+**Helpful Resources card: 3 trailing contact-shaped nodes excluded as a source authoring artifact.**
+Node `2395:7625` (the sidebar card's own scrollable content) ends with "Emma Johnson" / "Noah Brown"
+/ "Emma White" sub-nodes — same names, addresses, and `Reservation Container`/`Name Container`
+layer-naming pattern as the Directory card's own contact rows a few nodes over, and always outside
+that card's own `overflow-clip` viewport (so never actually visible in the mock's own screenshot).
+Read as a copy/paste bleed-through from the Directory card during Figma authoring, not real Helpful
+Resources content, so they were left out of both the card and its overlay rather than reproduced as
+phantom "resources." The 5 real items (HOA Files folder + its 3 files, Rules and Regulations,
+Riverview Property Map, Payment Options, Leasing Office Hours) are built in full.
+
+**Helpful Resources Overlay's tree reuses Document Center's `.rmr-doc-tree` component wholesale**
+(toggle button, 90°-rotating `keyboard-arrow-right.svg` chevron, indent spacer, cascading JS
+collapse/expand) for the HOA Files folder, rather than sourcing new up/down chevron assets and a
+second toggle behavior for what both source frames show as the same underlying idea (a
+collapsible file group) — the one deliberate reuse-over-re-source call on this page, per the
+"reuse existing components" project rule. The "Safe & Secure Storage" property tab is real, sourced
+markup but not wired to different content (matches the existing single-real-option precedent used
+for every other one-choice control in this prototype — e.g. Payment Method/Country selects).
+
+**Assets.** New icons in `assets/icons/community/` (call, email, open-in-new, pdf/file, the three
+calendar chevrons) were exported fresh from this file's own nodes — none of the existing
+`assets/icons/documents/` or `assets/icons/payments/` icons were an exact visual match, though
+`print.svg`, `file-download.svg`, `folder.svg`, `search.svg`, `setting.svg`, and `mp-close.svg` (all
+already shared across screens) were reused as-is since they are exact matches. The hero photo
+(`assets/images/community/hero.png`) is this file's own Banner Image fill, exported directly (same
+"real photo behind a `--background-element` scrim" hero pattern already used everywhere else).
 
 ## Lease Renewal flow
 

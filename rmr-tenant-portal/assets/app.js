@@ -126,19 +126,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Fake "Make a Payment" / "Start" / "Sign" actions with a toast instead of a
-  // real transaction or document flow — there is no backend behind this
-  // prototype. Delegated on document (rather than bound per-element) so it
-  // also covers fake-submit triggers inside content added later via
-  // innerHTML — e.g. the Issue Details modal, built per-issue by app.js.
+  // Fake "Make a Payment" / "Start" / "Sign" actions do nothing beyond
+  // preventing navigation — there is no backend behind this prototype, and
+  // an unwired click shouldn't have side effects like dismissing whatever
+  // overlay it happens to be inside. Delegated on document (rather than
+  // bound per-element) so it also covers fake-submit triggers inside content
+  // added later via innerHTML — e.g. the Issue Details modal, built per-issue
+  // by app.js. Flows that really do need to close (and confirm) after a fake
+  // action get their own dedicated data-action/handler instead, e.g.
+  // decline-all-submit below.
   document.addEventListener('click', (e) => {
     const el = e.target.closest('[data-action="fake-submit"]');
     if (!el) return;
     e.preventDefault();
     const menu = el.closest('.rmr-account-menu');
     if (menu) closeAccountMenu();
-    const modalBackdrop = el.closest('[data-modal-backdrop]');
-    if (modalBackdrop) closeModal(modalBackdrop);
   });
 
   // Overlays (Lease Track, Flex, Contact Us, Cash Pay, Email Property Manager)
@@ -289,6 +291,25 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('[data-dropdown].rmr-dropdown--open').forEach((dd) => {
       dd.querySelector('[data-dropdown-menu]').hidden = true;
       dd.classList.remove('rmr-dropdown--open', 'rmr-dropdown--menu-up');
+    });
+  });
+
+  // Community page — the "View" dropdown (real Dropdown component, same markup/behavior as every
+  // other dropdown above) additionally switches which calendar panel is showing, since unlike
+  // every other dropdown in this prototype its options aren't just cosmetic. Month/Week/Day panels
+  // ([data-comm-cal-view]) and the nav row's per-view date labels ([data-comm-cal-label]) both key
+  // off the same option's data-comm-view value.
+  document.querySelectorAll('[data-comm-view-select]').forEach((dd) => {
+    dd.querySelectorAll('[data-dropdown-option]').forEach((option) => {
+      option.addEventListener('click', () => {
+        const view = option.dataset.commView;
+        document.querySelectorAll('[data-comm-cal-view]').forEach((panel) => {
+          panel.hidden = panel.dataset.commCalView !== view;
+        });
+        document.querySelectorAll('[data-comm-cal-label]').forEach((label) => {
+          label.hidden = label.dataset.commCalLabel !== view;
+        });
+      });
     });
   });
 
@@ -606,6 +627,157 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // Amenity Reservations (reservations.html) — Upcoming / Past Requests
+  // tabs. Same real underline "Tabs" component/classes as Account Settings
+  // and Service Issues above (.rmr-acct-tab / .rmr-acct-tab--selected).
+  document.querySelectorAll('[data-action="rsv-tab"]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.rsvTarget;
+      document.querySelectorAll('[data-action="rsv-tab"]').forEach((b) => {
+        const selected = b === btn;
+        b.classList.toggle('rmr-acct-tab--selected', selected);
+        b.setAttribute('aria-selected', String(selected));
+      });
+      document.querySelectorAll('[data-rsv-panel]').forEach((panel) => {
+        panel.hidden = panel.dataset.rsvPanel !== target;
+      });
+    });
+  });
+
+  // New Reservation overlay's day-schedule side panel — the block matching
+  // the form's own Start/End Time is a real drag-to-move / drag-to-resize
+  // control, not just a static preview: dragging its body moves the whole
+  // reservation (same duration); dragging its bottom edge stretches the end
+  // time later/earlier, and its top edge stretches the start time
+  // earlier/later, each independently of the other end, in 15-minute
+  // increments; all three write straight into the Start Time / End Time
+  // display fields — per direct instruction, those fields and this block are
+  // "the same thing, just displayed differently," not two independent
+  // controls.
+  document.querySelectorAll('[data-rsv-current]').forEach((slot) => {
+    const grid = slot.closest('[data-rsv-grid]');
+    const col = slot.closest('[data-rsv-col]');
+    const scope = slot.closest('.rmr-modal') || document;
+    if (!grid || !col) return;
+    const label = slot.querySelector('[data-rsv-current-label]');
+    const resizeTop = slot.querySelector('[data-rsv-resize-top]');
+    const resizeBottom = slot.querySelector('[data-rsv-resize-bottom]');
+    const startField = scope.querySelector('[data-rsv-field="start"]');
+    const endField = scope.querySelector('[data-rsv-field="end"]');
+    const gridStartMin = parseInt(grid.dataset.rsvGridStartMin, 10);
+    const pxPerMin = 56 / 60;
+    const snapMin = 15;
+    const snapPx = snapMin * pxPerMin;
+    const minDurationMin = 30;
+    const rowCount = col.querySelectorAll('.rmr-rsv-side__row').length;
+    const colHeightPx = rowCount * 56;
+
+    const snap = (px) => Math.round(px / snapPx) * snapPx;
+
+    const minutesToLabel = (totalMin) => {
+      const h24 = Math.floor(totalMin / 60) % 24;
+      const m = totalMin % 60;
+      const period = h24 < 12 ? 'AM' : 'PM';
+      let h = h24 % 12;
+      if (h === 0) h = 12;
+      return `${h}:${String(m).padStart(2, '0')} ${period}`;
+    };
+
+    const render = () => {
+      const startMin = parseInt(slot.dataset.startMin, 10);
+      const durationMin = parseInt(slot.dataset.durationMin, 10);
+      const topPx = (startMin - gridStartMin) * pxPerMin;
+      const heightPx = durationMin * pxPerMin;
+      slot.style.top = `${topPx}px`;
+      slot.style.height = `${heightPx}px`;
+      const startLabel = minutesToLabel(startMin);
+      const endLabel = minutesToLabel(startMin + durationMin);
+      if (label) label.textContent = `${startLabel} - ${endLabel}`;
+      if (startField) startField.textContent = startLabel;
+      if (endField) endField.textContent = endLabel;
+    };
+
+    slot.addEventListener('pointerdown', (e) => {
+      if (e.target === resizeTop || e.target === resizeBottom) return;
+      e.preventDefault();
+      slot.setPointerCapture(e.pointerId);
+      const startY = e.clientY;
+      const startTopPx = (parseInt(slot.dataset.startMin, 10) - gridStartMin) * pxPerMin;
+      const durationMin = parseInt(slot.dataset.durationMin, 10);
+      const heightPx = durationMin * pxPerMin;
+      const onMove = (moveEvent) => {
+        const rawTop = startTopPx + (moveEvent.clientY - startY);
+        const clampedTop = Math.min(Math.max(snap(rawTop), 0), colHeightPx - heightPx);
+        slot.dataset.startMin = Math.round(gridStartMin + clampedTop / pxPerMin);
+        render();
+      };
+      const onUp = () => {
+        document.removeEventListener('pointermove', onMove);
+        document.removeEventListener('pointerup', onUp);
+      };
+      document.addEventListener('pointermove', onMove);
+      document.addEventListener('pointerup', onUp);
+    });
+
+    // Bottom edge — stretches the end time, start time stays put.
+    if (resizeBottom) {
+      resizeBottom.addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        resizeBottom.setPointerCapture(e.pointerId);
+        const startY = e.clientY;
+        const durationMin = parseInt(slot.dataset.durationMin, 10);
+        const startHeightPx = durationMin * pxPerMin;
+        const topPx = (parseInt(slot.dataset.startMin, 10) - gridStartMin) * pxPerMin;
+        const onMove = (moveEvent) => {
+          const rawHeight = startHeightPx + (moveEvent.clientY - startY);
+          const minHeightPx = minDurationMin * pxPerMin;
+          const clampedHeight = Math.min(Math.max(snap(rawHeight), minHeightPx), colHeightPx - topPx);
+          slot.dataset.durationMin = Math.round(clampedHeight / pxPerMin);
+          render();
+        };
+        const onUp = () => {
+          document.removeEventListener('pointermove', onMove);
+          document.removeEventListener('pointerup', onUp);
+        };
+        document.addEventListener('pointermove', onMove);
+        document.addEventListener('pointerup', onUp);
+      });
+    }
+
+    // Top edge — stretches the start time, end time stays put.
+    if (resizeTop) {
+      resizeTop.addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        resizeTop.setPointerCapture(e.pointerId);
+        const startY = e.clientY;
+        const startMin0 = parseInt(slot.dataset.startMin, 10);
+        const durationMin0 = parseInt(slot.dataset.durationMin, 10);
+        const endMin = startMin0 + durationMin0;
+        const startTopPx = (startMin0 - gridStartMin) * pxPerMin;
+        const onMove = (moveEvent) => {
+          const rawTop = startTopPx + (moveEvent.clientY - startY);
+          const minHeightPx = minDurationMin * pxPerMin;
+          const endTopPx = (endMin - gridStartMin) * pxPerMin;
+          const clampedTop = Math.min(Math.max(snap(rawTop), 0), endTopPx - minHeightPx);
+          const newStartMin = Math.round(gridStartMin + clampedTop / pxPerMin);
+          slot.dataset.startMin = newStartMin;
+          slot.dataset.durationMin = endMin - newStartMin;
+          render();
+        };
+        const onUp = () => {
+          document.removeEventListener('pointermove', onMove);
+          document.removeEventListener('pointerup', onUp);
+        };
+        document.addEventListener('pointermove', onMove);
+        document.addEventListener('pointerup', onUp);
+      });
+    }
+
+    render();
+  });
+
   // Add Service Issue overlay's three Yes/No questions ("Has this happened
   // before?", pets, technician entry) each get their own independent
   // radio-dot pair, scoped by data-svc-question so selecting one question's
@@ -776,8 +948,9 @@ document.addEventListener('DOMContentLoaded', () => {
           { label: 'Alternate 2', day: 'Thursday, Feb 05', time: '8:00 AM - 12:00 PM' },
         ],
       },
-      category: null, repeat: null,
-      description: null, pets: 'Yes', entry: 'No', resolution: null, attachments: SVC_ATTACHMENTS,
+      category: 'Plumbing', repeat: null,
+      description: "The kitchen faucet has a steady drip that won't stop, even when fully shut off.",
+      pets: 'Yes', entry: 'No', resolution: null, attachments: SVC_ATTACHMENTS,
       comments: {
         title: 'Notes', mode: 'notes',
         entries: [
@@ -788,12 +961,16 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     'open-97': {
       title: 'Water stain on ceiling', created: 'Created: 01/31/26', status: 'open',
-      schedule: null, category: null, repeat: null, description: null, pets: 'Yes', entry: 'No', resolution: null,
+      schedule: null, category: 'Plumbing', repeat: null,
+      description: 'A brownish water stain has appeared on the living room ceiling and seems to be slowly spreading.',
+      pets: 'Yes', entry: 'No', resolution: null,
       attachments: null, comments: null,
     },
     'closed-175': {
       title: 'Closet door broken', created: 'Created: 02/04/26', status: 'closed',
-      schedule: null, category: null, repeat: null, description: null, pets: 'Yes', entry: 'Yes', resolution: 'Replaced with new door',
+      schedule: null, category: 'Other', repeat: null,
+      description: "The primary bedroom closet door came off its track and won't slide or close properly.",
+      pets: 'Yes', entry: 'Yes', resolution: 'Replaced with new door',
       attachments: SVC_ATTACHMENTS,
       comments: {
         title: 'Notes', mode: 'notes',
@@ -805,7 +982,9 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     'closed-130': {
       title: 'Kitchen sink leaking', created: 'Created: 02/02/26', status: 'closed',
-      schedule: null, category: null, repeat: null, description: null, pets: null, entry: null, resolution: 'Installed new valve',
+      schedule: null, category: 'Plumbing', repeat: null,
+      description: 'Water was pooling under the kitchen sink cabinet, likely from a leaking pipe connection.',
+      pets: 'No', entry: 'Yes', resolution: 'Installed new valve',
       attachments: null,
       comments: {
         title: 'Messages', mode: 'closed',
@@ -832,14 +1011,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const nextBtn = backdrop.querySelector('[data-svc-attach-next]');
     if (!track || !nav) return;
 
+    // Both arrows stay visible the whole time the row overflows — only
+    // their color/clickability changes, based on whether that direction
+    // actually has more attachments to reveal, rather than the arrow
+    // itself appearing/disappearing.
     function update() {
       const hasOverflow = track.scrollWidth > track.clientWidth + 1;
       nav.hidden = !hasOverflow;
-      if (fade) fade.hidden = !hasOverflow;
-      if (!hasOverflow) return;
-      prevBtn.hidden = track.scrollLeft <= 0;
-      nextBtn.hidden = track.scrollLeft + track.clientWidth >= track.scrollWidth - 1;
-      if (fade) fade.hidden = nextBtn.hidden;
+      if (!hasOverflow) {
+        if (fade) fade.hidden = true;
+        return;
+      }
+      const atStart = track.scrollLeft <= 0;
+      const atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 1;
+      prevBtn.classList.toggle('rmr-svc-attach__nav-btn--active', !atStart);
+      prevBtn.disabled = atStart;
+      nextBtn.classList.toggle('rmr-svc-attach__nav-btn--active', !atEnd);
+      nextBtn.disabled = atEnd;
+      if (fade) fade.hidden = atEnd;
     }
 
     track.scrollLeft = 0;
@@ -945,11 +1134,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function svcBuildFallback(row) {
     const cells = row.querySelectorAll('td');
+    const title = cells[2] ? cells[2].textContent.trim() : 'Service Issue';
     return {
-      title: cells[2] ? cells[2].textContent.trim() : 'Service Issue',
+      title,
       created: `Closed: ${cells[1] ? cells[1].textContent.trim() : ''}`,
       status: 'closed',
-      schedule: null, category: null, repeat: null, description: null, pets: null, entry: null,
+      schedule: null, category: 'Other', repeat: null,
+      description: `${title} was reported and has since been resolved by the property team.`,
+      pets: 'Yes', entry: 'Yes',
       resolution: cells[3] ? cells[3].textContent.trim() : null,
       attachments: null, comments: null,
     };
@@ -1003,6 +1195,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const commentsWrap = backdrop.querySelector('[data-svc-detail-comments-wrap]');
     commentsWrap.hidden = !data.comments;
+    // Without a Notes/Messages column the modal itself shrinks to just the
+    // left column's own width instead of keeping its full two-column size
+    // and leaving that half empty (see .rmr-svc-details-modal--solo).
+    const detailsModal = backdrop.querySelector('.rmr-svc-details-modal');
+    if (detailsModal) detailsModal.classList.toggle('rmr-svc-details-modal--solo', !data.comments);
     if (data.comments) {
       backdrop.querySelector('[data-svc-detail-comments-title]').textContent = data.comments.title;
       const thread = backdrop.querySelector('[data-svc-detail-thread]');

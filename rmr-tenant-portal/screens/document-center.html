@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Document Center — rmResident Portal</title>
-<link rel="stylesheet" href="../assets/rmr.css?v=50" />
+<link rel="stylesheet" href="../assets/rmr.css?v=60" />
 <link rel="stylesheet" href="../assets/proto.css" />
 </head>
 <body data-screen="document-center">
@@ -132,12 +132,11 @@
               <table class="rmr-pay-table rmr-pay-table--doc" data-component="Table">
                 <thead>
                   <tr>
-                    <th style="width:26%;">Document Name</th>
-                    <th style="width:12%;">Published</th>
-                    <th style="width:12%;">Expiration</th>
-                    <th style="width:18%;" class="rmr-doc-col-signers">Number of Signers</th>
-                    <th style="width:16%;" aria-label="Sign"></th>
-                    <th style="width:16%;" aria-label="Print / Download"></th>
+                    <th style="width:110px;">Document Name</th>
+                    <th style="width:80px;">Published</th>
+                    <th style="width:80px;">Expiration</th>
+                    <th style="width:64px;" class="rmr-doc-col-signers">Number of Signers</th>
+                    <th style="width:124px;" aria-label="Actions"></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -146,9 +145,9 @@
                     <td>04/15/26</td>
                     <td>04/20/26</td>
                     <td class="rmr-doc-col-signers">1 of 2</td>
-                    <td><a class="rmr-btn rmr-btn--primary rmr-btn--table" href="document-sign.html?doc=parking-policy">Sign</a></td>
                     <td>
                       <span class="rmr-doc-table__actions">
+                        <a class="rmr-btn rmr-btn--primary rmr-btn--table" href="document-sign.html?doc=parking-policy">Sign</a>
                         <button type="button" data-action="fake-submit" data-fake-message="Printing isn't included in this example."><img src="../assets/icons/documents/print.svg" alt="Print" width="20" height="20" /></button>
                         <button type="button" data-action="fake-submit" data-fake-message="Downloading isn't included in this example."><img src="../assets/icons/documents/file-download.svg" alt="Download" width="20" height="20" /></button>
                       </span>
@@ -159,9 +158,9 @@
                     <td>05/30/26</td>
                     <td>06/02/26</td>
                     <td class="rmr-doc-col-signers">0 of 1</td>
-                    <td><a class="rmr-btn rmr-btn--primary rmr-btn--table" href="document-sign.html?doc=pet-policy">Sign</a></td>
                     <td>
                       <span class="rmr-doc-table__actions">
+                        <a class="rmr-btn rmr-btn--primary rmr-btn--table" href="document-sign.html?doc=pet-policy">Sign</a>
                         <button type="button" data-action="fake-submit" data-fake-message="Printing isn't included in this example."><img src="../assets/icons/documents/print.svg" alt="Print" width="20" height="20" /></button>
                         <button type="button" data-action="fake-submit" data-fake-message="Downloading isn't included in this example."><img src="../assets/icons/documents/file-download.svg" alt="Download" width="20" height="20" /></button>
                       </span>
@@ -195,6 +194,8 @@
                   </button>
                   <div class="rmr-dropdown__menu" data-dropdown-menu hidden>
                     <div class="rmr-dropdown__option rmr-dropdown__option--selected" data-dropdown-option>All Selected</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>Riverview Apartments</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>Safe &amp; Secure Storage</div>
                   </div>
                 </div>
               </div>
@@ -472,6 +473,6 @@
   </div>
 </div>
 
-<script src="../assets/app.js?v=23"></script>
+<script src="../assets/app.js?v=26"></script>
 </body>
 </html>

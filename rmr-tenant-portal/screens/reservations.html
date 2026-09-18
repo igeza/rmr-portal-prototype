@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Amenity Reservations — rmResident Portal</title>
+<link rel="stylesheet" href="../assets/rmr.css?v=61" />
+<link rel="stylesheet" href="../assets/proto.css" />
+</head>
+<body data-screen="reservations">
+<div class="rmr-app" data-component="2.0.3 Amenity Reservations">
+
+  <header class="rmr-header" data-component="Header">
+    <div class="rmr-header__left">
+      <div class="rmr-header__logo" data-component="New Logo">
+        <img class="rmr-header__logo-icon" src="../assets/icons/logo-icon.svg" alt="" />
+        <img class="rmr-header__logo-text" src="../assets/icons/logo-text.svg" alt="rmResident" />
+      </div>
+    </div>
+    <div class="rmr-header__right" data-component="Header Right">
+      <div class="rmr-header__icon" data-component="RMP Icon">
+        <img src="../assets/icons/globe.svg" alt="Language" width="24" height="24" />
+      </div>
+      <span class="rmr-header__divider" aria-hidden="true"></span>
+      <div class="rmr-account" data-component="User Info">
+        <button class="rmr-header__user" type="button" data-action="toggle-account-menu">
+          <img class="rmr-header__avatar" src="../assets/images/avatar.png" alt="" width="24" height="24" />
+          <span class="rmr-header__username">Samantha Carpenter</span>
+          <img src="../assets/icons/chevron-down.svg" alt="" width="24" height="24" />
+        </button>
+        <div class="rmr-account-menu" data-account-menu hidden data-component="Dropdown Menu">
+          <a class="rmr-account-menu__item" href="fp-account.html">
+            <span>View Account</span>
+          </a>
+          <button class="rmr-account-menu__item" type="button" data-action="fake-submit" data-fake-message="Payment Settings isn't included in this example.">
+            <span>Payment Settings</span>
+          </button>
+          <button class="rmr-account-menu__item" type="button" data-action="fake-submit" data-fake-message="Switching accounts isn't included in this example.">
+            <span>Switch Accounts</span>
+            <span class="rmr-account-menu__arrow" aria-hidden="true"></span>
+          </button>
+          <button class="rmr-account-menu__item" type="button" data-action="fake-submit" data-fake-message="Logout isn't wired up in this example.">
+            <span>Log Out</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="rmr-body" data-component="Content">
+    <nav class="rmr-menu" data-component="Menu" aria-label="Primary">
+      <ul class="rmr-menu__list" data-component="Expanded Menu">
+        <li class="rmr-menu__item" data-nav="community" data-component="Menu Items">
+          <a class="rmr-menu__link" href="community.html">
+            <svg class="rmr-menu__icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M8 8.5C9.08667 8.5 10.0467 8.76 10.8267 9.1C11.5467 9.42 12 10.14 12 10.92V12H4V10.9267C4 10.14 4.45333 9.42 5.17333 9.10667C5.95333 8.76 6.91333 8.5 8 8.5ZM2.66667 8.66667C3.4 8.66667 4 8.06667 4 7.33333C4 6.6 3.4 6 2.66667 6C1.93333 6 1.33333 6.6 1.33333 7.33333C1.33333 8.06667 1.93333 8.66667 2.66667 8.66667ZM3.42 9.4C3.17333 9.36 2.92667 9.33333 2.66667 9.33333C2.00667 9.33333 1.38 9.47333 0.813333 9.72C0.32 9.93333 0 10.4133 0 10.9533V12H3V10.9267C3 10.3733 3.15333 9.85333 3.42 9.4ZM13.3333 8.66667C14.0667 8.66667 14.6667 8.06667 14.6667 7.33333C14.6667 6.6 14.0667 6 13.3333 6C12.6 6 12 6.6 12 7.33333C12 8.06667 12.6 8.66667 13.3333 8.66667ZM16 10.9533C16 10.4133 15.68 9.93333 15.1867 9.72C14.62 9.47333 13.9933 9.33333 13.3333 9.33333C13.0733 9.33333 12.8267 9.36 12.58 9.4C12.8467 9.85333 13 10.3733 13 10.9267V12H16V10.9533ZM8 4C9.10667 4 10 4.89333 10 6C10 7.10667 9.10667 8 8 8C6.89333 8 6 7.10667 6 6C6 4.89333 6.89333 4 8 4Z" fill="currentColor"/>
+            </svg>
+            <span class="rmr-menu__label">Community</span>
+          </a>
+        </li>
+        <li class="rmr-menu__item rmr-menu__item--active" data-nav="reservations" data-component="Menu Items">
+          <a class="rmr-menu__link" href="reservations.html">
+            <svg class="rmr-menu__icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M11.624 8.04798L10.776 7.19998L6.872 11.104L5.176 9.40798L4.328 10.256L6.872 12.8L11.624 8.04798ZM13.6 1.59998H12.8V0H11.2V1.59998H4.8V0H3.2V1.59998H2.4C1.512 1.59998 0.808 2.31998 0.808 3.19998L0.8 14.4C0.8 15.28 1.512 16 2.4 16H13.6C14.48 16 15.2 15.28 15.2 14.4V3.19998C15.2 2.31998 14.48 1.59998 13.6 1.59998ZM13.6 14.4H2.4V5.59998H13.6V14.4Z" fill="currentColor"/>
+            </svg>
+            <span class="rmr-menu__label">Reservations</span>
+          </a>
+        </li>
+      </ul>
+      <div class="rmr-menu__footer" data-component="Expanded Menu Item">
+        <div class="rmr-menu__item">
+          <button class="rmr-menu__link" type="button" data-action="toggle-menu" data-component="Collapse">
+            <img class="rmr-menu__icon" src="../assets/icons/collapse.svg" alt="" data-collapse-icon />
+            <span class="rmr-menu__label" data-collapse-label>Collapse</span>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <main class="rmr-main" data-component="Main Content">
+      <div class="rmr-settings-page rmr-settings-page--fit" data-component="Content">
+
+        <div class="rmr-settings-hero" data-component="Context Bar">
+          <img class="rmr-settings-hero__bg" src="../assets/images/reservations/hero.png" alt="" />
+          <div class="rmr-settings-hero__scrim"></div>
+          <p class="rmr-settings-hero__title">Amenity Reservations</p>
+        </div>
+
+        <div class="rmr-msg-banner rmr-msg-banner--compact" data-component="Banner">
+          <img class="rmr-msg-banner__icon" src="../assets/icons/payments/campaign.svg" alt="" />
+          <p class="rmr-msg-banner__body">Please submit at least 24 hours in advance.</p>
+        </div>
+
+        <div class="rmr-comm-layout" data-component="Main Content">
+
+          <div class="rmr-comm-card rmr-rsv-list-card" data-component="Cards">
+            <div class="rmr-rsv-list__header">
+              <p class="rmr-comm-card__title" style="margin:0;">My Reservations</p>
+              <button class="rmr-btn rmr-btn--primary" type="button" style="min-width:0;" data-action="open-modal" data-modal-target="new-reservation-1">Add New</button>
+            </div>
+
+            <div class="rmr-acct-tabs" role="tablist">
+              <button class="rmr-acct-tab rmr-acct-tab--selected" type="button" role="tab" aria-selected="true" data-action="rsv-tab" data-rsv-target="upcoming">Upcoming</button>
+              <button class="rmr-acct-tab" type="button" role="tab" aria-selected="false" data-action="rsv-tab" data-rsv-target="past">Past Requests</button>
+            </div>
+
+            <div class="rmr-acct-panel rmr-rsv-list" data-rsv-panel="upcoming">
+              <button type="button" class="rmr-rsv-item" data-action="fake-submit" data-fake-message="Reservation details for this item aren't included in this example.">
+                <span class="rmr-rsv-item__icon rmr-rsv-item__icon--yellow">
+                  <img src="../assets/icons/reservations/calendar-month.svg" alt="" width="20" height="20" />
+                </span>
+                <span class="rmr-rsv-item__details">
+                  <span class="rmr-rsv-item__title">Reservation: Clubhouse Room 1</span>
+                  <span class="rmr-rsv-item__meta">Wed, Oct 17 @ 7:00 PM</span>
+                  <span class="rmr-rsv-lozenge rmr-rsv-lozenge--green">Approved</span>
+                </span>
+                <img class="rmr-rsv-item__more" src="../assets/icons/reservations/more-vert.svg" alt="" width="20" height="20" />
+              </button>
+
+              <button type="button" class="rmr-rsv-item" data-action="open-modal" data-modal-target="reservation-details-pending">
+                <span class="rmr-rsv-item__icon rmr-rsv-item__icon--green">
+                  <img src="../assets/icons/reservations/calendar-month.svg" alt="" width="20" height="20" />
+                </span>
+                <span class="rmr-rsv-item__details">
+                  <span class="rmr-rsv-item__title">Reservation: Theater Room</span>
+                  <span class="rmr-rsv-item__meta">Wed, Oct 24 @ 7:00 PM</span>
+                  <span class="rmr-rsv-lozenge rmr-rsv-lozenge--yellow">Pending</span>
+                </span>
+                <img class="rmr-rsv-item__more" src="../assets/icons/reservations/more-vert.svg" alt="" width="20" height="20" />
+              </button>
+            </div>
+
+            <div class="rmr-acct-panel rmr-rsv-list" data-rsv-panel="past" hidden>
+              <button type="button" class="rmr-rsv-item" data-action="open-modal" data-modal-target="reservation-details-denied">
+                <span class="rmr-rsv-item__icon rmr-rsv-item__icon--green">
+                  <img src="../assets/icons/reservations/calendar-month.svg" alt="" width="20" height="20" />
+                </span>
+                <span class="rmr-rsv-item__details">
+                  <span class="rmr-rsv-item__title">Reservation: Theater Room</span>
+                  <span class="rmr-rsv-item__meta">Mon, Oct 13 @ 7:00 PM</span>
+                  <span class="rmr-rsv-lozenge rmr-rsv-lozenge--red">Denied</span>
+                </span>
+                <img class="rmr-rsv-item__more" src="../assets/icons/reservations/more-vert.svg" alt="" width="20" height="20" />
+              </button>
+
+              <button type="button" class="rmr-rsv-item" data-action="fake-submit" data-fake-message="Reservation details for this item aren't included in this example.">
+                <span class="rmr-rsv-item__icon rmr-rsv-item__icon--yellow">
+                  <img src="../assets/icons/reservations/calendar-month.svg" alt="" width="20" height="20" />
+                </span>
+                <span class="rmr-rsv-item__details">
+                  <span class="rmr-rsv-item__title">Reservation: Clubhouse Room 1</span>
+                  <span class="rmr-rsv-item__meta">Fri, Sep 26 @ 6:00 PM</span>
+                  <span class="rmr-rsv-lozenge rmr-rsv-lozenge--gray">Completed</span>
+                </span>
+                <img class="rmr-rsv-item__more" src="../assets/icons/reservations/more-vert.svg" alt="" width="20" height="20" />
+              </button>
+            </div>
+          </div>
+
+          <div class="rmr-comm-card rmr-comm-main" data-component="Cards">
+            <div class="rmr-comm-cal">
+              <div class="rmr-comm-cal__nav">
+                <div class="rmr-comm-cal__month">
+                  <button type="button" data-action="fake-submit" data-fake-message="Changing months isn't included in this example." aria-label="Previous">
+                    <img src="../assets/icons/community/cal-arrow-left.svg" alt="" width="20" height="20" />
+                  </button>
+                  <p class="rmr-comm-cal__month-label" data-comm-cal-label="month">October 2025</p>
+                  <p class="rmr-comm-cal__month-label" data-comm-cal-label="week" hidden>October 14 - 20, 2025</p>
+                  <p class="rmr-comm-cal__month-label" data-comm-cal-label="day" hidden>Wed, October 17, 2025</p>
+                  <button type="button" data-action="fake-submit" data-fake-message="Changing months isn't included in this example." aria-label="Next">
+                    <img src="../assets/icons/community/cal-arrow-right.svg" alt="" width="20" height="20" />
+                  </button>
+                </div>
+                <div style="display:flex; gap:var(--spacing-md); align-items:center;">
+                  <div class="rmr-comm-cal__view" style="width:195px;">
+                    <span class="rmr-comm-cal__view-label">Amenities</span>
+                    <div class="rmr-dropdown" data-dropdown>
+                      <button type="button" class="rmr-modal__select rmr-dropdown__trigger" data-dropdown-trigger>
+                        <span data-dropdown-value>All</span>
+                      </button>
+                      <div class="rmr-dropdown__menu" data-dropdown-menu hidden>
+                        <div class="rmr-dropdown__option rmr-dropdown__option--selected" data-dropdown-option>All</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="rmr-comm-cal__view">
+                    <span class="rmr-comm-cal__view-label">View</span>
+                    <div class="rmr-dropdown" data-dropdown data-comm-view-select>
+                      <button type="button" class="rmr-modal__select rmr-dropdown__trigger" data-dropdown-trigger>
+                        <span data-dropdown-value>Month</span>
+                      </button>
+                      <div class="rmr-dropdown__menu" data-dropdown-menu hidden>
+                        <div class="rmr-dropdown__option rmr-dropdown__option--selected" data-dropdown-option data-comm-view="month">Month</div>
+                        <div class="rmr-dropdown__option" data-dropdown-option data-comm-view="week">Week</div>
+                        <div class="rmr-dropdown__option" data-dropdown-option data-comm-view="day">Day</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Month view — node 2001:2844 -->
+              <div data-comm-cal-view="month">
+                <div class="rmr-comm-cal__grid">
+                  <div class="rmr-comm-cal__weekdays">
+                    <div>Sunday</div><div>Monday</div><div>Tuesday</div><div>Wednesday</div><div>Thursday</div><div>Friday</div><div>Saturday</div>
+                  </div>
+                  <div class="rmr-comm-cal__body">
+                    <!-- Week 1 -->
+                    <div class="rmr-comm-cal__cell rmr-comm-cal__cell--out"><p class="rmr-comm-cal__daynum rmr-comm-cal__daynum--muted">30</p></div>
+                    <div class="rmr-comm-cal__cell rmr-comm-cal__cell--out"><p class="rmr-comm-cal__daynum rmr-comm-cal__daynum--muted">1</p></div>
+                    <div class="rmr-comm-cal__cell rmr-comm-cal__cell--out"><p class="rmr-comm-cal__daynum rmr-comm-cal__daynum--muted">2</p></div>
+                    <div class="rmr-comm-cal__cell rmr-comm-cal__cell--out"><p class="rmr-comm-cal__daynum rmr-comm-cal__daynum--muted">3</p></div>
+                    <div class="rmr-comm-cal__cell rmr-comm-cal__cell--out"><p class="rmr-comm-cal__daynum rmr-comm-cal__daynum--muted">4</p></div>
+                    <div class="rmr-comm-cal__cell rmr-comm-cal__cell--out"><p class="rmr-comm-cal__daynum rmr-comm-cal__daynum--muted">5</p></div>
+                    <div class="rmr-comm-cal__cell rmr-comm-cal__cell--out"><p class="rmr-comm-cal__daynum rmr-comm-cal__daynum--muted">6</p></div>
+                    <!-- Week 2 -->
+                    <div class="rmr-comm-cal__cell rmr-comm-cal__cell--out"><p class="rmr-comm-cal__daynum rmr-comm-cal__daynum--muted">7</p></div>
+                    <div class="rmr-comm-cal__cell rmr-comm-cal__cell--out"><p class="rmr-comm-cal__daynum rmr-comm-cal__daynum--muted">8</p></div>
+                    <div class="rmr-comm-cal__cell rmr-comm-cal__cell--out"><p class="rmr-comm-cal__daynum rmr-comm-cal__daynum--muted">9</p></div>
+                    <div class="rmr-comm-cal__cell rmr-comm-cal__cell--out"><p class="rmr-comm-cal__daynum rmr-comm-cal__daynum--muted">10</p></div>
+                    <div class="rmr-comm-cal__cell rmr-comm-cal__cell--out"><p class="rmr-comm-cal__daynum rmr-comm-cal__daynum--muted">11</p></div>
+                    <div class="rmr-comm-cal__cell rmr-comm-cal__cell--out"><p class="rmr-comm-cal__daynum rmr-comm-cal__daynum--muted">12</p></div>
+                    <div class="rmr-comm-cal__cell rmr-comm-cal__cell--out"><p class="rmr-comm-cal__daynum rmr-comm-cal__daynum--muted">13</p></div>
+                    <!-- Week 3 -->
+                    <div class="rmr-comm-cal__cell"><p class="rmr-comm-cal__daynum">14</p></div>
+                    <div class="rmr-comm-cal__cell rmr-comm-cal__cell--selected">
+                      <p class="rmr-comm-cal__daynum">15</p>
+                      <div class="rmr-rsv-event" data-action="fake-submit" data-fake-message="Event details for this reservation aren't included in this example.">
+                        <span class="rmr-comm-cal__event-time">11:00 AM</span><span class="rmr-comm-cal__event-label">Theater Room</span>
+                      </div>
+                    </div>
+                    <div class="rmr-comm-cal__cell"><p class="rmr-comm-cal__daynum">16</p></div>
+                    <div class="rmr-comm-cal__cell">
+                      <p class="rmr-comm-cal__daynum">17</p>
+                      <button type="button" class="rmr-rsv-event rmr-rsv-event--pending" data-action="fake-submit" data-fake-message="Event details for this reservation aren't included in this example.">
+                        <span class="rmr-comm-cal__event-time">7:00 PM</span><span class="rmr-comm-cal__event-label">Clubhouse Room 1</span>
+                      </button>
+                    </div>
+                    <div class="rmr-comm-cal__cell"><p class="rmr-comm-cal__daynum">18</p></div>
+                    <div class="rmr-comm-cal__cell"><p class="rmr-comm-cal__daynum">19</p></div>
+                    <div class="rmr-comm-cal__cell">
+                      <p class="rmr-comm-cal__daynum">20</p>
+                      <button type="button" class="rmr-rsv-event rmr-rsv-event--accent" data-action="fake-submit" data-fake-message="Event details for this reservation aren't included in this example.">
+                        <span class="rmr-comm-cal__event-time">7:00 PM</span><span class="rmr-comm-cal__event-label">Clubhouse Room 1</span>
+                      </button>
+                      <div class="rmr-rsv-event" data-action="fake-submit" data-fake-message="Event details for this reservation aren't included in this example.">
+                        <span class="rmr-comm-cal__event-time">7:30 PM</span><span class="rmr-comm-cal__event-label">Theater Room</span>
+                      </div>
+                    </div>
+                    <!-- Week 4 -->
+                    <div class="rmr-comm-cal__cell"><p class="rmr-comm-cal__daynum">21</p></div>
+                    <div class="rmr-comm-cal__cell"><p class="rmr-comm-cal__daynum">22</p></div>
+                    <div class="rmr-comm-cal__cell"><p class="rmr-comm-cal__daynum">23</p></div>
+                    <div class="rmr-comm-cal__cell">
+                      <p class="rmr-comm-cal__daynum">24</p>
+                      <button type="button" class="rmr-rsv-event" data-action="open-modal" data-modal-target="reservation-details-pending">
+                        <span class="rmr-comm-cal__event-time">7:00 PM</span><span class="rmr-comm-cal__event-label">Theater Room</span>
+                      </button>
+                    </div>
+                    <div class="rmr-comm-cal__cell"><p class="rmr-comm-cal__daynum">25</p></div>
+                    <div class="rmr-comm-cal__cell">
+                      <p class="rmr-comm-cal__daynum">26</p>
+                      <button type="button" class="rmr-rsv-event rmr-rsv-event--accent" data-action="fake-submit" data-fake-message="Event details for this reservation aren't included in this example.">
+                        <span class="rmr-comm-cal__event-time">7:00 PM</span><span class="rmr-comm-cal__event-label">Clubhouse Room 1</span>
+                      </button>
+                    </div>
+                    <div class="rmr-comm-cal__cell"><p class="rmr-comm-cal__daynum">27</p></div>
+                    <!-- Week 5 -->
+                    <div class="rmr-comm-cal__cell"><p class="rmr-comm-cal__daynum">28</p></div>
+                    <div class="rmr-comm-cal__cell">
+                      <p class="rmr-comm-cal__daynum">29</p>
+                      <button type="button" class="rmr-rsv-event rmr-rsv-event--accent" data-action="fake-submit" data-fake-message="Event details for this reservation aren't included in this example.">
+                        <span class="rmr-comm-cal__event-time">2:00 PM</span><span class="rmr-comm-cal__event-label">Clubhouse Room 1</span>
+                      </button>
+                      <button type="button" class="rmr-rsv-event rmr-rsv-event--accent" data-action="fake-submit" data-fake-message="Event details for this reservation aren't included in this example.">
+                        <span class="rmr-comm-cal__event-time">4:00 PM</span><span class="rmr-comm-cal__event-label">Clubhouse Room 1</span>
+                      </button>
+                      <div class="rmr-rsv-event" data-action="fake-submit" data-fake-message="Event details for this reservation aren't included in this example.">
+                        <span class="rmr-comm-cal__event-time">6:30 PM</span><span class="rmr-comm-cal__event-label">Theater Room</span>
+                      </div>
+                      <p class="rmr-comm-cal__more">+3</p>
+                    </div>
+                    <div class="rmr-comm-cal__cell"><p class="rmr-comm-cal__daynum">30</p></div>
+                    <div class="rmr-comm-cal__cell rmr-comm-cal__cell--out"><p class="rmr-comm-cal__daynum rmr-comm-cal__daynum--muted">31</p></div>
+                    <div class="rmr-comm-cal__cell rmr-comm-cal__cell--out"><p class="rmr-comm-cal__daynum rmr-comm-cal__daynum--muted">1</p></div>
+                    <div class="rmr-comm-cal__cell"><p class="rmr-comm-cal__daynum">2</p></div>
+                    <div class="rmr-comm-cal__cell"><p class="rmr-comm-cal__daynum">3</p></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Week view — node 2036:3290 ("2.0.4 Amenity Reservations - Week View") -->
+              <div data-comm-cal-view="week" hidden>
+                <div class="rmr-comm-cal__timegrid">
+                  <div class="rmr-comm-cal__gutter">
+                    <div class="rmr-comm-cal__gutter-corner"></div>
+                    <div class="rmr-comm-cal__gutter-hour">11 AM</div>
+                    <div class="rmr-comm-cal__gutter-hour">12 PM</div>
+                    <div class="rmr-comm-cal__gutter-hour">1 PM</div>
+                    <div class="rmr-comm-cal__gutter-hour">2 PM</div>
+                    <div class="rmr-comm-cal__gutter-hour">3 PM</div>
+                    <div class="rmr-comm-cal__gutter-hour">4 PM</div>
+                    <div class="rmr-comm-cal__gutter-hour">5 PM</div>
+                    <div class="rmr-comm-cal__gutter-hour">6 PM</div>
+                    <div class="rmr-comm-cal__gutter-hour">7 PM</div>
+                    <div class="rmr-comm-cal__gutter-hour">8 PM</div>
+                  </div>
+                  <div class="rmr-comm-cal__daycol">
+                    <div class="rmr-comm-cal__daycol-head">Sun, 14</div>
+                    <div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div>
+                  </div>
+                  <div class="rmr-comm-cal__daycol rmr-comm-cal__daycol--selected">
+                    <div class="rmr-comm-cal__daycol-head">Mon, 15</div>
+                    <div class="rmr-comm-cal__daycol-hour">
+                      <div class="rmr-rsv-event rmr-rsv-event--block" data-action="fake-submit" data-fake-message="Event details for this reservation aren't included in this example.">
+                        <span class="rmr-comm-cal__event-time">11:00 AM</span><span class="rmr-comm-cal__event-label">Theater Room</span>
+                      </div>
+                    </div>
+                    <div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div>
+                  </div>
+                  <div class="rmr-comm-cal__daycol">
+                    <div class="rmr-comm-cal__daycol-head">Tue, 16</div>
+                    <div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div>
+                  </div>
+                  <div class="rmr-comm-cal__daycol">
+                    <div class="rmr-comm-cal__daycol-head">Wed, 17</div>
+                    <div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div>
+                    <div class="rmr-comm-cal__daycol-hour">
+                      <a href="#" class="rmr-rsv-event rmr-rsv-event--block rmr-rsv-event--pending" data-action="fake-submit" data-fake-message="Event details for this reservation aren't included in this example.">
+                        <span class="rmr-comm-cal__event-time">7:00 PM</span><span class="rmr-comm-cal__event-label">Clubhouse Room 1</span>
+                      </a>
+                    </div>
+                    <div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div>
+                  </div>
+                  <div class="rmr-comm-cal__daycol">
+                    <div class="rmr-comm-cal__daycol-head">Thu, 18</div>
+                    <div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div>
+                  </div>
+                  <div class="rmr-comm-cal__daycol">
+                    <div class="rmr-comm-cal__daycol-head">Fri, 19</div>
+                    <div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div>
+                  </div>
+                  <div class="rmr-comm-cal__daycol">
+                    <div class="rmr-comm-cal__daycol-head">Sat, 20</div>
+                    <div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div>
+                    <div class="rmr-comm-cal__daycol-hour rmr-comm-cal__daycol-hour--multi">
+                      <button type="button" class="rmr-rsv-event rmr-rsv-event--block rmr-rsv-event--accent" data-action="fake-submit" data-fake-message="Event details for this reservation aren't included in this example.">
+                        <span class="rmr-comm-cal__event-time">7:00 PM</span><span class="rmr-comm-cal__event-label">Clubhouse Room 1</span>
+                      </button>
+                      <div class="rmr-rsv-event rmr-rsv-event--block" data-action="fake-submit" data-fake-message="Event details for this reservation aren't included in this example.">
+                        <span class="rmr-comm-cal__event-time">7:30 PM</span><span class="rmr-comm-cal__event-label">Theater Room</span>
+                      </div>
+                    </div>
+                    <div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Day view — node 2046:3704 ("2.0.5 Amenity Reservations - Day View") -->
+              <div data-comm-cal-view="day" hidden>
+                <div class="rmr-comm-cal__timegrid">
+                  <div class="rmr-comm-cal__gutter">
+                    <div class="rmr-comm-cal__gutter-corner"></div>
+                    <div class="rmr-comm-cal__gutter-hour">11 AM</div>
+                    <div class="rmr-comm-cal__gutter-hour">12 PM</div>
+                    <div class="rmr-comm-cal__gutter-hour">1 PM</div>
+                    <div class="rmr-comm-cal__gutter-hour">2 PM</div>
+                    <div class="rmr-comm-cal__gutter-hour">3 PM</div>
+                    <div class="rmr-comm-cal__gutter-hour">4 PM</div>
+                    <div class="rmr-comm-cal__gutter-hour">5 PM</div>
+                    <div class="rmr-comm-cal__gutter-hour">6 PM</div>
+                    <div class="rmr-comm-cal__gutter-hour">7 PM</div>
+                    <div class="rmr-comm-cal__gutter-hour">8 PM</div>
+                  </div>
+                  <div class="rmr-comm-cal__daycol rmr-comm-cal__daycol--wide">
+                    <div class="rmr-comm-cal__daycol-head">Wed, October 17, 2025</div>
+                    <div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div>
+                    <div class="rmr-comm-cal__daycol-hour">
+                      <a href="#" class="rmr-rsv-event rmr-rsv-event--block rmr-rsv-event--pending" data-action="fake-submit" data-fake-message="Event details for this reservation aren't included in this example.">
+                        <span class="rmr-comm-cal__event-time">7:00 PM</span><span class="rmr-comm-cal__event-label">Clubhouse Room 1</span>
+                      </a>
+                    </div>
+                    <div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- New Reservation — step 1: 3.0.2 New Reservation Overlay - payment (node 2008:2968) -->
+<div class="rmr-modal-backdrop" data-modal-backdrop="new-reservation-1" hidden>
+  <div class="rmr-modal rmr-modal--newres1" role="dialog" aria-modal="true" aria-labelledby="modal-newres1-title" data-component="3.0.2 New Reservation Overlay - payment">
+    <div class="rmr-modal__header" data-component="Header">
+      <h2 class="rmr-modal__title" id="modal-newres1-title">New Reservation</h2>
+      <button class="rmr-modal__close" type="button" data-action="close-modal">
+        <img src="../assets/icons/payments/mp-close.svg" alt="Close" width="24" height="24" />
+      </button>
+    </div>
+    <div class="rmr-pmt-body rmr-pmt-body--split">
+      <div class="rmr-rsv-form">
+       <div class="rmr-pmt-scroll">
+        <div class="rmr-modal__field" style="width:240px;">
+          <span class="rmr-modal__field-label">Select Amenity</span>
+          <div class="rmr-dropdown" data-dropdown>
+            <button type="button" class="rmr-modal__select rmr-dropdown__trigger" data-dropdown-trigger>
+              <span data-dropdown-value>Theater Room</span>
+            </button>
+            <div class="rmr-dropdown__menu" data-dropdown-menu hidden>
+              <div class="rmr-dropdown__option rmr-dropdown__option--selected" data-dropdown-option>Theater Room</div>
+            </div>
+          </div>
+        </div>
+        <p style="margin:0; font-size:var(--font-size-sm); color:var(--text-primary);">Located near the main office.</p>
+        <div class="rmr-rsv-fee-row">
+          <span style="color:var(--text-primary);">Total Reservation Fee: <strong>$15.00</strong></span>
+          <button type="button" class="rmr-btn rmr-btn--text rmr-btn--link" data-action="fake-submit" data-fake-message="Fee breakdown isn't included in this example.">View All Fees</button>
+        </div>
+        <div>
+          <p class="rmr-rsv-form__label">Amenity Images</p>
+          <div class="rmr-svc-attach__thumb">
+            <img class="rmr-svc-attach__thumb-img" src="../assets/images/reservations/room-2.png" alt="" />
+          </div>
+        </div>
+        <hr class="rmr-divider" />
+        <div class="rmr-rsv-form-row">
+          <div class="rmr-modal__field">
+            <span class="rmr-modal__field-label">Date</span>
+            <button type="button" class="rmr-rsv-date-btn" data-action="fake-submit" data-fake-message="Changing the date isn't included in this example.">
+              <span>10/15/25</span>
+              <img src="../assets/icons/reservations/calendar-today.svg" alt="" width="20" height="20" />
+            </button>
+          </div>
+          <div class="rmr-modal__field">
+            <span class="rmr-modal__field-label">Start Time</span>
+            <div class="rmr-rsv-date-btn" data-rsv-field="start" style="cursor:default;">2:30 PM</div>
+          </div>
+          <div class="rmr-modal__field">
+            <span class="rmr-modal__field-label">End Time</span>
+            <div class="rmr-rsv-date-btn" data-rsv-field="end" style="cursor:default;">3:30 PM</div>
+          </div>
+        </div>
+        <div class="rmr-modal__field">
+          <span class="rmr-modal__field-label">Notes</span>
+          <textarea class="rmr-modal__textarea" data-component="Notes"></textarea>
+        </div>
+        <div class="rmr-svc-attach" data-component="Attach file">
+          <span class="rmr-svc-attach__label">Attachments</span>
+          <div class="rmr-svc-attach__zone">
+            <img src="../assets/icons/reservations/file-download-32.svg" alt="" width="32" height="32" />
+            <p class="rmr-svc-attach__text"><a href="#" data-action="fake-submit" data-fake-message="Attaching a file isn't included in this example.">Choose a file</a> or drag it here.</p>
+          </div>
+        </div>
+       </div>
+      </div>
+
+      <div class="rmr-rsv-side">
+        <div class="rmr-rsv-side__header">
+          <button type="button" data-action="fake-submit" data-fake-message="Changing the date isn't included in this example." aria-label="Previous day">
+            <img src="../assets/icons/community/cal-arrow-left.svg" alt="" width="20" height="20" />
+          </button>
+          <p class="rmr-rsv-side__title">Tue, Oct 15, 2025</p>
+          <button type="button" data-action="fake-submit" data-fake-message="Changing the date isn't included in this example." aria-label="Next day">
+            <img src="../assets/icons/community/cal-arrow-right.svg" alt="" width="20" height="20" />
+          </button>
+        </div>
+        <div class="rmr-rsv-side__grid" data-rsv-grid data-rsv-grid-start-min="660">
+          <div class="rmr-rsv-side__gutter">
+            <div class="rmr-rsv-side__hour">11 AM</div>
+            <div class="rmr-rsv-side__hour">12 PM</div>
+            <div class="rmr-rsv-side__hour">1 PM</div>
+            <div class="rmr-rsv-side__hour">2 PM</div>
+            <div class="rmr-rsv-side__hour">3 PM</div>
+            <div class="rmr-rsv-side__hour">4 PM</div>
+            <div class="rmr-rsv-side__hour">5 PM</div>
+            <div class="rmr-rsv-side__hour">6 PM</div>
+            <div class="rmr-rsv-side__hour">7 PM</div>
+            <div class="rmr-rsv-side__hour">8 PM</div>
+            <div class="rmr-rsv-side__hour">9 PM</div>
+          </div>
+          <div class="rmr-rsv-side__col" data-rsv-col>
+            <div class="rmr-rsv-side__row"></div>
+            <div class="rmr-rsv-side__row"></div>
+            <div class="rmr-rsv-side__row"></div>
+            <div class="rmr-rsv-side__row"></div>
+            <div class="rmr-rsv-side__row"></div>
+            <div class="rmr-rsv-side__row"></div>
+            <div class="rmr-rsv-side__row"></div>
+            <div class="rmr-rsv-side__row"></div>
+            <div class="rmr-rsv-side__row"></div>
+            <div class="rmr-rsv-side__row"></div>
+            <div class="rmr-rsv-side__row"></div>
+            <div class="rmr-rsv-side__slot rmr-rsv-side__slot--booked" style="top:0px; height:182px;">11:00 AM - 2:15 PM</div>
+            <div class="rmr-rsv-side__slot rmr-rsv-side__slot--current" data-rsv-current data-start-min="870" data-duration-min="60" style="top:196px; height:56px;">
+              <span class="rmr-rsv-side__resize rmr-rsv-side__resize--top" data-rsv-resize-top aria-hidden="true"></span>
+              <span data-rsv-current-label>2:30 PM - 3:30 PM</span>
+              <span class="rmr-rsv-side__resize rmr-rsv-side__resize--bottom" data-rsv-resize-bottom aria-hidden="true"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="rmr-modal__footer" style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+      <label class="rmr-pmt-terms" style="margin:0; width:auto; padding-top:0; border-top:none;">
+        <span class="rmr-checkbox">
+          <input type="checkbox" />
+          <span class="rmr-checkbox-box"><img src="../assets/icons/payments/mp-checkbox-check.svg" alt="" /></span>
+        </span>
+        I have read and agree to <a href="#" data-action="fake-submit" data-fake-message="Terms and Conditions isn't included in this example.">Terms and Conditions</a>
+      </label>
+      <button type="button" class="rmr-btn rmr-btn--primary" data-action="switch-modal" data-modal-close-current="new-reservation-1" data-modal-target="new-reservation-2">Continue</button>
+    </div>
+  </div>
+</div>
+
+<!-- New Reservation — step 2: 3.0.3 New Reservation - payment required (node 2001:3139) -->
+<div class="rmr-modal-backdrop" data-modal-backdrop="new-reservation-2" hidden>
+  <div class="rmr-modal rmr-modal--newres2" role="dialog" aria-modal="true" aria-labelledby="modal-newres2-title" data-component="3.0.3 New Reservation - payment required">
+    <div class="rmr-modal__header" data-component="Header">
+      <h2 class="rmr-modal__title" id="modal-newres2-title">New Reservation</h2>
+      <button class="rmr-modal__close" type="button" data-action="close-modal">
+        <img src="../assets/icons/payments/mp-close.svg" alt="Close" width="24" height="24" />
+      </button>
+    </div>
+    <p style="margin:0 0 0 24px; font-size:var(--font-size-sm); color:var(--text-secondary);">To complete the reservation request, the property requires payment for the reservation fees.</p>
+    <div class="rmr-pmt-body rmr-pmt-body--split">
+      <div class="rmr-pmt-main rmr-pmt-main--pinned-footer">
+        <div class="rmr-pmt-scroll">
+          <p class="rmr-pmt-method-title">Your Payment Method</p>
+
+          <div class="rmr-ap-method-row" data-ap-method-row>
+            <span class="rmr-ap-method-row__info">
+              <img class="rmr-pmt-method__icon" src="../assets/icons/payments/mp-credit-card.svg" alt="" />
+              <p class="rmr-ap-method-row__label">Visa ending in 1234</p>
+            </span>
+            <button class="rmr-ap-method-row__edit" type="button" data-action="ap-toggle-edit" aria-label="Edit payment method">
+              <img src="../assets/icons/payments/ap-edit.svg" alt="" width="20" height="20" />
+            </button>
+          </div>
+
+          <div class="rmr-pmt-new-form" data-ap-edit-form hidden>
+            <div class="rmr-pmt-new-form__header">
+              <p class="rmr-pmt-new-form__title">Edit Saved Payment Method</p>
+              <button class="rmr-modal__link-btn" type="button" data-action="fake-submit" data-fake-message="Clearing fields isn't included in this example.">Clear All Fields</button>
+            </div>
+
+            <div class="rmr-pmt-field" style="max-width:240px;">
+              <span class="rmr-pmt-field__label" style="color:var(--text-secondary);">Payment Method</span>
+              <div class="rmr-dropdown" data-dropdown>
+                <button type="button" class="rmr-modal__select rmr-dropdown__trigger" data-dropdown-trigger>
+                  <span data-dropdown-value>Credit Card</span>
+                </button>
+                <div class="rmr-dropdown__menu" data-dropdown-menu hidden>
+                  <div class="rmr-dropdown__option rmr-dropdown__option--selected" data-dropdown-option>Credit Card</div>
+                  <div class="rmr-dropdown__option" data-dropdown-option>Debit Card</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="rmr-pmt-form-row">
+              <div class="rmr-modal__field">
+                <span class="rmr-modal__field-label">Card Number*</span>
+                <input class="rmr-modal__input" type="text" value="32452341234" />
+              </div>
+              <div class="rmr-modal__field">
+                <span class="rmr-modal__field-label">Expiration Date*</span>
+                <input class="rmr-modal__input" type="text" value="12/27" />
+              </div>
+              <div class="rmr-modal__field">
+                <span class="rmr-modal__field-label">Security Code*</span>
+                <span class="rmr-pmt-cvv-wrap">
+                  <input class="rmr-modal__input rmr-pmt-cvv-input" type="text" value="234" />
+                  <img class="rmr-pmt-cvv-icon" src="../assets/icons/payments/mp-cvv.svg" alt="" />
+                </span>
+              </div>
+            </div>
+
+            <div class="rmr-pmt-billing-header">
+              <p class="rmr-pmt-billing-title">Billing Information</p>
+              <button class="rmr-modal__link-btn" type="button" data-action="fake-submit" data-fake-message="Using the address on file isn't included in this example.">Use Address on File</button>
+            </div>
+
+            <div class="rmr-pmt-form-row">
+              <div class="rmr-modal__field">
+                <span class="rmr-modal__field-label">First Name</span>
+                <input class="rmr-modal__input" type="text" value="Samantha" />
+              </div>
+              <div class="rmr-modal__field">
+                <span class="rmr-modal__field-label">Last Name</span>
+                <input class="rmr-modal__input" type="text" value="Carpenter" />
+              </div>
+            </div>
+            <div class="rmr-pmt-form-row">
+              <div class="rmr-modal__field">
+                <span class="rmr-modal__field-label">Country</span>
+                <div class="rmr-dropdown" data-dropdown>
+                  <button type="button" class="rmr-modal__select rmr-dropdown__trigger" data-dropdown-trigger>
+                    <span data-dropdown-value>United States</span>
+                  </button>
+                  <div class="rmr-dropdown__menu" data-dropdown-menu hidden>
+                    <div class="rmr-dropdown__option rmr-dropdown__option--selected" data-dropdown-option>United States</div>
+                  </div>
+                </div>
+              </div>
+              <div class="rmr-modal__field" style="flex:2;">
+                <span class="rmr-modal__field-label">Street</span>
+                <input class="rmr-modal__input" type="text" value="742 Willow Crescent, Apt 3B" />
+              </div>
+            </div>
+            <div class="rmr-pmt-form-row">
+              <div class="rmr-modal__field">
+                <span class="rmr-modal__field-label">City</span>
+                <input class="rmr-modal__input" type="text" value="Loveland" />
+              </div>
+              <div class="rmr-modal__field">
+                <span class="rmr-modal__field-label">State</span>
+                <div class="rmr-dropdown" data-dropdown>
+                  <button type="button" class="rmr-modal__select rmr-dropdown__trigger" data-dropdown-trigger>
+                    <span data-dropdown-value>Ohio</span>
+                  </button>
+                  <div class="rmr-dropdown__menu" data-dropdown-menu hidden>
+                    <div class="rmr-dropdown__option rmr-dropdown__option--selected" data-dropdown-option>Ohio</div>
+                  </div>
+                </div>
+              </div>
+              <div class="rmr-modal__field">
+                <span class="rmr-modal__field-label">Postal Code</span>
+                <input class="rmr-modal__input" type="text" value="45208" />
+              </div>
+            </div>
+
+            <div class="rmr-ap-form-footer">
+              <button class="rmr-btn rmr-btn--secondary" type="button" style="height:32px;" data-action="ap-toggle-edit">Cancel Changes</button>
+              <button class="rmr-btn rmr-btn--primary" type="button" style="height:32px;" data-action="ap-toggle-edit">Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="rmr-pmt-summary">
+        <div class="rmr-pmt-field">
+          <span class="rmr-pmt-field__label">Amount Due</span>
+          <span class="rmr-pmt-field__value">$15.00</span>
+        </div>
+        <div class="rmr-pmt-field">
+          <span class="rmr-pmt-field__label">
+            Platform Fee
+            <img src="../assets/icons/payments/mp-info-outline.svg" alt="" width="20" height="20" />
+          </span>
+          <span class="rmr-pmt-field__value">$3.65</span>
+        </div>
+        <hr class="rmr-divider" />
+        <div class="rmr-pmt-field">
+          <span class="rmr-pmt-summary__title">Total Due</span>
+          <span class="rmr-pmt-summary__amount">$18.65</span>
+        </div>
+      </div>
+    </div>
+    <label class="rmr-pmt-terms">
+      <span class="rmr-checkbox">
+        <input type="checkbox" />
+        <span class="rmr-checkbox-box"><img src="../assets/icons/payments/mp-checkbox-check.svg" alt="" /></span>
+      </span>
+      I have read and agree to <a href="#" data-action="fake-submit" data-fake-message="Terms and Conditions isn't included in this example.">Terms and Conditions</a>
+    </label>
+    <div class="rmr-pmt-footer" data-component="Footer">
+      <button type="button" class="rmr-btn rmr-btn--secondary" data-action="switch-modal" data-modal-close-current="new-reservation-2" data-modal-target="new-reservation-1">Back</button>
+      <div class="rmr-pmt-footer__right">
+        <button type="button" class="rmr-modal__link-btn" data-action="fake-submit" data-fake-message="Zego Privacy Policy isn't included in this example.">Zego Privacy Policy</button>
+        <button type="button" class="rmr-btn rmr-btn--primary" data-action="switch-modal" data-modal-close-current="new-reservation-2" data-modal-target="new-reservation-3">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- New Reservation — step 3: 3.0.4 New Reservation Submitted (node 2001:3222) -->
+<div class="rmr-modal-backdrop" data-modal-backdrop="new-reservation-3" hidden>
+  <div class="rmr-modal rmr-modal--narrow" role="dialog" aria-modal="true" aria-labelledby="modal-newres3-title" data-component="3.0.4 New Reservation Submitted">
+    <button class="rmr-modal__close" type="button" data-action="close-modal">
+      <img src="../assets/icons/payments/mp-close.svg" alt="Close" width="24" height="24" />
+    </button>
+    <div class="rmr-pmt-success">
+      <img class="rmr-pmt-success__icon" src="../assets/icons/payments/mp-check-circle-filled.svg" alt="" />
+      <div class="rmr-pmt-success__message">
+        <h2 class="rmr-pmt-success__title" id="modal-newres3-title">Reservation Submitted</h2>
+        <p class="rmr-pmt-success__body">Thank you for your payment! Your reservation has been submitted, and will be reviewed soon.</p>
+      </div>
+      <div class="rmr-pmt-success__details">
+        <div class="rmr-pmt-success__row">
+          <p class="rmr-pmt-success__row-label">Amenity</p>
+          <p class="rmr-pmt-success__row-value">Theater Room</p>
+        </div>
+        <div class="rmr-pmt-success__row">
+          <p class="rmr-pmt-success__row-label">Date</p>
+          <p class="rmr-pmt-success__row-value">10/15/25</p>
+        </div>
+        <div class="rmr-pmt-success__row">
+          <p class="rmr-pmt-success__row-label">Time</p>
+          <p class="rmr-pmt-success__row-value">5:00 PM - 6:00 PM</p>
+        </div>
+        <div class="rmr-pmt-success__row">
+          <p class="rmr-pmt-success__row-label">Reservation Fee</p>
+          <p class="rmr-pmt-success__row-value">$15.00</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Reservation Details — Pending, node 2027:2947 ("2.0.6 Reservation Details") -->
+<div class="rmr-modal-backdrop" data-modal-backdrop="reservation-details-pending" hidden>
+  <div class="rmr-modal rmr-modal--resdetails" role="dialog" aria-modal="true" aria-labelledby="modal-resdetails-pending-title" data-component="2.0.6 Reservation Details">
+    <div class="rmr-modal__header" data-component="Header">
+      <div class="rmr-rsv-status">
+        <h2 class="rmr-modal__title" id="modal-resdetails-pending-title">Reservation Details</h2>
+        <span class="rmr-rsv-status__dot rmr-rsv-status__dot--yellow"></span>
+        <span class="rmr-rsv-status__text">Pending</span>
+      </div>
+      <button class="rmr-modal__close" type="button" data-action="close-modal">
+        <img src="../assets/icons/payments/mp-close.svg" alt="Close" width="24" height="24" />
+      </button>
+    </div>
+    <div class="rmr-modal__body">
+      <div class="rmr-rsv-form-row">
+        <div class="rmr-modal__field" style="flex:1;">
+          <span class="rmr-modal__field-label">Amenity</span>
+          <p class="rmr-rsv-value">Theater Room</p>
+        </div>
+        <div class="rmr-modal__field" style="flex:1;">
+          <span class="rmr-modal__field-label">Date</span>
+          <p class="rmr-rsv-value">10/24/25</p>
+        </div>
+        <div class="rmr-modal__field" style="flex:1;">
+          <span class="rmr-modal__field-label">Time</span>
+          <p class="rmr-rsv-value">7:00 PM - 8:00 PM</p>
+        </div>
+      </div>
+      <div class="rmr-modal__field" style="width:240px;">
+        <span class="rmr-modal__field-label">Description</span>
+        <p class="rmr-rsv-value">Located near the main office.</p>
+      </div>
+      <div class="rmr-rsv-fee-row">
+        <span style="color:var(--text-primary);">Total Reservation Fee <strong>$15.00</strong></span>
+        <button type="button" class="rmr-btn rmr-btn--text rmr-btn--link" data-action="fake-submit" data-fake-message="Fee breakdown isn't included in this example.">View Fee Breakdown</button>
+      </div>
+      <div>
+        <p class="rmr-rsv-form__label">Amenity Images</p>
+        <div class="rmr-svc-attach__thumb">
+          <img class="rmr-svc-attach__thumb-img" src="../assets/images/reservations/room-2.png" alt="" />
+        </div>
+      </div>
+      <hr class="rmr-divider" />
+      <div class="rmr-modal__field" style="width:240px;">
+        <span class="rmr-modal__field-label">Notes</span>
+        <p class="rmr-rsv-value">Party of 15</p>
+      </div>
+      <div>
+        <p class="rmr-rsv-form__label">Attachments</p>
+        <div class="rmr-svc-attach__thumb rmr-svc-attach__thumb--file">
+          <img class="rmr-svc-attach__file-icon" src="../assets/icons/service-issues/file-paper.svg" alt="" />
+          <p class="rmr-svc-attach__thumb-name">reservation_form.docx</p>
+        </div>
+      </div>
+    </div>
+    <div class="rmr-modal__footer" style="display:flex; justify-content:flex-end; width:100%;">
+      <button type="button" class="rmr-btn rmr-btn--primary" data-action="fake-submit" data-fake-message="Cancelling a reservation isn't included in this example.">Cancel Reservation</button>
+    </div>
+  </div>
+</div>
+
+<!-- Reservation Details — Denied, node 2059:459901 ("2.0.7 Reservation Details") -->
+<div class="rmr-modal-backdrop" data-modal-backdrop="reservation-details-denied" hidden>
+  <div class="rmr-modal rmr-modal--resdetails" role="dialog" aria-modal="true" aria-labelledby="modal-resdetails-denied-title" data-component="2.0.7 Reservation Details">
+    <div class="rmr-modal__header" data-component="Header">
+      <div class="rmr-rsv-status">
+        <h2 class="rmr-modal__title" id="modal-resdetails-denied-title">Reservation Details</h2>
+        <span class="rmr-rsv-status__dot rmr-rsv-status__dot--red"></span>
+        <span class="rmr-rsv-status__text">Denied</span>
+      </div>
+      <button class="rmr-modal__close" type="button" data-action="close-modal">
+        <img src="../assets/icons/payments/mp-close.svg" alt="Close" width="24" height="24" />
+      </button>
+    </div>
+    <div class="rmr-modal__body">
+      <div class="rmr-modal__field">
+        <span class="rmr-modal__field-label">Reason</span>
+        <p class="rmr-rsv-value">The clubhouse is getting painted and is no longer available during this time.</p>
+      </div>
+      <hr class="rmr-divider" />
+      <div class="rmr-rsv-form-row">
+        <div class="rmr-modal__field" style="flex:1;">
+          <span class="rmr-modal__field-label">Amenity</span>
+          <p class="rmr-rsv-value">Theater Room</p>
+        </div>
+        <div class="rmr-modal__field" style="flex:1;">
+          <span class="rmr-modal__field-label">Date</span>
+          <p class="rmr-rsv-value">10/13/25</p>
+        </div>
+        <div class="rmr-modal__field" style="flex:1;">
+          <span class="rmr-modal__field-label">Time</span>
+          <p class="rmr-rsv-value">7:00 PM - 8:00 PM</p>
+        </div>
+      </div>
+      <div class="rmr-modal__field" style="width:240px;">
+        <span class="rmr-modal__field-label">Description</span>
+        <p class="rmr-rsv-value">Located near the main office.</p>
+      </div>
+      <div class="rmr-modal__field" style="width:240px;">
+        <span class="rmr-modal__field-label">Reservation Fee</span>
+        <p class="rmr-rsv-value">$15.00</p>
+      </div>
+      <hr class="rmr-divider" />
+      <div class="rmr-modal__field">
+        <span class="rmr-modal__field-label">Notes</span>
+        <p class="rmr-rsv-value">We're expecting around 15–20 people, mostly family and a few friends. We'll likely bring some light decorations (nothing taped to walls) and a couple of folding tables for food and gifts. We also plan to bring a cake and some catered food, but no cooking will be done on-site. We'll make sure everything is cleaned up and trash is removed before the end of the reservation. Please let me know if there are any specific setup or cleanup requirements we should be aware of. Thank you!</p>
+      </div>
+      <div>
+        <p class="rmr-rsv-form__label">Attachments</p>
+        <div class="rmr-svc-attach__thumb rmr-svc-attach__thumb--file">
+          <img class="rmr-svc-attach__file-icon" src="../assets/icons/service-issues/file-paper.svg" alt="" />
+          <p class="rmr-svc-attach__thumb-name">reservation_form.docx</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="../assets/app.js?v=27"></script>
+</body>
+</html>

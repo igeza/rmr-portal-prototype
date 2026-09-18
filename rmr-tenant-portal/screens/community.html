@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Community — rmResident Portal</title>
+<link rel="stylesheet" href="../assets/rmr.css?v=60" />
+<link rel="stylesheet" href="../assets/proto.css" />
+</head>
+<body data-screen="community">
+<div class="rmr-app" data-component="3.1.1 Community Page - All Features Enabled">
+
+  <header class="rmr-header" data-component="Header">
+    <div class="rmr-header__left">
+      <div class="rmr-header__logo" data-component="New Logo">
+        <img class="rmr-header__logo-icon" src="../assets/icons/logo-icon.svg" alt="" />
+        <img class="rmr-header__logo-text" src="../assets/icons/logo-text.svg" alt="rmResident" />
+      </div>
+    </div>
+    <div class="rmr-header__right" data-component="Header Right">
+      <div class="rmr-header__icon" data-component="RMP Icon">
+        <img src="../assets/icons/globe.svg" alt="Language" width="24" height="24" />
+      </div>
+      <span class="rmr-header__divider" aria-hidden="true"></span>
+      <div class="rmr-account" data-component="User Info">
+        <button class="rmr-header__user" type="button" data-action="toggle-account-menu">
+          <img class="rmr-header__avatar" src="../assets/images/avatar.png" alt="" width="24" height="24" />
+          <span class="rmr-header__username">Samantha Carpenter</span>
+          <img src="../assets/icons/chevron-down.svg" alt="" width="24" height="24" />
+        </button>
+        <div class="rmr-account-menu" data-account-menu hidden data-component="Dropdown Menu">
+          <a class="rmr-account-menu__item" href="fp-account.html">
+            <span>View Account</span>
+          </a>
+          <button class="rmr-account-menu__item" type="button" data-action="fake-submit" data-fake-message="Payment Settings isn't included in this example.">
+            <span>Payment Settings</span>
+          </button>
+          <button class="rmr-account-menu__item" type="button" data-action="fake-submit" data-fake-message="Switching accounts isn't included in this example.">
+            <span>Switch Accounts</span>
+            <span class="rmr-account-menu__arrow" aria-hidden="true"></span>
+          </button>
+          <button class="rmr-account-menu__item" type="button" data-action="fake-submit" data-fake-message="Logout isn't wired up in this example.">
+            <span>Log Out</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="rmr-body" data-component="Content">
+    <nav class="rmr-menu" data-component="Menu" aria-label="Primary">
+      <ul class="rmr-menu__list" data-component="Expanded Menu">
+        <li class="rmr-menu__item rmr-menu__item--active" data-nav="community" data-component="Menu Items">
+          <a class="rmr-menu__link" href="community.html">
+            <svg class="rmr-menu__icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M8 8.5C9.08667 8.5 10.0467 8.76 10.8267 9.1C11.5467 9.42 12 10.14 12 10.92V12H4V10.9267C4 10.14 4.45333 9.42 5.17333 9.10667C5.95333 8.76 6.91333 8.5 8 8.5ZM2.66667 8.66667C3.4 8.66667 4 8.06667 4 7.33333C4 6.6 3.4 6 2.66667 6C1.93333 6 1.33333 6.6 1.33333 7.33333C1.33333 8.06667 1.93333 8.66667 2.66667 8.66667ZM3.42 9.4C3.17333 9.36 2.92667 9.33333 2.66667 9.33333C2.00667 9.33333 1.38 9.47333 0.813333 9.72C0.32 9.93333 0 10.4133 0 10.9533V12H3V10.9267C3 10.3733 3.15333 9.85333 3.42 9.4ZM13.3333 8.66667C14.0667 8.66667 14.6667 8.06667 14.6667 7.33333C14.6667 6.6 14.0667 6 13.3333 6C12.6 6 12 6.6 12 7.33333C12 8.06667 12.6 8.66667 13.3333 8.66667ZM16 10.9533C16 10.4133 15.68 9.93333 15.1867 9.72C14.62 9.47333 13.9933 9.33333 13.3333 9.33333C13.0733 9.33333 12.8267 9.36 12.58 9.4C12.8467 9.85333 13 10.3733 13 10.9267V12H16V10.9533ZM8 4C9.10667 4 10 4.89333 10 6C10 7.10667 9.10667 8 8 8C6.89333 8 6 7.10667 6 6C6 4.89333 6.89333 4 8 4Z" fill="currentColor"/>
+            </svg>
+            <span class="rmr-menu__label">Community</span>
+          </a>
+        </li>
+        <li class="rmr-menu__item" data-nav="reservations" data-component="Menu Items">
+          <a class="rmr-menu__link" href="reservations.html">
+            <svg class="rmr-menu__icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M11.624 8.04798L10.776 7.19998L6.872 11.104L5.176 9.40798L4.328 10.256L6.872 12.8L11.624 8.04798ZM13.6 1.59998H12.8V0H11.2V1.59998H4.8V0H3.2V1.59998H2.4C1.512 1.59998 0.808 2.31998 0.808 3.19998L0.8 14.4C0.8 15.28 1.512 16 2.4 16H13.6C14.48 16 15.2 15.28 15.2 14.4V3.19998C15.2 2.31998 14.48 1.59998 13.6 1.59998ZM13.6 14.4H2.4V5.59998H13.6V14.4Z" fill="currentColor"/>
+            </svg>
+            <span class="rmr-menu__label">Reservations</span>
+          </a>
+        </li>
+      </ul>
+      <div class="rmr-menu__footer" data-component="Expanded Menu Item">
+        <div class="rmr-menu__item">
+          <button class="rmr-menu__link" type="button" data-action="toggle-menu" data-component="Collapse">
+            <img class="rmr-menu__icon" src="../assets/icons/collapse.svg" alt="" data-collapse-icon />
+            <span class="rmr-menu__label" data-collapse-label>Collapse</span>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <main class="rmr-main" data-component="Main Content">
+      <div class="rmr-settings-page rmr-settings-page--fit" data-component="Content">
+
+        <div class="rmr-settings-hero" data-component="Context Bar">
+          <img class="rmr-settings-hero__bg" src="../assets/images/community/hero.png" alt="" />
+          <div class="rmr-settings-hero__scrim"></div>
+          <p class="rmr-settings-hero__title">Community</p>
+          <p style="position:relative; margin:0; font-size:var(--font-size-md); line-height:var(--line-height-lg); letter-spacing:0.32px; color:var(--white);">742 Willow Crescent, Apt 3B</p>
+        </div>
+
+        <div class="rmr-msg-banner rmr-msg-banner--compact" data-component="Banner">
+          <img class="rmr-msg-banner__icon" src="../assets/icons/payments/campaign.svg" alt="" />
+          <p class="rmr-msg-banner__body">For any questions concerning upcoming events, feel free to reach out to management@riverviewapts.com.</p>
+        </div>
+
+        <div class="rmr-comm-layout" data-component="Main Content">
+
+          <div class="rmr-comm-card rmr-comm-main" data-component="Cards">
+            <div class="rmr-comm-cal">
+              <div>
+                <p class="rmr-comm-card__title" style="margin-bottom:var(--spacing-xs);">Calendar</p>
+                <p class="rmr-comm-card__desc">Stay on top of all our community events!</p>
+              </div>
+              <div class="rmr-comm-cal__nav">
+                <div class="rmr-comm-cal__month">
+                  <button type="button" data-action="fake-submit" data-fake-message="Changing months isn't included in this example." aria-label="Previous">
+                    <img src="../assets/icons/community/cal-arrow-left.svg" alt="" width="20" height="20" />
+                  </button>
+                  <p class="rmr-comm-cal__month-label" data-comm-cal-label="month">October 2025</p>
+                  <p class="rmr-comm-cal__month-label" data-comm-cal-label="week" hidden>October 14 - 20, 2025</p>
+                  <p class="rmr-comm-cal__month-label" data-comm-cal-label="day" hidden>Wed, October 17, 2025</p>
+                  <button type="button" data-action="fake-submit" data-fake-message="Changing months isn't included in this example." aria-label="Next">
+                    <img src="../assets/icons/community/cal-arrow-right.svg" alt="" width="20" height="20" />
+                  </button>
+                </div>
+                <div class="rmr-comm-cal__view">
+                  <span class="rmr-comm-cal__view-label">View</span>
+                  <div class="rmr-dropdown" data-dropdown data-comm-view-select>
+                    <button type="button" class="rmr-modal__select rmr-dropdown__trigger" data-dropdown-trigger>
+                      <span data-dropdown-value>Month</span>
+                    </button>
+                    <div class="rmr-dropdown__menu" data-dropdown-menu hidden>
+                      <div class="rmr-dropdown__option rmr-dropdown__option--selected" data-dropdown-option data-comm-view="month">Month</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option data-comm-view="week">Week</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option data-comm-view="day">Day</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Month view — node 2183:15817 -->
+              <div data-comm-cal-view="month">
+                <div class="rmr-comm-cal__grid">
+                  <div class="rmr-comm-cal__weekdays">
+                    <div>Sunday</div><div>Monday</div><div>Tuesday</div><div>Wednesday</div><div>Thursday</div><div>Friday</div><div>Saturday</div>
+                  </div>
+                  <div class="rmr-comm-cal__body">
+                    <!-- Week 1 -->
+                    <div class="rmr-comm-cal__cell rmr-comm-cal__cell--out"><p class="rmr-comm-cal__daynum rmr-comm-cal__daynum--muted">30</p></div>
+                    <div class="rmr-comm-cal__cell rmr-comm-cal__cell--out"><p class="rmr-comm-cal__daynum rmr-comm-cal__daynum--muted">1</p></div>
+                    <div class="rmr-comm-cal__cell rmr-comm-cal__cell--out"><p class="rmr-comm-cal__daynum rmr-comm-cal__daynum--muted">2</p></div>
+                    <div class="rmr-comm-cal__cell rmr-comm-cal__cell--out"><p class="rmr-comm-cal__daynum rmr-comm-cal__daynum--muted">3</p></div>
+                    <div class="rmr-comm-cal__cell rmr-comm-cal__cell--out"><p class="rmr-comm-cal__daynum rmr-comm-cal__daynum--muted">4</p></div>
+                    <div class="rmr-comm-cal__cell rmr-comm-cal__cell--out"><p class="rmr-comm-cal__daynum rmr-comm-cal__daynum--muted">5</p></div>
+                    <div class="rmr-comm-cal__cell rmr-comm-cal__cell--out"><p class="rmr-comm-cal__daynum rmr-comm-cal__daynum--muted">6</p></div>
+                    <!-- Week 2 -->
+                    <div class="rmr-comm-cal__cell rmr-comm-cal__cell--out"><p class="rmr-comm-cal__daynum rmr-comm-cal__daynum--muted">7</p></div>
+                    <div class="rmr-comm-cal__cell rmr-comm-cal__cell--out"><p class="rmr-comm-cal__daynum rmr-comm-cal__daynum--muted">8</p></div>
+                    <div class="rmr-comm-cal__cell rmr-comm-cal__cell--out"><p class="rmr-comm-cal__daynum rmr-comm-cal__daynum--muted">9</p></div>
+                    <div class="rmr-comm-cal__cell rmr-comm-cal__cell--out"><p class="rmr-comm-cal__daynum rmr-comm-cal__daynum--muted">10</p></div>
+                    <div class="rmr-comm-cal__cell rmr-comm-cal__cell--out"><p class="rmr-comm-cal__daynum rmr-comm-cal__daynum--muted">11</p></div>
+                    <div class="rmr-comm-cal__cell rmr-comm-cal__cell--out"><p class="rmr-comm-cal__daynum rmr-comm-cal__daynum--muted">12</p></div>
+                    <div class="rmr-comm-cal__cell rmr-comm-cal__cell--out"><p class="rmr-comm-cal__daynum rmr-comm-cal__daynum--muted">13</p></div>
+                    <!-- Week 3 -->
+                    <div class="rmr-comm-cal__cell"><p class="rmr-comm-cal__daynum">14</p></div>
+                    <div class="rmr-comm-cal__cell rmr-comm-cal__cell--selected">
+                      <p class="rmr-comm-cal__daynum">15</p>
+                      <button type="button" class="rmr-comm-cal__event" data-action="open-modal" data-modal-target="event-details">
+                        <span class="rmr-comm-cal__event-time">11:00 AM</span><span class="rmr-comm-cal__event-label">Doggie Hangout</span>
+                      </button>
+                    </div>
+                    <div class="rmr-comm-cal__cell"><p class="rmr-comm-cal__daynum">16</p></div>
+                    <div class="rmr-comm-cal__cell">
+                      <p class="rmr-comm-cal__daynum">17</p>
+                      <button type="button" class="rmr-comm-cal__event" data-action="fake-submit" data-fake-message="Event Details for this event isn't included in this example.">
+                        <span class="rmr-comm-cal__event-time">2:00 PM</span><span class="rmr-comm-cal__event-label">Open House</span>
+                      </button>
+                    </div>
+                    <div class="rmr-comm-cal__cell"><p class="rmr-comm-cal__daynum">18</p></div>
+                    <div class="rmr-comm-cal__cell"><p class="rmr-comm-cal__daynum">19</p></div>
+                    <div class="rmr-comm-cal__cell">
+                      <p class="rmr-comm-cal__daynum">20</p>
+                      <button type="button" class="rmr-comm-cal__event rmr-comm-cal__event--movie" data-action="fake-submit" data-fake-message="Event Details for this event isn't included in this example.">
+                        <span class="rmr-comm-cal__event-time">7:00 PM</span><span class="rmr-comm-cal__event-label">Movie Night</span>
+                      </button>
+                      <button type="button" class="rmr-comm-cal__event rmr-comm-cal__event--board" data-action="fake-submit" data-fake-message="Event Details for this event isn't included in this example.">
+                        <span class="rmr-comm-cal__event-time">7:30 PM</span><span class="rmr-comm-cal__event-label">Community</span>
+                      </button>
+                    </div>
+                    <!-- Week 4 -->
+                    <div class="rmr-comm-cal__cell"><p class="rmr-comm-cal__daynum">21</p></div>
+                    <div class="rmr-comm-cal__cell"><p class="rmr-comm-cal__daynum">22</p></div>
+                    <div class="rmr-comm-cal__cell"><p class="rmr-comm-cal__daynum">23</p></div>
+                    <div class="rmr-comm-cal__cell">
+                      <p class="rmr-comm-cal__daynum">24</p>
+                      <button type="button" class="rmr-comm-cal__event" data-action="fake-submit" data-fake-message="Event Details for this event isn't included in this example.">
+                        <span class="rmr-comm-cal__event-time">2:00 PM</span><span class="rmr-comm-cal__event-label">Open House</span>
+                      </button>
+                    </div>
+                    <div class="rmr-comm-cal__cell"><p class="rmr-comm-cal__daynum">25</p></div>
+                    <div class="rmr-comm-cal__cell">
+                      <p class="rmr-comm-cal__daynum">26</p>
+                      <button type="button" class="rmr-comm-cal__event rmr-comm-cal__event--movie" data-action="fake-submit" data-fake-message="Event Details for this event isn't included in this example.">
+                        <span class="rmr-comm-cal__event-time">7:00 PM</span><span class="rmr-comm-cal__event-label">Movie Night</span>
+                      </button>
+                    </div>
+                    <div class="rmr-comm-cal__cell"><p class="rmr-comm-cal__daynum">27</p></div>
+                    <!-- Week 5 -->
+                    <div class="rmr-comm-cal__cell"><p class="rmr-comm-cal__daynum">28</p></div>
+                    <div class="rmr-comm-cal__cell">
+                      <p class="rmr-comm-cal__daynum">29</p>
+                      <button type="button" class="rmr-comm-cal__event" data-action="fake-submit" data-fake-message="Event Details for this event isn't included in this example.">
+                        <span class="rmr-comm-cal__event-time">2:00 PM</span><span class="rmr-comm-cal__event-label">Open House</span>
+                      </button>
+                      <button type="button" class="rmr-comm-cal__event rmr-comm-cal__event--error" data-action="fake-submit" data-fake-message="Event Details for this event isn't included in this example.">
+                        <span class="rmr-comm-cal__event-time">4:00 PM</span><span class="rmr-comm-cal__event-label">Halloween Contest</span>
+                      </button>
+                      <p class="rmr-comm-cal__more">+3</p>
+                    </div>
+                    <div class="rmr-comm-cal__cell"><p class="rmr-comm-cal__daynum">30</p></div>
+                    <div class="rmr-comm-cal__cell"><p class="rmr-comm-cal__daynum rmr-comm-cal__daynum--muted">31</p></div>
+                    <div class="rmr-comm-cal__cell"><p class="rmr-comm-cal__daynum rmr-comm-cal__daynum--muted">1</p></div>
+                    <div class="rmr-comm-cal__cell"><p class="rmr-comm-cal__daynum rmr-comm-cal__daynum--muted">2</p></div>
+                    <div class="rmr-comm-cal__cell"><p class="rmr-comm-cal__daynum rmr-comm-cal__daynum--muted">3</p></div>
+                  </div>
+                </div>
+
+                <div class="rmr-comm-cal__legend">
+                  <div class="rmr-comm-cal__legend-item"><span class="rmr-comm-cal__legend-swatch rmr-comm-cal__legend-swatch--community"></span>Community Events</div>
+                  <div class="rmr-comm-cal__legend-item"><span class="rmr-comm-cal__legend-swatch rmr-comm-cal__legend-swatch--movie"></span>Movie Night</div>
+                  <div class="rmr-comm-cal__legend-item"><span class="rmr-comm-cal__legend-swatch rmr-comm-cal__legend-swatch--board"></span>Board Meeting</div>
+                </div>
+              </div>
+
+              <!-- Week view — node 2183:16063 ("3.1.3 Community Page - Both - Week View") -->
+              <div data-comm-cal-view="week" hidden>
+                <div class="rmr-comm-cal__timegrid">
+                  <div class="rmr-comm-cal__gutter">
+                    <div class="rmr-comm-cal__gutter-corner"></div>
+                    <div class="rmr-comm-cal__gutter-hour">11 AM</div>
+                    <div class="rmr-comm-cal__gutter-hour">12 PM</div>
+                    <div class="rmr-comm-cal__gutter-hour">1 PM</div>
+                    <div class="rmr-comm-cal__gutter-hour">2 PM</div>
+                    <div class="rmr-comm-cal__gutter-hour">3 PM</div>
+                    <div class="rmr-comm-cal__gutter-hour">4 PM</div>
+                    <div class="rmr-comm-cal__gutter-hour">5 PM</div>
+                    <div class="rmr-comm-cal__gutter-hour">6 PM</div>
+                    <div class="rmr-comm-cal__gutter-hour">7 PM</div>
+                    <div class="rmr-comm-cal__gutter-hour">8 PM</div>
+                  </div>
+                  <div class="rmr-comm-cal__daycol">
+                    <div class="rmr-comm-cal__daycol-head">Sun, 14</div>
+                    <div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div>
+                  </div>
+                  <div class="rmr-comm-cal__daycol rmr-comm-cal__daycol--selected">
+                    <div class="rmr-comm-cal__daycol-head">Mon, 15</div>
+                    <div class="rmr-comm-cal__daycol-hour">
+                      <button type="button" class="rmr-comm-cal__event rmr-comm-cal__event--block" data-action="open-modal" data-modal-target="event-details">
+                        <span class="rmr-comm-cal__event-time">11:00 AM</span><span class="rmr-comm-cal__event-label">Doggie Hangout</span>
+                      </button>
+                    </div>
+                    <div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div>
+                  </div>
+                  <div class="rmr-comm-cal__daycol">
+                    <div class="rmr-comm-cal__daycol-head">Tue, 16</div>
+                    <div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div>
+                  </div>
+                  <div class="rmr-comm-cal__daycol">
+                    <div class="rmr-comm-cal__daycol-head">Wed, 17</div>
+                    <div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div>
+                    <div class="rmr-comm-cal__daycol-hour">
+                      <button type="button" class="rmr-comm-cal__event rmr-comm-cal__event--block" data-action="fake-submit" data-fake-message="Event Details for this event isn't included in this example.">
+                        <span class="rmr-comm-cal__event-time">2:00 PM</span><span class="rmr-comm-cal__event-label">Open House</span>
+                      </button>
+                    </div>
+                    <div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div>
+                  </div>
+                  <div class="rmr-comm-cal__daycol">
+                    <div class="rmr-comm-cal__daycol-head">Thu, 18</div>
+                    <div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div>
+                  </div>
+                  <div class="rmr-comm-cal__daycol">
+                    <div class="rmr-comm-cal__daycol-head">Fri, 19</div>
+                    <div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div>
+                  </div>
+                  <div class="rmr-comm-cal__daycol">
+                    <div class="rmr-comm-cal__daycol-head">Sat, 20</div>
+                    <div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div>
+                    <div class="rmr-comm-cal__daycol-hour rmr-comm-cal__daycol-hour--multi">
+                      <button type="button" class="rmr-comm-cal__event rmr-comm-cal__event--block rmr-comm-cal__event--movie" data-action="fake-submit" data-fake-message="Event Details for this event isn't included in this example.">
+                        <span class="rmr-comm-cal__event-time">7:00 PM</span><span class="rmr-comm-cal__event-label">Movie Night</span>
+                      </button>
+                      <button type="button" class="rmr-comm-cal__event rmr-comm-cal__event--block rmr-comm-cal__event--board" data-action="fake-submit" data-fake-message="Event Details for this event isn't included in this example.">
+                        <span class="rmr-comm-cal__event-time">7:30 PM</span><span class="rmr-comm-cal__event-label">Community</span>
+                      </button>
+                    </div>
+                    <div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div>
+                  </div>
+                </div>
+
+                <div class="rmr-comm-cal__legend">
+                  <div class="rmr-comm-cal__legend-item"><span class="rmr-comm-cal__legend-swatch rmr-comm-cal__legend-swatch--community"></span>Community Events</div>
+                  <div class="rmr-comm-cal__legend-item"><span class="rmr-comm-cal__legend-swatch rmr-comm-cal__legend-swatch--movie"></span>Movie Night</div>
+                  <div class="rmr-comm-cal__legend-item"><span class="rmr-comm-cal__legend-swatch rmr-comm-cal__legend-swatch--board"></span>Board Meeting</div>
+                </div>
+              </div>
+
+              <!-- Day view — node 2183:16237 ("3.1.4 Community Page - Both - Day View") -->
+              <div data-comm-cal-view="day" hidden>
+                <div class="rmr-comm-cal__timegrid">
+                  <div class="rmr-comm-cal__gutter">
+                    <div class="rmr-comm-cal__gutter-corner"></div>
+                    <div class="rmr-comm-cal__gutter-hour">11 AM</div>
+                    <div class="rmr-comm-cal__gutter-hour">12 PM</div>
+                    <div class="rmr-comm-cal__gutter-hour">1 PM</div>
+                    <div class="rmr-comm-cal__gutter-hour">2 PM</div>
+                    <div class="rmr-comm-cal__gutter-hour">3 PM</div>
+                    <div class="rmr-comm-cal__gutter-hour">4 PM</div>
+                    <div class="rmr-comm-cal__gutter-hour">5 PM</div>
+                    <div class="rmr-comm-cal__gutter-hour">6 PM</div>
+                    <div class="rmr-comm-cal__gutter-hour">7 PM</div>
+                    <div class="rmr-comm-cal__gutter-hour">8 PM</div>
+                  </div>
+                  <div class="rmr-comm-cal__daycol rmr-comm-cal__daycol--wide">
+                    <div class="rmr-comm-cal__daycol-head">Wed, October 17, 2025</div>
+                    <div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div>
+                    <div class="rmr-comm-cal__daycol-hour">
+                      <button type="button" class="rmr-comm-cal__event rmr-comm-cal__event--block" data-action="fake-submit" data-fake-message="Event Details for this event isn't included in this example.">
+                        <span class="rmr-comm-cal__event-time">2:00 PM</span><span class="rmr-comm-cal__event-label">Open House</span>
+                      </button>
+                    </div>
+                    <div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div><div class="rmr-comm-cal__daycol-hour"></div>
+                  </div>
+                </div>
+
+                <div class="rmr-comm-cal__legend">
+                  <div class="rmr-comm-cal__legend-item"><span class="rmr-comm-cal__legend-swatch rmr-comm-cal__legend-swatch--community"></span>Community Events</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="rmr-comm-sidebar">
+
+            <div class="rmr-comm-card" data-component="Directory Card">
+              <div class="rmr-comm-card__header">
+                <h2 class="rmr-comm-card__title">Directory</h2>
+                <button type="button" class="rmr-comm-card__link" data-action="open-modal" data-modal-target="directory" aria-label="Open full Directory">
+                  <img src="../assets/icons/community/open-in-new.svg" alt="" width="24" height="24" />
+                </button>
+              </div>
+              <p class="rmr-comm-card__desc">Please only use when necessary and do not spam your neighbors.</p>
+              <div class="rmr-comm-dir">
+                <div class="rmr-comm-dir__entry">
+                  <p class="rmr-comm-dir__name">Kellan Atherton</p>
+                  <div class="rmr-comm-dir__contacts">
+                    <span class="rmr-comm-dir__contact"><img src="../assets/icons/community/call.svg" alt="" />425-263-8563</span>
+                    <span class="rmr-comm-dir__contact"><img src="../assets/icons/community/email.svg" alt="" />katherton@gmail.com</span>
+                  </div>
+                  <p class="rmr-comm-dir__address">1492 Loveland Road Unit #12, Loveland, OH 45140</p>
+                </div>
+                <hr class="rmr-divider" />
+                <div class="rmr-comm-dir__entry">
+                  <p class="rmr-comm-dir__name">Maya Lin</p>
+                  <div class="rmr-comm-dir__contacts">
+                    <span class="rmr-comm-dir__contact"><img src="../assets/icons/community/email.svg" alt="" />mlin@gmail.com</span>
+                  </div>
+                  <p class="rmr-comm-dir__address">1492 Loveland Road Unit #12, Loveland, OH 45140</p>
+                </div>
+                <hr class="rmr-divider" />
+                <div class="rmr-comm-dir__entry">
+                  <p class="rmr-comm-dir__name">Jasper Haines</p>
+                  <div class="rmr-comm-dir__contacts">
+                    <span class="rmr-comm-dir__contact"><img src="../assets/icons/community/call.svg" alt="" />234-463-2134</span>
+                  </div>
+                  <p class="rmr-comm-dir__address">1492 Loveland Road Unit #15, Loveland, OH 45140</p>
+                </div>
+                <hr class="rmr-divider" />
+                <div class="rmr-comm-dir__entry">
+                  <p class="rmr-comm-dir__name">Maya Chen</p>
+                  <div class="rmr-comm-dir__contacts">
+                    <span class="rmr-comm-dir__contact"><img src="../assets/icons/community/call.svg" alt="" />234-684-2351</span>
+                  </div>
+                  <p class="rmr-comm-dir__address">1492 Loveland Road Unit #23, Loveland, OH 45140</p>
+                </div>
+                <hr class="rmr-divider" />
+                <div class="rmr-comm-dir__entry">
+                  <p class="rmr-comm-dir__name">Liam O'Connor</p>
+                  <p class="rmr-comm-dir__address">1492 Loveland Road Unit #11, Loveland, OH 45140</p>
+                </div>
+                <hr class="rmr-divider" />
+                <div class="rmr-comm-dir__entry">
+                  <p class="rmr-comm-dir__name">Emma Johnson</p>
+                  <p class="rmr-comm-dir__address">1492 Loveland Road Unit #62, Loveland, OH 45140</p>
+                </div>
+                <hr class="rmr-divider" />
+                <div class="rmr-comm-dir__entry">
+                  <p class="rmr-comm-dir__name" style="display:flex; align-items:center; gap:8px;">Noah Brown <img src="../assets/icons/community/email.svg" alt="" width="20" height="20" /></p>
+                  <p class="rmr-comm-dir__address">88 Oak Drive, Seattle, WA 98101</p>
+                </div>
+                <hr class="rmr-divider" />
+                <div class="rmr-comm-dir__entry">
+                  <p class="rmr-comm-dir__name" style="display:flex; align-items:center; gap:8px;">Emma White <img src="../assets/icons/community/call.svg" alt="" width="20" height="20" /><img src="../assets/icons/community/email.svg" alt="" width="20" height="20" /></p>
+                  <p class="rmr-comm-dir__address">32 Maple Avenue, Portland, OR 97205</p>
+                </div>
+                <hr class="rmr-divider" />
+                <div class="rmr-comm-dir__entry">
+                  <p class="rmr-comm-dir__name" style="display:flex; align-items:center; gap:8px;">Noah Brown <img src="../assets/icons/community/call.svg" alt="" width="20" height="20" /><img src="../assets/icons/community/email.svg" alt="" width="20" height="20" /></p>
+                  <p class="rmr-comm-dir__address">88 Oak Drive, Seattle, WA 98101</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="rmr-comm-card" data-component="Helpful Resources Card">
+              <div class="rmr-comm-card__header">
+                <h2 class="rmr-comm-card__title">Helpful Resources</h2>
+                <button type="button" class="rmr-comm-card__link" data-action="open-modal" data-modal-target="resources" aria-label="Open full Helpful Resources">
+                  <img src="../assets/icons/community/open-in-new.svg" alt="" width="24" height="24" />
+                </button>
+              </div>
+              <p class="rmr-comm-card__desc">Browse community info here!</p>
+              <div class="rmr-comm-res">
+                <div class="rmr-comm-res__item">
+                  <div class="rmr-comm-res__row">
+                    <span class="rmr-comm-res__label"><img src="../assets/icons/documents/folder.svg" alt="" />HOA Files</span>
+                    <img src="../assets/icons/community/cal-arrow-down.svg" alt="" width="20" height="20" style="transform:rotate(180deg);" />
+                  </div>
+                </div>
+                <hr class="rmr-divider" />
+                <div class="rmr-comm-res__item">
+                  <div class="rmr-comm-res__row">
+                    <span class="rmr-comm-res__label">Rules and Regulations</span>
+                    <span class="rmr-comm-res__actions">
+                      <button type="button" data-action="fake-submit" data-fake-message="Printing isn't included in this example."><img src="../assets/icons/documents/print.svg" alt="Print" /></button>
+                      <button type="button" data-action="fake-submit" data-fake-message="Downloading isn't included in this example."><img src="../assets/icons/documents/file-download.svg" alt="Download" /></button>
+                    </span>
+                  </div>
+                  <p class="rmr-comm-res__desc">Rules and Regulations to help avoid receiving violations</p>
+                </div>
+                <hr class="rmr-divider" />
+                <div class="rmr-comm-res__item">
+                  <div class="rmr-comm-res__row">
+                    <span class="rmr-comm-res__label">Riverview Property Map</span>
+                    <span class="rmr-comm-res__actions">
+                      <button type="button" data-action="fake-submit" data-fake-message="Printing isn't included in this example."><img src="../assets/icons/documents/print.svg" alt="Print" /></button>
+                      <button type="button" data-action="fake-submit" data-fake-message="Downloading isn't included in this example."><img src="../assets/icons/documents/file-download.svg" alt="Download" /></button>
+                    </span>
+                  </div>
+                  <p class="rmr-comm-res__desc">Map of the property</p>
+                </div>
+                <hr class="rmr-divider" />
+                <div class="rmr-comm-res__item">
+                  <div class="rmr-comm-res__row">
+                    <span class="rmr-comm-res__label">Payment Options</span>
+                    <span class="rmr-comm-res__actions">
+                      <button type="button" data-action="fake-submit" data-fake-message="Printing isn't included in this example."><img src="../assets/icons/documents/print.svg" alt="Print" /></button>
+                      <button type="button" data-action="fake-submit" data-fake-message="Downloading isn't included in this example."><img src="../assets/icons/documents/file-download.svg" alt="Download" /></button>
+                    </span>
+                  </div>
+                  <p class="rmr-comm-res__desc">Various ways to pay your rent</p>
+                </div>
+                <hr class="rmr-divider" />
+                <div class="rmr-comm-res__item">
+                  <div class="rmr-comm-res__row">
+                    <span class="rmr-comm-res__label">Leasing Office Hours</span>
+                    <span class="rmr-comm-res__actions">
+                      <button type="button" data-action="fake-submit" data-fake-message="Printing isn't included in this example."><img src="../assets/icons/documents/print.svg" alt="Print" /></button>
+                      <button type="button" data-action="fake-submit" data-fake-message="Downloading isn't included in this example."><img src="../assets/icons/documents/file-download.svg" alt="Download" /></button>
+                    </span>
+                  </div>
+                  <p class="rmr-comm-res__desc">Information for main office scheduling and communitcation</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- Directory Overlay — node 2183:21942 -->
+<div class="rmr-modal-backdrop" data-modal-backdrop="directory" hidden>
+  <div class="rmr-modal rmr-modal--comm" role="dialog" aria-modal="true" aria-labelledby="modal-directory-title" data-component="3.1.5 Directory Overlay">
+    <div class="rmr-modal__header" data-component="Header">
+      <h2 class="rmr-modal__title" id="modal-directory-title">Directory</h2>
+      <button class="rmr-modal__close" type="button" data-action="close-modal">
+        <img src="../assets/icons/payments/mp-close.svg" alt="Close" width="24" height="24" />
+      </button>
+    </div>
+    <div class="rmr-modal__body">
+      <div class="rmr-comm-modal-filters">
+        <div class="rmr-comm-modal-filters__fields">
+          <div class="rmr-modal__field" style="width:240px;">
+            <span class="rmr-modal__field-label">Search</span>
+            <label class="rmr-doc-search">
+              <img src="../assets/icons/documents/search.svg" alt="" width="20" height="20" />
+              <input type="text" placeholder="Search" />
+            </label>
+          </div>
+          <div class="rmr-modal__field" style="width:240px;">
+            <span class="rmr-modal__field-label">Property</span>
+            <div class="rmr-dropdown" data-dropdown>
+              <button type="button" class="rmr-modal__select rmr-dropdown__trigger" data-dropdown-trigger>
+                <span data-dropdown-value>Riverview Apartments</span>
+              </button>
+              <div class="rmr-dropdown__menu" data-dropdown-menu hidden>
+                <div class="rmr-dropdown__option rmr-dropdown__option--selected" data-dropdown-option>Riverview Apartments</div>
+                <div class="rmr-dropdown__option" data-dropdown-option>Safe &amp; Secure Storage</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="rmr-comm-modal-filters__actions">
+          <button type="button" class="rmr-btn rmr-btn--secondary" style="min-width:0;" data-action="fake-submit" data-fake-message="Printing isn't included in this example.">
+            <img class="rmr-btn__icon" src="../assets/icons/documents/print.svg" alt="" />Print
+          </button>
+          <a class="rmr-comm-iconbtn" href="fp-account.html#settings" aria-label="Account Settings">
+            <img src="../assets/icons/payments/setting.svg" alt="" width="20" height="20" />
+          </a>
+        </div>
+      </div>
+
+      <div class="rmr-pay-table-wrap">
+        <table class="rmr-pay-table" data-component="Table">
+          <thead>
+            <tr>
+              <th style="width:20%;">Name</th>
+              <th style="width:38%;">Address</th>
+              <th style="width:28%;">Email</th>
+              <th style="width:14%;">Phone</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Samantha Carpenter</td><td>742 Willow Crescent, Apt 3B, Loveland, OH 45140</td><td>scarpenter@gmail.com</td><td>425-263-8563</td></tr>
+            <tr><td>Kellan Atherton</td><td>742 Willow Crescent, Apt 1A, Loveland, OH 45140</td><td></td><td>324-534-7564</td></tr>
+            <tr><td>Aaliyah Braxton</td><td>742 Willow Crescent, Apt 1B, Loveland, OH 45140</td><td></td><td>234-643-7453</td></tr>
+            <tr><td>Jaxon Rigsby</td><td>742 Willow Crescent, Apt 2A, Loveland, OH 45140</td><td></td><td>523-534-7645</td></tr>
+            <tr><td>Kayden Estep</td><td>742 Willow Crescent, Apt 3A, Loveland, OH 45140</td><td></td><td>734-643-1236</td></tr>
+            <tr><td>Leo Crockett</td><td>742 Willow Crescent, Apt 6A, Loveland, OH 45140</td><td>leocroc@gmail.com</td><td>543-665-1212</td></tr>
+            <tr><td>Maya Johnson</td><td>742 Willow Crescent, Apt 4B, Loveland, OH 45140</td><td>johnson.maya@gmail.com</td><td>555-123-4567</td></tr>
+            <tr><td>Ravi Patel</td><td>742 Willow Crescent, Apt 5C, Loveland, OH 45140</td><td>ravipatel242@gmail.com</td><td>987-654-3210</td></tr>
+            <tr><td>Sofia Chen</td><td>742 Willow Crescent, Apt 6D, Loveland, OH 45140</td><td>chennies@gmail.com</td><td></td></tr>
+            <tr><td>Ethan Kim</td><td>742 Willow Crescent, Apt 7E, Loveland, OH 45140</td><td></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="rmr-comm-modal-footer" style="justify-content:flex-end;">Showing 45 of 45 Contacts</p>
+    </div>
+  </div>
+</div>
+
+<!-- Helpful Resources Overlay — node 2428:97166 -->
+<div class="rmr-modal-backdrop" data-modal-backdrop="resources" hidden>
+  <div class="rmr-modal rmr-modal--comm" role="dialog" aria-modal="true" aria-labelledby="modal-resources-title" data-component="3.1.7 Helpful Resources Overlay">
+    <div class="rmr-modal__header" data-component="Header">
+      <h2 class="rmr-modal__title" id="modal-resources-title">Helpful Resources</h2>
+      <button class="rmr-modal__close" type="button" data-action="close-modal">
+        <img src="../assets/icons/payments/mp-close.svg" alt="Close" width="24" height="24" />
+      </button>
+    </div>
+    <div class="rmr-modal__body">
+      <div class="rmr-modal__field" style="width:240px;">
+        <span class="rmr-modal__field-label">Search</span>
+        <label class="rmr-doc-search">
+          <img src="../assets/icons/documents/search.svg" alt="" width="20" height="20" />
+          <input type="text" placeholder="Search" />
+        </label>
+      </div>
+
+      <div class="rmr-acct-tabs" role="tablist">
+        <button class="rmr-acct-tab rmr-acct-tab--selected" type="button" role="tab" aria-selected="true">Riverview Apartments</button>
+        <button class="rmr-acct-tab" type="button" role="tab" aria-selected="false" data-action="fake-submit" data-fake-message="Switching properties isn't included in this example.">Safe &amp; Secure Storage</button>
+      </div>
+
+      <div class="rmr-pay-table-wrap">
+        <table class="rmr-pay-table rmr-doc-tree" data-component="Table">
+          <thead>
+            <tr><th style="width:4%;" aria-label="Expand"></th><th style="width:32%;">File / Folder Name</th><th style="width:48%;">Description</th><th style="width:16%;" aria-label="Actions"></th></tr>
+          </thead>
+          <tbody>
+            <tr class="rmr-doc-tree__row rmr-doc-tree__row--property" data-doc-tree-id="hoa" data-doc-tree-expanded="true">
+              <td>
+                <button class="rmr-doc-tree__toggle" type="button" data-action="doc-tree-toggle" aria-label="Collapse HOA Files">
+                  <img class="rmr-doc-tree__chevron" src="../assets/icons/documents/keyboard-arrow-right.svg" alt="" width="20" height="20" />
+                </button>
+              </td>
+              <td colspan="3">
+                <div class="rmr-doc-tree__row-inner">
+                  <img class="rmr-doc-tree__icon" src="../assets/icons/documents/folder.svg" alt="" width="20" height="20" />
+                  <span>HOA Files</span>
+                </div>
+              </td>
+            </tr>
+            <tr class="rmr-doc-tree__row rmr-doc-tree__row--doc" data-doc-tree-parent="hoa">
+              <td></td>
+              <td>
+                <div class="rmr-doc-tree__row-inner">
+                  <span class="rmr-doc-tree__spacer"></span>
+                  <img class="rmr-doc-tree__icon" src="../assets/icons/community/pdf.svg" alt="" width="20" height="20" />
+                  <span>Conditions &amp; Restrictions</span>
+                </div>
+              </td>
+              <td></td>
+              <td>
+                <span class="rmr-doc-table__actions">
+                  <button type="button" data-action="fake-submit" data-fake-message="Printing isn't included in this example."><img src="../assets/icons/documents/print.svg" alt="Print" width="20" height="20" /></button>
+                  <button type="button" data-action="fake-submit" data-fake-message="Downloading isn't included in this example."><img src="../assets/icons/documents/file-download.svg" alt="Download" width="20" height="20" /></button>
+                </span>
+              </td>
+            </tr>
+            <tr class="rmr-doc-tree__row rmr-doc-tree__row--doc" data-doc-tree-parent="hoa">
+              <td></td>
+              <td>
+                <div class="rmr-doc-tree__row-inner">
+                  <span class="rmr-doc-tree__spacer"></span>
+                  <img class="rmr-doc-tree__icon" src="../assets/icons/community/pdf.svg" alt="" width="20" height="20" />
+                  <span>Bylaws</span>
+                </div>
+              </td>
+              <td></td>
+              <td>
+                <span class="rmr-doc-table__actions">
+                  <button type="button" data-action="fake-submit" data-fake-message="Printing isn't included in this example."><img src="../assets/icons/documents/print.svg" alt="Print" width="20" height="20" /></button>
+                  <button type="button" data-action="fake-submit" data-fake-message="Downloading isn't included in this example."><img src="../assets/icons/documents/file-download.svg" alt="Download" width="20" height="20" /></button>
+                </span>
+              </td>
+            </tr>
+            <tr class="rmr-doc-tree__row rmr-doc-tree__row--doc" data-doc-tree-parent="hoa">
+              <td></td>
+              <td>
+                <div class="rmr-doc-tree__row-inner">
+                  <span class="rmr-doc-tree__spacer"></span>
+                  <img class="rmr-doc-tree__icon" src="../assets/icons/community/pdf.svg" alt="" width="20" height="20" />
+                  <span>Amendments</span>
+                </div>
+              </td>
+              <td></td>
+              <td>
+                <span class="rmr-doc-table__actions">
+                  <button type="button" data-action="fake-submit" data-fake-message="Printing isn't included in this example."><img src="../assets/icons/documents/print.svg" alt="Print" width="20" height="20" /></button>
+                  <button type="button" data-action="fake-submit" data-fake-message="Downloading isn't included in this example."><img src="../assets/icons/documents/file-download.svg" alt="Download" width="20" height="20" /></button>
+                </span>
+              </td>
+            </tr>
+            <tr class="rmr-doc-tree__row">
+              <td></td>
+              <td>Screenshot</td>
+              <td>Information for main office scheduling an...</td>
+              <td>
+                <span class="rmr-doc-table__actions">
+                  <button type="button" data-action="fake-submit" data-fake-message="Printing isn't included in this example."><img src="../assets/icons/documents/print.svg" alt="Print" width="20" height="20" /></button>
+                  <button type="button" data-action="fake-submit" data-fake-message="Downloading isn't included in this example."><img src="../assets/icons/documents/file-download.svg" alt="Download" width="20" height="20" /></button>
+                </span>
+              </td>
+            </tr>
+            <tr class="rmr-doc-tree__row">
+              <td></td>
+              <td>Payment Options</td>
+              <td>Various ways to pay your rent</td>
+              <td>
+                <span class="rmr-doc-table__actions">
+                  <button type="button" data-action="fake-submit" data-fake-message="Printing isn't included in this example."><img src="../assets/icons/documents/print.svg" alt="Print" width="20" height="20" /></button>
+                  <button type="button" data-action="fake-submit" data-fake-message="Downloading isn't included in this example."><img src="../assets/icons/documents/file-download.svg" alt="Download" width="20" height="20" /></button>
+                </span>
+              </td>
+            </tr>
+            <tr class="rmr-doc-tree__row">
+              <td></td>
+              <td>Rules and Regulations</td>
+              <td>Rules and Regulations to help...</td>
+              <td>
+                <span class="rmr-doc-table__actions">
+                  <button type="button" data-action="fake-submit" data-fake-message="Printing isn't included in this example."><img src="../assets/icons/documents/print.svg" alt="Print" width="20" height="20" /></button>
+                  <button type="button" data-action="fake-submit" data-fake-message="Downloading isn't included in this example."><img src="../assets/icons/documents/file-download.svg" alt="Download" width="20" height="20" /></button>
+                </span>
+              </td>
+            </tr>
+            <tr class="rmr-doc-tree__row">
+              <td></td>
+              <td>Riverview Property Map</td>
+              <td>Map of the property</td>
+              <td>
+                <span class="rmr-doc-table__actions">
+                  <button type="button" data-action="fake-submit" data-fake-message="Printing isn't included in this example."><img src="../assets/icons/documents/print.svg" alt="Print" width="20" height="20" /></button>
+                  <button type="button" data-action="fake-submit" data-fake-message="Downloading isn't included in this example."><img src="../assets/icons/documents/file-download.svg" alt="Download" width="20" height="20" /></button>
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="rmr-comm-modal-footer" style="justify-content:flex-end;">Showing 7 of 7 Files</p>
+    </div>
+  </div>
+</div>
+
+<!-- Event Details — node 2183:15939, the Doggie Hangout event actually reachable from the calendar (Oct 15) -->
+<div class="rmr-modal-backdrop" data-modal-backdrop="event-details" hidden>
+  <div class="rmr-modal rmr-modal--wide" role="dialog" aria-modal="true" aria-labelledby="modal-event-title" data-component="3.1.2 Event Details">
+    <div class="rmr-modal__header" data-component="Header">
+      <div style="display:flex; align-items:center; gap:var(--spacing-md);">
+        <h2 class="rmr-modal__title" id="modal-event-title">Event Details</h2>
+        <span class="rmr-comm-lozenge">Community Event</span>
+      </div>
+      <button class="rmr-modal__close" type="button" data-action="close-modal">
+        <img src="../assets/icons/payments/mp-close.svg" alt="Close" width="24" height="24" />
+      </button>
+    </div>
+    <div class="rmr-modal__body">
+      <p class="rmr-comm-event-title">Doggie Hangout</p>
+      <div class="rmr-modal__field">
+        <span class="rmr-modal__field-label">Property</span>
+        <p style="margin:0; font-size:var(--font-size-sm); color:var(--text-primary);">Riverview Apartments</p>
+      </div>
+      <div class="rmr-comm-event-row">
+        <div class="rmr-modal__field" style="width:240px;">
+          <span class="rmr-modal__field-label">Location</span>
+          <p style="margin:0; font-size:var(--font-size-sm); color:var(--text-primary);">Front Lobby</p>
+        </div>
+        <div class="rmr-modal__field" style="flex:1;">
+          <span class="rmr-modal__field-label">Date</span>
+          <p style="margin:0; font-size:var(--font-size-sm); color:var(--text-primary);">10/15/25</p>
+        </div>
+        <div class="rmr-modal__field" style="flex:1;">
+          <span class="rmr-modal__field-label">Time</span>
+          <p style="margin:0; font-size:var(--font-size-sm); color:var(--text-primary);">11:00 AM - 12:00 PM</p>
+        </div>
+      </div>
+      <div class="rmr-modal__field">
+        <span class="rmr-modal__field-label">Description</span>
+        <p style="margin:0; font-size:var(--font-size-sm); color:var(--text-primary);">Bring your furry friend for a fun playdate! Treats for you and pets provided!</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="../assets/app.js?v=26"></script>
+</body>
+</html>

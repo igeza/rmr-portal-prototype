@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Service Issues — rmResident Portal</title>
-<link rel="stylesheet" href="../assets/rmr.css?v=50" />
+<link rel="stylesheet" href="../assets/rmr.css?v=60" />
 <link rel="stylesheet" href="../assets/proto.css" />
 </head>
 <body data-screen="maintenance">
@@ -426,8 +426,16 @@
             <div class="rmr-svc-attach-carousel__header">
               <p class="rmr-svc-details__field-label">Attachments</p>
               <div class="rmr-svc-attach__nav" data-svc-attach-nav>
-                <button type="button" class="rmr-svc-attach__nav-btn" data-svc-attach-prev aria-label="Previous attachments"><img src="../assets/icons/service-issues/chevron-left-20.svg" alt="Previous" /></button>
-                <button type="button" class="rmr-svc-attach__nav-btn" data-svc-attach-next aria-label="Next attachments"><img src="../assets/icons/service-issues/chevron-right-20.svg" alt="Next" /></button>
+                <button type="button" class="rmr-svc-attach__nav-btn" data-svc-attach-prev aria-label="Previous attachments">
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M11.6667 15L6.66667 10L11.6667 5L12.8333 6.16667L9 10L12.8333 13.8333L11.6667 15Z" fill="currentColor"/>
+                  </svg>
+                </button>
+                <button type="button" class="rmr-svc-attach__nav-btn" data-svc-attach-next aria-label="Next attachments">
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M10.5 10L6.66667 6.16667L7.83333 5L12.8333 10L7.83333 15L6.66667 13.8333L10.5 10Z" fill="currentColor"/>
+                  </svg>
+                </button>
               </div>
             </div>
             <div class="rmr-svc-attach-carousel__track" data-svc-attach-track>
@@ -448,6 +456,6 @@
   </div>
 
 </div>
-<script src="../assets/app.js?v=23"></script>
+<script src="../assets/app.js?v=26"></script>
 </body>
 </html>
