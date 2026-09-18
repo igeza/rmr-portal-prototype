@@ -1042,6 +1042,7 @@ button {
   font-size: var(--font-size-sm);
   color: var(--text-primary);
 }
+.rmr-modal__input::placeholder { color: var(--text-accent); font-style: italic; }
 
 .rmr-modal__textarea {
   width: 100%;
@@ -2205,6 +2206,13 @@ textarea:-webkit-autofill:focus {
 }
 
 .rmr-pay-table th[data-align="right"], .rmr-pay-table td[data-align="right"] { text-align: right; }
+.rmr-pay-table th[data-align="center"], .rmr-pay-table td[data-align="center"] { text-align: center; }
+/* text-align alone can't center an icon cell's <img> — the shared `img {
+   display: block }` reset (top of this file) takes it out of inline flow,
+   which is what text-align centers. Only override it back to inline-block
+   here, scoped to these icon-only cells, rather than touching the shared
+   reset. */
+.rmr-pay-table td[data-align="center"] img { display: inline-block; }
 
 .rmr-pay-table td {
   border-bottom: 1px solid var(--border-border);
@@ -3748,6 +3756,13 @@ body[data-screen="document-sign"] .rmr-settings-page--fit { padding-bottom: 0; }
    default [hidden] { display:none } UA rule at equal specificity. */
 [data-arq-panel] { display: flex; flex-direction: column; gap: var(--spacing-md); flex: 1; min-height: 0; }
 [data-arq-panel][hidden] { display: none; }
+
+/* Open Violations / Closed Violations tab panels (violations.html) — same
+   [hidden]-must-win pattern as [data-svc-panel]/[data-arq-panel] above, so
+   each panel's own .rmr-acct-table-footer can right-align via align-self
+   against this flex-column parent. */
+[data-vio-panel] { display: flex; flex-direction: column; gap: var(--spacing-md); flex: 1; min-height: 0; }
+[data-vio-panel][hidden] { display: none; }
 
 /* Add Request overlay ("2.5 Submit Request - Custom Form," node 2026:7271) —
    622px, its own real instance width (echoed by .rmr-modal--resdetails

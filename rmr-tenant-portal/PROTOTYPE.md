@@ -32,7 +32,7 @@ Apply the same pattern to any new sidebar item's icon.
 
 ## Full Product — scope
 
-**Full Product has five pages so far: `screens/community.html`, `screens/fp-account.html`, `screens/reservations.html`, `screens/architectural-requests.html`, and `screens/polls.html`.**
+**Full Product has nine pages so far: `screens/community.html`, `screens/fp-account.html`, `screens/reservations.html`, `screens/architectural-requests.html`, `screens/polls.html`, `screens/meter-readings.html`, `screens/notes.html`, `screens/violations.html`, and `screens/reports.html`.**
 Nothing on this track links to an MVP screen, and nothing on MVP links back — a first pass wired
 the Directory Overlay's gear icon straight to MVP's own `account.html#settings`, which worked but
 broke the "keep it separate from MVP" rule; corrected, per direct instruction, by forking a real
@@ -73,6 +73,56 @@ yet), so it was likewise appended as the fourth nav item rather than reordering 
 tabs for Notes/Violations/Meter Readings, which aren't built. All four Full Product pages'
 (`community.html`, `reservations.html`, `architectural-requests.html`, `fp-account.html`) shared nav
 lists were grown to include it, same as every prior addition.
+
+`meter-readings.html`, `notes.html`, and `violations.html` are the fifth/sixth/seventh pages added
+the same way, all sourced from one Figma file (`Er93r9FDjMeltm07RhX66j`, "RMR UI Rewrite — Metered
+Utilities, Notes and Violations") built for this specific feature set. That file's own Menu shows a
+much larger 11-item combined nav (Dashboard, Charges & Payments, Maintenance Requests, Architectural
+Requests, Meter Readings, Community, Reservations, Document Center, Notes, Polls, Violations) —
+i.e. the MVP tabs merged into the Full Product sidebar. Per the same "keep Full Product's own nav
+separate from MVP" rule established above (Full Product's nav has never included Dashboard/Charges &
+Payments/Maintenance Requests/Document Center, even though those pages exist on the MVP track), only
+the three Full-Product-native items — Meter Readings, Notes, Violations — were appended, in that
+relative order, to all five Full Product pages' (`community.html`, `reservations.html`,
+`architectural-requests.html`, `polls.html`, `fp-account.html`) shared nav lists; the MVP-only items
+were left out. Each new page's own hero photo is a copy of the same shared MVP hero image (not the
+distinct photo shown in this Figma file's own Context Bar), consistent with the "Context Bar/hero
+photos ... consistently use the MVP hero photo" correction made when Architectural Requests/Polls
+were added.
+
+Violations Register merges its "3.1 Violations Register" (Open) and "4.1 Closed Violations Register"
+mock frames into one page with Open Violations/Closed Violations tabs, the same real underline Tabs
+pattern as Service Issues/Amenity Reservations/Architectural Requests (`.rmr-acct-tab`, wired via a
+page-scoped `vio-tab`/`vio-panel` data-action pair in `app.js`, following that exact precedent). Only
+the row with a full "Violation Details" mock (LANDSCAPE, 10/13/25) opens that modal; the other two
+rows (CAR, NOISE — which do have their own Due Date/Description data in the register itself, just no
+dedicated Details mock) are `fake-submit`, matching how Community's calendar only wires the one event
+with its own Event Details mock and leaves the others as placeholders. Same reasoning on
+`notes.html`: only the second row ("New account created via transfer...") has its own "Note Details"
+mock (with a Files gallery), so only that row opens the modal; "Building Map updated" is fake-submit.
+Meter Readings has no Details mock in this source file at all, so its register has no row
+interactivity beyond the real Date Range/Utility filter inputs (fake, like every other filter in this
+prototype — no page here actually re-queries data by date or utility).
+
+Both detail modals' file/photo thumbnails reuse the existing `.rmr-svc-attach__thumb` /
+`.rmr-svc-attach__thumb--file` classes (Service Issues' attachment-carousel component) rather than
+adding new CSS, and reuse existing prototype photo assets as stand-ins (mock photo content, not real
+listing photos) since the real photos referenced by the Figma mock aren't available outside Figma.
+
+`reports.html` is the eighth page added the same way, sourced from a separate Figma file
+(`fVDy9CF99dAmuid64Pjh5I`, "RMR Rewrite — Reports published for Associations"), not the Metered
+Utilities/Notes/Violations file above. Same deal as before: that file's own Menu shows the full
+11-item combined MVP+Full Product nav, but only "Reports" (the one Full-Product-native item) was
+appended to all nine Full Product pages' shared nav lists, same MVP/Full Product separation rule.
+Its own hero photo is again a copy of the shared MVP hero image, not the Figma file's own Banner
+Image photo. The register's report names render as plain `.rmr-doc-tree__link` blue links
+(fake-submit — no report-opening/download flow exists to wire them to, and this source file has no
+Report Details mock to build one from), and its Search field is a plain labeled text input (`.rmr-
+modal__field` + `.rmr-modal__input`, no leading icon, unlike `.rmr-doc-search` used elsewhere) since
+the mock shows no search icon on this one. Added `.rmr-modal__input::placeholder` (italic
+`--text-accent`) to `rmr.css` to match the mock's placeholder styling and the same treatment already
+used by `.rmr-doc-search input::placeholder` / `.rmr-svc-comments__input::placeholder` — a real
+shared Input Field default, not new-per-page fakery.
 
 ## Source
 

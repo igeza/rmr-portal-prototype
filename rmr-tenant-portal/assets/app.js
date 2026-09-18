@@ -671,6 +671,24 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // Violations Register (violations.html) — Open Violations / Closed
+  // Violations tabs. Same real underline "Tabs" component/classes as
+  // Account Settings, Service Issues, Amenity Reservations, and
+  // Architectural Requests above (.rmr-acct-tab / .rmr-acct-tab--selected).
+  document.querySelectorAll('[data-action="vio-tab"]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.vioTarget;
+      document.querySelectorAll('[data-action="vio-tab"]').forEach((b) => {
+        const selected = b === btn;
+        b.classList.toggle('rmr-acct-tab--selected', selected);
+        b.setAttribute('aria-selected', String(selected));
+      });
+      document.querySelectorAll('[data-vio-panel]').forEach((panel) => {
+        panel.hidden = panel.dataset.vioPanel !== target;
+      });
+    });
+  });
+
   // New Reservation overlay's day-schedule side panel — the block matching
   // the form's own Start/End Time is a real drag-to-move / drag-to-resize
   // control, not just a static preview: dragging its body moves the whole
