@@ -1183,6 +1183,22 @@ rather than merge with it.
   icon/title/body/details-box classes) with a new 3-column row for Preferred/Alternate 1/Alternate
   2 — the summary reflects whatever was actually selected in step 2, not a hardcoded example.
 
+### Correction: Submit now actually adds the issue to Open Issues
+
+The Step 2 "Submit" handler only ever populated Step 3's own confirmation summary — it never read
+the Step 1 form fields, never touched the Open Issues register, and never added anything to the
+`SVC_ISSUES` map the Issue Details overlay reads from, so a submitted issue vanished once the
+confirmation modal closed. Fixed in `app.js`: Submit now reads Step 1's real field values (Issue,
+Category, Description, and the three Yes/No answers, via the same selected-choice markup used
+elsewhere), assigns the next issue number (one past whatever's highest in the register, starting
+at 176), and both prepends a real row to the Open Issues table (status "New," today's date) and adds
+a matching `SVC_ISSUES['open-<n>']` entry (status `open`, a `pending` schedule built from whichever
+slots were picked in Step 2) so the new row opens the same real Issue Details overlay as any other
+row. The register's own "Showing X of X Open Issues" footer count updates to match, and the Add
+Service Issue form resets to blank afterward (same empty-start state as the original build) so the
+next submission doesn't inherit stale values. The new row reuses the existing row-click binding via
+a small `svcBindIssueRow` helper rather than a second copy of that logic.
+
 ## Issue Details overlay (`maintenance.html`)
 
 Clicking any row in either register (Open or Closed) opens an Issue Details overlay, sourced from

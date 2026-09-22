@@ -2151,9 +2151,24 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Open Issues table this Submit button below adds a new row + SVC_ISSUES
+  // entry to, so a submitted issue actually shows up in the list instead of
+  // only living on the confirmation screen.
+  const svcOpenPanel = document.querySelector('[data-svc-panel="open"]');
+  const svcOpenTbody = svcOpenPanel ? svcOpenPanel.querySelector('tbody') : null;
+  const svcOpenFooter = svcOpenPanel ? svcOpenPanel.querySelector('.rmr-acct-table-footer') : null;
+  let svcNextIssueNumber = 176;
+  if (svcOpenTbody) {
+    const existingNums = Array.from(svcOpenTbody.querySelectorAll('tr'))
+      .map((r) => parseInt(r.querySelector('td').textContent, 10))
+      .filter((n) => !Number.isNaN(n));
+    if (existingNums.length) svcNextIssueNumber = Math.max(...existingNums) + 1;
+  }
+
   // Submit -> populate the Confirmation step's summary rows from whatever
-  // was actually selected above, then switch modals (same close-current/
-  // open-target pattern as data-action="switch-modal" elsewhere).
+  // was actually selected above, add the issue to the Open Issues table,
+  // then switch modals (same close-current/open-target pattern as
+  // data-action="switch-modal" elsewhere).
   if (svcSubmitScheduleBtn) {
     svcSubmitScheduleBtn.addEventListener('click', () => {
       const rows = document.querySelector('[data-svc-confirm-rows]');
@@ -2166,6 +2181,64 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
         `).join('');
       }
+
+      const addBackdrop = document.querySelector('[data-modal-backdrop="svc-add"]');
+      if (addBackdrop && svcOpenTbody) {
+        const svcChoiceValue = (question) => {
+          const selected = addBackdrop.querySelector(`[data-svc-question="${question}"] .rmr-pmt-radio--selected`);
+          const choice = selected ? selected.closest('[data-action="svc-select-choice"]') : null;
+          return choice ? (choice.dataset.svcValue === 'yes' ? 'Yes' : 'No') : null;
+        };
+        const titleInput = addBackdrop.querySelector('.rmr-modal__input');
+        const categoryEl = addBackdrop.querySelector('[data-dropdown-value]');
+        const descriptionEl = addBackdrop.querySelector('[data-component="Description"]');
+
+        const number = svcNextIssueNumber++;
+        const key = `open-${number}`;
+        const created = '10/19/26';
+        const title = (titleInput && titleInput.value.trim()) || 'Service Issue';
+        const category = (categoryEl && !categoryEl.classList.contains('rmr-dropdown__value--placeholder'))
+          ? categoryEl.textContent.trim() : null;
+        const description = (descriptionEl && descriptionEl.value.trim()) || null;
+
+        SVC_ISSUES[key] = {
+          title, created: `Created: ${created}`, status: 'open',
+          schedule: {
+            type: 'pending',
+            slots: svcSelectedSlots.map((slot, i) => ({ label: svcSlotLabels[i], day: slot.day, time: slot.time })),
+          },
+          category, repeat: svcChoiceValue('add-repeat'),
+          description, pets: svcChoiceValue('add-pets'), entry: svcChoiceValue('add-entry'),
+          resolution: null, attachments: null, comments: null,
+        };
+
+        const row = document.createElement('tr');
+        row.className = 'rmr-pay-table__row-link';
+        row.dataset.action = 'open-issue-details';
+        row.dataset.svcKey = key;
+        row.innerHTML = `<td>${number}</td><td>${created}</td><td>${title}</td><td>New</td>`;
+        svcBindIssueRow(row);
+        svcOpenTbody.insertBefore(row, svcOpenTbody.firstChild);
+
+        if (svcOpenFooter) {
+          const count = svcOpenTbody.querySelectorAll('tr').length;
+          svcOpenFooter.textContent = `Showing ${count} of ${count} Open Issues`;
+        }
+
+        // Reset the form so the next "Add Service Issue" starts blank.
+        if (titleInput) titleInput.value = '';
+        if (descriptionEl) descriptionEl.value = '';
+        if (categoryEl) {
+          categoryEl.textContent = 'Select a Category';
+          categoryEl.classList.add('rmr-dropdown__value--placeholder');
+          addBackdrop.querySelectorAll('[data-dropdown-option]').forEach((o) => o.classList.remove('rmr-dropdown__option--selected'));
+        }
+        addBackdrop.querySelectorAll('.rmr-pmt-radio--selected').forEach((el) => el.classList.remove('rmr-pmt-radio--selected'));
+        svcSelectedSlots = [];
+        svcSyncSlotButtons();
+        svcRenderSelectedSlots();
+      }
+
       const current = document.querySelector('[data-modal-backdrop="svc-schedule"]');
       const next = document.querySelector('[data-modal-backdrop="svc-confirm"]');
       if (current) current.hidden = true;
@@ -2488,7 +2561,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (allAttachments.length) svcSetupAttachCarousel(backdrop);
   }
 
-  document.querySelectorAll('[data-action="open-issue-details"]').forEach((row) => {
+  function svcBindIssueRow(row) {
     row.addEventListener('click', () => {
       const key = row.dataset.svcKey;
       // Register rows carry the issue number in their first <td>; a
@@ -2499,7 +2572,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const data = SVC_ISSUES[key] || svcBuildFallback(row);
       svcOpenIssueDetails(number, data);
     });
-  });
+  }
+
+  document.querySelectorAll('[data-action="open-issue-details"]').forEach(svcBindIssueRow);
 
   // Deep-linking into a specific issue via URL, e.g. maintenance.html?issue=
   // open-175 — switch to the row's Open/Closed tab first, then open its
