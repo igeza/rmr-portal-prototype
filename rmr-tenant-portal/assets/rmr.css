@@ -2245,8 +2245,8 @@ textarea:-webkit-autofill:focus {
 .rmr-pay-field {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: var(--spacing-xxs);
-  width: 226px;
   flex-shrink: 0;
 }
 
@@ -3071,6 +3071,8 @@ tr.rmr-pay-table__empty-row td.rmr-pay-table__empty {
 .rmr-svc-comments__input::placeholder { color: var(--text-accent); font-style: italic; }
 .rmr-svc-comments__input-btn { background: none; border: none; padding: 0; cursor: pointer; flex-shrink: 0; }
 .rmr-svc-comments__input-btn img { width: 20px; height: 20px; }
+.rmr-svc-comments__send-btn { color: #c2c8cc; display: flex; }
+.rmr-svc-comments__send-btn--active { color: var(--text-blue); }
 /* Node 2794:94919/94923 ("Issue is closed."/"Communication is disabled."
    footer) — a slim 32px input-field-styled bar, not a plain line of text
    floating in the panel: white fill, hairline border, only the bottom

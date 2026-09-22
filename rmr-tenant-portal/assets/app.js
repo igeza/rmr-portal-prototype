@@ -2508,7 +2508,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="rmr-svc-comments__input-row">
           <input class="rmr-svc-comments__input" type="text" placeholder="Type your comment here" data-svc-comment-input />
           <button class="rmr-svc-comments__input-btn" type="button" data-action="fake-submit" data-fake-message="Attaching a file to a comment isn't included in this example."><img src="assets/icons/service-issues/attach-file.svg" alt="Attach" /></button>
-          <button class="rmr-svc-comments__input-btn" type="button" data-svc-comment-send><img src="assets/icons/service-issues/send.svg" alt="Send" /></button>
+          <button class="rmr-svc-comments__input-btn rmr-svc-comments__send-btn" type="button" data-svc-comment-send aria-label="Send"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 16.6667V11.6667L9.16667 10L2.5 8.33333V3.33333L18.3333 10L2.5 16.6667Z" fill="currentColor"/></svg></button>
         </div>`;
     }
     if (mode === 'disabled') return `<p class="rmr-svc-comments__disabled-bar">Communication is disabled.</p>`;
@@ -2624,6 +2624,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (data.comments.mode === 'two-way') {
         const input = footer.querySelector('[data-svc-comment-input]');
         const sendBtn = footer.querySelector('[data-svc-comment-send]');
+        const updateSendState = () => {
+          sendBtn.classList.toggle('rmr-svc-comments__send-btn--active', input.value.trim().length > 0);
+        };
         const send = () => {
           const text = input.value.trim();
           if (!text) return;
@@ -2632,11 +2635,14 @@ document.addEventListener('DOMContentLoaded', () => {
           thread.scrollTop = thread.scrollHeight;
           input.value = '';
           input.focus();
+          updateSendState();
         };
         sendBtn.addEventListener('click', send);
         input.addEventListener('keydown', (e) => {
           if (e.key === 'Enter') { e.preventDefault(); send(); }
         });
+        input.addEventListener('input', updateSendState);
+        updateSendState();
       }
     }
 
