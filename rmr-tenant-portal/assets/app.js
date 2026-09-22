@@ -2497,8 +2497,35 @@ document.addEventListener('DOMContentLoaded', () => {
     return '';
   }
 
+  // A handful of realistic closed-issue message threads, some just a single
+  // message, so the 8 generic fallback issues below don't all read the
+  // identical exchange. Picked deterministically per issue (not random) so
+  // reopening the same issue always shows the same thread.
+  const SVC_FALLBACK_THREADS = [
+    (d) => [
+      { sender: 'Riverview Apartments', time: `${d} 10:30 AM`, text: 'I will be on my way around 11' },
+      { sender: 'You', time: `${d} 10:37 AM`, text: 'Sounds good thanks', self: true },
+    ],
+    (d) => [
+      { sender: 'Riverview Apartments', time: `${d} 2:15 PM`, text: 'All fixed — let us know if it happens again.' },
+    ],
+    (d) => [
+      { sender: 'You', time: `${d} 8:05 AM`, text: 'Just checking on the status of this.', self: true },
+      { sender: 'Riverview Apartments', time: `${d} 11:50 AM`, text: 'Technician is on site now.' },
+      { sender: 'You', time: `${d} 4:30 PM`, text: 'Thank you!', self: true },
+    ],
+    (d) => [
+      { sender: 'Riverview Apartments', time: `${d} 9:00 AM`, text: 'Resolved this morning.' },
+    ],
+    (d) => [
+      { sender: 'Riverview Apartments', time: `${d} 1:20 PM`, text: 'Should be all set now — thanks for your patience.' },
+      { sender: 'You', time: `${d} 1:45 PM`, text: 'Appreciate it, thanks!', self: true },
+    ],
+  ];
+
   function svcBuildFallback(row) {
     const cells = row.querySelectorAll('td');
+    const number = cells[0] ? parseInt(cells[0].textContent.trim(), 10) || 0 : 0;
     const title = cells[2] ? cells[2].textContent.trim() : 'Service Issue';
     const closedDate = cells[1] ? cells[1].textContent.trim() : '';
     return {
@@ -2512,10 +2539,7 @@ document.addEventListener('DOMContentLoaded', () => {
       attachments: null,
       comments: {
         title: 'Messages', mode: 'closed',
-        messages: [
-          { sender: 'Riverview Apartments', time: `${closedDate} 10:30 AM`, text: 'I will be on my way around 11' },
-          { sender: 'You', time: `${closedDate} 10:37 AM`, text: 'Sounds good thanks', self: true },
-        ],
+        messages: SVC_FALLBACK_THREADS[number % SVC_FALLBACK_THREADS.length](closedDate),
       },
     };
   }

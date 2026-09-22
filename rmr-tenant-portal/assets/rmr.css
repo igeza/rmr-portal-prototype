@@ -10,6 +10,7 @@
   /* Color / text */
   --text-primary: #313233;
   --text-secondary: #616466;
+  --text-disabled: #c2c8cc; /* Messages panel's "Issue is closed."/"Communication is disabled." footer */
   --secondary-text: #747474; /* distinct "Secondary Text" token, e.g. table numeric cells */
   --text-accent: #929699; /* placeholder/italic input text */
   --text-tertiary: #747474; /* "Secondary Text" token */
@@ -3070,7 +3071,32 @@ tr.rmr-pay-table__empty-row td.rmr-pay-table__empty {
 .rmr-svc-comments__input::placeholder { color: var(--text-accent); font-style: italic; }
 .rmr-svc-comments__input-btn { background: none; border: none; padding: 0; cursor: pointer; flex-shrink: 0; }
 .rmr-svc-comments__input-btn img { width: 20px; height: 20px; }
-.rmr-svc-comments__disabled-bar { text-align: center; font-size: var(--font-size-sm); font-style: italic; color: var(--text-secondary); flex-shrink: 0; }
+/* Node 2794:94919/94923 ("Issue is closed."/"Communication is disabled."
+   footer) — a slim 32px input-field-styled bar, not a plain line of text
+   floating in the panel: white fill, hairline border, only the bottom
+   corners rounded since it sits flush against the panel's own bottom edge.
+   Figma has it break out of .rmr-svc-comments__panel's own padding to run
+   the full container width (unlike the thread above it, which stays
+   inset) — negative side/bottom margins cancel that padding here rather
+   than restructuring the panel into separate padded/full-bleed zones. */
+.rmr-svc-comments__disabled-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  margin: 0 calc(-1 * var(--spacing-md)) calc(-1 * var(--spacing-md));
+  padding: var(--spacing-xs);
+  background: var(--component-input-default, var(--background-primary));
+  border: 1px solid var(--border-border);
+  border-radius: 0 0 var(--spacing-xs) var(--spacing-xs);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-md);
+  font-style: italic;
+  color: var(--text-disabled);
+  text-align: center;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
 
 /* Notes/Timeline variant of the Messages panel (node 2572:7198, "Legacy
    History/Notes") — reuses .rmr-svc-comments/__title/__panel for the shared
