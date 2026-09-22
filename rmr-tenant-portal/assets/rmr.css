@@ -177,7 +177,8 @@ button {
 .rmr-pay-section,
 .rmr-pay-table-wrap,
 .rmr-dropdown__menu,
-.rmr-sign-stage {
+.rmr-sign-stage,
+.rmr-daterange-popover__list {
   scrollbar-width: thin;
   scrollbar-color: var(--icon-disabled) transparent;
 }
@@ -192,7 +193,8 @@ button {
 .rmr-pay-section::-webkit-scrollbar,
 .rmr-pay-table-wrap::-webkit-scrollbar,
 .rmr-dropdown__menu::-webkit-scrollbar,
-.rmr-sign-stage::-webkit-scrollbar {
+.rmr-sign-stage::-webkit-scrollbar,
+.rmr-daterange-popover__list::-webkit-scrollbar {
   width: var(--spacing-xs);
   height: var(--spacing-xs);
 }
@@ -207,7 +209,8 @@ button {
 .rmr-pay-section::-webkit-scrollbar-track,
 .rmr-pay-table-wrap::-webkit-scrollbar-track,
 .rmr-dropdown__menu::-webkit-scrollbar-track,
-.rmr-sign-stage::-webkit-scrollbar-track {
+.rmr-sign-stage::-webkit-scrollbar-track,
+.rmr-daterange-popover__list::-webkit-scrollbar-track {
   background: transparent;
 }
 .rmr-menu::-webkit-scrollbar-thumb,
@@ -221,7 +224,8 @@ button {
 .rmr-pay-section::-webkit-scrollbar-thumb,
 .rmr-pay-table-wrap::-webkit-scrollbar-thumb,
 .rmr-dropdown__menu::-webkit-scrollbar-thumb,
-.rmr-sign-stage::-webkit-scrollbar-thumb {
+.rmr-sign-stage::-webkit-scrollbar-thumb,
+.rmr-daterange-popover__list::-webkit-scrollbar-thumb {
   background: var(--icon-disabled);
   border-radius: var(--spacing-xs);
 }
@@ -241,7 +245,8 @@ button {
 .rmr-pay-section,
 .rmr-pay-table-wrap,
 .rmr-dropdown__menu,
-.rmr-sign-stage {
+.rmr-sign-stage,
+.rmr-daterange-popover__list {
   scrollbar-gutter: stable;
 }
 
@@ -561,6 +566,7 @@ button {
 .rmr-btn--text.rmr-btn--link { color: var(--text-blue); }
 
 .rmr-btn__icon { width: 20px; height: 20px; }
+.rmr-btn[hidden] { display: none; }
 
 /* ---------- Main section: message banner, tasks/notifications, footer ads ---------- */
 
@@ -635,6 +641,12 @@ button {
   width: auto;
   border-left-color: var(--color-blue-400);
 }
+/* Same trick again for the Dashboard's Tasks/Latest Updates cards — see
+   .rmr-settings-card's own :has() rule above for the full explanation. */
+.rmr-card:has(.rmr-tasks),
+.rmr-card:has(.rmr-notif-list) { padding-right: var(--spacing-xs); }
+.rmr-card:has(.rmr-tasks) > :not(.rmr-tasks),
+.rmr-card:has(.rmr-notif-list) > :not(.rmr-notif-list) { padding-right: var(--spacing-md); }
 
 .rmr-card__title {
   margin: 0;
@@ -1108,6 +1120,11 @@ textarea:-webkit-autofill:focus {
    in this prototype was rebuilt as a trigger button + this menu instead. */
 .rmr-dropdown { position: relative; width: 100%; }
 .rmr-dropdown__trigger { text-align: left; cursor: pointer; }
+/* Unselected state for a dropdown that starts with no real value picked
+   (e.g. Add Service Issue's Category) — every other dropdown in this file
+   always starts pre-selected, so this is opt-in via the trigger value's own
+   class rather than the default. Removed on pick, see app.js. */
+.rmr-dropdown__value--placeholder { color: var(--text-accent); }
 .rmr-dropdown__menu {
   position: absolute;
   top: calc(100% + 4px);
@@ -1116,6 +1133,7 @@ textarea:-webkit-autofill:focus {
   z-index: 30;
   max-height: 240px;
   overflow-y: auto;
+  padding-right: var(--spacing-xs);
   background: var(--background-primary);
   border: 1px solid var(--border-border);
   border-radius: var(--spacing-xs);
@@ -1157,10 +1175,24 @@ textarea:-webkit-autofill:focus {
    container of its own (scrollbar-gutter: auto is set defensively here too,
    in case the bare .rmr-modal rule below this ever changes back to
    reserving one — see that rule's own comment for why it currently doesn't). */
+/* Same 24px-split-into-thirds trick as .rmr-modal--pinned/--comm elsewhere
+   in this file: .rmr-pmt-body's own scrollbar draws flush against its
+   right edge, so without handing this modal's own right padding over to it
+   the bar ends up floating 24px in from the true edge with a dead gap after
+   it instead of before it. .rmr-modal__header and .rmr-pmt-footer (its
+   non-scrolling siblings in the modal's own column) get that 16px back so
+   they still sit the normal 24px in. */
 .rmr-modal--payment,
 .rmr-modal--autopay {
   overflow-y: hidden;
   scrollbar-gutter: auto;
+  padding-right: var(--spacing-xs);
+}
+.rmr-modal--payment > .rmr-modal__header,
+.rmr-modal--autopay > .rmr-modal__header,
+.rmr-modal--payment > .rmr-pmt-footer,
+.rmr-modal--autopay > .rmr-pmt-footer {
+  padding-right: var(--spacing-md);
 }
 .rmr-modal--payment { width: 1168px; height: 608px; }
 .rmr-modal--narrow { width: 400px; }
@@ -1179,12 +1211,16 @@ textarea:-webkit-autofill:focus {
 .rmr-pmt-body {
   display: flex;
   gap: var(--spacing-xl);
-  align-items: flex-start;
+  align-items: stretch;
   flex: 1;
   min-height: 0;
   width: 100%;
   overflow-y: auto;
 }
+/* The 8px content-to-scrollbar gap, same as every other scroll region in
+   this file — left off .rmr-pmt-body--split since that variant doesn't
+   scroll at this level (.rmr-pmt-scroll further in already has its own). */
+.rmr-pmt-body:not(.rmr-pmt-body--split) { padding-right: var(--spacing-xs); }
 
 .rmr-pmt-main {
   display: flex;
@@ -1380,6 +1416,11 @@ textarea:-webkit-autofill:focus {
 .rmr-pmt-summary__disclaimer { margin: 0; font-size: var(--font-size-sm); color: var(--text-secondary); letter-spacing: 0.28px; }
 .rmr-pmt-summary__disclaimer a { color: var(--text-blue); }
 
+/* Pins the divider + platform-fee disclaimer to the bottom of the (often
+   taller-than-its-content) summary box, instead of sitting right under the
+   fields above it — matches the AutoPay Balance mock (node 2044:20657). */
+.rmr-pmt-summary__footer { display: flex; flex-direction: column; gap: var(--spacing-md); width: 100%; margin-top: auto; }
+
 .rmr-pmt-field { display: flex; flex-direction: column; gap: var(--spacing-xxs); width: 100%; }
 .rmr-pmt-field__label { display: flex; align-items: center; gap: var(--spacing-xs); font-size: var(--font-size-sm); color: var(--text-secondary); }
 .rmr-pmt-field__label img { width: 20px; height: 20px; }
@@ -1535,6 +1576,7 @@ textarea:-webkit-autofill:focus {
   font-size: var(--font-size-sm);
   color: var(--text-secondary);
   letter-spacing: 0.28px;
+  white-space: nowrap;
 }
 
 .rmr-ap-amount-option__sub {
@@ -1552,11 +1594,19 @@ textarea:-webkit-autofill:focus {
   letter-spacing: 0.24px;
 }
 
+.rmr-ap-footnote a { color: var(--text-blue); white-space: nowrap; }
+
+/* Current Convenience Fees popup, opened from "View Platform Fees" above. */
+.rmr-ap-fee-rows { display: flex; flex-direction: column; gap: var(--spacing-md); width: 100%; }
+.rmr-ap-fee-row { display: flex; align-items: center; justify-content: space-between; gap: var(--spacing-md); }
+.rmr-ap-fee-row__label { font-size: var(--font-size-md); font-weight: var(--font-weight-bold); color: var(--text-primary); }
+.rmr-ap-fee-row__value { font-size: var(--font-size-md); color: var(--text-primary); }
+
 .rmr-ap-schedule-title { margin: 0; font-size: var(--font-size-md); font-weight: var(--font-weight-bold); color: var(--text-primary); }
 .rmr-ap-schedule-desc { margin: 0; font-size: var(--font-size-sm); color: var(--text-secondary); }
 
 .rmr-ap-date-wrap { position: relative; width: 100%; }
-.rmr-ap-date-input { padding-right: 32px; }
+.rmr-ap-date-input { padding-right: 32px; cursor: pointer; }
 .rmr-ap-date-icon { position: absolute; right: var(--spacing-xs); top: 50%; transform: translateY(-50%); width: 20px; height: 20px; pointer-events: none; }
 
 .rmr-ap-method-row {
@@ -1616,7 +1666,7 @@ textarea:-webkit-autofill:focus {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-xl);
-  width: 1160px;
+  width: 1140px;
   max-width: 100%;
   margin: 0 auto;
   padding: var(--spacing-xl);
@@ -1625,6 +1675,30 @@ textarea:-webkit-autofill:focus {
   box-shadow: var(--dropshadow-sm);
 }
 .rmr-settings-card[hidden] { display: none; }
+
+/* On a single-tile settings-style page (Service Issues, Meter Readings,
+   Notes, Reports, Violations Register, ...) the Banner above the register
+   matches its sibling .rmr-settings-card's own capped width instead of
+   stretching to the page's full available width — scoped to pages that
+   actually have that sibling card, so a multi-column page like Document
+   Center (no .rmr-settings-card, just its own wider .rmr-doc-columns)
+   is unaffected. */
+.rmr-settings-page:has(> .rmr-settings-card) > .rmr-msg-banner {
+  width: 1140px;
+  max-width: 100%;
+  margin: 0 auto;
+}
+/* Same 24px-split-into-thirds trick as .rmr-modal--pinned/--comm elsewhere in
+   this file: a register's .rmr-pay-table-wrap draws its own scrollbar flush
+   against ITS right edge, so it floats 24px in from the card's true edge —
+   with a dead gap after the bar instead of before it — unless the card hands
+   its own right padding over to it and gives every other direct child
+   (filters, tabs, banners, buttons — whichever mix a given register page
+   happens to have) the 16px back to stay at the normal 24px inset. :has()
+   finds the branch that actually scrolls, so this works regardless of that
+   mix without needing a per-page override. */
+.rmr-settings-card:has(.rmr-pay-table-wrap) { padding-right: var(--spacing-xs); }
+.rmr-settings-card:has(.rmr-pay-table-wrap) > :not(:has(.rmr-pay-table-wrap)) { padding-right: var(--spacing-md); }
 
 .rmr-settings-row {
   display: flex;
@@ -1945,24 +2019,24 @@ textarea:-webkit-autofill:focus {
   align-items: center;
   gap: var(--spacing-xl);
 }
+/* [hidden]'s UA-stylesheet display:none loses to this class's own display:flex
+   at equal specificity once this stylesheet loads after it — same fix as the
+   other toggled-display elements in this file (see e.g. .rmr-pay-autopay). */
+.rmr-pay-chart-row[hidden] { display: none; }
 
 .rmr-pay-donut {
   position: relative;
   width: 222px;
   height: 222px;
   flex-shrink: 0;
+  border-radius: 50%;
 }
 
-/* Each arc is a separately-exported SVG shaped to its own slice of the ring —
-   it must sit at its exact Figma inset (not stretched to fill the circle) or
-   the slices distort and overlap. Insets from node 3013:44115. */
-.rmr-pay-donut__seg { position: absolute; }
-.rmr-pay-donut__seg img { display: block; width: 100%; height: 100%; }
-.rmr-pay-donut__seg--1 { inset: 0 0 0.16% 0; }
-.rmr-pay-donut__seg--2 { inset: 52.89% 0.15% 28.76% 83.95%; }
-.rmr-pay-donut__seg--3 { inset: 85.88% 35.44% 0 47.5%; }
-.rmr-pay-donut__seg--4 { inset: 66.81% 5.3% 2.55% 61.82%; }
-
+/* Ring is a conic-gradient sized to each charge type's real share of the
+   total (set per-instance via inline style, since the stops are page data,
+   not a fixed design token) — no dead space between slices, unlike the old
+   four fixed-inset arc images. .rmr-pay-donut__center's own background
+   punches the donut hole by covering the gradient's center. */
 .rmr-pay-donut__center {
   position: absolute;
   top: 50%;
@@ -1971,11 +2045,23 @@ textarea:-webkit-autofill:focus {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: var(--spacing-xs);
   width: 158px;
+  height: 158px;
+  border-radius: 50%;
+  background: var(--background-primary);
   text-align: center;
   color: var(--text-primary);
 }
+
+/* Paid-off "Balance Circle" (node 2552:19014, "You're all caught up!")  —
+   a single complete green ring image instead of the four proportional
+   donut-seg arcs, since there's no breakdown left to chart. */
+.rmr-pay-chart-row--complete { justify-content: center; }
+.rmr-pay-donut__ring { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
+.rmr-pay-donut__check { width: 32px; height: 32px; }
+.rmr-pay-donut__caughtup { margin: 0; font-size: var(--font-size-sm); }
 
 .rmr-pay-donut__label {
   margin: 0;
@@ -2165,6 +2251,88 @@ textarea:-webkit-autofill:focus {
 
 .rmr-pay-field__divider { width: 4px; height: 1px; background: var(--border-border); flex-shrink: 0; }
 .rmr-pay-field__icon { width: 20px; height: 20px; margin-left: auto; flex-shrink: 0; }
+.rmr-pay-field__input--active { border-color: var(--text-blue); box-shadow: 0 0 0 1px var(--text-blue); cursor: pointer; }
+.rmr-pay-field__input { cursor: pointer; }
+.rmr-daterange-placeholder { color: var(--text-accent); font-style: normal; font-weight: var(--font-weight-regular); }
+
+/* Date Range popover — one shared, position:fixed instance (built once in
+   app.js and reused) for every .rmr-pay-field "Date Range" filter across the
+   register pages, same approach as the Community calendar's "+x" day
+   popover: positioned off the clicked field's own rect so it can't be
+   clipped by any ancestor's overflow, rather than one embedded per field. */
+.rmr-daterange-popover {
+  position: fixed;
+  z-index: 110;
+  width: 280px;
+  background: var(--background-primary);
+  border: 1px solid var(--border-border);
+  border-radius: var(--spacing-xs);
+  box-shadow: var(--dropshadow-dropdown);
+  padding: var(--spacing-md);
+  padding-right: var(--spacing-xs);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+.rmr-daterange-popover[hidden] { display: none; }
+/* Same 16px-split trick as .rmr-modal--pinned/--comm elsewhere in this file
+   (those split 24px, this one splits 16px): .rmr-daterange-popover__list's
+   own scrollbar draws flush against its right edge, so without handing this
+   popover's own right padding over to it (above) the bar would float 16px
+   in from the true edge with a dead gap after it instead of before it. Nav/
+   weekdays/footer — the non-scrolling rows — get that 8px back so they
+   still sit the normal 16px in. */
+.rmr-daterange-popover__nav,
+.rmr-daterange-popover__weekdays,
+.rmr-daterange-popover__footer { padding-right: var(--spacing-xs); }
+.rmr-daterange-popover__list { padding-right: var(--spacing-xs); }
+/* Grid, not flex/space-between — Year/Month hide the next button (display:
+   none), and space-between would then push the label to the far side
+   instead of centering it since it'd only have one sibling left to balance
+   against. A fixed side-column width keeps the label centered on the row
+   either way, since a grid track holds its size regardless of whether the
+   content inside it is hidden. */
+.rmr-daterange-popover__nav { display: grid; grid-template-columns: 28px 1fr 28px; align-items: center; }
+.rmr-daterange-popover__nav-btn { display: flex; align-items: center; justify-content: center; width: 28px; height: 28px; background: none; border: none; border-radius: 50%; padding: 0; cursor: pointer; }
+.rmr-daterange-popover__nav-btn[hidden] { display: none; }
+.rmr-daterange-popover__nav-btn:hover { background: var(--interaction-hover-blue); }
+.rmr-daterange-popover__nav-btn img { width: 20px; height: 20px; }
+.rmr-daterange-popover__month-label { width: 100%; background: none; border: none; padding: 2px var(--spacing-xxs); border-radius: var(--radius-sm); font-family: var(--font-family-main); font-size: var(--font-size-sm); font-weight: var(--font-weight-bold); color: var(--text-primary); text-align: center; cursor: pointer; }
+.rmr-daterange-popover__month-label:hover { background: var(--interaction-hover-blue); }
+.rmr-daterange-popover__weekdays { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-size: var(--font-size-xs); color: var(--text-secondary); }
+.rmr-daterange-popover__weekdays[hidden] { display: none; }
+.rmr-daterange-popover__days { display: grid; grid-template-columns: repeat(7, 1fr); row-gap: 2px; }
+.rmr-daterange-popover__day {
+  position: relative;
+  height: 32px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
+}
+.rmr-daterange-popover__day:disabled { color: var(--text-accent); cursor: default; }
+.rmr-daterange-popover__day--in-range::before { content: ""; position: absolute; inset: 0 0; background: var(--interaction-selected-blue); }
+.rmr-daterange-popover__day--range-start::before { left: 50%; }
+.rmr-daterange-popover__day--range-end::before { right: 50%; }
+.rmr-daterange-popover__day-inner { position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; width: 28px; height: 28px; margin: 0 auto; border-radius: 50%; }
+.rmr-daterange-popover__day:not(:disabled):hover .rmr-daterange-popover__day-inner { background: var(--interaction-hover-blue); }
+.rmr-daterange-popover__day--range-start .rmr-daterange-popover__day-inner,
+.rmr-daterange-popover__day--range-end .rmr-daterange-popover__day-inner { background: var(--color-blue-600); color: var(--white); }
+/* Year/month grid — same days container, swapped to 4 cells/row (Material's
+   own month- and multi-year-select layout) instead of the day grid's 7. */
+/* Year/Month lists (node 308:1878) — a plain scrollable column of rows with
+   the current one highlighted, not a grid; same 240px cap as every other
+   scrollable list/menu in this file (.rmr-dropdown__menu etc). */
+.rmr-daterange-popover__list { display: flex; flex-direction: column; max-height: 240px; overflow-y: auto; }
+.rmr-daterange-popover__list-item { display: flex; align-items: center; flex-shrink: 0; height: 36px; padding: 0 var(--spacing-sm); background: none; border: none; border-radius: var(--radius-sm); font-family: var(--font-family-main); font-size: var(--font-size-sm); color: var(--text-primary); text-align: left; cursor: pointer; }
+.rmr-daterange-popover__list-item:hover { background: var(--interaction-hover-blue); }
+.rmr-daterange-popover__list-item--current { background: var(--interaction-selected-blue); }
+.rmr-daterange-popover__footer { display: flex; align-items: center; justify-content: space-between; padding-top: var(--spacing-xs); border-top: 1px solid var(--border-border); }
+.rmr-daterange-popover__footer[hidden] { display: none; }
+.rmr-daterange-popover__footer-btn { background: none; border: none; padding: 0 var(--spacing-xxs); height: 28px; font-family: var(--font-family-main); font-size: var(--font-size-sm); color: var(--text-blue); cursor: pointer; border-radius: var(--radius-sm); }
+.rmr-daterange-popover__footer-btn:hover { background: var(--interaction-hover-blue); }
 
 .rmr-pay-table-wrap {
   flex: 1;
@@ -2182,15 +2350,24 @@ textarea:-webkit-autofill:focus {
    fit its content instead, which is what forced every register into
    horizontal scroll. Every cell then truncates with an ellipsis (below)
    instead of pushing the table wider than its wrap. */
+/* border-collapse: separate (not the more obvious `collapse`) — Chrome/
+   WebKit's border-collapse algorithm paints collapsed borders before a
+   sticky th's scroll offset is applied, so its border-bottom below visually
+   disappears once scrolled under itself instead of scrolling with it.
+   `separate` (cells here only ever have their own border-bottom, never
+   adjoining left/right borders) renders identically at rest and fixes that
+   without any double-border side effect. */
 .rmr-pay-table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   table-layout: fixed;
 }
 
 .rmr-pay-table th {
   position: sticky;
   top: 0;
+  z-index: 1;
   background: var(--background-primary);
   border-bottom: 2px solid var(--border-border);
   padding: var(--spacing-xxs) var(--spacing-xs);
@@ -2230,6 +2407,47 @@ textarea:-webkit-autofill:focus {
 
 .rmr-pay-table td.rmr-pay-table__swatch-cell { white-space: normal; }
 .rmr-pay-table__row-link { cursor: pointer; }
+
+/* Overpayment Amount row (Make a Payment's itemized "Other Amount" table):
+   its label spans the row's empty leading columns via colspan rather than
+   truncating in just the narrow Charge Amount column, since nothing else
+   sits to its left — so it needs the base td rule's truncation lifted. It's
+   also the table's last row, sitting directly above the summary panel below
+   it, so the normal row divider is dropped too. Both need to out-specify
+   the base `.rmr-pay-table td` rule above (same class+tag weight, so
+   source order alone wouldn't win) — the extra `tr` qualifier does that. */
+tr.rmr-pmt-overpay-row td {
+  border-bottom: none;
+}
+tr.rmr-pmt-overpay-row td.rmr-pmt-overpay-label {
+  overflow: visible;
+  text-overflow: clip;
+  white-space: normal;
+}
+
+/* Open Charges' empty state once a payment has cleared every open charge
+   (see rmrApplyPaymentPaid in app.js) — a single full-width cell replacing
+   the normal rows, so it needs its own centered/wrapped treatment instead of
+   the base .rmr-pay-table td's left-aligned, non-wrapping one. Copy/tokens
+   from node 2001:1084 ("There are no open charges!"). It's also the table's
+   only row, so it — not a fixed 40px — stretches to fill .rmr-pay-table-wrap
+   (which has a definite height via its own flex:1) and centers the message
+   in that space instead of leaving it pinned under the header; the extra
+   `tr`/class qualifier on both rules out-specifies the base row-height/
+   border-bottom rules above (same fix as .rmr-pmt-overpay-row). */
+.rmr-pay-table:has(> tbody > tr.rmr-pay-table__empty-row) { height: 100%; }
+tr.rmr-pay-table__empty-row { height: 100%; }
+tr.rmr-pay-table__empty-row td.rmr-pay-table__empty {
+  height: 100%;
+  vertical-align: middle;
+  border-bottom: none;
+  text-align: center;
+  white-space: normal;
+  color: var(--text-accent);
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-lg);
+  letter-spacing: 0.32px;
+}
 .rmr-pay-table__row-link:hover td { background: var(--interaction-hover-blue); }
 
 .rmr-pay-table-footer {
@@ -2281,7 +2499,6 @@ textarea:-webkit-autofill:focus {
   [data-pay-view] th,
   [data-pay-view] td {
     padding: var(--spacing-xxs) var(--spacing-xxs);
-    font-size: var(--font-size-xs);
   }
 }
 
@@ -2592,9 +2809,20 @@ textarea:-webkit-autofill:focus {
    and question/choice/attach classes above — only the schedule step's
    calendar + time-slot picker is new. */
 
-.rmr-svc-schedule-intro { margin: 0; font-size: var(--font-size-sm); color: var(--text-secondary); letter-spacing: 0.28px; }
+/* Direct child of .rmr-modal, whose own align-items: center would otherwise
+   center this as a shrink-wrapped box — width: 100% + text-align: left keeps
+   top instruction text under a modal header left-aligned, matching every
+   other modal's body copy. */
+.rmr-svc-schedule-intro { width: 100%; margin: 0; font-size: var(--font-size-sm); color: var(--text-secondary); letter-spacing: 0.28px; text-align: left; }
 
-.rmr-svc-schedule { display: flex; gap: var(--spacing-xl); width: 100%; align-items: flex-start; }
+/* Fixed 1200x772 so all 3 day columns' slot cards (including a day with two
+   stacked slots plus its Preferred/Alternate badge) always fit without the
+   calendar or selected panel clipping — same "fixed but generous" approach
+   as .rmr-modal--payment/--newres1 elsewhere in this file. */
+.rmr-modal--svcschedule { width: 1200px; height: 772px; }
+.rmr-modal--svcschedule .rmr-svc-schedule { flex: 1; min-height: 0; }
+
+.rmr-svc-schedule { display: flex; gap: var(--spacing-xl); width: 100%; align-items: stretch; }
 
 .rmr-svc-cal { flex: 1; min-width: 0; border: 1px solid var(--border-border); border-radius: var(--spacing-xs); padding: var(--spacing-xl); }
 .rmr-svc-cal__header { margin: 0 0 var(--spacing-lg, 20px); font-size: var(--font-size-md); font-weight: var(--font-weight-bold); color: var(--text-primary); text-align: center; }
@@ -2602,10 +2830,13 @@ textarea:-webkit-autofill:focus {
 .rmr-svc-cal__col { flex: 1; min-width: 0; }
 .rmr-svc-cal__nav { background: none; border: none; padding: var(--spacing-xs); cursor: pointer; margin-top: var(--spacing-xl); flex-shrink: 0; }
 .rmr-svc-cal__nav img { width: 20px; height: 20px; }
+.rmr-svc-cal__nav[disabled] { cursor: not-allowed; opacity: 0.35; }
 .rmr-svc-cal__day-head { display: flex; flex-direction: column; align-items: center; gap: var(--spacing-xxs); padding-bottom: var(--spacing-sm); border-bottom: 2px solid var(--border-accent); margin-bottom: var(--spacing-md); }
 .rmr-svc-cal__day-name { font-size: var(--font-size-sm); color: var(--text-primary); }
 .rmr-svc-cal__day-num { font-size: var(--font-size-xl); color: var(--text-primary); }
-.rmr-svc-cal__slots { display: flex; flex-direction: column; gap: var(--spacing-sm); }
+/* Generous gap (was --spacing-sm/12px) so stacked slot cards within a day
+   column read as distinct rows rather than crowding each other. */
+.rmr-svc-cal__slots { display: flex; flex-direction: column; gap: var(--spacing-md); }
 
 /* Slot buttons (calendar side) and the "Selected Time Slots" panel's cards
    share the same real anatomy — re-verified against node 2438:33028 (panel)
@@ -2632,6 +2863,10 @@ textarea:-webkit-autofill:focus {
   letter-spacing: 0.32px;
   cursor: pointer;
 }
+/* The full "8:00 AM - 12:00 PM" range must read as one line, with the
+   Preferred/Alternate badge as its own line below (not the time wrapping
+   awkwardly across two lines on its own). */
+.rmr-svc-slot__time { white-space: nowrap; }
 .rmr-svc-slot--preferred { background: var(--component-selector); border: 2px solid var(--border-button-tertiary); }
 .rmr-svc-slot--alternate { background: var(--component-selector); border: 1px solid var(--border-button-tertiary); }
 .rmr-svc-slot__badge { padding: var(--spacing-xxs) var(--spacing-xs); border-radius: var(--spacing-xxs); font-size: var(--font-size-xs); font-weight: var(--font-weight-regular); letter-spacing: 0.24px; }
@@ -2639,7 +2874,7 @@ textarea:-webkit-autofill:focus {
 .rmr-svc-slot__badge--alternate { background: var(--color-blue-200); color: var(--text-primary); }
 
 .rmr-svc-selected {
-  width: 280px;
+  width: 350px;
   flex-shrink: 0;
   align-self: stretch;
   display: flex;
@@ -2654,6 +2889,10 @@ textarea:-webkit-autofill:focus {
 .rmr-svc-selected__title { margin: 0; font-size: var(--font-size-md); font-weight: var(--font-weight-bold); line-height: var(--line-height-lg); color: var(--text-primary); }
 .rmr-svc-selected__hint { margin: 0; font-size: var(--font-size-md); line-height: var(--line-height-lg); letter-spacing: 0.32px; color: var(--text-secondary); }
 .rmr-svc-selected__empty { margin: 0; font-size: var(--font-size-sm); color: var(--text-secondary); }
+/* Card list itself: a plain gap (was unset, so stacked Alternate cards had
+   zero space between them) gives every card even breathing room, on top of
+   the divider wrapper's own spacing below the Preferred card. */
+[data-svc-selected-list] { display: flex; flex-direction: column; gap: var(--spacing-md); }
 /* Wraps just the Preferred card (node 2438:33031) with a divider below it,
    separating it from the Alternate cards underneath — .rmr-svc-selected's
    own 24px gap still applies above/below this wrapper like any other child. */
@@ -2668,7 +2907,10 @@ textarea:-webkit-autofill:focus {
   border-radius: var(--spacing-xs);
   background: var(--component-selector);
   position: relative;
+  cursor: grab;
 }
+.rmr-svc-selected__card:active { cursor: grabbing; }
+.rmr-svc-selected__card--dragover { box-shadow: 0 0 0 2px var(--border-button-tertiary) inset; }
 .rmr-svc-selected__card--preferred { border: 2px solid var(--border-button-tertiary); }
 .rmr-svc-selected__card--alternate { border: 1px solid var(--border-button-tertiary); }
 .rmr-svc-selected__card-day { margin: 0; font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); line-height: var(--line-height-sm); color: var(--text-primary); }
@@ -2715,10 +2957,17 @@ textarea:-webkit-autofill:focus {
 .rmr-svc-status-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
 .rmr-svc-status-dot--open { background: var(--color-yellow-500); }
 .rmr-svc-status-dot--closed { background: var(--color-blue-500); }
+/* Architectural Requests' own Status values (rmr-rsv-lozenge's yellow/blue/red
+   palette, matching what the register itself already shows per row) — Pending
+   reuses --open verbatim since it's already the same yellow. */
+.rmr-svc-status-dot--review { background: var(--color-blue-500); }
+.rmr-svc-status-dot--denied { background: var(--status-error); }
 
 .rmr-svc-details__title { margin: 0; font-size: var(--font-size-lg); font-weight: var(--font-weight-regular); line-height: var(--line-height-xl); color: var(--text-primary); }
 .rmr-svc-details__created { margin: 0; font-size: var(--font-size-sm); letter-spacing: 0.28px; color: var(--text-secondary); }
 
+.rmr-svc-details__field { display: flex; flex-direction: column; gap: var(--spacing-xxs); }
+.rmr-svc-details__field[hidden] { display: none; }
 .rmr-svc-details__field-label { margin: 0; font-size: var(--font-size-sm); color: var(--secondary-text); letter-spacing: 0.28px; }
 .rmr-svc-details__field-value { margin: 0; font-size: var(--font-size-sm); color: var(--text-primary); letter-spacing: 0.28px; }
 
@@ -2755,7 +3004,7 @@ textarea:-webkit-autofill:focus {
    edge signaling more content, matching the same carousel already built for
    the Add Service Issue form's Attachments dropzone. */
 .rmr-svc-attach-carousel { position: relative; }
-.rmr-svc-attach-carousel__header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--spacing-xs); }
+.rmr-svc-attach-carousel__header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--spacing-xxs); }
 .rmr-svc-attach-carousel__track { width: 100%; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; -ms-overflow-style: none; }
 .rmr-svc-attach-carousel__track::-webkit-scrollbar { display: none; }
 .rmr-svc-attach-carousel__fade { position: absolute; bottom: 0; right: 0; width: 71px; height: 80px; background: linear-gradient(to right, rgba(255, 255, 255, 0), var(--background-primary)); pointer-events: none; }
@@ -2978,6 +3227,14 @@ textarea:-webkit-autofill:focus {
   padding: 0;
   overflow: hidden;
 }
+/* The property row's own toggle sits directly in its <td> (no
+   .rmr-doc-tree__row-inner — it has no icon/name to lay out alongside), but
+   that td still carries the base .rmr-pay-table td's 8px padding on every
+   side. Against the Expand column's real 28px width (see the <th> width
+   below) that leaves only 12px for the 20px chevron button, clipping it —
+   same fix as above: drop the padding and center the button in the full
+   column width instead. */
+.rmr-doc-tree__row--property > td:first-child { padding: 0; text-align: center; }
 .rmr-doc-tree__row-inner {
   display: flex;
   align-items: center;
@@ -3159,24 +3416,34 @@ body[data-screen="document-sign"] .rmr-settings-page--fit { padding-bottom: 0; }
   position: absolute;
   inset: 0;
   z-index: 20;
+  background: rgba(255, 255, 255, 0.85);
+}
+.rmr-sign-loading[hidden] { display: none; }
+/* Centered on the visible viewport (.rmr-sign-stage, this overlay's nearest
+   scrolling ancestor) rather than the full scrollable document height —
+   without this, the spinner sits at the vertical midpoint of the whole
+   (taller-than-the-viewport) letter and can end up off-screen depending on
+   scroll position. position: sticky + a half-height translateY is the
+   standard trick for viewport-centering inside a scrollable box. */
+.rmr-sign-loading__inner {
+  position: sticky;
+  top: 50%;
+  transform: translateY(-50%);
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   gap: var(--spacing-xxs);
   padding: var(--spacing-xl);
-  background: rgba(255, 255, 255, 0.85);
   text-align: center;
 }
-.rmr-sign-loading[hidden] { display: none; }
 
 .rmr-sign-loading__spinner {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 64px;
-  height: 64px;
+  width: 178px;
+  height: 178px;
   margin-bottom: var(--spacing-sm);
 }
 .rmr-sign-loading__spinner::before {
@@ -3184,18 +3451,20 @@ body[data-screen="document-sign"] .rmr-settings-page--fit { padding-bottom: 0; }
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  border: 4px solid var(--interaction-selected-blue);
+  border: 8px solid var(--interaction-selected-blue);
   border-top-color: var(--text-blue);
   animation: rmr-sign-loading-spin 0.9s linear infinite;
 }
-.rmr-sign-loading__spinner img { position: relative; z-index: 1; width: 24px; height: auto; }
+.rmr-sign-loading__spinner img { position: relative; z-index: 1; width: 40px; height: auto; }
 
 @keyframes rmr-sign-loading-spin {
   to { transform: rotate(360deg); }
 }
 
-.rmr-sign-loading__title { margin: 0; font-size: var(--font-size-md); font-weight: var(--font-weight-bold); color: var(--text-primary); }
-.rmr-sign-loading__desc { margin: 0; font-size: var(--font-size-sm); color: var(--text-secondary); }
+/* Both lines share the same regular weight/size/color per the source (node
+   2677:26211) — no title/desc distinction despite the class names. */
+.rmr-sign-loading__title { margin: 0; font-size: var(--font-size-md); font-weight: var(--font-weight-regular); color: var(--text-primary); }
+.rmr-sign-loading__desc { margin: 0; font-size: var(--font-size-md); font-weight: var(--font-weight-regular); color: var(--text-primary); }
 
 .rmr-sign-doc-toolbar {
   flex-shrink: 0;
@@ -3280,8 +3549,20 @@ body[data-screen="document-sign"] .rmr-settings-page--fit { padding-bottom: 0; }
 }
 
 .rmr-comm-main { flex: 1 1 0; min-width: 0; height: 100%; }
+/* Same trick again for a .rmr-comm-card used as a register card outside the
+   sidebar (Architectural Requests' My Requests / Requests to Review) — see
+   .rmr-settings-card's own :has() rule above for the full explanation. */
+.rmr-comm-card:has(.rmr-pay-table-wrap) { padding-right: var(--spacing-xs); }
+.rmr-comm-card:has(.rmr-pay-table-wrap) > :not(:has(.rmr-pay-table-wrap)) { padding-right: var(--spacing-md); }
 .rmr-comm-sidebar { display: flex; flex-direction: column; gap: var(--spacing-xl); width: 428px; flex-shrink: 0; height: 100%; }
-.rmr-comm-sidebar .rmr-comm-card { flex: 1 1 0; min-height: 0; position: relative; overflow: hidden; }
+/* Same 24px-split-into-thirds trick as .rmr-modal--pinned/--comm above: the
+   Directory/Helpful Resources lists' own flex:1/overflow-y:auto draws their
+   scrollbar flush against this card's true edge unless the card's own right
+   padding is handed over to it, otherwise the bar floats 24px in from the
+   edge with a dead gap after it instead of before it. */
+.rmr-comm-sidebar .rmr-comm-card { flex: 1 1 0; min-height: 0; position: relative; overflow: hidden; padding-right: var(--spacing-xs); }
+.rmr-comm-sidebar .rmr-comm-card__header,
+.rmr-comm-sidebar .rmr-comm-card__desc { padding-right: var(--spacing-md); }
 
 @media (max-width: 1024px) {
   .rmr-comm-layout { flex-direction: column; }
@@ -3369,7 +3650,28 @@ body[data-screen="document-sign"] .rmr-settings-page--fit { padding-bottom: 0; }
 .rmr-comm-cal__event--error { border-left-color: var(--status-error); }
 .rmr-comm-cal__event-time { flex-shrink: 0; font-size: var(--font-size-sm); font-weight: var(--font-weight-bold); color: var(--text-primary); }
 .rmr-comm-cal__event-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; font-size: var(--font-size-sm); color: var(--text-secondary); }
-.rmr-comm-cal__more { margin: 0; text-align: center; font-size: var(--font-size-sm); color: var(--text-secondary); }
+.rmr-comm-cal__more { margin: 0; width: 100%; text-align: left; font-size: var(--font-size-sm); color: var(--text-secondary); background: none; border: none; padding: 0; cursor: pointer; }
+.rmr-comm-cal__more:hover { text-decoration: underline; }
+
+.rmr-comm-cal__day-popover {
+  position: fixed;
+  z-index: 50;
+  width: 240px;
+  max-height: 280px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xxs);
+  background: var(--background-primary);
+  border-radius: var(--spacing-xs);
+  box-shadow: var(--dropshadow-around);
+  padding: var(--spacing-sm);
+}
+.rmr-comm-cal__day-popover[hidden] { display: none; }
+.rmr-comm-cal__day-popover-header { display: flex; align-items: center; justify-content: space-between; font-size: var(--font-size-sm); font-weight: var(--font-weight-bold); color: var(--text-primary); margin-bottom: var(--spacing-xxs); }
+.rmr-comm-cal__day-popover-header button { background: none; border: none; padding: 0; cursor: pointer; line-height: 0; }
+.rmr-comm-cal__day-popover-list { display: flex; flex-direction: column; gap: var(--spacing-xxs); }
+.rmr-comm-cal__day-popover-list .rmr-comm-cal__event { flex-shrink: 0; }
 
 .rmr-comm-cal__legend { display: flex; align-items: center; gap: var(--spacing-md); flex-shrink: 0; }
 .rmr-comm-cal__legend-item { display: flex; align-items: center; gap: var(--spacing-xs); font-size: var(--font-size-sm); color: var(--text-secondary); }
@@ -3390,6 +3692,7 @@ body[data-screen="document-sign"] .rmr-settings-page--fit { padding-bottom: 0; }
 /* Helpful Resources card */
 .rmr-comm-res { display: flex; flex-direction: column; gap: var(--spacing-md); flex: 1; min-height: 0; overflow-y: auto; padding-right: var(--spacing-xs); }
 .rmr-comm-res__item { display: flex; flex-direction: column; gap: var(--spacing-xs); }
+.rmr-comm-res__item[hidden] { display: none; }
 .rmr-comm-res__row { display: flex; align-items: center; justify-content: space-between; width: 100%; }
 .rmr-comm-res__label { display: flex; align-items: center; gap: 4px; font-size: var(--font-size-sm); font-weight: var(--font-weight-bold); color: var(--text-primary); }
 .rmr-comm-res__label img { width: 20px; height: 20px; }
@@ -3398,9 +3701,24 @@ body[data-screen="document-sign"] .rmr-settings-page--fit { padding-bottom: 0; }
 .rmr-comm-res__actions img { width: 20px; height: 20px; }
 .rmr-comm-res__desc { margin: 0; font-size: var(--font-size-sm); color: var(--text-secondary); }
 
-/* Directory / Helpful Resources overlays — reuse .rmr-modal's box, just wider */
-.rmr-modal--comm { width: 1128px; }
-.rmr-modal--comm .rmr-modal__body { width: 100%; }
+/* Directory / Helpful Resources overlays — reuse .rmr-modal's box, just wider.
+   Both list many more rows than fit in 90vh (Directory: all 45 contacts;
+   Resources: however many files a property has), so only the table itself
+   should scroll — the search/filter row above and the "Showing X of Y" count
+   below stay pinned, same fixed-chrome/scrolling-middle idea as
+   .rmr-modal--pinned, just scoped to .rmr-pay-table-wrap's own existing
+   flex:1/overflow-y:auto instead of scrolling the whole body. */
+/* Same 24px-split-into-thirds trick as .rmr-modal--pinned above (see its own
+   comment): the table-wrap's flex:1/overflow-y:auto draws its scrollbar
+   flush against the modal's true edge unless the modal's own right padding
+   is handed over to it, otherwise the bar ends up floating 24px in from the
+   edge with a dead gap after it instead of before it. */
+.rmr-modal--comm { width: 1128px; overflow-y: hidden; padding-right: var(--spacing-xs); }
+.rmr-modal--comm .rmr-modal__body { width: 100%; flex: 1; min-height: 0; overflow: hidden; }
+.rmr-modal--comm .rmr-modal__header,
+.rmr-modal--comm .rmr-comm-modal-filters,
+.rmr-modal--comm .rmr-acct-tabs,
+.rmr-modal--comm .rmr-comm-modal-footer { flex-shrink: 0; padding-right: var(--spacing-md); }
 .rmr-comm-modal-filters { display: flex; align-items: flex-end; justify-content: space-between; width: 100%; gap: var(--spacing-md); }
 .rmr-comm-modal-filters__fields { display: flex; gap: var(--spacing-md); align-items: flex-end; }
 .rmr-comm-modal-filters__actions { display: flex; align-items: center; gap: var(--spacing-md); }
@@ -3416,20 +3734,43 @@ body[data-screen="document-sign"] .rmr-settings-page--fit { padding-bottom: 0; }
 /* Week/Day calendar views — nodes 2183:16063 ("Week View") / 2183:16237 ("Day View"), same
    Figma file as the Month view. Built as a real time-grid (gutter of hour labels + one column per
    day) rather than the source's per-event absolute pixel offsets — every event still sits in its
-   own real hour cell, just laid out with flexbox instead of reproducing exact px coordinates; see
-   PROTOTYPE.md. Hour range (11 AM–8 PM) is the union of what each sourced frame actually shows
-   (Week starts at 12 PM, Day starts at 11 AM) — every label is a real sourced hour, just merged
-   across the two frames' own coverage rather than picked. */
-.rmr-comm-cal__timegrid { display: flex; flex: 1; min-height: 0; overflow: auto; background: var(--background-primary); border-radius: var(--spacing-xs); }
-.rmr-comm-cal__gutter { display: flex; flex-direction: column; flex-shrink: 0; width: 66px; border-right: 1px solid var(--border-border); }
-.rmr-comm-cal__gutter-corner { height: 32px; flex-shrink: 0; border-bottom: 2px solid var(--border-border); }
-.rmr-comm-cal__gutter-hour { height: 64px; flex-shrink: 0; box-sizing: border-box; padding: var(--spacing-xxs); font-size: 12px; letter-spacing: 0.24px; color: var(--text-primary); border-bottom: 1px solid var(--border-border); }
-.rmr-comm-cal__daycol { display: flex; flex-direction: column; flex: 1; min-width: 66px; border-right: 1px solid var(--border-border); background: var(--background-secondary); }
-.rmr-comm-cal__daycol--selected { background: var(--background-page); border-left: 1px solid var(--border-button-tertiary); border-right: 1px solid var(--border-button-tertiary); }
-.rmr-comm-cal__daycol--wide { flex: 1; min-width: 0; }
-.rmr-comm-cal__daycol-head { height: 32px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: var(--font-size-sm); color: var(--text-primary); letter-spacing: 0.28px; border-bottom: 2px solid var(--border-border); }
-.rmr-comm-cal__daycol-hour { height: 64px; flex-shrink: 0; box-sizing: border-box; padding: 2px var(--spacing-xxs); display: flex; flex-direction: column; gap: 2px; border-bottom: 1px solid var(--border-border); }
-.rmr-comm-cal__daycol-hour--multi { height: auto; min-height: 64px; }
+   own real hour cell, just laid out on a real CSS grid instead of reproducing exact px
+   coordinates; see PROTOTYPE.md. Hour range (11 AM–8 PM) is the union of what each sourced frame
+   actually shows (Week starts at 12 PM, Day starts at 11 AM) — every label is a real sourced
+   hour, just merged across the two frames' own coverage rather than picked.
+
+   Every cell (gutter label, day header, day hour) is a DIRECT child of .timegrid, placed with an
+   explicit grid-column/grid-row (set inline per cell in the markup) rather than nested inside a
+   per-day wrapper column. A per-day flex column was the earlier approach, and it has a fatal
+   flaw: each day is then its own independent flex tree with its own independent height, so a day
+   that needs a taller row for a double-booked hour only grows THAT day's column — every other
+   column (and the gutter) stays short, and everything below the tall row silently stops lining up
+   with the rest of the grid, no matter how carefully each column's cell count is hand-kept in
+   sync (which is exactly what kept breaking). A shared grid row fixes this at the root: every
+   cell assigned to the same grid-row is the same row track, so when any one cell needs more
+   height the whole row grows for every column at once (minmax(64px, auto) below) — Month's own
+   .rmr-comm-cal__body technique, just extended to a true 2D grid instead of column-only. */
+.rmr-comm-cal__timegrid { display: grid; grid-template-columns: 66px 1fr; grid-template-rows: 32px repeat(10, minmax(64px, auto)); flex: 1; min-height: 0; overflow: auto; background: var(--background-primary); border-radius: var(--spacing-xs); }
+[data-comm-cal-view="week"] .rmr-comm-cal__timegrid { grid-template-columns: 66px repeat(7, 1fr); }
+/* Day-separator borders are drawn as inset box-shadows on each cell (there's no wrapping column
+   container left to hang a border-right off) so the line is baked into that cell's own paint and
+   can't be erased by a neighboring cell's rounding. They're 2px, not 1px: this grid sits inside a
+   scrolling, sticky-heavy container that gets its own compositor layer, and a hairline 1px line
+   rendered inside that layer lands on a different sub-pixel snap than the rest of the page and
+   all but disappears — 2px leaves a full device pixel solid regardless of that rounding, matching
+   what Month's non-scrolling grid gets away with at 1px. */
+.rmr-comm-cal__gutter-corner { grid-column: 1; grid-row: 1; box-sizing: border-box; box-shadow: inset 0 -2px 0 0 var(--border-border), inset -2px 0 0 0 var(--border-border); position: sticky; top: 0; left: 0; z-index: 4; background: var(--background-primary); }
+/* Source shows a half-hour tick between each hour label — drawn as a repeating background
+   stripe (fixed 32px period) rather than a real extra row, so it keeps repeating correctly
+   through a taller (minmax(…, auto)) row without needing its own special-cased tick. */
+.rmr-comm-cal__gutter-hour { grid-column: 1; box-sizing: border-box; padding: var(--spacing-xxs); font-size: 12px; letter-spacing: 0.24px; color: var(--text-primary); box-shadow: inset 0 -2px 0 0 var(--border-border), inset -2px 0 0 0 var(--border-border); background: var(--background-primary); background-image: repeating-linear-gradient(to bottom, transparent 0, transparent 31px, var(--border-border) 31px, var(--border-border) 32px); position: sticky; left: 0; z-index: 3; }
+.rmr-comm-cal__daycol-head { grid-row: 1; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: var(--font-size-sm); color: var(--text-primary); letter-spacing: 0.28px; box-shadow: inset 0 -2px 0 0 var(--border-border), inset -2px 0 0 0 var(--border-border); position: sticky; top: 0; z-index: 2; background: var(--background-secondary); }
+.rmr-comm-cal__daycol-hour { box-sizing: border-box; padding: 2px var(--spacing-xxs); display: flex; flex-direction: column; gap: 2px; box-shadow: inset 0 -2px 0 0 var(--border-border), inset -2px 0 0 0 var(--border-border); background: var(--background-secondary); background-image: repeating-linear-gradient(to bottom, transparent 0, transparent 31px, var(--border-border) 31px, var(--border-border) 32px); }
+.rmr-comm-cal__daycol-head--selected, .rmr-comm-cal__daycol-hour--selected { background: var(--background-page); }
+.rmr-comm-cal__daycol-head--selected { box-shadow: inset 0 2px 0 0 var(--border-button-tertiary), inset 0 -2px 0 0 var(--border-button-tertiary), inset 2px 0 0 0 var(--border-button-tertiary), inset -2px 0 0 0 var(--border-button-tertiary); }
+.rmr-comm-cal__daycol-hour--selected { box-shadow: inset 0 -2px 0 0 var(--border-border), inset 2px 0 0 0 var(--border-button-tertiary), inset -2px 0 0 0 var(--border-button-tertiary); }
+/* A day with no bookable hours (source: Thursday) gets its whole column shaded. */
+.rmr-comm-cal__daycol-head--disabled, .rmr-comm-cal__daycol-hour--disabled { background: var(--component-input-disabled); }
 
 /* Week/Day event pill — same component as Month's .rmr-comm-cal__event, but the source's own
    time-grid instance uses a thicker 4px left accent (vs Month's 2px) and fills its hour cell
@@ -3562,6 +3903,11 @@ body[data-screen="document-sign"] .rmr-settings-page--fit { padding-bottom: 0; }
 .rmr-rsv-status__dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
 .rmr-rsv-status__dot--yellow { background: var(--color-yellow-500); }
 .rmr-rsv-status__dot--red { background: var(--status-error); }
+/* Approved/Completed weren't in the two sourced states above — reuses the
+   same solid green/gray already established for Approved's own sidebar
+   icon (--status-success) and the Completed lozenge's neutral fill family. */
+.rmr-rsv-status__dot--green { background: var(--status-success); }
+.rmr-rsv-status__dot--gray { background: var(--text-secondary); }
 .rmr-rsv-status__text { margin: 0; font-size: var(--font-size-md); letter-spacing: 0.32px; color: var(--text-primary); }
 .rmr-modal--resdetails { width: 622px; }
 .rmr-rsv-value { margin: 0; font-size: var(--font-size-sm); color: var(--text-primary); }
@@ -3583,9 +3929,16 @@ body[data-screen="document-sign"] .rmr-settings-page--fit { padding-bottom: 0; }
    with the page (only its own inner .rmr-rsv-side__grid can, if the day ever
    has more hours than fit), and only .rmr-pmt-scroll (the left form's fields)
    scrolls internally as a last resort if a short viewport can't fit 684px. */
-.rmr-modal--newres1 { width: 928px; height: 770px; }
+/* No fixed height here (unlike .rmr-modal--payment/--autopay above): the
+   form column's real content is shorter than the side panel's fixed 558px
+   schedule, and a fixed modal height stretched the form column via
+   .rmr-pmt-body's align-items:stretch to match it, leaving dead space below
+   Attachments before the footer. align-self:flex-start on .rmr-rsv-form
+   opts it out of that stretch so the modal instead hugs the taller of the
+   two columns' real content. */
+.rmr-modal--newres1 { width: 928px; }
 .rmr-modal--newres2 { width: 928px; height: 572px; }
-.rmr-rsv-form { display: flex; flex-direction: column; width: 504px; flex-shrink: 0; min-height: 0; }
+.rmr-rsv-form { display: flex; flex-direction: column; width: 504px; flex-shrink: 0; min-height: 0; align-self: flex-start; }
 
 /* Side panel day-schedule preview — a real, sourced element (node 2008:3115)
    but rebuilt with flexbox hour rows rather than the source's own absolute
@@ -3602,11 +3955,17 @@ body[data-screen="document-sign"] .rmr-settings-page--fit { padding-bottom: 0; }
    (to 11 AM-9 PM, matching this app's existing Week/Day-view hour range) so
    the grid actually needs its own internal scroll, per instruction, rather
    than always showing every hour at once. */
-.rmr-rsv-side { display: flex; flex-direction: column; gap: var(--spacing-md); width: 352px; flex-shrink: 0; align-self: flex-start; height: 558px; padding: var(--spacing-lg, 20px); background: var(--background-secondary); border: 1px solid var(--border-border); border-radius: var(--spacing-xs); box-shadow: var(--dropshadow-sm); }
-.rmr-rsv-side__header { display: flex; align-items: center; gap: var(--spacing-xs); flex-shrink: 0; }
+.rmr-rsv-side { display: flex; flex-direction: column; gap: var(--spacing-md); width: 352px; flex-shrink: 0; align-self: flex-start; height: 558px; padding: var(--spacing-lg, 20px); padding-right: var(--spacing-xs); background: var(--background-secondary); border: 1px solid var(--border-border); border-radius: var(--spacing-xs); box-shadow: var(--dropshadow-sm); }
+/* Same 20px-split trick as .rmr-modal--pinned/--comm elsewhere in this file
+   (that one splits 24px, this one 20px): .rmr-rsv-side__grid's own scrollbar
+   draws flush against its right edge, so without handing this box's own
+   right padding over to it the bar floats 20px in from the true edge with a
+   dead gap after it instead of before it. .rmr-rsv-side__header gets that
+   12px back so it still sits the normal 20px in. */
+.rmr-rsv-side__header { padding-right: var(--spacing-sm); display: flex; align-items: center; gap: var(--spacing-xs); flex-shrink: 0; }
 .rmr-rsv-side__header button { background: none; border: none; padding: 0; cursor: pointer; display: flex; }
 .rmr-rsv-side__title { margin: 0; font-size: var(--font-size-lg); font-weight: var(--font-weight-bold); color: var(--text-primary); }
-.rmr-rsv-side__grid { display: flex; flex: 1; min-height: 0; overflow-y: auto; }
+.rmr-rsv-side__grid { display: flex; flex: 1; min-height: 0; overflow-y: auto; padding-right: var(--spacing-xs); }
 .rmr-rsv-side__gutter { display: flex; flex-direction: column; flex-shrink: 0; width: 40px; }
 .rmr-rsv-side__hour { height: 56px; flex-shrink: 0; padding-top: 2px; font-size: var(--font-size-xs); color: var(--text-primary); border-bottom: 1px solid var(--border-border); }
 .rmr-rsv-side__col { flex: 1; min-width: 0; position: relative; }
@@ -3801,6 +4160,8 @@ body[data-screen="document-sign"] .rmr-settings-page--fit { padding-bottom: 0; }
 body[data-screen="polls"] .rmr-msg-banner--compact,
 body[data-screen="polls"] .rmr-comm-layout {
   max-width: 1140px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* A [data-dropdown-no-flip] dropdown (see app.js) is told to always open

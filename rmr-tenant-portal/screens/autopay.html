@@ -4,8 +4,8 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>AutoPay — rmResident Portal</title>
-<link rel="stylesheet" href="../assets/rmr.css?v=60" />
-<link rel="stylesheet" href="../assets/proto.css" />
+<link rel="stylesheet" href="../assets/rmr.css?v=215" />
+<link rel="stylesheet" href="../assets/proto.css?v=3" />
 </head>
 <body data-screen="autopay">
 <div class="rmr-app" data-component="3.3.1 / 3.3.2 / 3.3.3 / 3.3.4 Tenant Autopay" data-ap-has-schedule="false">
@@ -145,15 +145,15 @@
             </div>
             <div class="rmr-pmt-field">
               <span class="rmr-pmt-field__label">Starting on</span>
-              <span class="rmr-pmt-field__value">11/01/25</span>
+              <span class="rmr-pmt-field__value">11/01/26</span>
             </div>
             <div class="rmr-pmt-field">
               <span class="rmr-pmt-field__label">Ending on</span>
-              <span class="rmr-pmt-field__value">11/01/26</span>
+              <span class="rmr-pmt-field__value">11/01/27</span>
             </div>
           </div>
           <hr class="rmr-divider" />
-          <p class="rmr-ap-footnote">A platform fee may be added to your payment amount. <a href="#" data-action="fake-submit" data-fake-message="Platform fee details aren't included in this example.">View Platform Fees</a></p>
+          <p class="rmr-ap-footnote">A platform fee may be added to your payment amount. <a href="#" data-action="fake-submit" data-fake-message="Platform fee details aren't included in this example.">View Platform Fees <img src="../assets/icons/payments/mp-info-outline.svg" alt="" width="20" height="20" style="display:inline-block; vertical-align:middle;" data-rmr-tooltip="Platform Fee is charged by Zego a Global Payments Company" /></a></p>
         </div>
 
         <!-- Edit/setup — combines node 2099:43692 ("3.3.2 ... New") and
@@ -188,11 +188,13 @@
               </span>
             </button>
           </div>
-          <div class="rmr-modal__field" style="width:240px;">
-            <span class="rmr-modal__field-label">Max Amount <img src="../assets/icons/payments/mp-info-outline.svg" alt="" style="display:inline-block;width:20px;height:20px;vertical-align:middle;" /></span>
-            <input class="rmr-modal__input" type="text" value="2,000.00" />
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            <div class="rmr-modal__field" style="width:240px;">
+              <span class="rmr-modal__field-label">Max Amount <img src="../assets/icons/payments/mp-info-outline.svg" alt="" style="display:inline-block;width:20px;height:20px;vertical-align:middle;" data-rmr-tooltip="This is the maximum amount you've authorized for withdrawal" /></span>
+              <input class="rmr-modal__input" type="text" value="2,000.00" />
+            </div>
+            <p class="rmr-ap-footnote">*Max Amount applies to your balance only. Any applicable platform fees may cause the total payment to exceed this amount.</p>
           </div>
-          <p class="rmr-ap-footnote">*Max Amount applies to your balance only. Any applicable platform fees may cause the total payment to exceed this amount.</p>
 
           <div style="display:flex; flex-direction:column; gap:var(--spacing-md);">
             <div>
@@ -207,7 +209,11 @@
                     <span data-dropdown-value>Monthly</span>
                   </button>
                   <div class="rmr-dropdown__menu" data-dropdown-menu hidden>
+                    <div class="rmr-dropdown__option" data-dropdown-option>Weekly</div>
                     <div class="rmr-dropdown__option rmr-dropdown__option--selected" data-dropdown-option>Monthly</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>Quarterly</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>Semiannually</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>Annually</div>
                   </div>
                 </div>
               </div>
@@ -219,6 +225,36 @@
                   </button>
                   <div class="rmr-dropdown__menu" data-dropdown-menu hidden>
                     <div class="rmr-dropdown__option rmr-dropdown__option--selected" data-dropdown-option>1</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>2</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>3</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>4</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>5</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>6</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>7</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>8</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>9</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>10</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>11</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>12</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>13</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>14</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>15</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>16</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>17</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>18</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>19</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>20</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>21</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>22</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>23</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>24</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>25</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>26</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>27</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>28</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>29</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>30</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>31</div>
                   </div>
                 </div>
               </div>
@@ -227,7 +263,7 @@
               <div class="rmr-modal__field">
                 <span class="rmr-modal__field-label">Start Date</span>
                 <span class="rmr-ap-date-wrap">
-                  <input class="rmr-modal__input rmr-ap-date-input" type="text" value="11/01/25" />
+                  <input class="rmr-modal__input rmr-ap-date-input" type="text" value="11/01/26" />
                   <img class="rmr-ap-date-icon" src="../assets/icons/payments/ap-calendar.svg" alt="" />
                 </span>
               </div>
@@ -427,10 +463,12 @@
           </div>
           <div class="rmr-pmt-field">
             <span class="rmr-pmt-field__label">Every month starting on</span>
-            <span class="rmr-pmt-field__value">11/01/25</span>
+            <span class="rmr-pmt-field__value">11/01/26</span>
           </div>
-          <hr class="rmr-divider" />
-          <p class="rmr-ap-footnote">A platform fee may be added to your payment amount. <a href="#" data-action="fake-submit" data-fake-message="Platform fee details aren't included in this example.">View Platform Fees</a></p>
+          <div class="rmr-pmt-summary__footer">
+            <hr class="rmr-divider" />
+            <p class="rmr-ap-footnote">A platform fee may be added to your payment amount. <a href="#" data-action="fake-submit" data-fake-message="Platform fee details aren't included in this example.">View Platform Fees <img src="../assets/icons/payments/mp-info-outline.svg" alt="" width="20" height="20" style="display:inline-block; vertical-align:middle;" data-rmr-tooltip="Platform Fee is charged by Zego a Global Payments Company" /></a></p>
+          </div>
         </div>
         </div>
 
@@ -452,6 +490,6 @@
   </div>
 
 </div>
-<script src="../assets/app.js?v=26"></script>
+<script src="../assets/app.js?v=119"></script>
 </body>
 </html>

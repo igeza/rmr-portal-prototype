@@ -4,8 +4,8 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Dashboard — rmResident Portal</title>
-<link rel="stylesheet" href="../assets/rmr.css?v=60" />
-<link rel="stylesheet" href="../assets/proto.css" />
+<link rel="stylesheet" href="../assets/rmr.css?v=215" />
+<link rel="stylesheet" href="../assets/proto.css?v=3" />
 </head>
 <body data-screen="dashboard">
 <div class="rmr-app" data-component="2.0.0 Tenant Dashboard">
@@ -112,14 +112,18 @@
         <div class="rmr-hero__content" data-component="Balance Section">
           <div>
             <p class="rmr-hero__balance-label">Balance Due</p>
-            <p class="rmr-hero__balance-amount">$1,668.53</p>
+            <p class="rmr-hero__balance-amount" data-pay-remaining>$1,597.28</p>
           </div>
           <div class="rmr-hero__actions" data-component="Payment Options">
             <button class="rmr-btn rmr-btn--secondary" type="button" data-action="open-modal" data-modal-target="pay-amount" data-component="Button">Make a Payment</button>
-            <button class="rmr-btn rmr-btn--text" type="button" data-component="Button" data-action="fake-submit" data-fake-message="AutoPay setup is a multi-step flow not included in this example.">
+            <button class="rmr-btn rmr-btn--text" type="button" data-component="Button" data-action="open-modal" data-modal-target="autopay-amount" data-autopay-state="empty">
               <img class="rmr-btn__icon" src="../assets/icons/autorenew.svg" alt="" />
               Set up AutoPay
             </button>
+            <span class="rmr-btn rmr-btn--text" data-component="Button" data-autopay-state="scheduled" hidden>
+              <img class="rmr-btn__icon" src="../assets/icons/autorenew.svg" alt="" />
+              Autopay scheduled Dec 1, 2026 up to $2000 with **4534
+            </span>
           </div>
         </div>
       </div>
@@ -164,10 +168,10 @@
                   <img class="rmr-notif__icon" src="../assets/icons/notif-event-available.svg" alt="" />
                 </span>
                 <div class="rmr-notif__body">
-                  <p class="rmr-notif__title">Issue #175 has been scheduled for Thursday, Feb 5, 8:00 AM - 12:00 PM.</p>
+                  <p class="rmr-notif__title">Issue #175 has been scheduled for Thursday, Oct 22, 8:00 AM - 12:00 PM.</p>
                   <div class="rmr-notif__footer">
                     <span class="rmr-notif__time">1hr ago</span>
-                    <a class="rmr-btn rmr-btn--text rmr-btn--link" href="maintenance.html?issue=open-175" data-component="Button Left">View Issue</a>
+                    <button class="rmr-btn rmr-btn--text rmr-btn--link" type="button" data-action="open-issue-details" data-svc-key="open-175" data-component="Button Left">View Issue</button>
                   </div>
                 </div>
               </div>
@@ -181,7 +185,7 @@
                   <p class="rmr-notif__title">Riverview Apartments left a note on Issue #130.</p>
                   <div class="rmr-notif__footer">
                     <span class="rmr-notif__time">8 hr ago</span>
-                    <a class="rmr-btn rmr-btn--text rmr-btn--link" href="maintenance.html?issue=open-130" data-component="Button Left">View Comment</a>
+                    <button class="rmr-btn rmr-btn--text rmr-btn--link" type="button" data-action="open-issue-details" data-svc-key="open-130" data-component="Button Left">View Comment</button>
                   </div>
                 </div>
               </div>
@@ -195,7 +199,7 @@
                   <p class="rmr-notif__title">Issue #130 has a proposed schedule.</p>
                   <div class="rmr-notif__footer">
                     <span class="rmr-notif__time">3 days ago</span>
-                    <a class="rmr-btn rmr-btn--text rmr-btn--link" href="maintenance.html?issue=open-130" data-component="Button Left">View Issue</a>
+                    <button class="rmr-btn rmr-btn--text rmr-btn--link" type="button" data-action="open-issue-details" data-svc-key="open-130" data-component="Button Left">View Issue</button>
                   </div>
                 </div>
               </div>
@@ -206,7 +210,7 @@
                   <img class="rmr-notif__icon" src="../assets/icons/notif-event-available.svg" alt="" />
                 </span>
                 <div class="rmr-notif__body">
-                  <p class="rmr-notif__title">Rent is Due on 4/1/2026</p>
+                  <p class="rmr-notif__title">Rent is Due on 4/1/2027</p>
                   <div class="rmr-notif__footer">
                     <span class="rmr-notif__time">7 days ago</span>
                     <button class="rmr-btn rmr-btn--text rmr-btn--link" type="button" data-action="open-modal" data-modal-target="pay-amount" data-component="Button Left">Make a Payment</button>
@@ -438,28 +442,28 @@
               </thead>
               <tbody>
                 <tr>
-                  <td>10/01/25</td>
+                  <td>10/01/26</td>
                   <td>Rent</td>
                   <td></td>
                   <td data-align="right">$50.00</td>
                   <td data-align="right">$50.00</td>
                 </tr>
                 <tr>
-                  <td>11/01/25</td>
+                  <td>11/01/26</td>
                   <td>Rent</td>
                   <td></td>
                   <td data-align="right">$1,338.75</td>
                   <td data-align="right">$1,338.75</td>
                 </tr>
                 <tr>
-                  <td>11/01/25</td>
+                  <td>11/01/26</td>
                   <td>Utilities</td>
-                  <td>Water 10/01/25-10/31/25</td>
+                  <td>Water 10/01/26-10/31/26</td>
                   <td data-align="right">$68.53</td>
                   <td data-align="right">$68.53</td>
                 </tr>
                 <tr>
-                  <td>11/01/25</td>
+                  <td>11/01/26</td>
                   <td>Parking Garage</td>
                   <td>1 lot spot</td>
                   <td data-align="right">$100.00</td>
@@ -492,42 +496,38 @@
               <tbody>
                 <tr>
                   <td><span class="rmr-checkbox"><input type="checkbox" checked /><span class="rmr-checkbox-box"></span></span></td>
-                  <td>10/01/25</td>
+                  <td>10/01/26</td>
                   <td>Rent</td>
                   <td></td>
                   <td data-align="right">$50.00</td>
-                  <td data-align="right"><input class="rmr-pmt-pay-input" type="text" value="$50.00" aria-label="Pay amount for 10/01/25 Rent" /></td>
+                  <td data-align="right"><input class="rmr-pmt-pay-input" type="text" value="$50.00" aria-label="Pay amount for 10/01/26 Rent" /></td>
                 </tr>
                 <tr>
                   <td><span class="rmr-checkbox"><input type="checkbox" checked /><span class="rmr-checkbox-box"></span></span></td>
-                  <td>11/01/25</td>
+                  <td>11/01/26</td>
                   <td>Rent</td>
                   <td></td>
                   <td data-align="right">$1,338.75</td>
-                  <td data-align="right"><input class="rmr-pmt-pay-input" type="text" value="$1,338.75" aria-label="Pay amount for 11/01/25 Rent" /></td>
+                  <td data-align="right"><input class="rmr-pmt-pay-input" type="text" value="$1,338.75" aria-label="Pay amount for 11/01/26 Rent" /></td>
                 </tr>
                 <tr>
                   <td><span class="rmr-checkbox"><input type="checkbox" checked /><span class="rmr-checkbox-box"></span></span></td>
-                  <td>11/01/25</td>
+                  <td>11/01/26</td>
                   <td>Utilities</td>
-                  <td>Water 10/01/25-10/31/25</td>
+                  <td>Water 10/01/26-10/31/26</td>
                   <td data-align="right">$68.53</td>
-                  <td data-align="right"><input class="rmr-pmt-pay-input" type="text" value="$68.53" aria-label="Pay amount for 11/01/25 Utilities" /></td>
+                  <td data-align="right"><input class="rmr-pmt-pay-input" type="text" value="$68.53" aria-label="Pay amount for 11/01/26 Utilities" /></td>
                 </tr>
                 <tr>
                   <td><span class="rmr-checkbox"><input type="checkbox" checked /><span class="rmr-checkbox-box"></span></span></td>
-                  <td>11/01/25</td>
+                  <td>11/01/26</td>
                   <td>Parking Garage</td>
                   <td>1 lot spot</td>
                   <td data-align="right">$100.00</td>
-                  <td data-align="right"><input class="rmr-pmt-pay-input" type="text" value="$100.00" aria-label="Pay amount for 11/01/25 Parking Garage" /></td>
+                  <td data-align="right"><input class="rmr-pmt-pay-input" type="text" value="$100.00" aria-label="Pay amount for 11/01/26 Parking Garage" /></td>
                 </tr>
-                <tr>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td data-align="right" class="rmr-pmt-overpay-label">Overpayment Amount:</td>
+                <tr class="rmr-pmt-overpay-row">
+                  <td data-align="right" class="rmr-pmt-overpay-label" colspan="5">Overpayment Amount:</td>
                   <td data-align="right"><input class="rmr-pmt-pay-input" type="text" value="$0.00" aria-label="Overpayment amount" /></td>
                 </tr>
               </tbody>
@@ -538,7 +538,7 @@
         <div class="rmr-pmt-summary" data-component="Payment Summary">
           <p class="rmr-pmt-summary__title">Payment</p>
           <p class="rmr-pmt-summary__amount">$1,577.28</p>
-          <p class="rmr-pmt-summary__disclaimer">A platform fee may be added to your payment amount. <a href="#" data-action="fake-submit" data-fake-message="Platform fee details aren't included in this example.">View Platform Fees</a></p>
+          <p class="rmr-pmt-summary__disclaimer">A platform fee may be added to your payment amount. <a href="#" data-action="fake-submit" data-fake-message="Platform fee details aren't included in this example.">View Platform Fees <img src="../assets/icons/payments/mp-info-outline.svg" alt="" width="20" height="20" style="display:inline-block; vertical-align:middle;" data-rmr-tooltip="Platform Fee is charged by Zego a Global Payments Company" /></a></p>
           <hr class="rmr-divider" />
           <div data-component="Ad Container">
             <p class="rmr-pmt-flexad__title">Pay part now, the rest later</p>
@@ -793,7 +793,7 @@
         <button class="rmr-btn rmr-btn--secondary" type="button" data-action="switch-modal" data-modal-target="pay-amount" data-modal-close-current="pay-method">Back</button>
         <div class="rmr-pmt-footer__right">
           <button class="rmr-modal__link-btn" type="button" data-action="fake-submit" data-fake-message="Zego's privacy policy isn't included in this example.">Zego Privacy Policy</button>
-          <button class="rmr-btn rmr-btn--primary" type="button" data-action="switch-modal" data-modal-target="pay-success" data-modal-close-current="pay-method">Submit</button>
+          <button class="rmr-btn rmr-btn--primary" type="button" data-action="pmt-submit" data-modal-target="pay-success" data-modal-close-current="pay-method">Submit</button>
         </div>
       </div>
     </div>
@@ -822,14 +822,556 @@
         </div>
         <div class="rmr-pmt-success__row">
           <p class="rmr-pmt-success__row-label">Date</p>
-          <p class="rmr-pmt-success__row-value">11/01/25</p>
+          <p class="rmr-pmt-success__row-value">11/01/26</p>
         </div>
       </div>
       <button class="rmr-btn rmr-btn--primary" type="button" style="width:100%; height:36px;" data-action="fake-submit" data-fake-message="Printing isn't included in this example.">Print Receipt</button>
     </div>
   </div>
 
+  <!-- AutoPay setup flow — sourced from file fPSZy4e0NwJMiTs345xXGy,
+       section "Autopay setup" (node 2001:1682), duplicated from
+       payments.html so "Set up AutoPay" opens the same flow as an overlay
+       over the Dashboard, matching Make a Payment's own overlay pattern,
+       rather than navigating to the Payments screen. -->
+
+  <div class="rmr-modal-backdrop" data-modal-backdrop="autopay-amount" hidden>
+    <div class="rmr-modal rmr-modal--autopay" role="dialog" aria-modal="true" aria-labelledby="modal-autopay-amount-title" data-component="Reference: Schedule Autopay - pg1 Balance">
+      <div class="rmr-modal__header" data-component="Header">
+        <h2 class="rmr-modal__title" id="modal-autopay-amount-title">Set up Automatic Payments</h2>
+        <button class="rmr-modal__close" type="button" data-action="close-modal">
+          <img src="../assets/icons/payments/mp-close.svg" alt="Close" width="24" height="24" />
+        </button>
+      </div>
+
+      <div class="rmr-pmt-body">
+        <div class="rmr-pmt-main">
+          <p class="rmr-pmt-method-title">Payment Amount</p>
+
+          <div class="rmr-ap-amount-options">
+            <button class="rmr-ap-amount-option" type="button" data-action="ap-select-amount" data-amount-option="current">
+              <span class="rmr-ap-amount-option__row">
+                <span class="rmr-pmt-radio rmr-pmt-radio--selected"></span>
+                <span class="rmr-ap-amount-option__label">Current Balance Due</span>
+              </span>
+              <p class="rmr-ap-amount-option__sub">Up to selected date</p>
+            </button>
+            <button class="rmr-ap-amount-option" type="button" data-action="ap-select-amount" data-amount-option="total">
+              <span class="rmr-ap-amount-option__row">
+                <span class="rmr-pmt-radio"></span>
+                <span class="rmr-ap-amount-option__label">Total Balance Due</span>
+              </span>
+              <p class="rmr-ap-amount-option__sub">With future charges</p>
+            </button>
+            <button class="rmr-ap-amount-option" type="button" data-action="ap-select-amount" data-amount-option="specific">
+              <span class="rmr-ap-amount-option__row">
+                <span class="rmr-pmt-radio"></span>
+                <span class="rmr-ap-amount-option__label">Specific Amount</span>
+              </span>
+            </button>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:8px;" data-ap-amount-field="balance">
+            <div class="rmr-modal__field" style="width:240px;">
+              <span class="rmr-modal__field-label">Max Amount <img src="../assets/icons/payments/mp-info-outline.svg" alt="" style="display:inline-block;width:20px;height:20px;vertical-align:middle;" data-rmr-tooltip="This is the maximum amount you've authorized for withdrawal" /></span>
+              <input class="rmr-modal__input" type="text" placeholder="0.00" data-ap-max-input />
+            </div>
+            <p class="rmr-ap-footnote">*Max Amount applies to your balance only. Any applicable platform fees may cause the total payment to exceed this amount.</p>
+          </div>
+          <div style="display:none; flex-direction:column; gap:8px;" data-ap-amount-field="specific">
+            <div class="rmr-modal__field" style="width:240px;">
+              <span class="rmr-modal__field-label">Amount* <img src="../assets/icons/payments/mp-info-outline.svg" alt="" style="display:inline-block;width:20px;height:20px;vertical-align:middle;" data-rmr-tooltip="This is the exact amount you've authorized for withdrawal" /></span>
+              <input class="rmr-modal__input" type="text" placeholder="0.00" data-ap-specific-input />
+            </div>
+            <p class="rmr-ap-footnote">*Any applicable platform fees may cause the total payment to exceed this amount.</p>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:var(--spacing-md); margin-top:var(--spacing-md);">
+            <div>
+              <p class="rmr-ap-schedule-title">Autopay Schedule</p>
+              <p class="rmr-ap-schedule-desc">Consider scheduling your payment at least one day before its due date.</p>
+            </div>
+            <div class="rmr-pmt-form-row" style="max-width:496px;">
+              <div class="rmr-modal__field">
+                <span class="rmr-modal__field-label">Frequency</span>
+                <div class="rmr-dropdown" data-dropdown data-ap-frequency-dropdown>
+                  <button type="button" class="rmr-modal__select rmr-dropdown__trigger" data-dropdown-trigger>
+                    <span data-dropdown-value data-ap-frequency-value>Monthly</span>
+                  </button>
+                  <div class="rmr-dropdown__menu" data-dropdown-menu hidden>
+                    <div class="rmr-dropdown__option" data-dropdown-option>Weekly</div>
+                    <div class="rmr-dropdown__option rmr-dropdown__option--selected" data-dropdown-option>Monthly</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>Quarterly</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>Semiannually</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>Annually</div>
+                  </div>
+                </div>
+              </div>
+              <div class="rmr-modal__field">
+                <span class="rmr-modal__field-label">Day of Month</span>
+                <div class="rmr-dropdown" data-dropdown>
+                  <button type="button" class="rmr-modal__select rmr-dropdown__trigger" data-dropdown-trigger>
+                    <span data-dropdown-value data-ap-day-value>1</span>
+                  </button>
+                  <div class="rmr-dropdown__menu" data-dropdown-menu hidden>
+                    <div class="rmr-dropdown__option rmr-dropdown__option--selected" data-dropdown-option>1</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>2</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>3</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>4</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>5</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>6</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>7</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>8</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>9</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>10</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>11</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>12</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>13</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>14</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>15</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>16</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>17</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>18</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>19</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>20</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>21</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>22</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>23</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>24</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>25</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>26</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>27</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>28</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>29</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>30</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>31</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="rmr-pmt-form-row" style="max-width:496px;">
+              <div class="rmr-modal__field">
+                <span class="rmr-modal__field-label">Start Date</span>
+                <span class="rmr-ap-date-wrap">
+                  <input class="rmr-modal__input rmr-ap-date-input" type="text" value="11/01/26" />
+                  <img class="rmr-ap-date-icon" src="../assets/icons/payments/ap-calendar.svg" alt="" />
+                </span>
+              </div>
+              <div class="rmr-modal__field">
+                <span class="rmr-modal__field-label">End Date</span>
+                <span class="rmr-ap-date-wrap">
+                  <input class="rmr-modal__input rmr-ap-date-input" type="text" placeholder="mm/dd/yyyy" />
+                  <img class="rmr-ap-date-icon" src="../assets/icons/payments/ap-calendar.svg" alt="" />
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="rmr-pmt-summary" data-component="Summary Container">
+          <div style="display:flex; flex-direction:column; gap:var(--spacing-md); width:100%;" data-ap-summary-rows>
+            <div class="rmr-pmt-field">
+              <span class="rmr-pmt-field__label">You will pay</span>
+              <span class="rmr-pmt-field__value">Current Balance Due</span>
+            </div>
+            <div class="rmr-pmt-field">
+              <span class="rmr-pmt-field__label">Every month starting on</span>
+              <span class="rmr-pmt-field__value">11/01/26</span>
+            </div>
+          </div>
+          <div class="rmr-pmt-summary__footer">
+            <hr class="rmr-divider" />
+            <p class="rmr-ap-footnote">A platform fee may be added to your payment amount. <a href="#" data-action="open-modal" data-modal-target="platform-fees">View Platform Fees <img src="../assets/icons/payments/mp-info-outline.svg" alt="" width="20" height="20" style="display:inline-block; vertical-align:middle;" data-rmr-tooltip="Platform Fee is charged by Zego a Global Payments Company" /></a></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="rmr-pmt-footer" data-component="Footer">
+        <span></span>
+        <button class="rmr-btn rmr-btn--primary" type="button" data-action="switch-modal" data-modal-target="autopay-method" data-modal-close-current="autopay-amount">Continue</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Current Convenience Fees — opens on top of the AutoPay Balance step
+       via the "View Platform Fees" button above. -->
+  <div class="rmr-modal-backdrop" data-modal-backdrop="platform-fees" hidden>
+    <div class="rmr-modal" role="dialog" aria-modal="true" aria-labelledby="modal-platform-fees-title" data-component="Current Convenience Fees">
+      <div class="rmr-modal__header" data-component="Header">
+        <h2 class="rmr-modal__title" id="modal-platform-fees-title">Current Convenience Fees</h2>
+        <button class="rmr-modal__close" type="button" data-action="close-modal">
+          <img src="../assets/icons/payments/mp-close.svg" alt="Close" width="24" height="24" />
+        </button>
+      </div>
+      <div class="rmr-ap-fee-rows">
+        <div class="rmr-ap-fee-row">
+          <span class="rmr-ap-fee-row__label">ACH Amount</span>
+          <span class="rmr-ap-fee-row__value">$2.95</span>
+        </div>
+        <hr class="rmr-divider" />
+        <div class="rmr-ap-fee-row">
+          <span class="rmr-ap-fee-row__label">Credit Card Amount</span>
+          <span class="rmr-ap-fee-row__value">3.50% + $2.95</span>
+        </div>
+        <hr class="rmr-divider" />
+        <div class="rmr-ap-fee-row">
+          <span class="rmr-ap-fee-row__label">Surcharges</span>
+          <span class="rmr-ap-fee-row__value">$0.00</span>
+        </div>
+      </div>
+      <button class="rmr-btn rmr-btn--primary" type="button" data-action="close-modal" style="align-self:flex-end;">OK</button>
+    </div>
+  </div>
+
+  <div class="rmr-modal-backdrop" data-modal-backdrop="autopay-method" hidden>
+    <div class="rmr-modal rmr-modal--autopay" role="dialog" aria-modal="true" aria-labelledby="modal-autopay-method-title" data-component="5.2.1 Autopay - pg 2 Pay Method CC">
+      <div class="rmr-modal__header" data-component="Header">
+        <h2 class="rmr-modal__title" id="modal-autopay-method-title">Set up Automatic Payments</h2>
+        <button class="rmr-modal__close" type="button" data-action="close-modal">
+          <img src="../assets/icons/payments/mp-close.svg" alt="Close" width="24" height="24" />
+        </button>
+      </div>
+
+      <div class="rmr-pmt-body rmr-pmt-body--split">
+        <div class="rmr-pmt-main rmr-pmt-main--pinned-footer">
+          <div class="rmr-pmt-scroll">
+            <p class="rmr-pmt-method-title">Your Payment Method</p>
+
+            <div class="rmr-ap-method-row" data-ap-method-row>
+              <span class="rmr-ap-method-row__info">
+                <img class="rmr-pmt-method__icon" src="../assets/icons/payments/mp-credit-card.svg" alt="" />
+                <p class="rmr-ap-method-row__label">Visa ending in 1234</p>
+              </span>
+              <button class="rmr-ap-method-row__edit" type="button" data-action="ap-toggle-edit" aria-label="Edit payment method">
+                <img src="../assets/icons/payments/ap-edit.svg" alt="" width="20" height="20" />
+              </button>
+            </div>
+
+            <div class="rmr-pmt-new-form" data-ap-edit-form hidden>
+              <div class="rmr-pmt-new-form__header">
+                <p class="rmr-pmt-new-form__title">Edit Saved Payment Method</p>
+                <button class="rmr-modal__link-btn" type="button" data-action="fake-submit" data-fake-message="Clearing fields isn't included in this example.">Clear All Fields</button>
+              </div>
+
+              <div class="rmr-pmt-field" style="max-width:240px;">
+                <span class="rmr-pmt-field__label" style="color:var(--text-secondary);">Payment Method</span>
+                <div class="rmr-dropdown" data-dropdown>
+                  <button type="button" class="rmr-modal__select rmr-dropdown__trigger" data-dropdown-trigger>
+                    <span data-dropdown-value>Credit Card</span>
+                  </button>
+                  <div class="rmr-dropdown__menu" data-dropdown-menu hidden>
+                    <div class="rmr-dropdown__option rmr-dropdown__option--selected" data-dropdown-option>Credit Card</div>
+                    <div class="rmr-dropdown__option" data-dropdown-option>Debit Card</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="rmr-pmt-form-row">
+                <div class="rmr-modal__field">
+                  <span class="rmr-modal__field-label">Card Number*</span>
+                  <input class="rmr-modal__input" type="text" value="32452341234" />
+                </div>
+                <div class="rmr-modal__field">
+                  <span class="rmr-modal__field-label">Expiration Date*</span>
+                  <input class="rmr-modal__input" type="text" value="12/27" />
+                </div>
+                <div class="rmr-modal__field">
+                  <span class="rmr-modal__field-label">Security Code*</span>
+                  <span class="rmr-pmt-cvv-wrap">
+                    <input class="rmr-modal__input rmr-pmt-cvv-input" type="text" value="234" />
+                    <img class="rmr-pmt-cvv-icon" src="../assets/icons/payments/mp-cvv.svg" alt="" />
+                  </span>
+                </div>
+              </div>
+
+              <div class="rmr-pmt-billing-header">
+                <p class="rmr-pmt-billing-title">Billing Information</p>
+                <button class="rmr-modal__link-btn" type="button" data-action="fake-submit" data-fake-message="Using the address on file isn't included in this example.">Use Address on File</button>
+              </div>
+
+              <div class="rmr-pmt-form-row">
+                <div class="rmr-modal__field">
+                  <span class="rmr-modal__field-label">First Name</span>
+                  <input class="rmr-modal__input" type="text" value="Samantha" />
+                </div>
+                <div class="rmr-modal__field">
+                  <span class="rmr-modal__field-label">Last Name</span>
+                  <input class="rmr-modal__input" type="text" value="Carpenter" />
+                </div>
+              </div>
+              <div class="rmr-pmt-form-row">
+                <div class="rmr-modal__field">
+                  <span class="rmr-modal__field-label">Country</span>
+                  <div class="rmr-dropdown" data-dropdown>
+                    <button type="button" class="rmr-modal__select rmr-dropdown__trigger" data-dropdown-trigger>
+                      <span data-dropdown-value>United States</span>
+                    </button>
+                    <div class="rmr-dropdown__menu" data-dropdown-menu hidden>
+                      <div class="rmr-dropdown__option rmr-dropdown__option--selected" data-dropdown-option>United States</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Canada</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Mexico</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>United Kingdom</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Australia</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Germany</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>France</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Italy</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Spain</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Netherlands</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Ireland</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>New Zealand</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Japan</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>China</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>India</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Brazil</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>South Korea</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Sweden</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Switzerland</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Other</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="rmr-modal__field" style="flex:2;">
+                  <span class="rmr-modal__field-label">Street</span>
+                  <input class="rmr-modal__input" type="text" value="742 Willow Crescent, Apt 3B" />
+                </div>
+              </div>
+              <div class="rmr-pmt-form-row">
+                <div class="rmr-modal__field">
+                  <span class="rmr-modal__field-label">City</span>
+                  <input class="rmr-modal__input" type="text" value="Loveland" />
+                </div>
+                <div class="rmr-modal__field">
+                  <span class="rmr-modal__field-label">State</span>
+                  <div class="rmr-dropdown" data-dropdown>
+                    <button type="button" class="rmr-modal__select rmr-dropdown__trigger" data-dropdown-trigger>
+                      <span data-dropdown-value>Ohio</span>
+                    </button>
+                    <div class="rmr-dropdown__menu" data-dropdown-menu hidden>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Alabama</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Alaska</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Arizona</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Arkansas</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>California</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Colorado</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Connecticut</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Delaware</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>District of Columbia</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Florida</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Georgia</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Hawaii</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Idaho</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Illinois</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Indiana</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Iowa</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Kansas</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Kentucky</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Louisiana</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Maine</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Maryland</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Massachusetts</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Michigan</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Minnesota</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Mississippi</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Missouri</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Montana</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Nebraska</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Nevada</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>New Hampshire</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>New Jersey</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>New Mexico</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>New York</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>North Carolina</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>North Dakota</div>
+                      <div class="rmr-dropdown__option rmr-dropdown__option--selected" data-dropdown-option>Ohio</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Oklahoma</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Oregon</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Pennsylvania</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Rhode Island</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>South Carolina</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>South Dakota</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Tennessee</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Texas</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Utah</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Vermont</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Virginia</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Washington</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>West Virginia</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Wisconsin</div>
+                      <div class="rmr-dropdown__option" data-dropdown-option>Wyoming</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="rmr-modal__field">
+                  <span class="rmr-modal__field-label">Postal Code</span>
+                  <input class="rmr-modal__input" type="text" value="45208" />
+                </div>
+              </div>
+
+              <div class="rmr-ap-form-footer">
+                <button class="rmr-btn rmr-btn--secondary" type="button" style="height:32px;" data-action="ap-toggle-edit">Cancel Changes</button>
+                <button class="rmr-btn rmr-btn--primary" type="button" style="height:32px;" data-action="ap-toggle-edit">Save</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="rmr-pmt-summary" data-component="Summary Container">
+          <div class="rmr-pmt-form-row" style="width:100%;">
+            <div class="rmr-pmt-field">
+              <span class="rmr-pmt-field__label">You will pay</span>
+              <span class="rmr-pmt-field__value">Total Balance Due</span>
+            </div>
+            <div class="rmr-pmt-field">
+              <span class="rmr-pmt-field__label">Up to</span>
+              <span class="rmr-pmt-field__value">$2,000.00</span>
+            </div>
+          </div>
+          <div class="rmr-pmt-field">
+            <span class="rmr-pmt-field__label">Every month starting on</span>
+            <span class="rmr-pmt-field__value">11/01/26</span>
+          </div>
+          <div class="rmr-pmt-summary__footer">
+            <hr class="rmr-divider" />
+            <p class="rmr-ap-footnote">A platform fee may be added to your payment amount. <a href="#" data-action="fake-submit" data-fake-message="Platform fee details aren't included in this example.">View Platform Fees <img src="../assets/icons/payments/mp-info-outline.svg" alt="" width="20" height="20" style="display:inline-block; vertical-align:middle;" data-rmr-tooltip="Platform Fee is charged by Zego a Global Payments Company" /></a></p>
+          </div>
+        </div>
+      </div>
+
+      <label class="rmr-pmt-terms">
+        <span class="rmr-checkbox"><input type="checkbox" /><span class="rmr-checkbox-box"></span></span>
+        I have read and agree to the <a href="#" data-action="fake-submit" data-fake-message="Terms and Conditions aren't included in this example.">Terms and Conditions</a>.
+      </label>
+
+      <div class="rmr-pmt-footer" data-component="Footer">
+        <button class="rmr-btn rmr-btn--secondary" type="button" data-action="switch-modal" data-modal-target="autopay-amount" data-modal-close-current="autopay-method">Back</button>
+        <div class="rmr-pmt-footer__right">
+          <button class="rmr-modal__link-btn" type="button" data-action="fake-submit" data-fake-message="Zego's privacy policy isn't included in this example.">Zego Privacy Policy</button>
+          <button class="rmr-btn rmr-btn--primary" type="button" data-action="ap-schedule">Schedule</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rmr-modal-backdrop" data-modal-backdrop="autopay-success" hidden>
+    <div class="rmr-modal rmr-modal--narrow" role="dialog" aria-modal="true" aria-labelledby="modal-autopay-success-title" data-component="5.1.5 Autopay - Success">
+      <button class="rmr-modal__close" type="button" data-action="close-modal" style="align-self:flex-end;">
+        <img src="../assets/icons/payments/mp-close.svg" alt="Close" width="24" height="24" />
+      </button>
+      <div class="rmr-pmt-success">
+        <img class="rmr-pmt-success__icon" src="../assets/icons/payments/mp-check-circle-filled.svg" alt="" />
+        <div class="rmr-pmt-success__message">
+          <h2 class="rmr-pmt-success__title" id="modal-autopay-success-title">Autopay Scheduled</h2>
+          <p class="rmr-pmt-success__body">Your first autopay will be processed on Nov 1. You can update or cancel autopay anytime in Settings.</p>
+        </div>
+      </div>
+      <div class="rmr-pmt-success__details">
+        <div class="rmr-pmt-success__row">
+          <p class="rmr-pmt-success__row-label">Payment Type</p>
+          <p class="rmr-pmt-success__row-value">Total Balance</p>
+        </div>
+        <div class="rmr-pmt-success__row">
+          <p class="rmr-pmt-success__row-label">Max Amount</p>
+          <p class="rmr-pmt-success__row-value">$2,000</p>
+        </div>
+        <div class="rmr-pmt-success__row">
+          <p class="rmr-pmt-success__row-label">Payment Account</p>
+          <p class="rmr-pmt-success__row-value">Ending in 1234</p>
+        </div>
+        <div class="rmr-pmt-success__row">
+          <p class="rmr-pmt-success__row-label">Schedule</p>
+          <p class="rmr-pmt-success__row-value">Monthly</p>
+        </div>
+        <div class="rmr-pmt-success__row">
+          <p class="rmr-pmt-success__row-label">Next Payment</p>
+          <p class="rmr-pmt-success__row-value">11/01/26</p>
+        </div>
+      </div>
+      <button class="rmr-btn rmr-btn--primary" type="button" style="width:100%; height:36px;" data-action="fake-submit" data-fake-message="Editing AutoPay isn't included in this example.">Edit AutoPay</button>
+    </div>
+  </div>
+
+  <!-- Issue Details overlay — sourced from maintenance.html's own copy
+       (node 2792:94770), duplicated here so the Dashboard's "View Issue" /
+       "View Comment" links open it directly as an overlay instead of
+       navigating to Service Issues. -->
+
+  <div class="rmr-modal-backdrop" data-modal-backdrop="svc-details" hidden>
+    <div class="rmr-modal rmr-svc-details-modal" role="dialog" aria-modal="true" aria-labelledby="modal-svc-details-title" data-component="Issue Details">
+      <div class="rmr-modal__header" data-component="Header">
+        <div style="display:flex; align-items:center; gap:var(--spacing-md);">
+          <h2 class="rmr-modal__title" id="modal-svc-details-title" data-svc-detail-number>Issue #—</h2>
+          <span class="rmr-svc-details__status">
+            <span class="rmr-svc-status-dot" data-svc-detail-status-dot></span>
+            <span data-svc-detail-status-text></span>
+          </span>
+        </div>
+        <button class="rmr-modal__close" type="button" data-action="close-modal">
+          <img src="../assets/icons/modal-close.svg" alt="Close" width="24" height="24" />
+        </button>
+      </div>
+      <div class="rmr-svc-details">
+        <div class="rmr-svc-details__main">
+          <h3 class="rmr-svc-details__title" data-svc-detail-title></h3>
+          <p class="rmr-svc-details__created" data-svc-detail-created></p>
+          <div data-svc-detail-schedule></div>
+          <div class="rmr-svc-details__field" data-svc-detail-category-wrap>
+            <p class="rmr-svc-details__field-label">Category</p>
+            <p class="rmr-svc-details__field-value" data-svc-detail-category></p>
+          </div>
+          <div class="rmr-svc-details__field" data-svc-detail-description-wrap>
+            <p class="rmr-svc-details__field-label">Description</p>
+            <p class="rmr-svc-details__field-value" data-svc-detail-description></p>
+          </div>
+          <div class="rmr-svc-details__field" data-svc-detail-repeat-wrap>
+            <p class="rmr-svc-details__field-label">Has this happened before?</p>
+            <p class="rmr-svc-details__field-value" data-svc-detail-repeat></p>
+          </div>
+          <div class="rmr-svc-details__field">
+            <p class="rmr-svc-details__field-label">Will there be pets or service animals on the premises?</p>
+            <p class="rmr-svc-details__field-value" data-svc-detail-pets></p>
+          </div>
+          <div class="rmr-svc-details__field">
+            <p class="rmr-svc-details__field-label">Is technician allowed to enter if tenant is not present?</p>
+            <p class="rmr-svc-details__field-value" data-svc-detail-entry></p>
+          </div>
+          <div class="rmr-svc-details__field" data-svc-detail-resolution-wrap>
+            <p class="rmr-svc-details__field-label">Resolution</p>
+            <p class="rmr-svc-details__field-value" data-svc-detail-resolution></p>
+          </div>
+          <div data-svc-detail-attachments-wrap class="rmr-svc-attach-carousel">
+            <div class="rmr-svc-attach-carousel__header">
+              <p class="rmr-svc-details__field-label">Attachments</p>
+              <div class="rmr-svc-attach__nav" data-svc-attach-nav>
+                <button type="button" class="rmr-svc-attach__nav-btn" data-svc-attach-prev aria-label="Previous attachments">
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M11.6667 15L6.66667 10L11.6667 5L12.8333 6.16667L9 10L12.8333 13.8333L11.6667 15Z" fill="currentColor"/>
+                  </svg>
+                </button>
+                <button type="button" class="rmr-svc-attach__nav-btn" data-svc-attach-next aria-label="Next attachments">
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M10.5 10L6.66667 6.16667L7.83333 5L12.8333 10L7.83333 15L6.66667 13.8333L10.5 10Z" fill="currentColor"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="rmr-svc-attach-carousel__track" data-svc-attach-track>
+              <div class="rmr-svc-attachments-row" data-svc-detail-attachments></div>
+            </div>
+            <div class="rmr-svc-attach-carousel__fade" data-svc-attach-fade></div>
+          </div>
+        </div>
+        <div class="rmr-svc-comments" data-svc-detail-comments-wrap>
+          <p class="rmr-svc-comments__title" data-svc-detail-comments-title>Messages</p>
+          <div class="rmr-svc-comments__panel">
+            <div class="rmr-svc-comments__thread" data-svc-detail-thread></div>
+            <div data-svc-detail-comments-footer></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>
-<script src="../assets/app.js?v=26"></script>
+<script src="../assets/app.js?v=119"></script>
 </body>
 </html>

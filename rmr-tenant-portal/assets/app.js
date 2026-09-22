@@ -33,6 +33,98 @@ function rmrSetRenewalSigned(value) {
   } catch (e) { /* private browsing, etc. — demo state just won't persist */ }
 }
 
+// Shared between document-center.html's Documents to Sign register and its
+// Leases & Documents tree — same pattern as the renewal flag above, keyed
+// per policy doc (RMR_SIGN_DOCS' own keys) since there's more than one.
+const RMR_DOC_SIGNED_PREFIX = 'rmr-doc-signed:';
+function rmrIsDocSigned(key) {
+  try { return localStorage.getItem(RMR_DOC_SIGNED_PREFIX + key) === '1'; } catch (e) { return false; }
+}
+function rmrSetDocSigned(key, value) {
+  try {
+    if (value) localStorage.setItem(RMR_DOC_SIGNED_PREFIX + key, '1');
+    else localStorage.removeItem(RMR_DOC_SIGNED_PREFIX + key);
+  } catch (e) { /* private browsing, etc. — demo state just won't persist */ }
+}
+
+// Make a Payment — Current Balance submission. This static demo can only
+// back one payment amount with real numbers (the default "My Current
+// Balance" option — "Other Amount" isn't wired to a live total anywhere
+// else on this screen), so Submit always pays that amount in full: the
+// Balance Due card zeroes out, Open Charges empties, and a payment entry
+// appears in All Activity. Persisted the same way as the AutoPay/renewal/
+// signature flags above, so it survives navigating away and back.
+const RMR_PAYMENT_PAID_KEY = 'rmr-payment-paid';
+function rmrIsPaymentPaid() {
+  try { return localStorage.getItem(RMR_PAYMENT_PAID_KEY) === '1'; } catch (e) { return false; }
+}
+function rmrSetPaymentPaid(value) {
+  try {
+    if (value) localStorage.setItem(RMR_PAYMENT_PAID_KEY, '1');
+    else localStorage.removeItem(RMR_PAYMENT_PAID_KEY);
+  } catch (e) { /* private browsing, etc. — demo state just won't persist */ }
+}
+function rmrApplyPaymentPaid() {
+  // Dashboard hero's single "Balance Due" figure — the Payments screen's own
+  // Balance Due card uses the data-balance-state swap below instead, per its
+  // real "4.2.5 Charges - Paid off" design (node 2001:1008).
+  document.querySelectorAll('[data-pay-remaining]').forEach((el) => { el.textContent = '$0.00'; });
+
+  document.querySelectorAll('[data-balance-state="open"]').forEach((el) => { el.hidden = true; });
+  document.querySelectorAll('[data-balance-state="complete"]').forEach((el) => { el.hidden = false; });
+  document.querySelectorAll('.rmr-pay-payment-buttons .rmr-btn--primary').forEach((btn) => { btn.disabled = true; });
+
+  document.querySelectorAll('.rmr-pay-table[data-pay-view="open"]').forEach((table) => {
+    const tbody = table.querySelector('tbody');
+    if (!tbody || tbody.dataset.paid) return;
+    tbody.dataset.paid = '1';
+    const lateFeeTh = table.querySelector('thead th.rmr-pay-col-latefee');
+    if (lateFeeTh) lateFeeTh.hidden = true;
+    const cols = table.querySelectorAll('thead th:not([hidden])').length;
+    tbody.innerHTML = `<tr class="rmr-pay-table__empty-row"><td class="rmr-pay-table__empty" colspan="${cols}">There are no open charges!</td></tr>`;
+  });
+  document.querySelectorAll('.rmr-pay-table-footer[data-pay-view="open"]').forEach((el) => {
+    el.textContent = '0 Total Open Charges';
+  });
+
+  document.querySelectorAll('.rmr-pay-table[data-pay-view="all"]').forEach((table) => {
+    const tbody = table.querySelector('tbody');
+    if (!tbody || tbody.dataset.paid) return;
+    tbody.dataset.paid = '1';
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td data-label="Date">11/01/26</td>
+      <td data-label="Type">Payment</td>
+      <td data-label="Details">Online Payment</td>
+      <td data-label="Reference Number">5323423</td>
+      <td data-align="right" data-label="Charge Amount">-$1,577.28</td>
+      <td data-align="right" class="rmr-pay-col-latefee" data-label="Late Fee">$0.00</td>
+      <td data-align="right" data-label="Balance">$0.00</td>
+    `;
+    tbody.prepend(row);
+  });
+  document.querySelectorAll('.rmr-pay-table-footer[data-pay-view="all"]').forEach((el) => {
+    const m = el.textContent.match(/Showing (\d+) of (\d+) Transactions/);
+    if (m) el.textContent = `Showing ${Number(m[1]) + 1} of ${Number(m[2]) + 1} Transactions`;
+  });
+}
+
+// Document Signature wizard — once the tenant has signed anything at all,
+// a real e-sign flow remembers that signature: every later "Click to
+// Sign"/"Sign" entry point should open the Document Signature preview
+// (node 3012:22514, signature already filled in) instead of the blank Add
+// Signature step. Same persisted-flag pattern as the flags above.
+const RMR_HAS_SIGNATURE_KEY = 'rmr-has-signature';
+function rmrHasSignature() {
+  try { return localStorage.getItem(RMR_HAS_SIGNATURE_KEY) === '1'; } catch (e) { return false; }
+}
+function rmrSetHasSignature(value) {
+  try {
+    if (value) localStorage.setItem(RMR_HAS_SIGNATURE_KEY, '1');
+    else localStorage.removeItem(RMR_HAS_SIGNATURE_KEY);
+  } catch (e) { /* private browsing, etc. — demo state just won't persist */ }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   // Collapse/expand the left nav — mirrors the real Menu component's
   // Expanded=True/False variants from the RMR design system (icon-only pills,
@@ -67,10 +159,10 @@ document.addEventListener('DOMContentLoaded', () => {
       title: 'Sign Document - Parking Policy',
       bodyHTML: `
         <h1>PARKING POLICY ACKNOWLEDGMENT</h1>
-        <p class="rmr-sign-doc__date">4/15/2026</p>
+        <p class="rmr-sign-doc__date">12/15/2026</p>
         <p>Samantha Carpenter</p>
         <p>Dear Samantha Carpenter:</p>
-        <p>Riverview Apartments is updating its parking policy effective 4/20/2026. Please review the details below.</p>
+        <p>Riverview Apartments is updating its parking policy effective 12/20/2026. Please review the details below.</p>
         <p>Each unit is assigned one (1) reserved parking space, marked with your unit number. Guest parking is limited to designated visitor spots only. A vehicle parked in a reserved space without a valid permit, or left in a visitor spot for more than 48 hours, is subject to towing at the owner's expense.</p>
         <p>By signing below, you acknowledge that you have read and agree to abide by the parking policy described above.</p>
         <p>Please sign this letter electronically to confirm your acknowledgment.</p>
@@ -89,10 +181,10 @@ document.addEventListener('DOMContentLoaded', () => {
       title: 'Sign Document - Pet Policy Update',
       bodyHTML: `
         <h1>PET POLICY UPDATE</h1>
-        <p class="rmr-sign-doc__date">5/30/2026</p>
+        <p class="rmr-sign-doc__date">1/30/2027</p>
         <p>Samantha Carpenter</p>
         <p>Dear Samantha Carpenter:</p>
-        <p>Riverview Apartments is updating its pet policy effective 6/2/2026. Please review the details below.</p>
+        <p>Riverview Apartments is updating its pet policy effective 2/2/2027. Please review the details below.</p>
         <p>Residents with an approved pet must provide current vaccination records annually and keep pets leashed at all times in common areas. A refundable pet deposit of $300 and monthly pet rent of $35 per pet apply to all units with an approved pet.</p>
         <p>By signing below, you acknowledge that you have read and agree to the updated pet policy described above.</p>
         <p>Please sign this letter electronically to confirm your acknowledgment.</p>
@@ -109,8 +201,10 @@ document.addEventListener('DOMContentLoaded', () => {
     },
   };
   let rmrSignDocIsPolicy = false;
+  let rmrSignDocKey = null;
   if (document.body.dataset.screen === 'document-sign') {
-    const doc = RMR_SIGN_DOCS[new URLSearchParams(location.search).get('doc')];
+    rmrSignDocKey = new URLSearchParams(location.search).get('doc');
+    const doc = RMR_SIGN_DOCS[rmrSignDocKey];
     if (doc) {
       rmrSignDocIsPolicy = true;
       document.title = `${doc.title} — rmResident Portal`;
@@ -123,6 +217,20 @@ document.addEventListener('DOMContentLoaded', () => {
       // of opening the lease-preference modal.
       const signBtn = document.querySelector('[data-sign-btn]');
       if (signBtn) signBtn.dataset.modalTarget = 'add-signature';
+    } else {
+      // Default (lease renewal) letter only — pre-fill its lease-preference
+      // dropdown with whichever term card was picked on the previous screen
+      // (Review Multiple Term Offers' Accept Offer, see offer-select above),
+      // instead of always opening blank.
+      const term = new URLSearchParams(location.search).get('term');
+      const dropdown = document.querySelector('[data-sign-lease-dropdown]');
+      const option = term && dropdown ? dropdown.querySelector(`[data-lease-term="${term}"]`) : null;
+      if (option) {
+        dropdown.querySelectorAll('[data-dropdown-option]').forEach((o) => o.classList.remove('rmr-dropdown__option--selected'));
+        option.classList.add('rmr-dropdown__option--selected');
+        const valueEl = dropdown.querySelector('[data-dropdown-value]');
+        if (valueEl) valueEl.textContent = option.textContent;
+      }
     }
   }
 
@@ -150,6 +258,145 @@ document.addEventListener('DOMContentLoaded', () => {
     el.addEventListener('click', () => {
       const backdrop = document.querySelector(`[data-modal-backdrop="${el.dataset.modalTarget}"]`);
       if (backdrop) backdrop.hidden = false;
+    });
+  });
+
+  // Community page — calendar event details. One shared modal (see the
+  // event-details backdrop in community.html) populated from whichever
+  // event button was clicked — its own data-event-* attributes — rather than
+  // a modal per event. Delegated on document since the "+x" day popover's
+  // event buttons above are only created after the popover opens.
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-action="open-modal"][data-modal-target="event-details"]');
+    if (!btn) return;
+    const backdrop = document.querySelector('[data-modal-backdrop="event-details"]');
+    if (!backdrop) return;
+    backdrop.querySelector('[data-event-detail-title]').textContent = btn.dataset.eventTitle || '';
+    backdrop.querySelector('[data-event-detail-category]').textContent = btn.dataset.eventCategory || '';
+    backdrop.querySelector('[data-event-detail-property]').textContent = btn.dataset.eventProperty || '';
+    backdrop.querySelector('[data-event-detail-location]').textContent = btn.dataset.eventLocation || '';
+    backdrop.querySelector('[data-event-detail-date]').textContent = btn.dataset.eventDate || '';
+    backdrop.querySelector('[data-event-detail-time]').textContent = btn.dataset.eventTime || '';
+    backdrop.querySelector('[data-event-detail-description]').textContent = btn.dataset.eventDescription || '';
+    backdrop.hidden = false;
+    const popover = document.querySelector('[data-cal-day-popover]');
+    if (popover) popover.hidden = true;
+  });
+
+  // Violation Details (node 2021:4928) — one modal shared by every row in
+  // both Open and Closed Violations, populated from that row's own table
+  // cells (plus an optional image, since only some violations have one)
+  // rather than duplicating a static modal per row.
+  document.querySelectorAll('[data-action="open-violation-details"]').forEach((row) => {
+    row.addEventListener('click', () => {
+      const backdrop = document.querySelector('[data-modal-backdrop="violation-details"]');
+      if (!backdrop) return;
+      const cells = row.querySelectorAll('td');
+      backdrop.querySelector('[data-vio-detail-date]').textContent = cells[0].textContent.trim();
+      backdrop.querySelector('[data-vio-detail-code]').textContent = cells[1].textContent.trim();
+      backdrop.querySelector('[data-vio-detail-ccr]').textContent = cells[2].textContent.trim();
+      backdrop.querySelector('[data-vio-detail-description]').textContent = cells[3].textContent.trim();
+      backdrop.querySelector('[data-vio-detail-duedate]').textContent = cells[4].textContent.trim();
+
+      // .rmr-modal__field sets display:flex, which beats the [hidden] UA
+      // style at equal specificity — toggle display directly instead.
+      const imageWrap = backdrop.querySelector('[data-vio-detail-image-wrap]');
+      const image = row.dataset.vioImage;
+      imageWrap.style.display = image ? '' : 'none';
+      if (image) backdrop.querySelector('[data-vio-detail-image]').src = image;
+
+      backdrop.hidden = false;
+    });
+  });
+
+  // Note Details (node 2231:5065) — one modal shared by every row in the
+  // Notes register, populated from that row's own table cells; the Files
+  // field only appears when the row's own Files cell shows an attachment
+  // icon, same show/matching-the-row logic as Violation Details' image above.
+  document.querySelectorAll('[data-action="open-note-details"]').forEach((row) => {
+    row.addEventListener('click', () => {
+      const backdrop = document.querySelector('[data-modal-backdrop="note-details"]');
+      if (!backdrop) return;
+      const cells = row.querySelectorAll('td');
+      backdrop.querySelector('[data-note-detail-date]').textContent = cells[0].textContent.trim();
+      backdrop.querySelector('[data-note-detail-notes]').textContent = cells[1].textContent.trim();
+      const filesWrap = backdrop.querySelector('[data-note-detail-files-wrap]');
+      filesWrap.style.display = cells[2].querySelector('img') ? '' : 'none';
+      backdrop.hidden = false;
+    });
+  });
+
+  // Architectural Requests — shared detail data for every request/vote row
+  // (keyed by each row's own data-arq-key), reused by both the My Requests
+  // "Request Details" modal (open-arq-details) and the Requests to Review
+  // "Vote Details" modal (open-arq-vote). Only "paint" is the real
+  // Figma-sourced example (full Description/Attachments/urgent flag/mixed
+  // vote breakdown); every other key reuses the same field shape with
+  // request-appropriate mock content so every register row opens a fully
+  // populated, matching detail view rather than a placeholder toast.
+  const ARQ_REQUESTS = {
+    paint: { description: 'I want to update the color of the front door', attachments: ['../assets/images/architectural-requests/attach-1.png', '../assets/images/architectural-requests/attach-2.png'], urgent: 'Yes', votes: [['Anna Moore', 'No Response', ''], ['Diene Bailey', 'Approved', ''], ['William Morgan', 'Denied', 'Not in the budget for this year.']] },
+    fence: { description: "I'd like to install a wooden fence along the back property line for added privacy and security.", attachments: [], urgent: 'No' },
+    patio: { description: "I'd like to add a paved patio in the backyard for outdoor seating.", attachments: [], urgent: 'No' },
+    lighting: { description: "I'd like to install low-voltage lighting along the front walkway for better visibility at night.", attachments: [], urgent: 'No' },
+    flowerbeds: { description: "I'd like to plant flower beds along the front of the unit to improve curb appeal.", attachments: [], urgent: 'No' },
+    pathway: { description: "I'd like to lay a stone pathway through the side garden.", attachments: [], urgent: 'No' },
+    deck: { description: "I'd like to build a small wood deck off the back entrance.", attachments: [], urgent: 'No' },
+    firepit: { description: "I'd like to install a permanent fire pit in the backyard for gatherings.", attachments: [], urgent: 'Yes' },
+    waterfeature: { description: "I'd like to add a small fountain to the front garden bed.", attachments: [], urgent: 'No' },
+    trellis: { description: "I'd like to install a trellis along the side fence for climbing plants.", attachments: [], urgent: 'No' },
+  };
+  // A request without its own sourced vote breakdown (every key but "paint")
+  // gets one derived from that row's own register Status cell instead —
+  // nobody's voted yet on a Pending request, a Board Review has a vote or
+  // two trickling in, and a Denied one nets out mostly against.
+  function arqVotesForStatus(status) {
+    if (status === 'Denied') return [['Anna Moore', 'Denied', ''], ['Diene Bailey', 'Approved', ''], ['William Morgan', 'Denied', 'Not enough support from the board.']];
+    if (status === 'In Board Review') return [['Anna Moore', 'Approved', ''], ['Diene Bailey', 'No Response', ''], ['William Morgan', 'No Response', '']];
+    return [['Anna Moore', 'No Response', ''], ['Diene Bailey', 'No Response', ''], ['William Morgan', 'No Response', '']];
+  }
+  function arqStatusDotClass(status) {
+    if (status === 'Denied') return 'denied';
+    if (status === 'In Board Review') return 'review';
+    return 'open'; // Pending — same yellow as Service Issues' own --open
+  }
+  function arqFillCommon(backdrop, prefix, request, status, submitted, submittedBy, data) {
+    backdrop.querySelector(`[data-arq-${prefix}-title]`).textContent = request;
+    backdrop.querySelector(`[data-arq-${prefix}-status]`).textContent = status;
+    backdrop.querySelector(`[data-arq-${prefix}-status-dot]`).className = `rmr-svc-status-dot rmr-svc-status-dot--${arqStatusDotClass(status)}`;
+    backdrop.querySelector(`[data-arq-${prefix}-submitted]`).textContent = submitted;
+    backdrop.querySelector(`[data-arq-${prefix}-submitted-by]`).textContent = submittedBy;
+    backdrop.querySelector(`[data-arq-${prefix}-description]`).textContent = data.description;
+    backdrop.querySelector(`[data-arq-${prefix}-urgent]`).textContent = data.urgent;
+    const attachWrap = backdrop.querySelector(`[data-arq-${prefix}-attachments-wrap]`);
+    attachWrap.style.display = data.attachments.length ? '' : 'none';
+    if (data.attachments.length) {
+      backdrop.querySelector(`[data-arq-${prefix}-attachments]`).innerHTML = data.attachments.map((src) => `<img class="rmr-svc-attach__thumb-img" src="${src}" alt="" />`).join('');
+    }
+  }
+
+  document.querySelectorAll('[data-action="open-arq-details"]').forEach((row) => {
+    row.addEventListener('click', () => {
+      const backdrop = document.querySelector('[data-modal-backdrop="arq-details"]');
+      if (!backdrop) return;
+      const cells = row.querySelectorAll('td');
+      const data = ARQ_REQUESTS[row.dataset.arqKey] || { description: '', attachments: [], urgent: 'No' };
+      arqFillCommon(backdrop, 'detail', cells[2].textContent.trim(), cells[1].textContent.trim(), cells[0].textContent.trim(), 'Samantha Carpenter', data);
+      backdrop.hidden = false;
+    });
+  });
+
+  document.querySelectorAll('[data-action="open-arq-vote"]').forEach((row) => {
+    row.addEventListener('click', () => {
+      const backdrop = document.querySelector('[data-modal-backdrop="arq-vote"]');
+      if (!backdrop) return;
+      const cells = row.querySelectorAll('td');
+      const status = cells[4].textContent.trim();
+      const data = ARQ_REQUESTS[row.dataset.arqKey] || { description: '', attachments: [], urgent: 'No' };
+      arqFillCommon(backdrop, 'vote', cells[3].textContent.trim(), status, cells[0].textContent.trim(), cells[1].textContent.trim(), data);
+      backdrop.querySelector('[data-arq-vote-body]').innerHTML = (data.votes || arqVotesForStatus(status))
+        .map(([name, vote, note]) => `<tr><td>${name}</td><td>${vote}</td><td>${note}</td></tr>`).join('');
+      backdrop.hidden = false;
     });
   });
 
@@ -183,6 +430,21 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // Make a Payment — Submit. Same modal-to-modal navigation as switch-modal
+  // above, plus actually applying the payment (see rmrApplyPaymentPaid):
+  // otherwise "Payment Submitted" would show a success screen while the
+  // Balance Due card, Open Charges, and All Activity all stayed untouched.
+  document.querySelectorAll('[data-action="pmt-submit"]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const current = document.querySelector(`[data-modal-backdrop="${btn.dataset.modalCloseCurrent}"]`);
+      const next = document.querySelector(`[data-modal-backdrop="${btn.dataset.modalTarget}"]`);
+      if (current) current.hidden = true;
+      if (next) next.hidden = false;
+      rmrApplyPaymentPaid();
+      rmrSetPaymentPaid(true);
+    });
+  });
+
   document.querySelectorAll('[data-modal-backdrop]').forEach((backdrop) => {
     backdrop.addEventListener('click', (e) => {
       if (e.target === backdrop) closeModal(backdrop);
@@ -192,15 +454,144 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // AutoPay setup — amount option selection (Total Balance / Current Balance
-  // / Specific Amount), mirroring the Make a Payment radio-card pattern.
-  document.querySelectorAll('[data-action="ap-select-amount"]').forEach((opt) => {
-    opt.addEventListener('click', () => {
-      document.querySelectorAll('[data-action="ap-select-amount"]').forEach((o) => {
-        const selected = o === opt;
-        o.querySelector('.rmr-pmt-radio').classList.toggle('rmr-pmt-radio--selected', selected);
+  // AutoPay setup — Balance step (payments.html/dashboard.html's
+  // autopay-amount modal). Amount option selection (Total Balance / Current
+  // Balance / Specific Amount) swaps in the matching amount field (Max
+  // Amount vs. the required "Amount" field, node 2044:20657's Specific
+  // Amount variant) and, together with the Frequency/Start Date inputs,
+  // drives the summary card live instead of it showing static placeholder
+  // copy — an empty Max Amount omits the "Up to" column entirely (see
+  // apUpdateSummary), and Quarterly/Semiannually additionally preview every
+  // date in the next 12 months the payment will actually run on, since
+  // "Every quarter starting on 11/01/26" alone doesn't make the other three
+  // dates obvious.
+  const AP_FREQUENCY_PERIODS = { Weekly: 'week', Monthly: 'month', Quarterly: 'quarter', Semiannually: '6 months', Annually: 'year' };
+  const AP_FREQUENCY_MONTHS = { Quarterly: 3, Semiannually: 6 }; // only these two get a "processed on" date list — Monthly/Weekly would list too many, Annually's one date just repeats Start Date
+  const AP_MONTH_ABBR = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  function apFormatAmount(raw) {
+    const trimmed = (raw || '').trim();
+    if (!trimmed) return '';
+    return trimmed.startsWith('$') ? trimmed : `$${trimmed}`;
+  }
+  document.querySelectorAll('[data-modal-backdrop="autopay-amount"]').forEach((backdrop) => {
+    const modal = backdrop.querySelector('.rmr-modal');
+    const amountOptions = modal ? modal.querySelectorAll('[data-action="ap-select-amount"]') : [];
+    const summaryRows = modal ? modal.querySelector('[data-ap-summary-rows]') : null;
+    if (!modal || !amountOptions.length || !summaryRows) return;
+
+    const balanceField = modal.querySelector('[data-ap-amount-field="balance"]');
+    const specificField = modal.querySelector('[data-ap-amount-field="specific"]');
+    const maxInput = modal.querySelector('[data-ap-max-input]');
+    const specificInput = modal.querySelector('[data-ap-specific-input]');
+    const freqValueEl = modal.querySelector('[data-ap-frequency-value]');
+    const freqDropdown = modal.querySelector('[data-ap-frequency-dropdown]');
+    const dayValueEl = modal.querySelector('[data-ap-day-value]');
+    const dayDropdown = dayValueEl ? dayValueEl.closest('[data-dropdown]') : null;
+    const startInput = modal.querySelectorAll('.rmr-ap-date-input')[0];
+    const endInput = modal.querySelectorAll('.rmr-ap-date-input')[1];
+
+    function selectedAmountOption() {
+      const active = Array.from(amountOptions).find((o) => o.querySelector('.rmr-pmt-radio').classList.contains('rmr-pmt-radio--selected'));
+      return active ? active.dataset.amountOption : 'current';
+    }
+    function apProcessedDates(startDate, intervalMonths) {
+      const count = 12 / intervalMonths;
+      const dates = [];
+      for (let i = 0; i < count; i++) {
+        const d = new Date(startDate.getFullYear(), startDate.getMonth() + intervalMonths * i, startDate.getDate());
+        dates.push(`${AP_MONTH_ABBR[d.getMonth()]} ${d.getDate()}`);
+      }
+      return dates.join(', ');
+    }
+    function apUpdateSummary() {
+      const mode = selectedAmountOption();
+      const freq = (freqValueEl && freqValueEl.textContent.trim()) || 'Monthly';
+      const startVal = startInput ? startInput.value.trim() : '';
+      let rowsHtml = '';
+
+      if (mode === 'specific') {
+        const amt = apFormatAmount(specificInput && specificInput.value);
+        rowsHtml += `<div class="rmr-pmt-field"><span class="rmr-pmt-field__label">You will pay</span><span class="rmr-pmt-field__value">${amt || '—'}</span></div>`;
+      } else {
+        const label = mode === 'current' ? 'Current Balance Due' : 'Total Balance Due';
+        const maxAmt = apFormatAmount(maxInput && maxInput.value);
+        if (maxAmt) {
+          rowsHtml += `<div class="rmr-pmt-form-row"><div class="rmr-pmt-field"><span class="rmr-pmt-field__label">You will pay</span><span class="rmr-pmt-field__value">${label}</span></div><div class="rmr-pmt-field"><span class="rmr-pmt-field__label">Up to</span><span class="rmr-pmt-field__value">${maxAmt}</span></div></div>`;
+        } else {
+          rowsHtml += `<div class="rmr-pmt-field"><span class="rmr-pmt-field__label">You will pay</span><span class="rmr-pmt-field__value">${label}</span></div>`;
+        }
+      }
+
+      rowsHtml += `<div class="rmr-pmt-field"><span class="rmr-pmt-field__label">Every ${AP_FREQUENCY_PERIODS[freq] || 'month'} starting on</span><span class="rmr-pmt-field__value">${startVal || '—'}</span></div>`;
+
+      const intervalMonths = AP_FREQUENCY_MONTHS[freq];
+      const startDate = startVal ? drParseDate(startVal) : null;
+      if (intervalMonths && startDate) {
+        rowsHtml += `<div class="rmr-pmt-field"><span class="rmr-pmt-field__label">Your payments will be processed on</span><span class="rmr-pmt-field__value">${apProcessedDates(startDate, intervalMonths)}</span></div>`;
+      }
+      summaryRows.innerHTML = rowsHtml;
+    }
+    // Both fields carry an inline style="display:flex", which beats the
+    // [hidden] UA rule at equal specificity (same pitfall as Violation
+    // Details' image wrap elsewhere in this file) — toggle display directly.
+    function apShowAmountField(mode) {
+      if (balanceField) balanceField.style.display = mode === 'specific' ? 'none' : 'flex';
+      if (specificField) specificField.style.display = mode === 'specific' ? 'flex' : 'none';
+    }
+    function apResetForm() {
+      amountOptions.forEach((o) => {
+        o.querySelector('.rmr-pmt-radio').classList.toggle('rmr-pmt-radio--selected', o.dataset.amountOption === 'current');
+      });
+      apShowAmountField('current');
+      if (maxInput) maxInput.value = '';
+      if (specificInput) specificInput.value = '';
+      if (freqValueEl && freqDropdown) {
+        freqValueEl.textContent = 'Monthly';
+        freqDropdown.querySelectorAll('[data-dropdown-option]').forEach((o) => {
+          o.classList.toggle('rmr-dropdown__option--selected', o.textContent.trim() === 'Monthly');
+        });
+      }
+      if (dayValueEl && dayDropdown) {
+        dayValueEl.textContent = '1';
+        dayDropdown.querySelectorAll('[data-dropdown-option]').forEach((o) => {
+          o.classList.toggle('rmr-dropdown__option--selected', o.textContent.trim() === '1');
+        });
+      }
+      if (startInput) startInput.value = '11/01/26';
+      if (endInput) endInput.value = '';
+      apUpdateSummary();
+    }
+
+    amountOptions.forEach((opt) => {
+      opt.addEventListener('click', () => {
+        amountOptions.forEach((o) => {
+          o.querySelector('.rmr-pmt-radio').classList.toggle('rmr-pmt-radio--selected', o === opt);
+        });
+        apShowAmountField(opt.dataset.amountOption);
+        apUpdateSummary();
       });
     });
+    if (maxInput) maxInput.addEventListener('input', apUpdateSummary);
+    if (specificInput) specificInput.addEventListener('input', apUpdateSummary);
+    // setTimeout, not a direct call: this listener is attached (and so
+    // fires) before the generic dropdown wiring's own option click handler
+    // further down the file, which is what actually writes the picked
+    // option into data-ap-frequency-value — reading it synchronously here
+    // would still see the previous value.
+    if (freqDropdown) freqDropdown.querySelectorAll('[data-dropdown-option]').forEach((o) => o.addEventListener('click', () => setTimeout(apUpdateSummary, 0)));
+    if (dayDropdown) dayDropdown.querySelectorAll('[data-dropdown-option]').forEach((o) => o.addEventListener('click', () => setTimeout(apUpdateSummary, 0)));
+    if (startInput) startInput.addEventListener('input', apUpdateSummary); // the calendar picker dispatches 'input' on pick, see apPick below
+
+    // Reset to the empty state (Current Balance Due, no Max Amount, no End
+    // Date) every time the flow is entered fresh — but not on "Back" from
+    // the Payment Method step, which uses data-action="switch-modal" and so
+    // never reaches this open-modal listener.
+    document.querySelectorAll(`[data-action="open-modal"][data-modal-target="${backdrop.dataset.modalBackdrop}"]`).forEach((btn) => {
+      btn.addEventListener('click', apResetForm);
+    });
+
+    apShowAmountField(selectedAmountOption());
+    apUpdateSummary();
   });
 
   // Edit-in-place payment method form (pencil icon replaces the plain
@@ -292,6 +683,7 @@ document.addEventListener('DOMContentLoaded', () => {
         menu.querySelectorAll('[data-dropdown-option]').forEach((o) => o.classList.remove('rmr-dropdown__option--selected'));
         option.classList.add('rmr-dropdown__option--selected');
         valueEl.textContent = option.textContent;
+        valueEl.classList.remove('rmr-dropdown__value--placeholder');
         closeMenu();
       });
     });
@@ -321,6 +713,571 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   });
+
+  // Community page — Month view's "+x" overflow indicator (a day cell only
+  // ever shows one event tile before it, so every cell stays the same fixed
+  // size regardless of how many events land on that day). Clicking it opens
+  // a single shared popover listing every event for that day, positioned off
+  // the trigger's own rect rather than embedded in the cell, so it can't get
+  // clipped by the calendar grid's overflow:hidden even from the bottom row.
+  const CAL_DAY_EVENTS = {
+    'oct-29': {
+      label: 'Thu, Oct 29',
+      events: [
+        { time: '2:00 PM', endTime: '3:00 PM', label: 'Open House', category: 'Community Event', location: 'Leasing Office', description: 'Tour available units and meet the leasing team. Refreshments provided.' },
+        { time: '4:00 PM', endTime: '5:00 PM', label: 'Halloween Contest', modifier: 'error', category: 'Community Event', location: 'Clubhouse Courtyard', description: 'Show off your best costume for a chance to win prizes.' },
+        { time: '5:00 PM', endTime: '6:00 PM', label: 'Pumpkin Carving', category: 'Community Event', location: 'Clubhouse Courtyard', description: 'Pumpkins and carving tools provided — bring the family!' },
+        { time: '6:00 PM', endTime: '7:00 PM', label: 'Trick-or-Treat Safety Patrol', category: 'Community Event', location: 'Property Grounds', description: 'Staff will patrol the grounds to keep trick-or-treaters safe.' },
+        { time: '7:00 PM', endTime: '9:00 PM', label: 'Halloween Movie Night', modifier: 'movie', category: 'Movie Night', location: 'Clubhouse', description: 'A spooky double feature under the stars — popcorn included.' },
+      ],
+    },
+  };
+  const calDayPopover = document.querySelector('[data-cal-day-popover]');
+  if (calDayPopover) {
+    const closeCalDayPopover = () => { calDayPopover.hidden = true; };
+    document.querySelectorAll('[data-action="cal-day-popover-open"]').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const data = CAL_DAY_EVENTS[btn.dataset.calDayKey];
+        if (!data) return;
+        calDayPopover.querySelector('[data-cal-day-popover-title]').textContent = data.label;
+        calDayPopover.querySelector('[data-cal-day-popover-list]').innerHTML = data.events.map((ev) => `
+          <button type="button" class="rmr-comm-cal__event${ev.modifier ? ` rmr-comm-cal__event--${ev.modifier}` : ''}" data-action="open-modal" data-modal-target="event-details" data-event-title="${ev.label}" data-event-category="${ev.category}" data-event-property="Riverview Apartments" data-event-location="${ev.location}" data-event-date="10/29/26" data-event-time="${ev.time} - ${ev.endTime}" data-event-description="${ev.description}">
+            <span class="rmr-comm-cal__event-time">${ev.time}</span><span class="rmr-comm-cal__event-label">${ev.label}</span>
+          </button>
+        `).join('');
+
+        const rect = btn.getBoundingClientRect();
+        calDayPopover.style.top = `${rect.bottom + 4}px`;
+        calDayPopover.style.left = `${rect.left}px`;
+        calDayPopover.hidden = false;
+
+        // Flip above/left if the popover would run off the viewport — same
+        // idea as the Dropdown component's own flip check above.
+        const pRect = calDayPopover.getBoundingClientRect();
+        if (pRect.bottom > window.innerHeight) calDayPopover.style.top = `${rect.top - pRect.height - 4}px`;
+        if (pRect.right > window.innerWidth) calDayPopover.style.left = `${window.innerWidth - pRect.width - 8}px`;
+      });
+    });
+    document.querySelectorAll('[data-action="cal-day-popover-close"]').forEach((btn) => {
+      btn.addEventListener('click', closeCalDayPopover);
+    });
+    document.addEventListener('click', (e) => {
+      if (calDayPopover.hidden) return;
+      if (!e.target.closest('[data-cal-day-popover]') && !e.target.closest('[data-action="cal-day-popover-open"]')) closeCalDayPopover();
+    });
+  }
+
+  // Date Range picker — shared by every register page's "Date Range" filter
+  // (Meter Readings, Service Issues, Architectural Requests, Payments &
+  // Charges, Notes, Reports). Functionally modeled on Angular Material's
+  // date-range-picker (material.angular.dev/components/datepicker/overview
+  // #date-range-picker-forms): Start and End can each be set on their own,
+  // not just as a single two-click range — but the field itself stays the
+  // one merged box already defined for this prototype (two <span>s, a
+  // divider, one calendar icon), not Material's own two-input layout. Which
+  // span was clicked decides the mode: clicking the Start or End text edits
+  // just that bound (pick a day, done, closes immediately); clicking the
+  // icon (or the divider) opens the original whole-range picker instead.
+  // One popover is built once and reused across every field on the page,
+  // same approach as the Community calendar's "+x" day popover above. Every
+  // commit re-runs the same live filter (see drFilterTables) immediately.
+  const DR_MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  const DR_WEEKDAYS = ['M', 'T', 'W', 'T', 'F', 'S', 'S']; // Monday-first, per the real Date Range Field component (node 308:1878)
+
+  function drParseDate(str) {
+    const m = str.trim().match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/);
+    if (!m) return null;
+    let [, mo, day, yr] = m;
+    if (yr.length === 2) yr = `20${yr}`;
+    return new Date(Number(yr), Number(mo) - 1, Number(day));
+  }
+  function drFormatDate(date, fourDigitYear) {
+    const mo = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const yr = fourDigitYear ? String(date.getFullYear()) : String(date.getFullYear()).slice(-2);
+    return `${mo}/${day}/${yr}`;
+  }
+  function drSameDay(a, b) { return !!a && !!b && a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate(); }
+  // Top-level (not nested in the `if (drFieldEls.length)` block below) since
+  // the AutoPay Schedule single-date picker further down reuses it too, on
+  // pages (autopay.html) that have no Date Range Field and so never enter
+  // that block.
+  function drMondayIndex(date) { return (date.getDay() + 6) % 7; } // Sunday=0..Saturday=6 -> Monday=0..Sunday=6
+
+  // Composable row filters — a register can have a Date Range field AND a
+  // Status/Utility/etc. dropdown filtering the same table, so each filter
+  // hides a row via its own dataset flag (rmrSetRowFilter) instead of the
+  // usual straight `row.hidden = …`; a row shows only while every active
+  // filter agrees, and the last filter to run can't clobber an earlier
+  // one's hide state. Top-level (not nested in the `if (drFieldEls.length)`
+  // block below) since the Status/Utility dropdown filters further down
+  // need it on pages with no Date Range field too.
+  function rmrFilterFooter(table) {
+    if (table.dataset.payView) return document.querySelector(`.rmr-pay-table-footer[data-pay-view="${table.dataset.payView}"]`);
+    const wrap = table.closest('.rmr-pay-table-wrap');
+    let sib = wrap ? wrap.nextElementSibling : table.nextElementSibling;
+    while (sib && !sib.matches('.rmr-acct-table-footer, .rmr-pay-table-footer')) sib = sib.nextElementSibling;
+    return sib;
+  }
+  function rmrSetRowFilter(row, filterKey, show) {
+    row.dataset[`filter${filterKey}`] = show ? '' : 'hide';
+    row.hidden = Object.keys(row.dataset).some((k) => k.indexOf('filter') === 0 && row.dataset[k] === 'hide');
+  }
+  function rmrRefreshTableFooter(table) {
+    const rows = Array.from(table.querySelectorAll(':scope > tbody > tr'));
+    const visible = rows.filter((r) => !r.hidden).length;
+    const footer = rmrFilterFooter(table);
+    if (!footer) return;
+    if (!footer.dataset.footerNoun) {
+      const m = footer.textContent.match(/of\s+\d+\s+(.+)$/);
+      footer.dataset.footerNoun = m ? m[1] : 'Items';
+    }
+    footer.textContent = `Showing ${visible} of ${rows.length} ${footer.dataset.footerNoun}`;
+  }
+
+  const drFieldEls = document.querySelectorAll('[data-action="open-daterange"]');
+  if (drFieldEls.length) {
+    const popover = document.createElement('div');
+    popover.className = 'rmr-daterange-popover';
+    popover.hidden = true;
+    popover.innerHTML = `
+      <div class="rmr-daterange-popover__nav">
+        <button type="button" class="rmr-daterange-popover__nav-btn" data-dr-prev aria-label="Previous"><img src="../assets/icons/community/cal-arrow-left.svg" alt="" /></button>
+        <button type="button" class="rmr-daterange-popover__month-label" data-dr-month-label aria-label="Choose year"></button>
+        <button type="button" class="rmr-daterange-popover__nav-btn" data-dr-next aria-label="Next"><img src="../assets/icons/community/cal-arrow-right.svg" alt="" /></button>
+      </div>
+      <div class="rmr-daterange-popover__weekdays" data-dr-weekdays>${DR_WEEKDAYS.map((d) => `<span>${d}</span>`).join('')}</div>
+      <div class="rmr-daterange-popover__days" data-dr-days></div>
+      <div class="rmr-daterange-popover__footer" data-dr-footer>
+        <button type="button" class="rmr-daterange-popover__footer-btn" data-dr-today>Today</button>
+        <button type="button" class="rmr-daterange-popover__footer-btn" data-dr-clear>Clear</button>
+      </div>
+    `;
+    document.body.appendChild(popover);
+
+    const monthLabel = popover.querySelector('[data-dr-month-label]');
+    const daysEl = popover.querySelector('[data-dr-days]');
+    const weekdaysEl = popover.querySelector('[data-dr-weekdays]');
+    const footerEl = popover.querySelector('[data-dr-footer]');
+    const prevBtn = popover.querySelector('[data-dr-prev]');
+    const nextBtn = popover.querySelector('[data-dr-next]');
+    let activeField = null;
+    let activeRole = null; // 'start' | 'end' | 'range' — which part of the field was clicked
+    let fourDigitYear = false;
+    let viewYear, viewMonth, rangeStart, rangeEnd;
+    // drView cycles day -> year -> month -> day (node 308:1878): clicking
+    // the "Month Year" label opens a scrollable Year list, picking a year
+    // opens a scrollable Month list for it, and picking a month returns to
+    // the day grid for that month/year. "‹" in Year/Month steps back one
+    // level instead of paging (see drRender).
+    let drView = 'days'; // 'days' | 'months' | 'years'
+
+    function drSpans(field) {
+      const spans = field.querySelectorAll(':scope > span:not(.rmr-pay-field__divider)');
+      return { startSpan: spans[0], endSpan: spans[1] };
+    }
+    function drRoleFromTarget(field, target) {
+      const { startSpan, endSpan } = drSpans(field);
+      if (startSpan && (target === startSpan || startSpan.contains(target))) return 'start';
+      if (endSpan && (target === endSpan || endSpan.contains(target))) return 'end';
+      return 'range';
+    }
+
+    // Every table[data-date-col] in the same card as `field` (both tabs, if
+    // the page has them, so a tab switched to later still reflects the last-
+    // applied range) gets its rows hidden/shown by its own date-col cell,
+    // and its own "Showing X of Y ___" footer recomputed to match — rather
+    // than the date field being decorative like every other filter in this
+    // prototype (see PROTOTYPE.md).
+    function drFilterTables(field, start, end) {
+      const scope = field.closest('.rmr-settings-card, .rmr-comm-card, .rmr-pay-section') || document;
+      scope.querySelectorAll('table[data-date-col]').forEach((table) => {
+        const colIdx = Number(table.dataset.dateCol);
+        table.querySelectorAll(':scope > tbody > tr').forEach((row) => {
+          const cell = row.children[colIdx];
+          const date = cell ? drParseDate(cell.textContent.trim()) : null;
+          rmrSetRowFilter(row, 'Date', !date || (date >= start && date <= end));
+        });
+        rmrRefreshTableFooter(table);
+      });
+    }
+
+    // Clear removes the filter entirely (every row shows again, footer count
+    // restored to the real total) rather than trying to represent an "empty"
+    // range within a start/end that's otherwise always some real date — the
+    // field's own two spans fall back to "Start date"/"End date" placeholder
+    // text (same var(--text-accent) italic treatment every other input's
+    // ::placeholder already uses in this file) to match Material's range
+    // picker clearing back to its own unset placeholder state.
+    function drClearAll(field) {
+      const scope = field.closest('.rmr-settings-card, .rmr-comm-card, .rmr-pay-section') || document;
+      scope.querySelectorAll('table[data-date-col]').forEach((table) => {
+        table.querySelectorAll(':scope > tbody > tr').forEach((row) => rmrSetRowFilter(row, 'Date', true));
+        rmrRefreshTableFooter(table);
+      });
+      const { startSpan, endSpan } = drSpans(field);
+      if (startSpan) { startSpan.textContent = 'Start date'; startSpan.classList.add('rmr-daterange-placeholder'); }
+      if (endSpan) { endSpan.textContent = 'End date'; endSpan.classList.add('rmr-daterange-placeholder'); }
+    }
+
+    function drCommit(field) {
+      if (!rangeStart) return;
+      const { startSpan, endSpan } = drSpans(field);
+      if (startSpan) { startSpan.textContent = drFormatDate(rangeStart, fourDigitYear); startSpan.classList.remove('rmr-daterange-placeholder'); }
+      if (endSpan) { endSpan.textContent = drFormatDate(rangeEnd || rangeStart, fourDigitYear); endSpan.classList.remove('rmr-daterange-placeholder'); }
+      drFilterTables(field, rangeStart, rangeEnd || rangeStart);
+    }
+
+    function drRenderDays() {
+      daysEl.className = 'rmr-daterange-popover__days';
+      const firstWeekday = drMondayIndex(new Date(viewYear, viewMonth, 1));
+      const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+      const daysInPrevMonth = new Date(viewYear, viewMonth, 0).getDate();
+      let html = '';
+      for (let i = firstWeekday - 1; i >= 0; i--) {
+        html += `<button type="button" class="rmr-daterange-popover__day" disabled><span class="rmr-daterange-popover__day-inner">${daysInPrevMonth - i}</span></button>`;
+      }
+      for (let d = 1; d <= daysInMonth; d++) {
+        const date = new Date(viewYear, viewMonth, d);
+        const isStart = drSameDay(date, rangeStart);
+        const isEnd = drSameDay(date, rangeEnd);
+        const inRange = rangeStart && rangeEnd && date > rangeStart && date < rangeEnd;
+        const classes = ['rmr-daterange-popover__day'];
+        if (isStart || inRange || isEnd) classes.push('rmr-daterange-popover__day--in-range');
+        if (isStart) classes.push('rmr-daterange-popover__day--range-start');
+        if (isEnd) classes.push('rmr-daterange-popover__day--range-end');
+        html += `<button type="button" class="${classes.join(' ')}" data-dr-day="${d}"><span class="rmr-daterange-popover__day-inner">${d}</span></button>`;
+      }
+      const trailing = (7 - ((firstWeekday + daysInMonth) % 7)) % 7;
+      for (let d = 1; d <= trailing; d++) {
+        html += `<button type="button" class="rmr-daterange-popover__day" disabled><span class="rmr-daterange-popover__day-inner">${d}</span></button>`;
+      }
+      daysEl.innerHTML = html;
+      daysEl.querySelectorAll('[data-dr-day]').forEach((btn) => {
+        btn.addEventListener('click', () => drPickDate(new Date(viewYear, viewMonth, Number(btn.dataset.drDay))));
+      });
+    }
+
+    // Year/Month are their own scrollable single-column lists (node 308:1878
+    // — a plain list of rows with the current one highlighted, not a grid),
+    // not just a compact grid variant of the day view.
+    function drRenderMonths() {
+      daysEl.className = 'rmr-daterange-popover__list';
+      daysEl.innerHTML = DR_MONTHS.map((m, i) => {
+        const current = i === viewMonth ? ' rmr-daterange-popover__list-item--current' : '';
+        return `<button type="button" class="rmr-daterange-popover__list-item${current}" data-dr-month="${i}">${m}</button>`;
+      }).join('');
+      daysEl.querySelectorAll('[data-dr-month]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          viewMonth = Number(btn.dataset.drMonth);
+          drView = 'days';
+          drRender();
+        });
+      });
+      daysEl.querySelector('.rmr-daterange-popover__list-item--current')?.scrollIntoView({ block: 'center' });
+    }
+
+    function drRenderYears() {
+      daysEl.className = 'rmr-daterange-popover__list';
+      let html = '';
+      for (let y = viewYear - 50; y <= viewYear + 50; y++) {
+        const current = y === viewYear ? ' rmr-daterange-popover__list-item--current' : '';
+        html += `<button type="button" class="rmr-daterange-popover__list-item${current}" data-dr-year="${y}">${y}</button>`;
+      }
+      daysEl.innerHTML = html;
+      daysEl.querySelectorAll('[data-dr-year]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          viewYear = Number(btn.dataset.drYear);
+          drView = 'months';
+          drRender();
+        });
+      });
+      daysEl.querySelector('.rmr-daterange-popover__list-item--current')?.scrollIntoView({ block: 'center' });
+    }
+
+    // Day's "‹›" pair page by month; Year/Month only ever show "‹" and it
+    // steps back one level in the day -> year -> month chain instead of
+    // paging (there's nothing to page — each is one continuous scroll list).
+    function drRender() {
+      weekdaysEl.hidden = drView !== 'days';
+      nextBtn.hidden = drView !== 'days';
+      // Today/Clear act on the picked date, which only exists as a concept
+      // in the day grid — Year/Month are just a way to get there faster.
+      footerEl.hidden = drView !== 'days';
+      if (drView === 'years') {
+        monthLabel.textContent = 'Year';
+        prevBtn.setAttribute('aria-label', 'Back to calendar');
+        drRenderYears();
+      } else if (drView === 'months') {
+        monthLabel.textContent = 'Month';
+        prevBtn.setAttribute('aria-label', 'Back to year');
+        drRenderMonths();
+      } else {
+        monthLabel.textContent = `${DR_MONTHS[viewMonth]} ${viewYear}`;
+        prevBtn.setAttribute('aria-label', 'Previous month');
+        drRenderDays();
+      }
+    }
+
+    // Shared by a day-cell click and the Today button — same branching
+    // either way, since "Today" is just a shortcut for picking today's date.
+    function drPickDate(date) {
+      if (activeRole === 'start') {
+        // Editing Start on its own — move End along with it if that would
+        // otherwise put the range backwards, same as Material clamps an
+        // out-of-order edit rather than rejecting it.
+        rangeStart = date;
+        if (rangeEnd && rangeStart > rangeEnd) rangeEnd = date;
+        drCommit(activeField);
+        drClose();
+      } else if (activeRole === 'end') {
+        rangeEnd = date;
+        if (rangeStart && rangeEnd < rangeStart) rangeStart = date;
+        drCommit(activeField);
+        drClose();
+      } else {
+        // Opened from the icon/divider — the original two-click sequence:
+        // first click starts a fresh range, second finishes it and commits/
+        // closes immediately (no separate Apply button, consistent with the
+        // single-bound edits above).
+        if (!rangeStart || (rangeStart && rangeEnd)) {
+          rangeStart = date;
+          rangeEnd = null;
+          drRender();
+        } else if (date < rangeStart) {
+          rangeEnd = rangeStart;
+          rangeStart = date;
+          drCommit(activeField);
+          drClose();
+        } else {
+          rangeEnd = date;
+          drCommit(activeField);
+          drClose();
+        }
+      }
+    }
+
+    function drPosition(anchor) {
+      const rect = anchor.getBoundingClientRect();
+      popover.style.top = `${rect.bottom + 4}px`;
+      popover.style.left = `${rect.left}px`;
+      popover.hidden = false;
+      const pRect = popover.getBoundingClientRect();
+      if (pRect.bottom > window.innerHeight) popover.style.top = `${rect.top - pRect.height - 4}px`;
+      if (pRect.right > window.innerWidth) popover.style.left = `${window.innerWidth - pRect.width - 8}px`;
+    }
+
+    function drOpen(field, role) {
+      activeField = field;
+      activeRole = role;
+      drView = 'days';
+      const { startSpan, endSpan } = drSpans(field);
+      // Read from the field's own remembered format (set once from its
+      // initial value below) rather than re-inferring from the current span
+      // text each time — after Clear empties both spans, a 4-digit-year
+      // page (Architectural Requests, Payments & Charges) would otherwise
+      // silently fall back to a 2-digit year on the next pick.
+      fourDigitYear = field.dataset.drFourDigitYear === 'true';
+      rangeStart = drParseDate(startSpan?.textContent || '') || new Date();
+      rangeEnd = drParseDate(endSpan?.textContent || '') || null;
+      const focusDate = role === 'end' ? (rangeEnd || rangeStart) : rangeStart;
+      viewYear = focusDate.getFullYear();
+      viewMonth = focusDate.getMonth();
+      drRender();
+
+      document.querySelectorAll('.rmr-pay-field__input--active').forEach((el) => el.classList.remove('rmr-pay-field__input--active'));
+      field.classList.add('rmr-pay-field__input--active');
+
+      drPosition(field);
+    }
+    function drClose() {
+      popover.hidden = true;
+      if (activeField) activeField.classList.remove('rmr-pay-field__input--active');
+      activeField = null;
+      activeRole = null;
+    }
+
+    drFieldEls.forEach((field) => {
+      const { startSpan } = drSpans(field);
+      field.dataset.drFourDigitYear = String((startSpan?.textContent || '').length > 8);
+      field.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const role = drRoleFromTarget(field, e.target);
+        if (!popover.hidden && activeField === field && activeRole === role) { drClose(); return; }
+        drOpen(field, role);
+      });
+    });
+    prevBtn.addEventListener('click', () => {
+      if (drView === 'years') { drView = 'days'; }
+      else if (drView === 'months') { drView = 'years'; }
+      else { viewMonth--; if (viewMonth < 0) { viewMonth = 11; viewYear--; } }
+      drRender();
+    });
+    nextBtn.addEventListener('click', () => {
+      viewMonth++;
+      if (viewMonth > 11) { viewMonth = 0; viewYear++; }
+      drRender();
+    });
+    // Clicking "Month Year" opens the Year list (only from the day grid —
+    // Year/Month's own headers are plain labels, not another forward step).
+    monthLabel.addEventListener('click', () => {
+      if (drView === 'days') {
+        drView = 'years';
+        drRender();
+      }
+    });
+    popover.querySelector('[data-dr-today]').addEventListener('click', () => {
+      const today = new Date();
+      viewYear = today.getFullYear();
+      viewMonth = today.getMonth();
+      drPickDate(new Date(viewYear, viewMonth, today.getDate()));
+    });
+    popover.querySelector('[data-dr-clear]').addEventListener('click', () => {
+      if (activeField) drClearAll(activeField);
+      drClose();
+    });
+    popover.addEventListener('click', (e) => e.stopPropagation());
+    document.addEventListener('click', (e) => {
+      if (!popover.hidden && !e.target.closest('.rmr-daterange-popover') && !e.target.closest('[data-action="open-daterange"]')) drClose();
+    });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !popover.hidden) drClose(); });
+  }
+
+  // Status / Utility / etc. dropdown filters — e.g. Meter Readings' Utility
+  // filter, Architectural Requests' Status filter. A dropdown opts in with
+  // data-filter-target="<name>"; every table in the same card that carries a
+  // matching data-<name>-col="N" gets its row N-th cell compared against the
+  // picked option text (an exact match, or "All"). Reuses the same
+  // composable rmrSetRowFilter/rmrRefreshTableFooter as the Date Range field
+  // above so the two combine instead of one undoing the other, and a table
+  // with two tabs (e.g. My Requests / Requests to Review) both stay filtered
+  // even while one tab is hidden, so switching tabs doesn't lose it.
+  document.querySelectorAll('[data-dropdown][data-filter-target]').forEach((dropdown) => {
+    const key = dropdown.dataset.filterTarget;
+    const colAttr = `data-${key}-col`;
+    const scope = dropdown.closest('.rmr-settings-card, .rmr-comm-card, .rmr-pay-section') || document;
+    dropdown.querySelectorAll('[data-dropdown-option]').forEach((option) => {
+      option.addEventListener('click', () => {
+        const selected = option.textContent.trim();
+        scope.querySelectorAll(`table[${colAttr}]`).forEach((table) => {
+          const colIdx = Number(table.getAttribute(colAttr));
+          table.querySelectorAll(':scope > tbody > tr').forEach((row) => {
+            const cell = row.children[colIdx];
+            const text = cell ? cell.textContent.trim() : '';
+            rmrSetRowFilter(row, key, selected === 'All' || text === selected);
+          });
+          rmrRefreshTableFooter(table);
+        });
+      });
+    });
+  });
+
+  // AutoPay Schedule — Start Date / End Date (payments.html, dashboard.html,
+  // autopay.html). Same calendar visuals as the Date Range Field above
+  // (rmr-daterange-popover), reusing its month/weekday helpers, but each
+  // field just picks one plain date into its own <input> rather than a
+  // start/end pair tied to table filtering.
+  const apDateInputs = document.querySelectorAll('.rmr-ap-date-input');
+  if (apDateInputs.length) {
+    const apPopover = document.createElement('div');
+    apPopover.className = 'rmr-daterange-popover';
+    apPopover.hidden = true;
+    apPopover.innerHTML = `
+      <div class="rmr-daterange-popover__nav">
+        <button type="button" class="rmr-daterange-popover__nav-btn" data-ap-cal-prev aria-label="Previous month"><img src="../assets/icons/community/cal-arrow-left.svg" alt="" /></button>
+        <span class="rmr-daterange-popover__month-label" data-ap-cal-month-label></span>
+        <button type="button" class="rmr-daterange-popover__nav-btn" data-ap-cal-next aria-label="Next month"><img src="../assets/icons/community/cal-arrow-right.svg" alt="" /></button>
+      </div>
+      <div class="rmr-daterange-popover__weekdays">${DR_WEEKDAYS.map((d) => `<span>${d}</span>`).join('')}</div>
+      <div class="rmr-daterange-popover__days" data-ap-cal-days></div>
+    `;
+    document.body.appendChild(apPopover);
+
+    const apMonthLabel = apPopover.querySelector('[data-ap-cal-month-label]');
+    const apDaysEl = apPopover.querySelector('[data-ap-cal-days]');
+    let apActiveInput = null;
+    let apViewYear, apViewMonth, apPicked;
+
+    function apRenderDays() {
+      const firstWeekday = drMondayIndex(new Date(apViewYear, apViewMonth, 1));
+      const daysInMonth = new Date(apViewYear, apViewMonth + 1, 0).getDate();
+      const daysInPrevMonth = new Date(apViewYear, apViewMonth, 0).getDate();
+      let html = '';
+      for (let i = firstWeekday - 1; i >= 0; i--) {
+        html += `<button type="button" class="rmr-daterange-popover__day" disabled><span class="rmr-daterange-popover__day-inner">${daysInPrevMonth - i}</span></button>`;
+      }
+      for (let d = 1; d <= daysInMonth; d++) {
+        const date = new Date(apViewYear, apViewMonth, d);
+        const selected = drSameDay(date, apPicked) ? ' rmr-daterange-popover__day--range-start' : '';
+        html += `<button type="button" class="rmr-daterange-popover__day${selected}" data-ap-cal-day="${d}"><span class="rmr-daterange-popover__day-inner">${d}</span></button>`;
+      }
+      const trailing = (7 - ((firstWeekday + daysInMonth) % 7)) % 7;
+      for (let d = 1; d <= trailing; d++) {
+        html += `<button type="button" class="rmr-daterange-popover__day" disabled><span class="rmr-daterange-popover__day-inner">${d}</span></button>`;
+      }
+      apDaysEl.innerHTML = html;
+      apDaysEl.querySelectorAll('[data-ap-cal-day]').forEach((btn) => {
+        btn.addEventListener('click', () => apPick(new Date(apViewYear, apViewMonth, Number(btn.dataset.apCalDay))));
+      });
+    }
+    function apRender() {
+      apMonthLabel.textContent = `${DR_MONTHS[apViewMonth]} ${apViewYear}`;
+      apRenderDays();
+    }
+    function apPick(date) {
+      if (apActiveInput) {
+        apActiveInput.value = drFormatDate(date, false);
+        // Programmatic .value doesn't fire 'input' on its own — the AutoPay
+        // Balance summary card listens for it to recompute live.
+        apActiveInput.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+      apClose();
+    }
+    function apPosition(anchor) {
+      const rect = anchor.getBoundingClientRect();
+      apPopover.style.top = `${rect.bottom + 4}px`;
+      apPopover.style.left = `${rect.left}px`;
+      apPopover.hidden = false;
+      const pRect = apPopover.getBoundingClientRect();
+      if (pRect.bottom > window.innerHeight) apPopover.style.top = `${rect.top - pRect.height - 4}px`;
+      if (pRect.right > window.innerWidth) apPopover.style.left = `${window.innerWidth - pRect.width - 8}px`;
+    }
+    function apOpen(input) {
+      apActiveInput = input;
+      apPicked = drParseDate(input.value) || new Date();
+      apViewYear = apPicked.getFullYear();
+      apViewMonth = apPicked.getMonth();
+      apRender();
+      apPosition(input.closest('.rmr-ap-date-wrap') || input);
+    }
+    function apClose() {
+      apPopover.hidden = true;
+      apActiveInput = null;
+    }
+
+    // Read-only (not disabled): still focusable/clickable to open the
+    // calendar, just not hand-typeable — the calendar icon has
+    // pointer-events:none (see rmr.css) so a click anywhere on the field,
+    // icon included, lands on the input itself.
+    apDateInputs.forEach((input) => {
+      input.setAttribute('readonly', '');
+      input.addEventListener('click', (e) => { e.stopPropagation(); apOpen(input); });
+    });
+    apPopover.querySelector('[data-ap-cal-prev]').addEventListener('click', () => {
+      apViewMonth--; if (apViewMonth < 0) { apViewMonth = 11; apViewYear--; }
+      apRender();
+    });
+    apPopover.querySelector('[data-ap-cal-next]').addEventListener('click', () => {
+      apViewMonth++; if (apViewMonth > 11) { apViewMonth = 0; apViewYear++; }
+      apRender();
+    });
+    apPopover.addEventListener('click', (e) => e.stopPropagation());
+    document.addEventListener('click', (e) => {
+      if (!apPopover.hidden && !e.target.closest('.rmr-daterange-popover') && !e.target.closest('.rmr-ap-date-wrap')) apClose();
+    });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !apPopover.hidden) apClose(); });
+  }
 
   // Payment Methods page — Bank Account / Card type selection.
   document.querySelectorAll('[data-action="pmm-select-type"]').forEach((card) => {
@@ -390,6 +1347,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // Balance Due card, Open Charges, and All Activity — reflect a payment
+  // already submitted (from either this visit or an earlier one).
+  if (rmrIsPaymentPaid()) rmrApplyPaymentPaid();
+
   document.addEventListener('keydown', (e) => {
     if (e.key !== 'Escape') return;
     document.querySelectorAll('[data-modal-backdrop]').forEach((backdrop) => {
@@ -405,9 +1366,50 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('[data-renewal-banner]').forEach((banner) => { banner.hidden = true; });
   }
 
+  // Document Center — Documents to Sign / Leases & Documents. Once the
+  // tenant has signed a policy doc (data-dts-row, keyed the same as
+  // RMR_SIGN_DOCS), its signer count reflects that signature — and once
+  // that brings it to its full required signer count (Parking Policy:
+  // 1 of 2 -> 2 of 2), it's actually DONE and moves into its real Leases &
+  // Documents folder (data-dtl-row, same key, hidden until then). A doc
+  // still short a signer after the tenant's own (Pet Policy Update:
+  // 0 of 2 -> 1 of 2) just stays in the register with its bumped count —
+  // either way its Sign link is spent, since the tenant's own part is done
+  // regardless of whether the whole document is.
+  document.querySelectorAll('[data-dts-row]').forEach((row) => {
+    if (!rmrIsDocSigned(row.dataset.dtsRow)) return;
+    const cell = row.querySelector('[data-dts-signers]');
+    let complete = false;
+    if (cell) {
+      const [signed, total] = cell.dataset.dtsSigners.split(',').map(Number);
+      const nowSigned = Math.min(signed + 1, total);
+      cell.textContent = `${nowSigned} of ${total}`;
+      complete = nowSigned >= total;
+    }
+    const signLink = row.querySelector('[data-dts-sign-link]');
+    if (signLink) {
+      signLink.textContent = 'Signed';
+      signLink.removeAttribute('href');
+      signLink.toggleAttribute('disabled', true);
+    }
+    if (complete) row.hidden = true;
+  });
+  document.querySelectorAll('[data-dtl-row]').forEach((row) => {
+    if (rmrIsDocSigned(row.dataset.dtlRow)) row.hidden = false;
+  });
+  const dtsFooter = document.querySelector('[data-dts-footer]');
+  if (dtsFooter) {
+    const visible = document.querySelectorAll('[data-dts-row]:not([hidden])').length;
+    dtsFooter.textContent = `${visible} Total Document${visible === 1 ? '' : 's'}`;
+  }
+
   // Review Multiple Term Offers — selecting a different term card, same
   // radio-card pattern as pmt-select-amount (visual selection only; each
   // card's own numbers are fixed, real content from the source frame).
+  // Accept Offer carries the picked term (data-offer-term) through to
+  // document-sign.html as ?term=, so the letter's own lease-preference
+  // dropdown can open pre-filled with it instead of a blank "Select an
+  // option" — see the matching read of ?term= there.
   document.querySelectorAll('[data-action="offer-select"]').forEach((card) => {
     card.addEventListener('click', () => {
       card.parentElement.querySelectorAll('[data-action="offer-select"]').forEach((c) => {
@@ -415,6 +1417,12 @@ document.addEventListener('DOMContentLoaded', () => {
         c.classList.toggle('rmr-offer-card--selected', selected);
         c.querySelector('.rmr-pmt-radio').classList.toggle('rmr-pmt-radio--selected', selected);
       });
+      const acceptLink = document.querySelector('[data-accept-offer-link]');
+      if (acceptLink && card.dataset.offerTerm) {
+        const url = new URL(acceptLink.href, location.href);
+        url.searchParams.set('term', card.dataset.offerTerm);
+        acceptLink.href = `${url.pathname}${url.search}`;
+      }
     });
   });
 
@@ -432,27 +1440,50 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Sign Document — "Sign" in the Add Signature modal finishes the wizard
-  // directly (no separate Document Signature preview step to confirm first —
-  // that's only needed for documents with more than one signature spot,
-  // which this prototype doesn't have): fills in the document's own embedded
-  // lease-preference value and cursive signature line, and marks the sidebar
-  // Sign button as done so Finish Signing can proceed straight to Submit.
+  // Sign Document — once the tenant has a signature on file (rmrHasSignature,
+  // set below the first time they actually sign something), every later
+  // "Click to Sign"/footer Sign entry point should open the Document
+  // Signature preview (signature already filled in) instead of the blank
+  // Add Signature step, matching a real e-sign flow that remembers your
+  // signature — "Enter a New Signature" there still reaches Add Signature.
+  // Capture phase so the trigger's data-modal-target is rewritten before the
+  // open-modal/switch-modal handlers (which read it at click time) run.
+  document.addEventListener('click', (e) => {
+    if (!rmrHasSignature()) return;
+    const trigger = e.target.closest('[data-modal-target="add-signature"]');
+    if (trigger) trigger.dataset.modalTarget = 'document-signature';
+  }, true);
+
+  // Sign Document — "Sign" in the Add Signature (or the remembered-signature
+  // Document Signature preview, see rmrHasSignature below) modal finishes
+  // the wizard: fills in the document's own embedded lease-preference value
+  // and cursive signature line, marks the sidebar Sign button as done so
+  // Finish Signing can proceed straight to Submit, and remembers that this
+  // tenant now has a signature on file for next time.
   document.querySelectorAll('[data-action="sign-complete"]').forEach((btn) => {
     btn.addEventListener('click', () => {
+      rmrSetHasSignature(true);
       const wizard = btn.closest('[data-modal-backdrop]');
       if (wizard) closeModal(wizard);
+      // Respects whatever's already showing (prefilled from the previous
+      // screen's term card, or manually picked from the dropdown's now-real
+      // 6/12/24/MTM options) — only falls back to a default if the tenant
+      // reached Sign without ever touching it.
       const leaseValue = document.querySelector('[data-sign-lease-value]');
-      if (leaseValue) leaseValue.textContent = '12-month lease renewal';
-      const fieldAttention = document.querySelector('[data-sign-field-attention]');
-      if (fieldAttention) {
+      if (leaseValue && leaseValue.textContent === 'Select an option') leaseValue.textContent = '12-month lease renewal';
+      // The lease renewal letter carries two attention fields (its own
+      // lease-preference dropdown, plus the Click to Sign box added at the
+      // bottom of the letter) where the Parking/Pet policy docs only ever
+      // have the one — querySelectorAll so signing clears both.
+      document.querySelectorAll('[data-sign-field-attention]').forEach((fieldAttention) => {
         fieldAttention.classList.remove('rmr-field-attention');
         // The lease-preference dropdown is a real answer that stays visible
-        // after signing; the Parking/Pet policy docs' own field-attention is
-        // just a "sign here" prompt with nothing to keep showing once the
-        // cursive signature below it takes over.
+        // after signing; the Click to Sign box (default letter and the
+        // Parking/Pet policy docs alike) is just a "sign here" prompt with
+        // nothing to keep showing once the cursive signature below it
+        // takes over.
         if ('signHideOnSign' in fieldAttention.dataset) fieldAttention.hidden = true;
-      }
+      });
       const signatureLine = document.querySelector('[data-sign-signature-line]');
       if (signatureLine) signatureLine.hidden = false;
       const signBtn = document.querySelector('[data-sign-btn]');
@@ -479,11 +1510,15 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Submit Signed Document — Submit persists the "already signed" flag so
-  // the Document Center banner reflects it on return. Only applies to the
-  // lease renewal itself; signing a Parking Policy or Pet Policy doc
-  // shouldn't hide the unrelated Renewal Available banner.
+  // Document Center reflects it on return: the lease renewal itself hides
+  // the Renewal Available banner, while a Parking/Pet policy doc is tracked
+  // per its own RMR_SIGN_DOCS key instead (see the Documents to
+  // Sign/Leases & Documents wiring below).
   document.querySelectorAll('[data-modal-target="document-signed-success"]').forEach((btn) => {
-    btn.addEventListener('click', () => { if (!rmrSignDocIsPolicy) rmrSetRenewalSigned(true); });
+    btn.addEventListener('click', () => {
+      if (rmrSignDocIsPolicy) rmrSetDocSigned(rmrSignDocKey, true);
+      else rmrSetRenewalSigned(true);
+    });
   });
 
   // Submit Signed Document — Submit, node 2677:26211's "Loading overlay":
@@ -652,6 +1687,103 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   });
+
+  // Reservation Details — one shared "Reservation Details" modal (node
+  // 2027:2947) for every Approved/Pending/Completed booking across the "My
+  // Reservations" list and the full Amenities calendar (month/week/day
+  // views), plus a second shared modal for Denied ones (node 2059:459901,
+  // only ever reached by the one real Denied example), populated from each
+  // clicked item's own data-rsv-* attributes rather than the two static,
+  // single-instance modals this page started with. Only Theater Room's own
+  // fee/description/image are the real sourced values (its Oct 24 booking);
+  // Clubhouse Room 1's are prototype-only mock content, same convention as
+  // every other invented amenity in this file.
+  const RSV_AMENITIES = {
+    'Theater Room': { image: '../assets/images/reservations/room-2.png', description: 'Located near the main office.', fee: '$15.00' },
+    'Clubhouse Room 1': { image: '../assets/images/reservations/room-1.png', description: 'A spacious multipurpose room with a full kitchen, ideal for parties and gatherings.', fee: '$25.00' },
+  };
+  function rsvStatusDotColor(status) {
+    if (status === 'Pending') return 'yellow';
+    if (status === 'Denied') return 'red';
+    if (status === 'Completed') return 'gray';
+    return 'green'; // Approved
+  }
+  // Every sourced time on this page is a plain on-the-hour/half-hour start
+  // (e.g. "7:00 PM") with the modal always showing a 1-hour block, so the
+  // end time is computed rather than needing its own attribute per item.
+  function rsvEndTime(start) {
+    const m = start.trim().match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
+    if (!m) return start;
+    let hour = Number(m[1]) % 12;
+    if (m[3].toUpperCase() === 'PM') hour += 12;
+    let endHour = (hour + 1) % 24;
+    const endAp = endHour >= 12 ? 'PM' : 'AM';
+    let displayHour = endHour % 12;
+    if (displayHour === 0) displayHour = 12;
+    return `${displayHour}:${m[2]} ${endAp}`;
+  }
+  document.querySelectorAll('[data-action="open-reservation-details"]').forEach((el) => {
+    el.addEventListener('click', () => {
+      const amenity = el.dataset.rsvAmenity;
+      const date = el.dataset.rsvDate;
+      const start = el.dataset.rsvTime;
+      const status = el.dataset.rsvStatus;
+      const info = RSV_AMENITIES[amenity] || { image: '', description: '', fee: '' };
+      const timeRange = `${start} - ${rsvEndTime(start)}`;
+
+      if (status === 'Denied') {
+        const backdrop = document.querySelector('[data-modal-backdrop="reservation-details-denied"]');
+        if (!backdrop) return;
+        backdrop.querySelector('[data-rsv-denied-amenity]').textContent = amenity;
+        backdrop.querySelector('[data-rsv-denied-date]').textContent = date;
+        backdrop.querySelector('[data-rsv-denied-time]').textContent = timeRange;
+        backdrop.querySelector('[data-rsv-denied-description]').textContent = info.description;
+        backdrop.querySelector('[data-rsv-denied-fee]').textContent = info.fee;
+        backdrop.hidden = false;
+        return;
+      }
+
+      const backdrop = document.querySelector('[data-modal-backdrop="reservation-details"]');
+      if (!backdrop) return;
+      backdrop.querySelector('[data-rsv-detail-status-dot]').className = `rmr-rsv-status__dot rmr-rsv-status__dot--${rsvStatusDotColor(status)}`;
+      backdrop.querySelector('[data-rsv-detail-status-text]').textContent = status;
+      backdrop.querySelector('[data-rsv-detail-amenity]').textContent = amenity;
+      backdrop.querySelector('[data-rsv-detail-date]').textContent = date;
+      backdrop.querySelector('[data-rsv-detail-time]').textContent = timeRange;
+      backdrop.querySelector('[data-rsv-detail-description]').textContent = info.description;
+      backdrop.querySelector('[data-rsv-detail-fee]').textContent = info.fee;
+      backdrop.querySelector('[data-rsv-detail-image]').src = info.image;
+      // A Completed reservation is already in the past — there's nothing left
+      // to cancel. The footer's own inline display:flex (for its
+      // justify-content) beats [hidden] at equal specificity, same pitfall as
+      // Violation Details' image wrap above — toggle display directly instead.
+      backdrop.querySelector('[data-rsv-detail-cancel]').style.display = status === 'Completed' ? 'none' : '';
+      backdrop.hidden = false;
+    });
+  });
+
+  // Amenities filter (reservations.html's calendar) — hides the individual
+  // event pill, not its whole day cell, so a day keeps showing its other
+  // amenity's booking (or stays visible but empty) when filtered. Every
+  // .rmr-rsv-event variant sets its own `display` in the stylesheet, which
+  // beats the UA [hidden] rule regardless of specificity (an author rule
+  // always wins over a same-weight UA one) — same pitfall as the Cancel
+  // button above, so this sets style.display directly instead of .hidden.
+  const rsvAmenityFilter = document.querySelector('[data-rsv-amenity-filter]');
+  if (rsvAmenityFilter) {
+    // Scoped to the calendar card (.rmr-comm-main), not the whole document —
+    // the dropdown sits above the calendar only, so it shouldn't also filter
+    // the separate "My Reservations" sidebar list beside it.
+    const rsvCalendarScope = rsvAmenityFilter.closest('.rmr-comm-main') || document;
+    rsvAmenityFilter.querySelectorAll('[data-dropdown-option]').forEach((option) => {
+      option.addEventListener('click', () => {
+        const selected = option.textContent.trim();
+        rsvCalendarScope.querySelectorAll('[data-rsv-amenity]').forEach((el) => {
+          el.style.display = (selected !== 'All' && el.dataset.rsvAmenity !== selected) ? 'none' : '';
+        });
+      });
+    });
+  }
 
   // Architectural Requests (architectural-requests.html) — My Requests /
   // Requests to Review tabs. Same real underline "Tabs" component/classes as
@@ -858,12 +1990,97 @@ document.addEventListener('DOMContentLoaded', () => {
   const svcSelectedHint = document.querySelector('[data-svc-selected-hint]');
   const svcSubmitScheduleBtn = document.querySelector('[data-svc-submit-schedule]');
 
+  // Availability behind the Schedule step's calendar — three real weeks
+  // around this prototype's "today" (Mon, Oct 19, 2026) so the prev/next
+  // arrows have somewhere to scroll to in both directions; the default page
+  // (below) lands on Wed 21 / Thu 22 / Fri 23, just after today.
+  const SVC_CAL_DAYS = [
+    { name: 'Mon', num: '12', full: 'Monday, October 12', times: ['8:00 AM - 12:00 PM', '12:00 PM - 4:00 PM'] },
+    { name: 'Tue', num: '13', full: 'Tuesday, October 13', times: ['12:00 PM - 4:00 PM'] },
+    { name: 'Wed', num: '14', full: 'Wednesday, October 14', times: ['12:00 PM - 4:00 PM'] },
+    { name: 'Thurs', num: '15', full: 'Thursday, October 15', times: ['8:00 AM - 12:00 PM', '12:00 PM - 4:00 PM'] },
+    { name: 'Fri', num: '16', full: 'Friday, October 16', times: ['8:00 AM - 12:00 PM', '12:00 PM - 4:00 PM'] },
+    { name: 'Mon', num: '19', full: 'Monday, October 19', times: ['8:00 AM - 12:00 PM'] },
+    { name: 'Tue', num: '20', full: 'Tuesday, October 20', times: ['8:00 AM - 12:00 PM', '12:00 PM - 4:00 PM'] },
+    { name: 'Wed', num: '21', full: 'Wednesday, October 21', times: ['12:00 PM - 4:00 PM'] },
+    { name: 'Thurs', num: '22', full: 'Thursday, October 22', times: ['8:00 AM - 12:00 PM', '12:00 PM - 4:00 PM'] },
+    { name: 'Fri', num: '23', full: 'Friday, October 23', times: ['8:00 AM - 12:00 PM'] },
+    { name: 'Mon', num: '26', full: 'Monday, October 26', times: ['8:00 AM - 12:00 PM', '12:00 PM - 4:00 PM'] },
+    { name: 'Tue', num: '27', full: 'Tuesday, October 27', times: ['12:00 PM - 4:00 PM'] },
+    { name: 'Wed', num: '28', full: 'Wednesday, October 28', times: ['12:00 PM - 4:00 PM'] },
+    { name: 'Thurs', num: '29', full: 'Thursday, October 29', times: ['8:00 AM - 12:00 PM', '12:00 PM - 4:00 PM'] },
+    { name: 'Fri', num: '30', full: 'Friday, October 30', times: ['8:00 AM - 12:00 PM', '12:00 PM - 4:00 PM'] },
+  ];
+  const SVC_CAL_PAGE_SIZE = 3;
+  let svcCalStart = 7; // defaults to the Wed 21 / Thu 22 / Fri 23 page
+
+  const svcCalDaysEl = document.querySelector('[data-svc-cal-days]');
+  const svcCalPrevBtn = document.querySelector('[data-action="svc-cal-prev"]');
+  const svcCalNextBtn = document.querySelector('[data-action="svc-cal-next"]');
+
+  function svcRenderCalendarDays() {
+    if (!svcCalDaysEl) return;
+    const days = SVC_CAL_DAYS.slice(svcCalStart, svcCalStart + SVC_CAL_PAGE_SIZE);
+    svcCalDaysEl.innerHTML = days.map((day) => `
+      <div class="rmr-svc-cal__col">
+        <div class="rmr-svc-cal__day-head">
+          <span class="rmr-svc-cal__day-name">${day.name}</span>
+          <span class="rmr-svc-cal__day-num">${day.num}</span>
+        </div>
+        <div class="rmr-svc-cal__slots">
+          ${day.times.map((time) => `
+            <button class="rmr-svc-slot" type="button" data-action="svc-select-slot" data-slot-day="${day.full}" data-slot-time="${time}">
+              <span class="rmr-svc-slot__time">${time}</span>
+            </button>
+          `).join('')}
+        </div>
+      </div>
+    `).join('');
+    document.querySelectorAll('[data-action="svc-select-slot"]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const day = btn.dataset.slotDay;
+        const time = btn.dataset.slotTime;
+        const idx = svcSelectedSlots.findIndex((s) => s.day === day && s.time === time);
+        if (idx !== -1) {
+          svcSelectedSlots.splice(idx, 1);
+        } else if (svcSelectedSlots.length < 3) {
+          svcSelectedSlots.push({ day, time });
+        }
+        svcSyncSlotButtons();
+        svcRenderSelectedSlots();
+      });
+    });
+    svcSyncSlotButtons();
+    if (svcCalPrevBtn) svcCalPrevBtn.disabled = svcCalStart <= 0;
+    if (svcCalNextBtn) svcCalNextBtn.disabled = svcCalStart + SVC_CAL_PAGE_SIZE >= SVC_CAL_DAYS.length;
+  }
+
+  if (svcCalPrevBtn) {
+    svcCalPrevBtn.addEventListener('click', () => {
+      svcCalStart = Math.max(0, svcCalStart - 1);
+      svcRenderCalendarDays();
+    });
+  }
+  if (svcCalNextBtn) {
+    svcCalNextBtn.addEventListener('click', () => {
+      svcCalStart = Math.min(SVC_CAL_DAYS.length - SVC_CAL_PAGE_SIZE, svcCalStart + 1);
+      svcRenderCalendarDays();
+    });
+  }
+  svcRenderCalendarDays();
+
+  // Selected-panel cards are drag-reorderable (right-side "Drag to rearrange
+  // preferences" hint) — dragging a card to a new position re-sorts
+  // svcSelectedSlots, and the Preferred/Alternate 1/Alternate 2 labels
+  // (which are purely positional) update to match.
+  let svcDragIndex = null;
+
   function svcRenderSelectedSlots() {
     if (!svcSelectedList) return;
     svcSelectedList.innerHTML = svcSelectedSlots.map((slot, i) => {
       const modifier = i === 0 ? 'preferred' : 'alternate';
       const card = `
-        <div class="rmr-svc-selected__card rmr-svc-selected__card--${modifier}">
+        <div class="rmr-svc-selected__card rmr-svc-selected__card--${modifier}" draggable="true" data-slot-index="${i}">
           <p class="rmr-svc-selected__card-day">${slot.day}</p>
           <p class="rmr-svc-selected__card-time">${slot.time}</p>
           <span class="rmr-svc-slot__badge rmr-svc-slot__badge--${modifier}">${svcSlotLabels[i]}</span>
@@ -881,6 +2098,33 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('[data-action="svc-deselect-slot"]').forEach((btn) => {
       btn.addEventListener('click', () => {
         svcSelectedSlots.splice(Number(btn.dataset.slotIndex), 1);
+        svcSyncSlotButtons();
+        svcRenderSelectedSlots();
+      });
+    });
+    svcSelectedList.querySelectorAll('.rmr-svc-selected__card').forEach((card) => {
+      card.addEventListener('dragstart', () => {
+        svcDragIndex = Number(card.dataset.slotIndex);
+        card.style.opacity = '0.5';
+      });
+      card.addEventListener('dragend', () => {
+        card.style.opacity = '';
+        svcSelectedList.querySelectorAll('.rmr-svc-selected__card--dragover').forEach((c) => c.classList.remove('rmr-svc-selected__card--dragover'));
+      });
+      card.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        card.classList.add('rmr-svc-selected__card--dragover');
+      });
+      card.addEventListener('dragleave', () => {
+        card.classList.remove('rmr-svc-selected__card--dragover');
+      });
+      card.addEventListener('drop', (e) => {
+        e.preventDefault();
+        const dropIndex = Number(card.dataset.slotIndex);
+        if (svcDragIndex === null || svcDragIndex === dropIndex) return;
+        const [moved] = svcSelectedSlots.splice(svcDragIndex, 1);
+        svcSelectedSlots.splice(dropIndex, 0, moved);
+        svcDragIndex = null;
         svcSyncSlotButtons();
         svcRenderSelectedSlots();
       });
@@ -906,21 +2150,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
-
-  document.querySelectorAll('[data-action="svc-select-slot"]').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const day = btn.dataset.slotDay;
-      const time = btn.dataset.slotTime;
-      const idx = svcSelectedSlots.findIndex((s) => s.day === day && s.time === time);
-      if (idx !== -1) {
-        svcSelectedSlots.splice(idx, 1);
-      } else if (svcSelectedSlots.length < 3) {
-        svcSelectedSlots.push({ day, time });
-      }
-      svcSyncSlotButtons();
-      svcRenderSelectedSlots();
-    });
-  });
 
   // Submit -> populate the Confirmation step's summary rows from whatever
   // was actually selected above, then switch modals (same close-current/
@@ -968,29 +2197,29 @@ document.addEventListener('DOMContentLoaded', () => {
   ];
   const SVC_ISSUES = {
     'open-175': {
-      title: 'Thermostat not working', created: 'Created: 02/04/26', status: 'open',
-      schedule: { type: 'confirmed', day: 'Thursday, Feb 05', time: '8:00 AM - 12:00 PM', tech: 'Alan Watson' },
+      title: 'Thermostat not working', created: 'Created: 10/21/26', status: 'open',
+      schedule: { type: 'confirmed', day: 'Thursday, Oct 22', time: '8:00 AM - 12:00 PM', tech: 'Alan Watson' },
       category: 'Other', repeat: 'Yes',
       description: "For the past week the thermostat doesn't record the temperature correctly. On top of that no matter what I set it to nothing changes.",
       pets: 'Yes', entry: 'Yes', resolution: null, attachments: SVC_ATTACHMENTS,
       comments: {
         title: 'Messages', mode: 'two-way',
         messages: [
-          { sender: 'Melissa Summers', time: '02/17/26 9:30 AM', text: 'Any update?' },
-          { sender: 'Riverview Apartments', time: '02/17/26 10:30 AM', text: 'Purchasing a part, will schedule when purchased' },
-          { sender: 'Riverview Apartments', time: '02/17/26 10:30 AM', text: 'I will be on my way around 11', attachments: SVC_MSG_ATTACHMENTS },
-          { sender: 'You', time: '02/17/36 10:37 AM', text: 'Sounds good thanks', self: true },
+          { sender: 'Melissa Summers', time: '11/03/26 9:30 AM', text: 'Any update?' },
+          { sender: 'Riverview Apartments', time: '11/03/26 10:30 AM', text: 'Purchasing a part, will schedule when purchased' },
+          { sender: 'Riverview Apartments', time: '11/03/26 10:30 AM', text: 'I will be on my way around 11', attachments: SVC_MSG_ATTACHMENTS },
+          { sender: 'You', time: '11/03/26 10:37 AM', text: 'Sounds good thanks', self: true },
         ],
       },
     },
     'open-130': {
-      title: 'Leaky faucet in kitchen', created: 'Created: 02/02/26', status: 'open',
+      title: 'Leaky faucet in kitchen', created: 'Created: 10/20/26', status: 'open',
       schedule: {
         type: 'pending',
         slots: [
-          { label: 'Preferred', day: 'Thursday, Feb 05', time: '8:00 AM - 12:00 PM' },
-          { label: 'Alternate 1', day: 'Thursday, Feb 05', time: '12:00 PM - 4:00 PM' },
-          { label: 'Alternate 2', day: 'Thursday, Feb 05', time: '8:00 AM - 12:00 PM' },
+          { label: 'Preferred', day: 'Thursday, Oct 22', time: '8:00 AM - 12:00 PM' },
+          { label: 'Alternate 1', day: 'Thursday, Oct 22', time: '12:00 PM - 4:00 PM' },
+          { label: 'Alternate 2', day: 'Thursday, Oct 22', time: '8:00 AM - 12:00 PM' },
         ],
       },
       category: 'Plumbing', repeat: null,
@@ -999,20 +2228,20 @@ document.addEventListener('DOMContentLoaded', () => {
       comments: {
         title: 'Notes', mode: 'notes',
         entries: [
-          { sender: 'Riverview Apartments', time: '02/17/2026 11:17 AM', text: 'Attached an image', attachment: { name: 'IMG_6700.jpg', src: '../assets/images/service-issues/attach-6.png' } },
-          { sender: 'Riverview Apartments', time: '02/17/2026 10:42 AM', text: 'Need to order part' },
+          { sender: 'Riverview Apartments', time: '11/02/2026 11:17 AM', text: 'Attached an image', attachment: { name: 'IMG_6700.jpg', src: '../assets/images/service-issues/attach-6.png' } },
+          { sender: 'Riverview Apartments', time: '11/02/2026 10:42 AM', text: 'Need to order part' },
         ],
       },
     },
     'open-97': {
-      title: 'Water stain on ceiling', created: 'Created: 01/31/26', status: 'open',
+      title: 'Water stain on ceiling', created: 'Created: 10/18/26', status: 'open',
       schedule: null, category: 'Plumbing', repeat: null,
       description: 'A brownish water stain has appeared on the living room ceiling and seems to be slowly spreading.',
       pets: 'Yes', entry: 'No', resolution: null,
       attachments: null, comments: null,
     },
     'closed-175': {
-      title: 'Closet door broken', created: 'Created: 02/04/26', status: 'closed',
+      title: 'Closet door broken', created: 'Created: 10/21/26', status: 'closed',
       schedule: null, category: 'Other', repeat: null,
       description: "The primary bedroom closet door came off its track and won't slide or close properly.",
       pets: 'Yes', entry: 'Yes', resolution: 'Replaced with new door',
@@ -1020,13 +2249,13 @@ document.addEventListener('DOMContentLoaded', () => {
       comments: {
         title: 'Notes', mode: 'notes',
         entries: [
-          { sender: 'Riverview Apartments', time: '02/17/2026 11:17 AM', text: 'Attached an image', attachment: { name: 'IMG_6700.jpg', src: '../assets/images/service-issues/attach-6.png' } },
-          { sender: 'Riverview Apartments', time: '02/17/2026 10:42 AM', text: 'Need to order part' },
+          { sender: 'Riverview Apartments', time: '11/03/2026 11:17 AM', text: 'Attached an image', attachment: { name: 'IMG_6700.jpg', src: '../assets/images/service-issues/attach-6.png' } },
+          { sender: 'Riverview Apartments', time: '11/03/2026 10:42 AM', text: 'Need to order part' },
         ],
       },
     },
     'closed-130': {
-      title: 'Kitchen sink leaking', created: 'Created: 02/02/26', status: 'closed',
+      title: 'Kitchen sink leaking', created: 'Created: 10/20/26', status: 'closed',
       schedule: null, category: 'Plumbing', repeat: null,
       description: 'Water was pooling under the kitchen sink cabinet, likely from a leaking pipe connection.',
       pets: 'No', entry: 'Yes', resolution: 'Installed new valve',
@@ -1034,8 +2263,8 @@ document.addEventListener('DOMContentLoaded', () => {
       comments: {
         title: 'Messages', mode: 'closed',
         messages: [
-          { sender: 'Riverview Apartments', time: '02/17/26 10:30 AM', text: 'I will be on my way around 11' },
-          { sender: 'You', time: '02/17/36 10:37 AM', text: 'Sounds good thanks', self: true },
+          { sender: 'Riverview Apartments', time: '11/02/26 10:30 AM', text: 'I will be on my way around 11' },
+          { sender: 'You', time: '11/02/26 10:37 AM', text: 'Sounds good thanks', self: true },
         ],
       },
     },
@@ -1262,15 +2491,21 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('[data-action="open-issue-details"]').forEach((row) => {
     row.addEventListener('click', () => {
       const key = row.dataset.svcKey;
-      const number = row.querySelector('td').textContent.trim();
+      // Register rows carry the issue number in their first <td>; a
+      // standalone trigger (e.g. the Dashboard's "View Issue" buttons) has
+      // no table cell, so fall back to the number embedded in the key.
+      const td = row.querySelector('td');
+      const number = td ? td.textContent.trim() : key.split('-')[1];
       const data = SVC_ISSUES[key] || svcBuildFallback(row);
       svcOpenIssueDetails(number, data);
     });
   });
 
-  // Deep-linking into a specific issue, e.g. from the Dashboard's "View
-  // Issue" / "View Comment" links (maintenance.html?issue=open-175) — switch
-  // to the row's Open/Closed tab first, then open its Issue Details modal.
+  // Deep-linking into a specific issue via URL, e.g. maintenance.html?issue=
+  // open-175 — switch to the row's Open/Closed tab first, then open its
+  // Issue Details modal. (The Dashboard's own "View Issue"/"View Comment"
+  // links no longer use this — they open the modal directly, see
+  // data-action="open-issue-details" above.)
   const deepLinkIssueKey = new URLSearchParams(location.search).get('issue');
   if (deepLinkIssueKey) {
     const targetRow = document.querySelector(`[data-svc-key="${deepLinkIssueKey}"]`);
@@ -1381,24 +2616,65 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // Document Center — Leases & Documents "Property" filter. Picking a
+  // property hides every other property's root row (and, via
+  // docTreeSetDescendantsHidden, that row's whole lease/doc subtree) while
+  // leaving each property's own remembered expand/collapse state alone, so
+  // switching back to "All Selected" restores rows exactly as left.
+  const docLeasesCard = document.querySelector('.rmr-doc-card--leases');
+  if (docLeasesCard) {
+    const propertyDropdown = docLeasesCard.querySelector('[data-dropdown]');
+    const leasesFooter = docLeasesCard.querySelector('.rmr-acct-table-footer');
+    propertyDropdown?.querySelectorAll('[data-dropdown-option]').forEach((option) => {
+      option.addEventListener('click', () => {
+        const selected = option.textContent.trim();
+        docLeasesCard.querySelectorAll('[data-doc-tree-property]').forEach((row) => {
+          const match = selected === 'All Selected' || row.dataset.docTreeProperty === selected;
+          row.hidden = !match;
+          const expanded = row.dataset.docTreeExpanded === 'true';
+          docTreeSetDescendantsHidden(row.dataset.docTreeId, !match || !expanded);
+        });
+        // docTreeSetDescendantsHidden unconditionally reveals every
+        // descendant of an expanded row, including a [data-dtl-row] doc
+        // that's meant to stay hidden until its Documents to Sign signature
+        // completes (see the dts-row/dtl-row pairing above) — re-hide any
+        // still-unsigned one so re-expanding a property doesn't jump it
+        // into view early.
+        docLeasesCard.querySelectorAll('[data-dtl-row]').forEach((row) => {
+          if (!rmrIsDocSigned(row.dataset.dtlRow)) row.hidden = true;
+        });
+        if (leasesFooter) {
+          const total = docLeasesCard.querySelectorAll('[data-doc-tree-lease]').length;
+          const shown = docLeasesCard.querySelectorAll('[data-doc-tree-lease]:not([hidden])').length;
+          leasesFooter.textContent = `Showing ${shown} of ${total} Leases`;
+        }
+      });
+    });
+  }
+
   // Truncated-text tooltips — every register's ellipsis-truncated cells
   // (Payments & Charges, Documents to Sign, the Leases & Documents tree's
-  // own names) get the full text as a native hover tooltip, but only while
+  // own names) get the full text as a hover tooltip, but only while
   // actually truncated (scrollWidth > clientWidth), so an untruncated cell
   // doesn't get a redundant tooltip. Re-scans on resize (a container query
   // can truncate a cell that wasn't before, or the reverse) and on any DOM
   // change — tab switches, tree expand/collapse, Document Sign's own
   // content swap — via MutationObserver rather than hand-wiring every
   // action that can change which cells are truncated.
+  //
+  // Shown via a small custom bubble (proto.css .rmr-tooltip-bubble) rather
+  // than the native `title` attribute — the browser's own title tooltip
+  // has a slow, OS-controlled show delay that's too slow to read on a
+  // quick hover over a register cell.
   let rmrTooltipRaf = null;
   function rmrRefreshTruncationTooltips() {
     document.querySelectorAll('td, .rmr-doc-tree__row-inner > :last-child').forEach((el) => {
       if (getComputedStyle(el).textOverflow !== 'ellipsis') return;
       const text = el.textContent.trim();
       if (el.scrollWidth > el.clientWidth + 1 && text) {
-        if (el.title !== text) el.title = text;
-      } else if (el.title) {
-        el.removeAttribute('title');
+        el.dataset.rmrTooltip = text;
+      } else if (el.dataset.rmrTooltip) {
+        delete el.dataset.rmrTooltip;
       }
     });
   }
@@ -1410,6 +2686,45 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('resize', rmrScheduleTruncationTooltips);
   new MutationObserver(rmrScheduleTruncationTooltips).observe(document.body, {
     childList: true, subtree: true, attributes: true, attributeFilter: ['hidden', 'class'],
+  });
+
+  // 150ms is fast enough to feel immediate on a deliberate hover without
+  // flickering on a quick pass-through, unlike the browser's own ~1s+
+  // native tooltip delay.
+  let rmrTooltipEl = null;
+  let rmrTooltipShowTimer = null;
+  function rmrShowTooltip(target) {
+    const text = target.dataset.rmrTooltip;
+    if (!text) return;
+    if (!rmrTooltipEl) {
+      rmrTooltipEl = document.createElement('div');
+      rmrTooltipEl.className = 'rmr-tooltip-bubble';
+      document.body.appendChild(rmrTooltipEl);
+    }
+    rmrTooltipEl.textContent = text;
+    // An info-icon tooltip (the small "i" next to a label/link) always
+    // shows on a white bubble, unlike the dark truncated-text bubble it
+    // shares markup/positioning with.
+    rmrTooltipEl.classList.toggle('rmr-tooltip-bubble--light', target.tagName === 'IMG');
+    const rect = target.getBoundingClientRect();
+    rmrTooltipEl.style.left = `${Math.round(rect.left)}px`;
+    rmrTooltipEl.style.top = `${Math.round(rect.bottom + 6)}px`;
+    rmrTooltipEl.classList.add('is-visible');
+  }
+  function rmrHideTooltip() {
+    clearTimeout(rmrTooltipShowTimer);
+    if (rmrTooltipEl) rmrTooltipEl.classList.remove('is-visible');
+  }
+  document.addEventListener('mouseover', (e) => {
+    const target = e.target.closest('[data-rmr-tooltip]');
+    if (!target) return;
+    clearTimeout(rmrTooltipShowTimer);
+    rmrTooltipShowTimer = setTimeout(() => rmrShowTooltip(target), 150);
+  });
+  document.addEventListener('mouseout', (e) => {
+    const target = e.target.closest('[data-rmr-tooltip]');
+    if (!target || (e.relatedTarget && target.contains(e.relatedTarget))) return;
+    rmrHideTooltip();
   });
 
   // Polls — Board Meeting's "What would you like for food?* (Choose up to
