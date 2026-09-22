@@ -2464,6 +2464,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function svcCommentsHTML(comments) {
+    // The kebab (edit/delete) only makes sense while you could still act on
+    // your own message — a closed issue's thread is read-only history, so
+    // it's left off there even for a message that was sent as "You".
+    const editable = comments.mode !== 'closed';
     return comments.messages.map((m) => `
       <div class="rmr-svc-comments__msg${m.self ? ' rmr-svc-comments__msg--self' : ''}">
         <span class="rmr-svc-comments__meta${m.self ? ' rmr-svc-comments__meta--self' : ''}">
@@ -2472,7 +2476,7 @@ document.addEventListener('DOMContentLoaded', () => {
         </span>
         <div class="rmr-svc-comments__bubble-row">
           <div class="rmr-svc-comments__bubble">${m.text}</div>
-          ${m.self ? '<img class="rmr-svc-comments__kebab" src="assets/icons/service-issues/kebab-vert.svg" alt="" />' : ''}
+          ${m.self && editable ? '<img class="rmr-svc-comments__kebab" src="assets/icons/service-issues/kebab-vert.svg" alt="" />' : ''}
         </div>
         ${m.attachments ? `<div class="rmr-svc-comments__attachments">${m.attachments.map((a) => `<img src="${a.src}" alt="" />`).join('')}</div>` : ''}
       </div>
