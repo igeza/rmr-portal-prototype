@@ -825,8 +825,14 @@ document.addEventListener('DOMContentLoaded', () => {
     row.hidden = Object.keys(row.dataset).some((k) => k.indexOf('filter') === 0 && row.dataset[k] === 'hide');
   }
   function rmrRefreshTableFooter(table) {
-    const rows = Array.from(table.querySelectorAll(':scope > tbody > tr'));
+    const rows = Array.from(table.querySelectorAll(':scope > tbody > tr:not([data-empty-row])'));
     const visible = rows.filter((r) => !r.hidden).length;
+    // A table can opt in to a "no results" placeholder row (Open/Closed
+    // Charges' own "There are no open charges!" style) by adding a hidden
+    // tr[data-empty-row] — shown only once every real row is filtered out,
+    // hidden again as soon as any real row is visible.
+    const emptyRow = table.querySelector(':scope > tbody > tr[data-empty-row]');
+    if (emptyRow) emptyRow.hidden = visible > 0;
     const footer = rmrFilterFooter(table);
     if (!footer) return;
     if (!footer.dataset.footerNoun) {
@@ -1099,8 +1105,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     drFieldEls.forEach((field) => {
-      const { startSpan } = drSpans(field);
+      const { startSpan, endSpan } = drSpans(field);
       field.dataset.drFourDigitYear = String((startSpan?.textContent || '').length > 8);
+      // Opt-in (data-dr-apply-on-load): filter the table(s) by this field's
+      // own default displayed range as soon as the page loads, rather than
+      // only once a user first touches the picker — e.g. Service Issues'
+      // "last 6 months" default should actually hide older rows on load,
+      // not just show that range as text. Other Date Range fields keep the
+      // original decorative-until-touched behavior so this doesn't change
+      // their default filtered state.
+      if (field.dataset.drApplyOnLoad !== undefined) {
+        const start = drParseDate(startSpan?.textContent || '');
+        const end = drParseDate(endSpan?.textContent || '') || start;
+        if (start && end) drFilterTables(field, start, end);
+      }
       field.addEventListener('click', (e) => {
         e.stopPropagation();
         const role = drRoleFromTarget(field, e.target);
@@ -2156,7 +2174,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // only living on the confirmation screen.
   const svcOpenPanel = document.querySelector('[data-svc-panel="open"]');
   const svcOpenTbody = svcOpenPanel ? svcOpenPanel.querySelector('tbody') : null;
-  const svcOpenFooter = svcOpenPanel ? svcOpenPanel.querySelector('.rmr-acct-table-footer') : null;
   let svcNextIssueNumber = 176;
   if (svcOpenTbody) {
     const existingNums = Array.from(svcOpenTbody.querySelectorAll('tr'))
@@ -2219,11 +2236,7 @@ document.addEventListener('DOMContentLoaded', () => {
         row.innerHTML = `<td>${number}</td><td>${created}</td><td>${title}</td><td>New</td>`;
         svcBindIssueRow(row);
         svcOpenTbody.insertBefore(row, svcOpenTbody.firstChild);
-
-        if (svcOpenFooter) {
-          const count = svcOpenTbody.querySelectorAll('tr').length;
-          svcOpenFooter.textContent = `Showing ${count} of ${count} Open Issues`;
-        }
+        rmrRefreshTableFooter(svcOpenTbody.closest('table'));
 
         // Reset the form so the next "Add Service Issue" starts blank.
         if (titleInput) titleInput.value = '';

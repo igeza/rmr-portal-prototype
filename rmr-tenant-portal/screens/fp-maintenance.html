@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Service Issues — rmResident Portal</title>
-<link rel="stylesheet" href="../assets/rmr.css?v=215" />
+<link rel="stylesheet" href="../assets/rmr.css?v=216" />
 <link rel="stylesheet" href="../assets/proto.css?v=3" />
 </head>
 <body data-screen="maintenance">
@@ -177,8 +177,8 @@
           <div style="display:flex; align-items:flex-end; justify-content:space-between; width:100%; flex-shrink:0;">
             <div class="rmr-pay-field" data-component="Input Field">
               <span class="rmr-pay-field__label">Date Range</span>
-              <div class="rmr-pay-field__input" data-action="open-daterange">
-                <span>09/19/26</span>
+              <div class="rmr-pay-field__input" data-action="open-daterange" data-dr-apply-on-load>
+                <span>04/19/26</span>
                 <span class="rmr-pay-field__divider"></span>
                 <span>10/19/26</span>
                 <img class="rmr-pay-field__icon" src="../assets/icons/payments/calendar.svg" alt="" />
@@ -222,6 +222,7 @@
                     <td>Water stain on ceiling</td>
                     <td>New</td>
                   </tr>
+                  <tr class="rmr-pay-table__empty-row" data-empty-row hidden><td class="rmr-pay-table__empty" colspan="4">There are no open issues!</td></tr>
                 </tbody>
               </table>
             </div>
@@ -250,6 +251,7 @@
                   <tr class="rmr-pay-table__row-link" data-action="open-issue-details" data-svc-key="closed-43"><td>43</td><td>04/20/26</td><td>Front yard fence damaged</td><td>Replaced damaged section</td></tr>
                   <tr class="rmr-pay-table__row-link" data-action="open-issue-details" data-svc-key="closed-29"><td>29</td><td>03/15/26</td><td>Back porch light out</td><td>New lightbulbs</td></tr>
                   <tr class="rmr-pay-table__row-link" data-action="open-issue-details" data-svc-key="closed-12"><td>12</td><td>02/28/26</td><td>Laundry machine making noise</td><td>Fixed connection to dryer hookup</td></tr>
+                  <tr class="rmr-pay-table__empty-row" data-empty-row hidden><td class="rmr-pay-table__empty" colspan="4">There are no closed issues!</td></tr>
                 </tbody>
               </table>
             </div>
@@ -506,6 +508,6 @@
   </div>
 
 </div>
-<script src="../assets/app.js?v=121"></script>
+<script src="../assets/app.js?v=123"></script>
 </body>
 </html>

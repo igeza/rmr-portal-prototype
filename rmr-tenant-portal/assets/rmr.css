@@ -2435,7 +2435,7 @@ tr.rmr-pmt-overpay-row td.rmr-pmt-overpay-label {
    in that space instead of leaving it pinned under the header; the extra
    `tr`/class qualifier on both rules out-specifies the base row-height/
    border-bottom rules above (same fix as .rmr-pmt-overpay-row). */
-.rmr-pay-table:has(> tbody > tr.rmr-pay-table__empty-row) { height: 100%; }
+.rmr-pay-table:has(> tbody > tr.rmr-pay-table__empty-row:not([hidden])) { height: 100%; }
 tr.rmr-pay-table__empty-row { height: 100%; }
 tr.rmr-pay-table__empty-row td.rmr-pay-table__empty {
   height: 100%;

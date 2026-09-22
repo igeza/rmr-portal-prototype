@@ -1199,6 +1199,47 @@ Service Issue form resets to blank afterward (same empty-start state as the orig
 next submission doesn't inherit stale values. The new row reuses the existing row-click binding via
 a small `svcBindIssueRow` helper rather than a second copy of that logic.
 
+### Correction: Created/Closed dates capped at the prototype's "today," Date Range now actually filters, default is the last 6 months, and a real empty state
+
+Two rows in both Open Issues and Closed Issues had Created/Closed dates of 10/20/26 and 10/21/26 —
+after this prototype's own "today" (10/19/26, the Date Range field's default end date and the date
+new issues are stamped with). Capped both to 10/19/26 in the register markup and their matching
+`SVC_ISSUES` entries, since an issue can't be created or closed in the future.
+
+The Date Range field already had a real, working filter mechanism behind it (`drFilterTables` in
+`app.js`, driving any `table[data-date-col]` in the same card — the exact same component Payments &
+Charges' "All Activity" and Architectural Requests' registers already use), and both Service Issues
+tables already carried `data-date-col="1"`, so filtering itself needed no new code — confirmed live
+by narrowing the range and watching rows hide/show correctly in both tabs. What it didn't do was
+apply on page load: the field's default value was purely decorative text until a user first touched
+the picker, so a 6-month default wouldn't actually hide anything until interacted with. Fixed with a
+small opt-in, `data-dr-apply-on-load` on the field element — on setup, if present, the field's own
+displayed start/end are parsed and run through the same `drFilterTables` a manual pick would trigger.
+Added only to Service Issues' Date Range field, not the shared component generally, so every other
+page using this field (Payments, Architectural Requests, Meter Readings, Notes, Reports) keeps its
+original behavior.
+
+The default range itself changed from exactly one month (09/19/26–10/19/26) to the last 6 months
+(04/19/26–10/19/26), per instruction — this pushes the two oldest Closed Issues rows (02/28/26,
+03/15/26) out of the default view, reachable by widening the range.
+
+**Empty state**: reuses Open Charges' own "There are no open charges!" pattern (`.rmr-pay-table__empty-row`
+/ `.rmr-pay-table__empty`, node-sourced copy/tokens) rather than inventing a new one — a hidden
+`tr[data-empty-row]` was added as each table's last row ("There are no open issues!" / "There are no
+closed issues!"), and `rmrRefreshTableFooter` (already the single choke point every row-filter change
+routes through — Date Range and the Status/Utility dropdown filters alike) now excludes that row from
+its own count and toggles it visible exactly when every real row is hidden. Generic and opt-in, like
+the load-time filter above, so Payments' own already-real (but structurally different, one-way)
+empty-charges state is untouched.
+
+**Bug caught in testing**: `.rmr-pay-table:has(> tbody > tr.rmr-pay-table__empty-row)` (the rule that
+stretches the table to fill its wrapper so a lone empty-state message can center vertically) doesn't
+care whether that row is actually visible — with the row now permanently present-but-hidden, every
+populated table stretched anyway, opening large gaps between real rows. Fixed by scoping the selector
+to `tr.rmr-pay-table__empty-row:not([hidden])`, which only matches while the placeholder is the thing
+actually showing; the Payments empty-charges state (which replaces its tbody outright rather than
+hiding a permanent row) never sets `hidden` in the first place, so it's unaffected.
+
 ## Issue Details overlay (`maintenance.html`)
 
 Clicking any row in either register (Open or Closed) opens an Issue Details overlay, sourced from
