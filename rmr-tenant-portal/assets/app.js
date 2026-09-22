@@ -2238,7 +2238,8 @@ document.addEventListener('DOMContentLoaded', () => {
           },
           category, repeat: svcChoiceValue('add-repeat'),
           description, pets: svcChoiceValue('add-pets'), entry: svcChoiceValue('add-entry'),
-          resolution: null, attachments: null, comments: null,
+          resolution: null, attachments: null,
+          comments: { title: 'Messages', mode: 'two-way', messages: [] },
         };
 
         const row = document.createElement('tr');
@@ -2324,10 +2325,11 @@ document.addEventListener('DOMContentLoaded', () => {
       description: "The kitchen faucet has a steady drip that won't stop, even when fully shut off.",
       pets: 'Yes', entry: 'No', resolution: null, attachments: SVC_ATTACHMENTS,
       comments: {
-        title: 'Notes', mode: 'notes',
-        entries: [
-          { sender: 'Riverview Apartments', time: '11/02/2026 11:17 AM', text: 'Attached an image', attachment: { name: 'IMG_6700.jpg', src: 'assets/images/service-issues/attach-6.png' } },
-          { sender: 'Riverview Apartments', time: '11/02/2026 10:42 AM', text: 'Need to order part' },
+        title: 'Messages', mode: 'two-way',
+        messages: [
+          { sender: 'Riverview Apartments', time: '11/02/26 10:42 AM', text: 'Need to order part, will update once it arrives.' },
+          { sender: 'Riverview Apartments', time: '11/02/26 11:17 AM', text: 'Attached an image', attachments: [{ src: 'assets/images/service-issues/attach-6.png' }] },
+          { sender: 'You', time: '11/02/26 11:20 AM', text: "Thanks, let me know when it's scheduled", self: true },
         ],
       },
     },
@@ -2336,7 +2338,14 @@ document.addEventListener('DOMContentLoaded', () => {
       schedule: null, category: 'Plumbing', repeat: null,
       description: 'A brownish water stain has appeared on the living room ceiling and seems to be slowly spreading.',
       pets: 'Yes', entry: 'No', resolution: null,
-      attachments: null, comments: null,
+      attachments: null,
+      comments: {
+        title: 'Messages', mode: 'two-way',
+        messages: [
+          { sender: 'You', time: '10/18/26 9:15 AM', text: 'Just wanted to check if someone has looked at this yet?', self: true },
+          { sender: 'Riverview Apartments', time: '10/18/26 1:40 PM', text: "We'll have a technician take a look this week." },
+        ],
+      },
     },
     'closed-175': {
       title: 'Closet door broken', created: 'Created: 10/19/26', status: 'closed',
@@ -2345,10 +2354,11 @@ document.addEventListener('DOMContentLoaded', () => {
       pets: 'Yes', entry: 'Yes', resolution: 'Replaced with new door',
       attachments: SVC_ATTACHMENTS,
       comments: {
-        title: 'Notes', mode: 'notes',
-        entries: [
-          { sender: 'Riverview Apartments', time: '11/03/2026 11:17 AM', text: 'Attached an image', attachment: { name: 'IMG_6700.jpg', src: 'assets/images/service-issues/attach-6.png' } },
-          { sender: 'Riverview Apartments', time: '11/03/2026 10:42 AM', text: 'Need to order part' },
+        title: 'Messages', mode: 'closed',
+        messages: [
+          { sender: 'Riverview Apartments', time: '11/03/26 10:42 AM', text: 'Need to order part' },
+          { sender: 'Riverview Apartments', time: '11/03/26 11:17 AM', text: 'Attached an image', attachments: [{ src: 'assets/images/service-issues/attach-6.png' }] },
+          { sender: 'You', time: '11/03/26 11:20 AM', text: 'Thank you!', self: true },
         ],
       },
     },
@@ -2469,28 +2479,7 @@ document.addEventListener('DOMContentLoaded', () => {
     `).join('');
   }
 
-  function svcNotesTimelineHTML(entries) {
-    return entries.map((e, i) => `
-      <div class="rmr-svc-notes__entry">
-        <div class="rmr-svc-notes__rail">
-          <div class="rmr-svc-notes__rail-line rmr-svc-notes__rail-line--stub${i > 0 ? ' rmr-svc-notes__rail-line--visible' : ''}"></div>
-          <div class="rmr-svc-notes__dot"></div>
-          <div class="rmr-svc-notes__rail-line rmr-svc-notes__rail-line--fill${i < entries.length - 1 ? ' rmr-svc-notes__rail-line--visible' : ''}"></div>
-        </div>
-        <div class="rmr-svc-notes__content">
-          <div class="rmr-svc-notes__meta">
-            <span class="rmr-svc-notes__meta-sender">${e.sender}</span>
-            <span class="rmr-svc-notes__meta-time">${e.time}</span>
-          </div>
-          <p class="rmr-svc-notes__body">${e.text}</p>
-          ${e.attachment ? `<div class="rmr-svc-notes__attach-row"><img class="rmr-svc-notes__attach-icon" src="assets/icons/service-issues/attach-image.svg" alt="" /><span class="rmr-svc-notes__attach-link">${e.attachment.name}</span></div>` : ''}
-        </div>
-      </div>
-    `).join('');
-  }
-
   function svcCommentsFooterHTML(mode) {
-    if (mode === 'notes') return '';
     if (mode === 'two-way') {
       return `
         <div class="rmr-svc-comments__input-row">
@@ -2507,15 +2496,23 @@ document.addEventListener('DOMContentLoaded', () => {
   function svcBuildFallback(row) {
     const cells = row.querySelectorAll('td');
     const title = cells[2] ? cells[2].textContent.trim() : 'Service Issue';
+    const closedDate = cells[1] ? cells[1].textContent.trim() : '';
     return {
       title,
-      created: `Closed: ${cells[1] ? cells[1].textContent.trim() : ''}`,
+      created: `Closed: ${closedDate}`,
       status: 'closed',
       schedule: null, category: 'Other', repeat: null,
       description: `${title} was reported and has since been resolved by the property team.`,
       pets: 'Yes', entry: 'Yes',
       resolution: cells[3] ? cells[3].textContent.trim() : null,
-      attachments: null, comments: null,
+      attachments: null,
+      comments: {
+        title: 'Messages', mode: 'closed',
+        messages: [
+          { sender: 'Riverview Apartments', time: `${closedDate} 10:30 AM`, text: 'I will be on my way around 11' },
+          { sender: 'You', time: `${closedDate} 10:37 AM`, text: 'Sounds good thanks', self: true },
+        ],
+      },
     };
   }
 
@@ -2556,10 +2553,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Attachments added inline in a Notes-mode entry also appear here as image
     // previews, alongside whatever was attached on the original issue.
-    const noteAttachments = (data.comments && data.comments.mode === 'notes')
-      ? data.comments.entries.filter((e) => e.attachment && e.attachment.src).map((e) => ({ type: 'image', src: e.attachment.src }))
-      : [];
-    const allAttachments = [...(data.attachments || []), ...noteAttachments];
+    const allAttachments = data.attachments || [];
 
     const attachWrap = backdrop.querySelector('[data-svc-detail-attachments-wrap]');
     attachWrap.hidden = allAttachments.length === 0;
@@ -2567,17 +2561,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const commentsWrap = backdrop.querySelector('[data-svc-detail-comments-wrap]');
     commentsWrap.hidden = !data.comments;
-    // Without a Notes/Messages column the modal itself shrinks to just the
-    // left column's own width instead of keeping its full two-column size
-    // and leaving that half empty (see .rmr-svc-details-modal--solo).
+    // Without a Messages column the modal itself shrinks to just the left
+    // column's own width instead of keeping its full two-column size and
+    // leaving that half empty (see .rmr-svc-details-modal--solo).
     const detailsModal = backdrop.querySelector('.rmr-svc-details-modal');
     if (detailsModal) detailsModal.classList.toggle('rmr-svc-details-modal--solo', !data.comments);
     if (data.comments) {
       backdrop.querySelector('[data-svc-detail-comments-title]').textContent = data.comments.title;
       const thread = backdrop.querySelector('[data-svc-detail-thread]');
-      thread.innerHTML = data.comments.mode === 'notes'
-        ? svcNotesTimelineHTML(data.comments.entries)
-        : svcCommentsHTML(data.comments);
+      thread.innerHTML = svcCommentsHTML(data.comments);
       backdrop.querySelector('[data-svc-detail-comments-footer]').innerHTML = svcCommentsFooterHTML(data.comments.mode);
       thread.scrollTop = thread.scrollHeight;
     }
@@ -2787,6 +2779,33 @@ document.addEventListener('DOMContentLoaded', () => {
   new MutationObserver(rmrScheduleTruncationTooltips).observe(document.body, {
     childList: true, subtree: true, attributes: true, attributeFilter: ['hidden', 'class'],
   });
+
+  // Dashboard Tasks/Latest Updates cards shrink to fit .rmr-main so the
+  // Dashboard never needs its own page scroll (see rmr.css). On a viewport
+  // short enough that shrinking would clip a card below the height of even
+  // one task/notification, switch back to natural sizing + page scroll
+  // (.rmr-main--cramped in rmr.css) rather than showing an unreadable sliver.
+  const rmrDashboardMain = document.querySelector('.rmr-columns')?.closest('.rmr-main');
+  if (rmrDashboardMain) {
+    const rmrUpdateDashboardFit = () => {
+      rmrDashboardMain.classList.remove('rmr-main--cramped');
+      const cramped = Array.from(rmrDashboardMain.querySelectorAll('.rmr-tasks, .rmr-notif-list')).some((list) => {
+        const firstItem = list.firstElementChild;
+        return firstItem && list.clientHeight < firstItem.offsetHeight;
+      });
+      rmrDashboardMain.classList.toggle('rmr-main--cramped', cramped);
+    };
+    rmrUpdateDashboardFit();
+    // Re-check once everything (fonts, the hero photos) has actually
+    // finished loading — the very first pass can measure before layout has
+    // settled, and nothing else re-triggers it since .rmr-main's own box
+    // doesn't change size when that settling happens.
+    window.addEventListener('load', rmrUpdateDashboardFit);
+    // ResizeObserver (rather than a window 'resize' listener) so this also
+    // catches the menu collapse/expand toggle resizing .rmr-main's content
+    // box without the browser window itself changing size.
+    new ResizeObserver(() => requestAnimationFrame(rmrUpdateDashboardFit)).observe(rmrDashboardMain);
+  }
 
   // 150ms is fast enough to feel immediate on a deliberate hover without
   // flickering on a quick pass-through, unlike the browser's own ~1s+
