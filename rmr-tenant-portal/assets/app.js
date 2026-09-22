@@ -139,8 +139,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const collapsed = menu.classList.toggle('rmr-menu--collapsed');
       if (collapseIcon) {
         collapseIcon.src = collapsed
-          ? '../assets/icons/expand.svg'
-          : '../assets/icons/collapse.svg';
+          ? 'assets/icons/expand.svg'
+          : 'assets/icons/collapse.svg';
       }
       if (collapseLabel) collapseLabel.textContent = collapsed ? 'Expand' : 'Collapse';
     });
@@ -202,7 +202,13 @@ document.addEventListener('DOMContentLoaded', () => {
   };
   let rmrSignDocIsPolicy = false;
   let rmrSignDocKey = null;
-  if (document.body.dataset.screen === 'document-sign') {
+  // Extracted into a function (rather than a one-time guarded block) so a
+  // single merged multi-screen page can re-run it every time the tenant
+  // navigates to the Sign Document panel, not just once at initial load —
+  // it always re-reads location.search fresh, so it's safe to call anytime.
+  // Exposed on window so a merged page's own panel-switch script (which
+  // runs outside this closure) can call it after updating location.search.
+  function rmrApplyDocumentSign() {
     rmrSignDocKey = new URLSearchParams(location.search).get('doc');
     const doc = RMR_SIGN_DOCS[rmrSignDocKey];
     if (doc) {
@@ -218,6 +224,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const signBtn = document.querySelector('[data-sign-btn]');
       if (signBtn) signBtn.dataset.modalTarget = 'add-signature';
     } else {
+      rmrSignDocIsPolicy = false;
       // Default (lease renewal) letter only — pre-fill its lease-preference
       // dropdown with whichever term card was picked on the previous screen
       // (Review Multiple Term Offers' Accept Offer, see offer-select above),
@@ -233,6 +240,8 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
   }
+  window.rmrApplyDocumentSign = rmrApplyDocumentSign;
+  if (document.body.dataset.screen === 'document-sign') rmrApplyDocumentSign();
 
   // Fake "Make a Payment" / "Start" / "Sign" actions do nothing beyond
   // preventing navigation — there is no backend behind this prototype, and
@@ -254,11 +263,14 @@ document.addEventListener('DOMContentLoaded', () => {
   // Overlays (Lease Track, Flex, Contact Us, Cash Pay, Email Property Manager)
   // — real content from the Dashboard section's overlay frames. Open via the
   // ad banners / footer links, close via the X, backdrop click, or Escape.
-  document.querySelectorAll('[data-action="open-modal"]').forEach((el) => {
-    el.addEventListener('click', () => {
-      const backdrop = document.querySelector(`[data-modal-backdrop="${el.dataset.modalTarget}"]`);
-      if (backdrop) backdrop.hidden = false;
-    });
+  // Delegated on document (rather than bound per-element at load) so it also
+  // covers triggers swapped in later via innerHTML — e.g. document-sign's
+  // own "Click to Sign" button, rebuilt by rmrApplyDocumentSign() above.
+  document.addEventListener('click', (e) => {
+    const el = e.target.closest('[data-action="open-modal"]');
+    if (!el) return;
+    const backdrop = document.querySelector(`[data-modal-backdrop="${el.dataset.modalTarget}"]`);
+    if (backdrop) backdrop.hidden = false;
   });
 
   // Community page — calendar event details. One shared modal (see the
@@ -335,7 +347,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // request-appropriate mock content so every register row opens a fully
   // populated, matching detail view rather than a placeholder toast.
   const ARQ_REQUESTS = {
-    paint: { description: 'I want to update the color of the front door', attachments: ['../assets/images/architectural-requests/attach-1.png', '../assets/images/architectural-requests/attach-2.png'], urgent: 'Yes', votes: [['Anna Moore', 'No Response', ''], ['Diene Bailey', 'Approved', ''], ['William Morgan', 'Denied', 'Not in the budget for this year.']] },
+    paint: { description: 'I want to update the color of the front door', attachments: ['assets/images/architectural-requests/attach-1.png', 'assets/images/architectural-requests/attach-2.png'], urgent: 'Yes', votes: [['Anna Moore', 'No Response', ''], ['Diene Bailey', 'Approved', ''], ['William Morgan', 'Denied', 'Not in the budget for this year.']] },
     fence: { description: "I'd like to install a wooden fence along the back property line for added privacy and security.", attachments: [], urgent: 'No' },
     patio: { description: "I'd like to add a paved patio in the backyard for outdoor seating.", attachments: [], urgent: 'No' },
     lighting: { description: "I'd like to install low-voltage lighting along the front walkway for better visibility at night.", attachments: [], urgent: 'No' },
@@ -849,9 +861,9 @@ document.addEventListener('DOMContentLoaded', () => {
     popover.hidden = true;
     popover.innerHTML = `
       <div class="rmr-daterange-popover__nav">
-        <button type="button" class="rmr-daterange-popover__nav-btn" data-dr-prev aria-label="Previous"><img src="../assets/icons/community/cal-arrow-left.svg" alt="" /></button>
+        <button type="button" class="rmr-daterange-popover__nav-btn" data-dr-prev aria-label="Previous"><img src="assets/icons/community/cal-arrow-left.svg" alt="" /></button>
         <button type="button" class="rmr-daterange-popover__month-label" data-dr-month-label aria-label="Choose year"></button>
-        <button type="button" class="rmr-daterange-popover__nav-btn" data-dr-next aria-label="Next"><img src="../assets/icons/community/cal-arrow-right.svg" alt="" /></button>
+        <button type="button" class="rmr-daterange-popover__nav-btn" data-dr-next aria-label="Next"><img src="assets/icons/community/cal-arrow-right.svg" alt="" /></button>
       </div>
       <div class="rmr-daterange-popover__weekdays" data-dr-weekdays>${DR_WEEKDAYS.map((d) => `<span>${d}</span>`).join('')}</div>
       <div class="rmr-daterange-popover__days" data-dr-days></div>
@@ -1203,9 +1215,9 @@ document.addEventListener('DOMContentLoaded', () => {
     apPopover.hidden = true;
     apPopover.innerHTML = `
       <div class="rmr-daterange-popover__nav">
-        <button type="button" class="rmr-daterange-popover__nav-btn" data-ap-cal-prev aria-label="Previous month"><img src="../assets/icons/community/cal-arrow-left.svg" alt="" /></button>
+        <button type="button" class="rmr-daterange-popover__nav-btn" data-ap-cal-prev aria-label="Previous month"><img src="assets/icons/community/cal-arrow-left.svg" alt="" /></button>
         <span class="rmr-daterange-popover__month-label" data-ap-cal-month-label></span>
-        <button type="button" class="rmr-daterange-popover__nav-btn" data-ap-cal-next aria-label="Next month"><img src="../assets/icons/community/cal-arrow-right.svg" alt="" /></button>
+        <button type="button" class="rmr-daterange-popover__nav-btn" data-ap-cal-next aria-label="Next month"><img src="assets/icons/community/cal-arrow-right.svg" alt="" /></button>
       </div>
       <div class="rmr-daterange-popover__weekdays">${DR_WEEKDAYS.map((d) => `<span>${d}</span>`).join('')}</div>
       <div class="rmr-daterange-popover__days" data-ap-cal-days></div>
@@ -1717,8 +1729,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Clubhouse Room 1's are prototype-only mock content, same convention as
   // every other invented amenity in this file.
   const RSV_AMENITIES = {
-    'Theater Room': { image: '../assets/images/reservations/room-2.png', description: 'Located near the main office.', fee: '$15.00' },
-    'Clubhouse Room 1': { image: '../assets/images/reservations/room-1.png', description: 'A spacious multipurpose room with a full kitchen, ideal for parties and gatherings.', fee: '$25.00' },
+    'Theater Room': { image: 'assets/images/reservations/room-2.png', description: 'Located near the main office.', fee: '$15.00' },
+    'Clubhouse Room 1': { image: 'assets/images/reservations/room-1.png', description: 'A spacious multipurpose room with a full kitchen, ideal for parties and gatherings.', fee: '$25.00' },
   };
   function rsvStatusDotColor(status) {
     if (status === 'Pending') return 'yellow';
@@ -2103,7 +2115,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <p class="rmr-svc-selected__card-time">${slot.time}</p>
           <span class="rmr-svc-slot__badge rmr-svc-slot__badge--${modifier}">${svcSlotLabels[i]}</span>
           <button class="rmr-svc-selected__card-remove" type="button" data-action="svc-deselect-slot" data-slot-index="${i}">
-            <img src="../assets/icons/service-issues/slot-remove-x.svg" alt="Remove" />
+            <img src="assets/icons/service-issues/slot-remove-x.svg" alt="Remove" />
           </button>
         </div>
       `;
@@ -2269,17 +2281,17 @@ document.addEventListener('DOMContentLoaded', () => {
   // built from that row's own real register cells instead of inventing a
   // unique example for all 15.
   const SVC_ATTACHMENTS = [
-    { type: 'image', src: '../assets/images/service-issues/attach-1.png' },
-    { type: 'image', src: '../assets/images/service-issues/attach-2.png' },
+    { type: 'image', src: 'assets/images/service-issues/attach-1.png' },
+    { type: 'image', src: 'assets/images/service-issues/attach-2.png' },
     { type: 'file', name: 'GoogleNestInstructions.pdf' },
-    { type: 'image', src: '../assets/images/service-issues/attach-3.png' },
-    { type: 'image', src: '../assets/images/service-issues/attach-4.png' },
-    { type: 'image', src: '../assets/images/service-issues/attach-5.png' },
+    { type: 'image', src: 'assets/images/service-issues/attach-3.png' },
+    { type: 'image', src: 'assets/images/service-issues/attach-4.png' },
+    { type: 'image', src: 'assets/images/service-issues/attach-5.png' },
   ];
   const SVC_MSG_ATTACHMENTS = [
-    { type: 'image', src: '../assets/images/service-issues/attach-4.png' },
-    { type: 'image', src: '../assets/images/service-issues/attach-5.png' },
-    { type: 'image', src: '../assets/images/service-issues/attach-6.png' },
+    { type: 'image', src: 'assets/images/service-issues/attach-4.png' },
+    { type: 'image', src: 'assets/images/service-issues/attach-5.png' },
+    { type: 'image', src: 'assets/images/service-issues/attach-6.png' },
   ];
   const SVC_ISSUES = {
     'open-175': {
@@ -2314,7 +2326,7 @@ document.addEventListener('DOMContentLoaded', () => {
       comments: {
         title: 'Notes', mode: 'notes',
         entries: [
-          { sender: 'Riverview Apartments', time: '11/02/2026 11:17 AM', text: 'Attached an image', attachment: { name: 'IMG_6700.jpg', src: '../assets/images/service-issues/attach-6.png' } },
+          { sender: 'Riverview Apartments', time: '11/02/2026 11:17 AM', text: 'Attached an image', attachment: { name: 'IMG_6700.jpg', src: 'assets/images/service-issues/attach-6.png' } },
           { sender: 'Riverview Apartments', time: '11/02/2026 10:42 AM', text: 'Need to order part' },
         ],
       },
@@ -2335,7 +2347,7 @@ document.addEventListener('DOMContentLoaded', () => {
       comments: {
         title: 'Notes', mode: 'notes',
         entries: [
-          { sender: 'Riverview Apartments', time: '11/03/2026 11:17 AM', text: 'Attached an image', attachment: { name: 'IMG_6700.jpg', src: '../assets/images/service-issues/attach-6.png' } },
+          { sender: 'Riverview Apartments', time: '11/03/2026 11:17 AM', text: 'Attached an image', attachment: { name: 'IMG_6700.jpg', src: 'assets/images/service-issues/attach-6.png' } },
           { sender: 'Riverview Apartments', time: '11/03/2026 10:42 AM', text: 'Need to order part' },
         ],
       },
@@ -2358,7 +2370,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function svcAttachmentsHTML(attachments) {
     return attachments.map((a) => a.type === 'file'
-      ? `<div class="rmr-svc-attach__thumb rmr-svc-attach__thumb--file"><img class="rmr-svc-attach__file-icon" src="../assets/icons/service-issues/file-paper.svg" alt="" /><p class="rmr-svc-attach__thumb-name">${a.name}</p></div>`
+      ? `<div class="rmr-svc-attach__thumb rmr-svc-attach__thumb--file"><img class="rmr-svc-attach__file-icon" src="assets/icons/service-issues/file-paper.svg" alt="" /><p class="rmr-svc-attach__thumb-name">${a.name}</p></div>`
       : `<img class="rmr-svc-attach__thumb-img" src="${a.src}" alt="" />`
     ).join('');
   }
@@ -2416,7 +2428,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="rmr-svc-schedule-card__tech">
             <span class="rmr-svc-schedule-card__tech-label">Your tech will be:</span>
             <div class="rmr-svc-schedule-card__tech-row">
-              <img class="rmr-svc-schedule-card__tech-avatar" src="../assets/images/avatar.png" alt="" />
+              <img class="rmr-svc-schedule-card__tech-avatar" src="assets/images/avatar.png" alt="" />
               <span class="rmr-svc-schedule-card__tech-name">${schedule.tech}</span>
             </div>
           </div>
@@ -2450,7 +2462,7 @@ document.addEventListener('DOMContentLoaded', () => {
         </span>
         <div class="rmr-svc-comments__bubble-row">
           <div class="rmr-svc-comments__bubble">${m.text}</div>
-          ${m.self ? '<img class="rmr-svc-comments__kebab" src="../assets/icons/service-issues/kebab-vert.svg" alt="" />' : ''}
+          ${m.self ? '<img class="rmr-svc-comments__kebab" src="assets/icons/service-issues/kebab-vert.svg" alt="" />' : ''}
         </div>
         ${m.attachments ? `<div class="rmr-svc-comments__attachments">${m.attachments.map((a) => `<img src="${a.src}" alt="" />`).join('')}</div>` : ''}
       </div>
@@ -2471,7 +2483,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <span class="rmr-svc-notes__meta-time">${e.time}</span>
           </div>
           <p class="rmr-svc-notes__body">${e.text}</p>
-          ${e.attachment ? `<div class="rmr-svc-notes__attach-row"><img class="rmr-svc-notes__attach-icon" src="../assets/icons/service-issues/attach-image.svg" alt="" /><span class="rmr-svc-notes__attach-link">${e.attachment.name}</span></div>` : ''}
+          ${e.attachment ? `<div class="rmr-svc-notes__attach-row"><img class="rmr-svc-notes__attach-icon" src="assets/icons/service-issues/attach-image.svg" alt="" /><span class="rmr-svc-notes__attach-link">${e.attachment.name}</span></div>` : ''}
         </div>
       </div>
     `).join('');
@@ -2483,8 +2495,8 @@ document.addEventListener('DOMContentLoaded', () => {
       return `
         <div class="rmr-svc-comments__input-row">
           <input class="rmr-svc-comments__input" type="text" placeholder="Type your comment here" data-svc-comment-input />
-          <button class="rmr-svc-comments__input-btn" type="button" data-action="fake-submit" data-fake-message="Attaching a file to a comment isn't included in this example."><img src="../assets/icons/service-issues/attach-file.svg" alt="Attach" /></button>
-          <button class="rmr-svc-comments__input-btn" type="button" data-action="fake-submit" data-fake-message="Sending a comment isn't included in this example."><img src="../assets/icons/service-issues/send.svg" alt="Send" /></button>
+          <button class="rmr-svc-comments__input-btn" type="button" data-action="fake-submit" data-fake-message="Attaching a file to a comment isn't included in this example."><img src="assets/icons/service-issues/attach-file.svg" alt="Attach" /></button>
+          <button class="rmr-svc-comments__input-btn" type="button" data-action="fake-submit" data-fake-message="Sending a comment isn't included in this example."><img src="assets/icons/service-issues/send.svg" alt="Send" /></button>
         </div>`;
     }
     if (mode === 'disabled') return `<p class="rmr-svc-comments__disabled-bar">Communication is disabled.</p>`;
@@ -2840,8 +2852,8 @@ document.addEventListener('DOMContentLoaded', () => {
       star.addEventListener('click', () => {
         stars.forEach((s, i) => {
           s.querySelector('img').src = i <= index
-            ? '../assets/icons/polls/star-filled.svg'
-            : '../assets/icons/polls/star-outline.svg';
+            ? 'assets/icons/polls/star-filled.svg'
+            : 'assets/icons/polls/star-outline.svg';
         });
       });
     });

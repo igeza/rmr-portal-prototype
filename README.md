@@ -13,7 +13,7 @@ cd rmr-tenant-portal
 python3 -m http.server 4173
 ```
 
-Then open `http://localhost:4173` (the launcher page links to every built screen).
+Then open `http://localhost:4173/MVP.html` or `http://localhost:4173/Full-Product.html`.
 
 If you're using Claude Code with this repo open, `.claude/launch.json` is already wired up to do
 the same thing — just start the `rmr-preview` configuration.
@@ -22,8 +22,11 @@ the same thing — just start the `rmr-preview` configuration.
 
 ```
 rmr-tenant-portal/
-  index.html            launcher — links to every screen
-  screens/               one HTML file per screen
+  MVP.html                single-page app — MVP's 4 tabs (Dashboard, Charges & Payments,
+                           Service Issues, Document Center), starts on Dashboard
+  Full-Product.html       single-page app — Full Product's full tab set (adds Community,
+                           Reservations, Architectural Requests, Polls, Meter Readings, Notes,
+                           Violations, Reports on top of the same 4), starts on Dashboard
   assets/
     rmr.css              real design tokens (colors, spacing, type)
     proto.css             prototype-only fakery (kept separate, commented)
@@ -31,3 +34,7 @@ rmr-tenant-portal/
     icons/, images/       assets exported from Figma
   PROTOTYPE.md            sourcing notes, scope decisions, deviations
 ```
+
+Each file is a single HTML document: one shared header/sidebar shell, with every screen's markup
+present up front and shown/hidden by `assets/app.js`'s panel-switcher as you click the nav —
+no separate page loads.
