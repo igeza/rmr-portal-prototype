@@ -2294,6 +2294,17 @@ document.addEventListener('DOMContentLoaded', () => {
     { type: 'image', src: 'assets/images/service-issues/attach-5.png' },
     { type: 'image', src: 'assets/images/service-issues/attach-6.png' },
   ];
+  // Per-issue attachment photos — each issue's own SVC_ATTACHMENTS-style set
+  // has to actually depict what that issue describes, not just reuse the
+  // thermostat set open-175 was sourced with.
+  const SVC_FAUCET_ATTACHMENTS = [
+    { type: 'image', src: 'assets/images/service-issues/faucet-kitchen.jpg' },
+    { type: 'image', src: 'assets/images/service-issues/faucet-drip.jpg' },
+  ];
+  const SVC_CLOSET_ATTACHMENTS = [
+    { type: 'image', src: 'assets/images/service-issues/closet-door.jpg' },
+    { type: 'image', src: 'assets/images/service-issues/closet-door-hinge.jpg' },
+  ];
   const SVC_ISSUES = {
     'open-175': {
       title: 'Thermostat not working', created: 'Created: 10/19/26', status: 'open',
@@ -2323,12 +2334,12 @@ document.addEventListener('DOMContentLoaded', () => {
       },
       category: 'Plumbing', repeat: null,
       description: "The kitchen faucet has a steady drip that won't stop, even when fully shut off.",
-      pets: 'Yes', entry: 'No', resolution: null, attachments: SVC_ATTACHMENTS,
+      pets: 'Yes', entry: 'No', resolution: null, attachments: SVC_FAUCET_ATTACHMENTS,
       comments: {
         title: 'Messages', mode: 'two-way',
         messages: [
           { sender: 'Riverview Apartments', time: '11/02/26 10:42 AM', text: 'Need to order part, will update once it arrives.' },
-          { sender: 'Riverview Apartments', time: '11/02/26 11:17 AM', text: 'Attached an image', attachments: [{ src: 'assets/images/service-issues/attach-6.png' }] },
+          { sender: 'Riverview Apartments', time: '11/02/26 11:17 AM', text: 'Attached an image', attachments: [{ src: 'assets/images/service-issues/faucet-drip.jpg' }] },
           { sender: 'You', time: '11/02/26 11:20 AM', text: "Thanks, let me know when it's scheduled", self: true },
         ],
       },
@@ -2352,12 +2363,12 @@ document.addEventListener('DOMContentLoaded', () => {
       schedule: null, category: 'Other', repeat: null,
       description: "The primary bedroom closet door came off its track and won't slide or close properly.",
       pets: 'Yes', entry: 'Yes', resolution: 'Replaced with new door',
-      attachments: SVC_ATTACHMENTS,
+      attachments: SVC_CLOSET_ATTACHMENTS,
       comments: {
         title: 'Messages', mode: 'closed',
         messages: [
           { sender: 'Riverview Apartments', time: '11/03/26 10:42 AM', text: 'Need to order part' },
-          { sender: 'Riverview Apartments', time: '11/03/26 11:17 AM', text: 'Attached an image', attachments: [{ src: 'assets/images/service-issues/attach-6.png' }] },
+          { sender: 'Riverview Apartments', time: '11/03/26 11:17 AM', text: 'Attached an image', attachments: [{ src: 'assets/images/service-issues/closet-door.jpg' }] },
           { sender: 'You', time: '11/03/26 11:20 AM', text: 'Thank you!', self: true },
         ],
       },
@@ -2438,7 +2449,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="rmr-svc-schedule-card__tech">
             <span class="rmr-svc-schedule-card__tech-label">Your tech will be:</span>
             <div class="rmr-svc-schedule-card__tech-row">
-              <img class="rmr-svc-schedule-card__tech-avatar" src="assets/images/avatar.png" alt="" />
+              <img class="rmr-svc-schedule-card__tech-avatar" src="${schedule.techAvatar || 'assets/images/tech-avatar-alan.png'}" alt="" />
               <span class="rmr-svc-schedule-card__tech-name">${schedule.tech}</span>
             </div>
           </div>
@@ -2483,13 +2494,21 @@ document.addEventListener('DOMContentLoaded', () => {
     `).join('');
   }
 
+  function svcFormatCommentTime(date) {
+    const pad = (n) => String(n).padStart(2, '0');
+    let hours = date.getHours();
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12 || 12;
+    return `${date.getMonth() + 1}/${pad(date.getDate())}/${String(date.getFullYear()).slice(-2)} ${hours}:${pad(date.getMinutes())} ${ampm}`;
+  }
+
   function svcCommentsFooterHTML(mode) {
     if (mode === 'two-way') {
       return `
         <div class="rmr-svc-comments__input-row">
           <input class="rmr-svc-comments__input" type="text" placeholder="Type your comment here" data-svc-comment-input />
           <button class="rmr-svc-comments__input-btn" type="button" data-action="fake-submit" data-fake-message="Attaching a file to a comment isn't included in this example."><img src="assets/icons/service-issues/attach-file.svg" alt="Attach" /></button>
-          <button class="rmr-svc-comments__input-btn" type="button" data-action="fake-submit" data-fake-message="Sending a comment isn't included in this example."><img src="assets/icons/service-issues/send.svg" alt="Send" /></button>
+          <button class="rmr-svc-comments__input-btn" type="button" data-svc-comment-send><img src="assets/icons/service-issues/send.svg" alt="Send" /></button>
         </div>`;
     }
     if (mode === 'disabled') return `<p class="rmr-svc-comments__disabled-bar">Communication is disabled.</p>`;
@@ -2598,8 +2617,27 @@ document.addEventListener('DOMContentLoaded', () => {
       backdrop.querySelector('[data-svc-detail-comments-title]').textContent = data.comments.title;
       const thread = backdrop.querySelector('[data-svc-detail-thread]');
       thread.innerHTML = svcCommentsHTML(data.comments);
-      backdrop.querySelector('[data-svc-detail-comments-footer]').innerHTML = svcCommentsFooterHTML(data.comments.mode);
+      const footer = backdrop.querySelector('[data-svc-detail-comments-footer]');
+      footer.innerHTML = svcCommentsFooterHTML(data.comments.mode);
       thread.scrollTop = thread.scrollHeight;
+
+      if (data.comments.mode === 'two-way') {
+        const input = footer.querySelector('[data-svc-comment-input]');
+        const sendBtn = footer.querySelector('[data-svc-comment-send]');
+        const send = () => {
+          const text = input.value.trim();
+          if (!text) return;
+          data.comments.messages.push({ sender: 'You', time: svcFormatCommentTime(new Date()), text, self: true });
+          thread.innerHTML = svcCommentsHTML(data.comments);
+          thread.scrollTop = thread.scrollHeight;
+          input.value = '';
+          input.focus();
+        };
+        sendBtn.addEventListener('click', send);
+        input.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') { e.preventDefault(); send(); }
+        });
+      }
     }
 
     backdrop.hidden = false;
