@@ -2270,7 +2270,7 @@ document.addEventListener('DOMContentLoaded', () => {
   ];
   const SVC_ISSUES = {
     'open-175': {
-      title: 'Thermostat not working', created: 'Created: 10/21/26', status: 'open',
+      title: 'Thermostat not working', created: 'Created: 10/19/26', status: 'open',
       schedule: { type: 'confirmed', day: 'Thursday, Oct 22', time: '8:00 AM - 12:00 PM', tech: 'Alan Watson' },
       category: 'Other', repeat: 'Yes',
       description: "For the past week the thermostat doesn't record the temperature correctly. On top of that no matter what I set it to nothing changes.",
@@ -2286,7 +2286,7 @@ document.addEventListener('DOMContentLoaded', () => {
       },
     },
     'open-130': {
-      title: 'Leaky faucet in kitchen', created: 'Created: 10/20/26', status: 'open',
+      title: 'Leaky faucet in kitchen', created: 'Created: 10/19/26', status: 'open',
       schedule: {
         type: 'pending',
         slots: [
@@ -2314,7 +2314,7 @@ document.addEventListener('DOMContentLoaded', () => {
       attachments: null, comments: null,
     },
     'closed-175': {
-      title: 'Closet door broken', created: 'Created: 10/21/26', status: 'closed',
+      title: 'Closet door broken', created: 'Created: 10/19/26', status: 'closed',
       schedule: null, category: 'Other', repeat: null,
       description: "The primary bedroom closet door came off its track and won't slide or close properly.",
       pets: 'Yes', entry: 'Yes', resolution: 'Replaced with new door',
@@ -2328,7 +2328,7 @@ document.addEventListener('DOMContentLoaded', () => {
       },
     },
     'closed-130': {
-      title: 'Kitchen sink leaking', created: 'Created: 10/20/26', status: 'closed',
+      title: 'Kitchen sink leaking', created: 'Created: 10/19/26', status: 'closed',
       schedule: null, category: 'Plumbing', repeat: null,
       description: 'Water was pooling under the kitchen sink cabinet, likely from a leaking pipe connection.',
       pets: 'No', entry: 'Yes', resolution: 'Installed new valve',
