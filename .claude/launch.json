@@ -7,6 +7,20 @@
       "runtimeArgs": ["-c", "python3 -m http.server \"${PORT:-4173}\" --directory 'rmr-tenant-portal'"],
       "port": 4173,
       "autoPort": true
+    },
+    {
+      "name": "rmr-full-product",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": ["-c", "python3 -m http.server \"${PORT:-4174}\" --directory 'rmr-tenant-portal'"],
+      "port": 4174,
+      "autoPort": true
+    },
+    {
+      "name": "rmr-mvp",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": ["-c", "python3 -m http.server \"${PORT:-4175}\" --directory 'rmr-tenant-portal'"],
+      "port": 4175,
+      "autoPort": true
     }
   ]
 }

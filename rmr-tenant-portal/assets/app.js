@@ -17,6 +17,15 @@ function rmrSetAutopayScheduled(value) {
     else localStorage.removeItem(RMR_AUTOPAY_KEY);
   } catch (e) { /* private browsing, etc. — demo state just won't persist */ }
 }
+// Flips every "empty"/"scheduled" AutoPay indicator on the current page
+// (Dashboard hero, Payments card, Payment Settings row) to match — called
+// whenever the shared flag above changes, from any entry point.
+function rmrSyncAutopayBanners(scheduled) {
+  document.querySelectorAll('[data-autopay-state="empty"]').forEach((el) => { el.hidden = scheduled; });
+  document.querySelectorAll('[data-autopay-state="scheduled"]').forEach((el) => { el.hidden = !scheduled; });
+  document.querySelectorAll('[data-autopay-row-state="empty"]').forEach((el) => { el.hidden = scheduled; });
+  document.querySelectorAll('[data-autopay-row-state="scheduled"]').forEach((el) => { el.hidden = !scheduled; });
+}
 
 // Shared between document-center.html's Renewal Available banner and
 // document-sign.html's own Finish Signing flow — once the lease renewal
@@ -45,6 +54,35 @@ function rmrSetDocSigned(key, value) {
     if (value) localStorage.setItem(RMR_DOC_SIGNED_PREFIX + key, '1');
     else localStorage.removeItem(RMR_DOC_SIGNED_PREFIX + key);
   } catch (e) { /* private browsing, etc. — demo state just won't persist */ }
+}
+
+// Polls register — once a poll's wizard is finished (data-poll-row, keyed per
+// poll), its row should look like the other already-submitted rows: a real
+// Submitted date instead of a blank cell, and no Start button. Same
+// persisted-flag pattern as the doc-signed/payment flags above.
+const RMR_POLL_SUBMITTED_PREFIX = 'rmr-poll-submitted:';
+function rmrIsPollSubmitted(key) {
+  try { return localStorage.getItem(RMR_POLL_SUBMITTED_PREFIX + key) === '1'; } catch (e) { return false; }
+}
+function rmrSetPollSubmitted(key, value) {
+  try {
+    if (value) localStorage.setItem(RMR_POLL_SUBMITTED_PREFIX + key, '1');
+    else localStorage.removeItem(RMR_POLL_SUBMITTED_PREFIX + key);
+  } catch (e) { /* private browsing, etc. — demo state just won't persist */ }
+}
+function rmrApplyPollSubmitted(key) {
+  const row = document.querySelector(`[data-poll-row="${key}"]`);
+  if (!row) return;
+  const submittedCell = row.querySelector('[data-poll-submitted]');
+  if (submittedCell) {
+    const today = new Date();
+    const mo = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    const yr = String(today.getFullYear()).slice(-2);
+    submittedCell.textContent = `${mo}/${day}/${yr}`;
+  }
+  const actionCell = row.querySelector('[data-poll-action]');
+  if (actionCell) actionCell.innerHTML = '';
 }
 
 // Make a Payment — Current Balance submission. This static demo can only
@@ -208,9 +246,23 @@ document.addEventListener('DOMContentLoaded', () => {
   // it always re-reads location.search fresh, so it's safe to call anytime.
   // Exposed on window so a merged page's own panel-switch script (which
   // runs outside this closure) can call it after updating location.search.
+  // Snapshot of the lease-renewal letter's own markup, taken before any
+  // policy doc overwrites it, so revisiting the panel without ?doc= (or
+  // with a different one) restores it instead of showing the last policy.
+  let rmrSignDocDefaults = null;
   function rmrApplyDocumentSign() {
     rmrSignDocKey = new URLSearchParams(location.search).get('doc');
     const doc = RMR_SIGN_DOCS[rmrSignDocKey];
+    const heroEl = document.querySelector('[data-sign-hero-title]');
+    const contentEl = document.querySelector('[data-sign-doc-content]');
+    const btnEl = document.querySelector('[data-sign-btn]');
+    if (!rmrSignDocDefaults) {
+      rmrSignDocDefaults = {
+        hero: heroEl ? heroEl.textContent : '',
+        content: contentEl ? contentEl.innerHTML : '',
+        target: btnEl ? btnEl.dataset.modalTarget : '',
+      };
+    }
     if (doc) {
       rmrSignDocIsPolicy = true;
       document.title = `${doc.title} — rmResident Portal`;
@@ -225,6 +277,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (signBtn) signBtn.dataset.modalTarget = 'add-signature';
     } else {
       rmrSignDocIsPolicy = false;
+      if (heroEl) heroEl.textContent = rmrSignDocDefaults.hero;
+      if (contentEl) contentEl.innerHTML = rmrSignDocDefaults.content;
+      if (btnEl) btnEl.dataset.modalTarget = rmrSignDocDefaults.target;
       // Default (lease renewal) letter only — pre-fill its lease-preference
       // dropdown with whichever term card was picked on the previous screen
       // (Review Multiple Term Offers' Accept Offer, see offer-select above),
@@ -285,6 +340,17 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!backdrop) return;
     backdrop.querySelector('[data-event-detail-title]').textContent = btn.dataset.eventTitle || '';
     backdrop.querySelector('[data-event-detail-category]').textContent = btn.dataset.eventCategory || '';
+    // Lozenge color matches this event's own calendar pill (see
+    // .rmr-comm-cal__event--movie/--board/--error) rather than a fixed
+    // color, so it stays correct for every category including the one
+    // real Community Event that's colored --error on the calendar.
+    const lozenge = backdrop.querySelector('.rmr-comm-lozenge');
+    if (lozenge) {
+      lozenge.classList.remove('rmr-comm-lozenge--movie', 'rmr-comm-lozenge--board', 'rmr-comm-lozenge--error');
+      ['movie', 'board', 'error'].forEach((mod) => {
+        if (btn.classList.contains(`rmr-comm-cal__event--${mod}`)) lozenge.classList.add(`rmr-comm-lozenge--${mod}`);
+      });
+    }
     backdrop.querySelector('[data-event-detail-property]').textContent = btn.dataset.eventProperty || '';
     backdrop.querySelector('[data-event-detail-location]').textContent = btn.dataset.eventLocation || '';
     backdrop.querySelector('[data-event-detail-date]').textContent = btn.dataset.eventDate || '';
@@ -347,7 +413,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // request-appropriate mock content so every register row opens a fully
   // populated, matching detail view rather than a placeholder toast.
   const ARQ_REQUESTS = {
-    paint: { description: 'I want to update the color of the front door', attachments: ['assets/images/architectural-requests/attach-1.png', 'assets/images/architectural-requests/attach-2.png'], urgent: 'Yes', votes: [['Anna Moore', 'No Response', ''], ['Diene Bailey', 'Approved', ''], ['William Morgan', 'Denied', 'Not in the budget for this year.']] },
+    paint: { description: 'I want to update the color of the front door', attachments: ['assets/images/architectural-requests/front-door.jpg'], urgent: 'Yes', votes: [['Anna Moore', 'No Response', ''], ['Diene Bailey', 'Approved', ''], ['William Morgan', 'Denied', 'Not in the budget for this year.'], ['Samantha Carpenter', 'No Response', '']] },
     fence: { description: "I'd like to install a wooden fence along the back property line for added privacy and security.", attachments: [], urgent: 'No' },
     patio: { description: "I'd like to add a paved patio in the backyard for outdoor seating.", attachments: [], urgent: 'No' },
     lighting: { description: "I'd like to install low-voltage lighting along the front walkway for better visibility at night.", attachments: [], urgent: 'No' },
@@ -362,10 +428,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // gets one derived from that row's own register Status cell instead —
   // nobody's voted yet on a Pending request, a Board Review has a vote or
   // two trickling in, and a Denied one nets out mostly against.
-  function arqVotesForStatus(status) {
-    if (status === 'Denied') return [['Anna Moore', 'Denied', ''], ['Diene Bailey', 'Approved', ''], ['William Morgan', 'Denied', 'Not enough support from the board.']];
-    if (status === 'In Board Review') return [['Anna Moore', 'Approved', ''], ['Diene Bailey', 'No Response', ''], ['William Morgan', 'No Response', '']];
-    return [['Anna Moore', 'No Response', ''], ['Diene Bailey', 'No Response', ''], ['William Morgan', 'No Response', '']];
+  function arqVotesForStatus(status, myVote) {
+    const sam = myVote || 'No Response';
+    if (status === 'Denied') return [['Anna Moore', 'Denied', ''], ['Diene Bailey', 'Approved', ''], ['William Morgan', 'Denied', 'Not enough support from the board.'], ['Samantha Carpenter', sam, '']];
+    if (status === 'In Board Review') return [['Anna Moore', 'Approved', ''], ['Diene Bailey', 'No Response', ''], ['William Morgan', 'No Response', ''], ['Samantha Carpenter', sam, '']];
+    return [['Anna Moore', 'No Response', ''], ['Diene Bailey', 'No Response', ''], ['William Morgan', 'No Response', ''], ['Samantha Carpenter', sam, '']];
   }
   function arqStatusDotClass(status) {
     if (status === 'Denied') return 'denied';
@@ -387,26 +454,85 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  document.querySelectorAll('[data-action="open-arq-details"]').forEach((row) => {
+  let arqDefaultThreadHTML = null;
+  function arqBindDetailsRow(row) {
     row.addEventListener('click', () => {
       const backdrop = document.querySelector('[data-modal-backdrop="arq-details"]');
       if (!backdrop) return;
       const cells = row.querySelectorAll('td');
       const data = ARQ_REQUESTS[row.dataset.arqKey] || { description: '', attachments: [], urgent: 'No' };
       arqFillCommon(backdrop, 'detail', cells[2].textContent.trim(), cells[1].textContent.trim(), cells[0].textContent.trim(), 'Samantha Carpenter', data);
+      // The mock's static thread belongs to the pre-existing requests; a
+      // just-submitted one (data.emptyThread) has no messages yet, same as
+      // a newly added Service Issue.
+      const thread = backdrop.querySelector('.rmr-svc-comments__thread');
+      if (thread) {
+        if (arqDefaultThreadHTML === null) arqDefaultThreadHTML = thread.innerHTML;
+        thread.innerHTML = data.emptyThread ? '' : arqDefaultThreadHTML;
+      }
+      if (arqCommentInput) arqCommentInput.value = '';
+      arqUpdateSendState();
       backdrop.hidden = false;
     });
-  });
+  }
+  document.querySelectorAll('[data-action="open-arq-details"]').forEach(arqBindDetailsRow);
+  // Send arrow turns blue once there's text to send — same as Service
+  // Issues' own Messages input.
+  const arqCommentInput = document.querySelector('[data-arq-comment-input]');
+  const arqCommentSend = document.querySelector('[data-arq-comment-send]');
+  const arqUpdateSendState = () => {
+    if (arqCommentInput && arqCommentSend) arqCommentSend.classList.toggle('rmr-svc-comments__send-btn--active', arqCommentInput.value.trim().length > 0);
+  };
+  if (arqCommentInput) arqCommentInput.addEventListener('input', arqUpdateSendState);
+
+  // Submit an Architectural Request — same "actually adds a real record"
+  // pattern as Service Issues' own Submit handler above: the request's real
+  // Request/Description field values become a new prepended My Requests row
+  // plus a matching ARQ_REQUESTS entry, so the new request opens its own
+  // Request Details overlay instead of vanishing once the confirmation
+  // modal closes.
+  const arqAddBackdrop = document.querySelector('[data-modal-backdrop="arq-add"]');
+  const arqMyTbody = document.querySelector('[data-arq-panel="my"] tbody');
+  const arqMyTabBtn = document.querySelector('[data-action="arq-tab"][data-arq-target="my"]');
+  const arqSubmitBtn = arqAddBackdrop ? arqAddBackdrop.querySelector('[data-modal-target="arq-submitted"]') : null;
+  let arqNextKey = 1;
+  if (arqSubmitBtn && arqAddBackdrop && arqMyTbody) {
+    arqSubmitBtn.addEventListener('click', () => {
+      const titleInput = arqAddBackdrop.querySelector('.rmr-modal__input');
+      const descriptionEl = arqAddBackdrop.querySelector('.rmr-modal__textarea');
+      const title = (titleInput && titleInput.value.trim()) || 'Architectural Request';
+      const description = (descriptionEl && descriptionEl.value.trim()) || '';
+      const key = `custom-${arqNextKey++}`;
+      const submitted = '10/19/26'; // prototype's "today," same stamp Service Issues' new rows use
+
+      ARQ_REQUESTS[key] = { description, attachments: [], urgent: 'No', emptyThread: true };
+
+      const row = document.createElement('tr');
+      row.className = 'rmr-pay-table__row-link';
+      row.dataset.action = 'open-arq-details';
+      row.dataset.arqKey = key;
+      row.innerHTML = `<td>${submitted}</td><td><span class="rmr-rsv-lozenge rmr-rsv-lozenge--yellow">Pending</span></td><td>${title}</td>`;
+      arqBindDetailsRow(row);
+      arqMyTbody.insertBefore(row, arqMyTbody.firstChild);
+      rmrRefreshTableFooter(arqMyTbody.closest('table'));
+      if (arqMyTabBtn) arqMyTabBtn.textContent = `My Requests (${arqMyTbody.querySelectorAll('tr').length})`;
+
+      // Reset the form so the next "Add Request" starts blank.
+      if (titleInput) titleInput.value = '';
+      if (descriptionEl) descriptionEl.value = '';
+    });
+  }
 
   document.querySelectorAll('[data-action="open-arq-vote"]').forEach((row) => {
     row.addEventListener('click', () => {
       const backdrop = document.querySelector('[data-modal-backdrop="arq-vote"]');
       if (!backdrop) return;
       const cells = row.querySelectorAll('td');
-      const status = cells[4].textContent.trim();
+      const status = cells[5].textContent.trim();
+      const myVote = cells[4].textContent.trim();
       const data = ARQ_REQUESTS[row.dataset.arqKey] || { description: '', attachments: [], urgent: 'No' };
       arqFillCommon(backdrop, 'vote', cells[3].textContent.trim(), status, cells[0].textContent.trim(), cells[1].textContent.trim(), data);
-      backdrop.querySelector('[data-arq-vote-body]').innerHTML = (data.votes || arqVotesForStatus(status))
+      backdrop.querySelector('[data-arq-vote-body]').innerHTML = (data.votes || arqVotesForStatus(status, myVote))
         .map(([name, vote, note]) => `<tr><td>${name}</td><td>${vote}</td><td>${note}</td></tr>`).join('');
       backdrop.hidden = false;
     });
@@ -457,6 +583,20 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // Polls — Finish. Same modal-to-modal navigation as switch-modal above,
+  // plus marking the poll's row in the register as submitted (see
+  // rmrApplyPollSubmitted) so it matches the other already-completed rows.
+  document.querySelectorAll('[data-action="poll-submit"]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const current = document.querySelector(`[data-modal-backdrop="${btn.dataset.modalCloseCurrent}"]`);
+      const next = document.querySelector(`[data-modal-backdrop="${btn.dataset.modalTarget}"]`);
+      if (current) current.hidden = true;
+      if (next) next.hidden = false;
+      rmrApplyPollSubmitted(btn.dataset.pollKey);
+      rmrSetPollSubmitted(btn.dataset.pollKey, true);
+    });
+  });
+
   document.querySelectorAll('[data-modal-backdrop]').forEach((backdrop) => {
     backdrop.addEventListener('click', (e) => {
       if (e.target === backdrop) closeModal(backdrop);
@@ -485,22 +625,25 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!trimmed) return '';
     return trimmed.startsWith('$') ? trimmed : `$${trimmed}`;
   }
-  document.querySelectorAll('[data-modal-backdrop="autopay-amount"]').forEach((backdrop) => {
-    const modal = backdrop.querySelector('.rmr-modal');
-    const amountOptions = modal ? modal.querySelectorAll('[data-action="ap-select-amount"]') : [];
-    const summaryRows = modal ? modal.querySelector('[data-ap-summary-rows]') : null;
-    if (!modal || !amountOptions.length || !summaryRows) return;
+  // Shared by the "Set up Automatic Payments" modal wizard AND the
+  // standalone AutoPay settings page (data-ap-edit-card) — same radio/field
+  // wiring and live summary, so editing an existing schedule feels exactly
+  // like setting up a new one instead of being a dead, non-interactive copy.
+  function apWireAmountForm(root) {
+    const amountOptions = root.querySelectorAll('[data-action="ap-select-amount"]');
+    const summaryRows = root.querySelector('[data-ap-summary-rows]');
+    if (!amountOptions.length || !summaryRows) return null;
 
-    const balanceField = modal.querySelector('[data-ap-amount-field="balance"]');
-    const specificField = modal.querySelector('[data-ap-amount-field="specific"]');
-    const maxInput = modal.querySelector('[data-ap-max-input]');
-    const specificInput = modal.querySelector('[data-ap-specific-input]');
-    const freqValueEl = modal.querySelector('[data-ap-frequency-value]');
-    const freqDropdown = modal.querySelector('[data-ap-frequency-dropdown]');
-    const dayValueEl = modal.querySelector('[data-ap-day-value]');
+    const balanceField = root.querySelector('[data-ap-amount-field="balance"]');
+    const specificField = root.querySelector('[data-ap-amount-field="specific"]');
+    const maxInput = root.querySelector('[data-ap-max-input]');
+    const specificInput = root.querySelector('[data-ap-specific-input]');
+    const freqValueEl = root.querySelector('[data-ap-frequency-value]');
+    const freqDropdown = root.querySelector('[data-ap-frequency-dropdown]');
+    const dayValueEl = root.querySelector('[data-ap-day-value]');
     const dayDropdown = dayValueEl ? dayValueEl.closest('[data-dropdown]') : null;
-    const startInput = modal.querySelectorAll('.rmr-ap-date-input')[0];
-    const endInput = modal.querySelectorAll('.rmr-ap-date-input')[1];
+    const startInput = root.querySelectorAll('.rmr-ap-date-input')[0];
+    const endInput = root.querySelectorAll('.rmr-ap-date-input')[1];
 
     function selectedAmountOption() {
       const active = Array.from(amountOptions).find((o) => o.querySelector('.rmr-pmt-radio').classList.contains('rmr-pmt-radio--selected'));
@@ -594,28 +737,41 @@ document.addEventListener('DOMContentLoaded', () => {
     if (dayDropdown) dayDropdown.querySelectorAll('[data-dropdown-option]').forEach((o) => o.addEventListener('click', () => setTimeout(apUpdateSummary, 0)));
     if (startInput) startInput.addEventListener('input', apUpdateSummary); // the calendar picker dispatches 'input' on pick, see apPick below
 
+    apShowAmountField(selectedAmountOption());
+    apUpdateSummary();
+    return { apResetForm };
+  }
+
+  document.querySelectorAll('[data-modal-backdrop="autopay-amount"]').forEach((backdrop) => {
+    const modal = backdrop.querySelector('.rmr-modal');
+    const api = modal && apWireAmountForm(modal);
+    if (!api) return;
     // Reset to the empty state (Current Balance Due, no Max Amount, no End
     // Date) every time the flow is entered fresh — but not on "Back" from
     // the Payment Method step, which uses data-action="switch-modal" and so
     // never reaches this open-modal listener.
     document.querySelectorAll(`[data-action="open-modal"][data-modal-target="${backdrop.dataset.modalBackdrop}"]`).forEach((btn) => {
-      btn.addEventListener('click', apResetForm);
+      btn.addEventListener('click', api.apResetForm);
     });
-
-    apShowAmountField(selectedAmountOption());
-    apUpdateSummary();
   });
+
+  // Standalone AutoPay settings page — same live radio/amount/schedule
+  // interactivity as the modal wizard above, minus the "reset to blank on
+  // open" step (this is editing an already-scheduled payment, not starting
+  // fresh, so its fields keep whatever values the markup loaded with).
+  document.querySelectorAll('[data-ap-edit-card]').forEach((card) => apWireAmountForm(card));
 
   // Edit-in-place payment method form (pencil icon replaces the plain
   // method row with the real, pre-filled "Edit Saved Payment Method" card;
   // Cancel Changes/Save swap it back) — shared by Make a Payment, AutoPay
-  // setup, and the Payment Settings page, so each toggle is scoped to its
-  // own modal rather than always finding the first row/form in the page.
-  // Per node 2045:7618, the form REPLACES the row (one card, never both at
-  // once) rather than expanding underneath it.
+  // setup (both the modal wizard and the standalone AutoPay settings page),
+  // and the Payment Settings page, so each toggle is scoped to its own
+  // modal/screen-panel rather than always finding the first row/form in the
+  // page. Per node 2045:7618, the form REPLACES the row (one card, never
+  // both at once) rather than expanding underneath it.
   document.querySelectorAll('[data-action="ap-toggle-edit"]').forEach((btn) => {
     btn.addEventListener('click', () => {
-      const scope = btn.closest('.rmr-modal') || document;
+      const scope = btn.closest('.rmr-modal') || btn.closest('[data-screen-panel]') || document;
       const form = scope.querySelector('[data-ap-edit-form]');
       const row = scope.querySelector('[data-ap-method-row]');
       if (form) form.hidden = !form.hidden;
@@ -639,7 +795,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // rmr.css). Every instance in this prototype has exactly one option, same
   // as the native selects they replaced, so opening one just re-confirms the
   // pre-filled value rather than offering a real choice.
-  document.querySelectorAll('[data-dropdown]').forEach((dd) => {
+  // Named (not an inline callback) so rows added later — e.g. Add Phone
+  // Number's new line — can wire up their own copy of the same dropdown.
+  function rmrBindDropdown(dd) {
     const trigger = dd.querySelector('[data-dropdown-trigger]');
     const valueEl = dd.querySelector('[data-dropdown-value]');
     const menu = dd.querySelector('[data-dropdown-menu]');
@@ -699,7 +857,8 @@ document.addEventListener('DOMContentLoaded', () => {
         closeMenu();
       });
     });
-  });
+  }
+  document.querySelectorAll('[data-dropdown]').forEach(rmrBindDropdown);
   document.addEventListener('click', () => {
     document.querySelectorAll('[data-dropdown].rmr-dropdown--open').forEach((dd) => {
       dd.querySelector('[data-dropdown-menu]').hidden = true;
@@ -711,27 +870,38 @@ document.addEventListener('DOMContentLoaded', () => {
   // other dropdown above) additionally switches which calendar panel is showing, since unlike
   // every other dropdown in this prototype its options aren't just cosmetic. Month/Week/Day panels
   // ([data-comm-cal-view]) and the nav row's per-view date labels ([data-comm-cal-label]) both key
-  // off the same option's data-comm-view value.
+  // off the same option's data-comm-view value. Community and Reservations each have their own
+  // independent copy of this dropdown/panel set, so the toggle must stay scoped to the dropdown's
+  // own screen panel — otherwise switching views on one screen also flips the other screen's
+  // panels (while leaving its dropdown label untouched), so the two go out of sync.
   document.querySelectorAll('[data-comm-view-select]').forEach((dd) => {
+    const scope = dd.closest('[data-screen-panel]') || document;
     dd.querySelectorAll('[data-dropdown-option]').forEach((option) => {
       option.addEventListener('click', () => {
         const view = option.dataset.commView;
-        document.querySelectorAll('[data-comm-cal-view]').forEach((panel) => {
+        scope.querySelectorAll('[data-comm-cal-view]').forEach((panel) => {
           panel.hidden = panel.dataset.commCalView !== view;
         });
-        document.querySelectorAll('[data-comm-cal-label]').forEach((label) => {
+        scope.querySelectorAll('[data-comm-cal-label]').forEach((label) => {
           label.hidden = label.dataset.commCalLabel !== view;
         });
       });
     });
   });
 
-  // Community page — Month view's "+x" overflow indicator (a day cell only
-  // ever shows one event tile before it, so every cell stays the same fixed
-  // size regardless of how many events land on that day). Clicking it opens
-  // a single shared popover listing every event for that day, positioned off
-  // the trigger's own rect rather than embedded in the cell, so it can't get
-  // clipped by the calendar grid's overflow:hidden even from the bottom row.
+  // Community's Month view AND Reservations' Month view both have the same
+  // "+x" overflow indicator (a day cell only ever shows so many event tiles
+  // before it, so every cell stays the same fixed size regardless of how
+  // many land on that day). Clicking either one opens the SAME shared
+  // popover (see its markup, a sibling of every .rmr-screen-panel so no
+  // panel's own [hidden] can hide it), listing every event/reservation for
+  // that day, positioned off the trigger's own rect rather than embedded in
+  // the cell, so it can't get clipped by the calendar grid's overflow:hidden
+  // even from the bottom row. CAL_DAY_EVENTS entries are keyed by day, with
+  // a `type` (default 'community') picking which template/target the list
+  // renders — Community's own Event Details modal, or Reservations' plain
+  // (non-interactive, matching "other resident's booking" elsewhere on that
+  // calendar) .rmr-rsv-event pills.
   const CAL_DAY_EVENTS = {
     'oct-29': {
       label: 'Thu, Oct 29',
@@ -741,6 +911,15 @@ document.addEventListener('DOMContentLoaded', () => {
         { time: '5:00 PM', endTime: '6:00 PM', label: 'Pumpkin Carving', category: 'Community Event', location: 'Clubhouse Courtyard', description: 'Pumpkins and carving tools provided — bring the family!' },
         { time: '6:00 PM', endTime: '7:00 PM', label: 'Trick-or-Treat Safety Patrol', category: 'Community Event', location: 'Property Grounds', description: 'Staff will patrol the grounds to keep trick-or-treaters safe.' },
         { time: '7:00 PM', endTime: '9:00 PM', label: 'Halloween Movie Night', modifier: 'movie', category: 'Movie Night', location: 'Clubhouse', description: 'A spooky double feature under the stars — popcorn included.' },
+      ],
+    },
+    'rsv-oct-29': {
+      label: 'Thu, Oct 29',
+      type: 'reservation',
+      events: [
+        { time: '2:00 PM', amenity: 'Clubhouse Room 1', status: 'Approved' },
+        { time: '4:00 PM', amenity: 'Clubhouse Room 1', status: 'Approved' },
+        { time: '6:30 PM', amenity: 'Theater Room', status: 'Approved' },
       ],
     },
   };
@@ -753,7 +932,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const data = CAL_DAY_EVENTS[btn.dataset.calDayKey];
         if (!data) return;
         calDayPopover.querySelector('[data-cal-day-popover-title]').textContent = data.label;
-        calDayPopover.querySelector('[data-cal-day-popover-list]').innerHTML = data.events.map((ev) => `
+        calDayPopover.querySelector('[data-cal-day-popover-list]').innerHTML = data.type === 'reservation' ? data.events.map((ev) => `
+          <div class="rmr-rsv-event rmr-rsv-event--other" data-rsv-amenity="${ev.amenity}" data-rsv-date="10/29/26" data-rsv-status="${ev.status}" data-rsv-time="${ev.time}">
+            <span class="rmr-comm-cal__event-time">${ev.time}</span><span class="rmr-comm-cal__event-label">${ev.amenity}</span>
+          </div>
+        `).join('') : data.events.map((ev) => `
           <button type="button" class="rmr-comm-cal__event${ev.modifier ? ` rmr-comm-cal__event--${ev.modifier}` : ''}" data-action="open-modal" data-modal-target="event-details" data-event-title="${ev.label}" data-event-category="${ev.category}" data-event-property="Riverview Apartments" data-event-location="${ev.location}" data-event-date="10/29/26" data-event-time="${ev.time} - ${ev.endTime}" data-event-description="${ev.description}">
             <span class="rmr-comm-cal__event-time">${ev.time}</span><span class="rmr-comm-cal__event-label">${ev.label}</span>
           </button>
@@ -915,7 +1098,9 @@ document.addEventListener('DOMContentLoaded', () => {
         table.querySelectorAll(':scope > tbody > tr').forEach((row) => {
           const cell = row.children[colIdx];
           const date = cell ? drParseDate(cell.textContent.trim()) : null;
-          rmrSetRowFilter(row, 'Date', !date || (date >= start && date <= end));
+          // Either bound may be empty (only one date removed) — an
+          // open-ended range just skips that side of the comparison.
+          rmrSetRowFilter(row, 'Date', !date || ((!start || date >= start) && (!end || date <= end)));
         });
         rmrRefreshTableFooter(table);
       });
@@ -928,23 +1113,52 @@ document.addEventListener('DOMContentLoaded', () => {
     // text (same var(--text-accent) italic treatment every other input's
     // ::placeholder already uses in this file) to match Material's range
     // picker clearing back to its own unset placeholder state.
-    function drClearAll(field) {
-      const scope = field.closest('.rmr-settings-card, .rmr-comm-card, .rmr-pay-section') || document;
-      scope.querySelectorAll('table[data-date-col]').forEach((table) => {
-        table.querySelectorAll(':scope > tbody > tr').forEach((row) => rmrSetRowFilter(row, 'Date', true));
-        rmrRefreshTableFooter(table);
-      });
+    // Renders the field's two spans from a (possibly half-empty) range and
+    // re-filters. Both empty -> "Start date"/"End date" placeholders and no
+    // filter at all. Only one empty -> that side is left blank (no
+    // placeholder) until a new date is picked, keeping its width so the
+    // field doesn't jump and the blank side stays clickable.
+    function drSetField(field, start, end) {
       const { startSpan, endSpan } = drSpans(field);
-      if (startSpan) { startSpan.textContent = 'Start date'; startSpan.classList.add('rmr-daterange-placeholder'); }
-      if (endSpan) { endSpan.textContent = 'End date'; endSpan.classList.add('rmr-daterange-placeholder'); }
+      // Single-date field (data-dr-single, e.g. New Reservation's Date):
+      // just shows the picked day and announces it — no range, no register
+      // filtering, never emptied.
+      if (field.dataset.drSingle !== undefined) {
+        if (start && startSpan) startSpan.textContent = drFormatDate(start, fourDigitYear);
+        field.dispatchEvent(new CustomEvent('rmr-date-change', { detail: { date: start }, bubbles: true }));
+        return;
+      }
+      if (!start && !end) {
+        const scope = field.closest('.rmr-settings-card, .rmr-comm-card, .rmr-pay-section') || document;
+        scope.querySelectorAll('table[data-date-col]').forEach((table) => {
+          table.querySelectorAll(':scope > tbody > tr').forEach((row) => rmrSetRowFilter(row, 'Date', true));
+          rmrRefreshTableFooter(table);
+        });
+        [[startSpan, 'Start date'], [endSpan, 'End date']].forEach(([span, label]) => {
+          if (!span) return;
+          span.textContent = label;
+          span.classList.add('rmr-daterange-placeholder');
+          span.style.minWidth = '';
+        });
+        return;
+      }
+      const filledWidth = [startSpan, endSpan].reduce((w, span) => Math.max(w, span ? span.offsetWidth : 0), 0);
+      [[startSpan, start], [endSpan, end]].forEach(([span, date]) => {
+        if (!span) return;
+        span.classList.remove('rmr-daterange-placeholder');
+        span.textContent = date ? drFormatDate(date, fourDigitYear) : '';
+        span.style.minWidth = date ? '' : `${filledWidth}px`;
+      });
+      drFilterTables(field, start, end);
     }
+    function drClearAll(field) { drSetField(field, null, null); }
 
     function drCommit(field) {
-      if (!rangeStart) return;
-      const { startSpan, endSpan } = drSpans(field);
-      if (startSpan) { startSpan.textContent = drFormatDate(rangeStart, fourDigitYear); startSpan.classList.remove('rmr-daterange-placeholder'); }
-      if (endSpan) { endSpan.textContent = drFormatDate(rangeEnd || rangeStart, fourDigitYear); endSpan.classList.remove('rmr-daterange-placeholder'); }
-      drFilterTables(field, rangeStart, rangeEnd || rangeStart);
+      // Whole-range mode always commits a complete range (a lone first
+      // click counts as a one-day range); single-bound edits keep the other
+      // side exactly as it was, even if that side is empty.
+      if (activeRole === 'range') drSetField(field, rangeStart, rangeEnd || rangeStart);
+      else drSetField(field, rangeStart, rangeEnd);
     }
 
     function drRenderDays() {
@@ -1097,9 +1311,11 @@ document.addEventListener('DOMContentLoaded', () => {
       // page (Architectural Requests, Payments & Charges) would otherwise
       // silently fall back to a 2-digit year on the next pick.
       fourDigitYear = field.dataset.drFourDigitYear === 'true';
-      rangeStart = drParseDate(startSpan?.textContent || '') || new Date();
+      // A single-date field has nothing to clear.
+      popover.querySelector('[data-dr-clear]').hidden = field.dataset.drSingle !== undefined;
+      rangeStart = drParseDate(startSpan?.textContent || '') || null;
       rangeEnd = drParseDate(endSpan?.textContent || '') || null;
-      const focusDate = role === 'end' ? (rangeEnd || rangeStart) : rangeStart;
+      const focusDate = (role === 'end' ? (rangeEnd || rangeStart) : (rangeStart || rangeEnd)) || new Date();
       viewYear = focusDate.getFullYear();
       viewMonth = focusDate.getMonth();
       drRender();
@@ -1133,7 +1349,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       field.addEventListener('click', (e) => {
         e.stopPropagation();
-        const role = drRoleFromTarget(field, e.target);
+        const role = field.dataset.drSingle !== undefined ? 'start' : drRoleFromTarget(field, e.target);
         if (!popover.hidden && activeField === field && activeRole === role) { drClose(); return; }
         drOpen(field, role);
       });
@@ -1172,6 +1388,40 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!popover.hidden && !e.target.closest('.rmr-daterange-popover') && !e.target.closest('[data-action="open-daterange"]')) drClose();
     });
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !popover.hidden) drClose(); });
+    // Highlight a date's text (drag or double-click) and press Backspace/
+    // Delete to remove just that date, like editing a text input. The other
+    // date stays; the removed side shows blank (no placeholder) until a new
+    // date is picked — placeholders only return once both are empty.
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Backspace' && e.key !== 'Delete') return;
+      const sel = window.getSelection();
+      // Also: a date clicked to open its own picker (Start or End) counts
+      // as "selected" — Backspace/Delete then removes that date.
+      if ((!sel || sel.isCollapsed || !sel.toString().trim()) && !popover.hidden && activeField && activeField.dataset.drSingle === undefined && (activeRole === 'start' || activeRole === 'end')) {
+        const tag = document.activeElement && document.activeElement.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+        e.preventDefault();
+        if (activeRole === 'start') drSetField(activeField, null, rangeEnd);
+        else drSetField(activeField, rangeStart, null);
+        drClose();
+        return;
+      }
+      if (!sel || sel.isCollapsed || !sel.toString().trim()) return;
+      const node = sel.anchorNode && (sel.anchorNode.nodeType === 1 ? sel.anchorNode : sel.anchorNode.parentElement);
+      const field = node && node.closest('[data-action="open-daterange"]');
+      if (!field || field.dataset.drSingle !== undefined) return;
+      const { startSpan, endSpan } = drSpans(field);
+      const hitStart = startSpan && sel.containsNode(startSpan, true);
+      const hitEnd = endSpan && sel.containsNode(endSpan, true);
+      if (!hitStart && !hitEnd) return;
+      e.preventDefault();
+      fourDigitYear = field.dataset.drFourDigitYear === 'true';
+      const start = hitStart ? null : drParseDate(startSpan?.textContent || '');
+      const end = hitEnd ? null : drParseDate(endSpan?.textContent || '');
+      drSetField(field, start, end);
+      sel.removeAllRanges();
+      drClose();
+    });
   }
 
   // Status / Utility / etc. dropdown filters — e.g. Meter Readings' Utility
@@ -1346,40 +1596,26 @@ document.addEventListener('DOMContentLoaded', () => {
       const success = document.querySelector('[data-modal-backdrop="autopay-success"]');
       if (method) method.hidden = true;
       if (success) success.hidden = false;
-      const emptyBanner = document.querySelector('[data-autopay-state="empty"]');
-      const scheduledBanner = document.querySelector('[data-autopay-state="scheduled"]');
-      if (emptyBanner) emptyBanner.hidden = true;
-      if (scheduledBanner) scheduledBanner.hidden = false;
       rmrSetAutopayScheduled(true);
+      rmrSyncAutopayBanners(true);
     });
   });
 
-  // Balance Due AutoPay banner — defaults to "empty" in the HTML, but should
-  // reflect AutoPay already having been scheduled from the *other* entry
-  // point (Payment Settings' AutoPay page) on load.
-  if (rmrIsAutopayScheduled()) {
-    const emptyBanner = document.querySelector('[data-autopay-state="empty"]');
-    const scheduledBanner = document.querySelector('[data-autopay-state="scheduled"]');
-    if (emptyBanner && scheduledBanner) {
-      emptyBanner.hidden = true;
-      scheduledBanner.hidden = false;
-    }
-  }
-
-  // Payment Settings' AutoPay row — same shared flag, same "empty unless
-  // already scheduled elsewhere" default.
-  if (rmrIsAutopayScheduled()) {
-    const emptyRow = document.querySelector('[data-autopay-row-state="empty"]');
-    const scheduledRow = document.querySelector('[data-autopay-row-state="scheduled"]');
-    if (emptyRow && scheduledRow) {
-      emptyRow.hidden = true;
-      scheduledRow.hidden = false;
-    }
-  }
+  // Balance Due AutoPay banner(s), and Payment Settings' AutoPay row —
+  // default to "empty" in the HTML, but should reflect AutoPay already
+  // having been scheduled from *any* entry point (Dashboard hero, Payments
+  // card, or Payment Settings' AutoPay page) on load.
+  if (rmrIsAutopayScheduled()) rmrSyncAutopayBanners(true);
 
   // Balance Due card, Open Charges, and All Activity — reflect a payment
   // already submitted (from either this visit or an earlier one).
   if (rmrIsPaymentPaid()) rmrApplyPaymentPaid();
+
+  // Polls register — reflect a poll already submitted (from either this
+  // visit or an earlier one).
+  document.querySelectorAll('[data-poll-row]').forEach((row) => {
+    if (rmrIsPollSubmitted(row.dataset.pollRow)) rmrApplyPollSubmitted(row.dataset.pollRow);
+  });
 
   document.addEventListener('keydown', (e) => {
     if (e.key !== 'Escape') return;
@@ -1392,6 +1628,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // renewal document has already been signed via document-sign.html (see
   // sign-complete/submit-signed-doc below), the same "already done, don't
   // invite re-review" pattern as the AutoPay banner's own persisted state.
+  // Wrapped in a function (and made safe to re-run) so a merged
+  // multi-screen page can re-sync Document Center each time it's shown —
+  // e.g. right after finishing a signature on the Sign Document panel —
+  // not just once at initial load.
+  function rmrSyncDocumentCenter() {
   if (rmrIsRenewalSigned()) {
     document.querySelectorAll('[data-renewal-banner]').forEach((banner) => { banner.hidden = true; });
   }
@@ -1407,7 +1648,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // either way its Sign link is spent, since the tenant's own part is done
   // regardless of whether the whole document is.
   document.querySelectorAll('[data-dts-row]').forEach((row) => {
-    if (!rmrIsDocSigned(row.dataset.dtsRow)) return;
+    if (!rmrIsDocSigned(row.dataset.dtsRow) || row.dataset.dtsApplied) return;
+    row.dataset.dtsApplied = 'true';
     const cell = row.querySelector('[data-dts-signers]');
     let complete = false;
     if (cell) {
@@ -1432,6 +1674,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const visible = document.querySelectorAll('[data-dts-row]:not([hidden])').length;
     dtsFooter.textContent = `${visible} Total Document${visible === 1 ? '' : 's'}`;
   }
+  }
+  window.rmrSyncDocumentCenter = rmrSyncDocumentCenter;
+  rmrSyncDocumentCenter();
 
   // Review Multiple Term Offers — selecting a different term card, same
   // radio-card pattern as pmt-select-amount (visual selection only; each
@@ -1574,9 +1819,21 @@ document.addEventListener('DOMContentLoaded', () => {
   // Account" frame. Opens/closes; every item inside is otherwise inert
   // (handled by fake-submit above).
   const accountToggle = document.querySelector('[data-action="toggle-account-menu"]');
+  // The header's language dropdown and account menu sit side by side —
+  // opening one closes the other (both stop click propagation, so the
+  // usual click-outside handlers wouldn't catch it).
+  const langTrigger = document.querySelector('.rmr-lang__trigger');
+  if (langTrigger) langTrigger.addEventListener('click', () => closeAccountMenu());
+  // Display-only list: clicking inside it doesn't pick anything or close it.
+  const langMenu = document.querySelector('.rmr-lang [data-dropdown-menu]');
+  if (langMenu) langMenu.addEventListener('click', (e) => e.stopPropagation());
   if (accountToggle) {
     accountToggle.addEventListener('click', (e) => {
       e.stopPropagation();
+      document.querySelectorAll('.rmr-lang.rmr-dropdown--open').forEach((dd) => {
+        dd.querySelector('[data-dropdown-menu]').hidden = true;
+        dd.classList.remove('rmr-dropdown--open', 'rmr-dropdown--menu-up');
+      });
       const menu = document.querySelector('[data-account-menu]');
       if (!menu) return;
       menu.hidden = !menu.hidden;
@@ -1658,12 +1915,44 @@ document.addEventListener('DOMContentLoaded', () => {
   // Linked Accounts table / Contact Information modal — single-select radio
   // ("Default" account, "Primary Phone") scoped to the enclosing table so
   // each table's own radio group is independent.
-  document.querySelectorAll('[data-action="acct-select-default"]').forEach((radio) => {
+  function rmrBindDefaultRadio(radio) {
     radio.addEventListener('click', () => {
       const scope = radio.closest('table') || document;
       scope.querySelectorAll('[data-action="acct-select-default"]').forEach((r) => {
         r.classList.toggle('rmr-pmt-radio--selected', r === radio);
       });
+    });
+  }
+  document.querySelectorAll('[data-action="acct-select-default"]').forEach(rmrBindDefaultRadio);
+
+  // Contact Information modal — Add Phone Number appends a new blank line
+  // to the phone register (empty number, Cell Phone type, not primary),
+  // built from the same markup as the existing rows and focused so the
+  // number can be typed straight away.
+  document.querySelectorAll('[data-action="acct-add-phone"]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const tbody = btn.closest('.rmr-modal')?.querySelector('[data-acct-phone-rows]');
+      if (!tbody) return;
+      const types = ['Cell Phone', 'Home Phone', 'Work Phone'];
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td><input class="rmr-modal__input" type="text" /></td>
+        <td>
+          <div class="rmr-dropdown" data-dropdown>
+            <button class="rmr-modal__select rmr-dropdown__trigger" data-dropdown-trigger type="button"><span data-dropdown-value>${types[0]}</span></button>
+            <div class="rmr-dropdown__menu" data-dropdown-menu hidden>
+              ${types.map((t, i) => `<div class="rmr-dropdown__option${i === 0 ? ' rmr-dropdown__option--selected' : ''}" data-dropdown-option>${t}</div>`).join('')}
+            </div>
+          </div>
+        </td>
+        <td class="rmr-cell--center"><button aria-label="Set as primary phone" class="rmr-pmt-radio" data-action="acct-select-default" type="button"></button></td>
+        <td><button aria-label="Remove phone number" data-action="fake-submit" data-fake-message="Removing a phone number isn't included in this example." type="button"><img alt="" height="20" src="assets/icons/settings/delete.svg" width="20" /></button></td>`;
+      tbody.appendChild(row);
+      rmrBindDropdown(row.querySelector('[data-dropdown]'));
+      rmrBindDefaultRadio(row.querySelector('[data-action="acct-select-default"]'));
+      const input = row.querySelector('input');
+      input.scrollIntoView({ block: 'nearest' });
+      input.focus();
     });
   });
 
@@ -1730,14 +2019,19 @@ document.addEventListener('DOMContentLoaded', () => {
   // every other invented amenity in this file.
   const RSV_AMENITIES = {
     'Theater Room': { image: 'assets/images/reservations/room-2.png', description: 'Located near the main office.', fee: '$15.00' },
-    'Clubhouse Room 1': { image: 'assets/images/reservations/room-1.png', description: 'A spacious multipurpose room with a full kitchen, ideal for parties and gatherings.', fee: '$25.00' },
+    'Clubhouse Room 1': { image: 'assets/images/reservations/clubhouse.jpg', description: 'A spacious multipurpose room with a full kitchen, ideal for parties and gatherings.', fee: '$25.00' },
   };
   function rsvStatusDotColor(status) {
     if (status === 'Pending') return 'yellow';
     if (status === 'Denied') return 'red';
-    if (status === 'Completed') return 'gray';
+    if (status === 'Completed' || status === 'Canceled') return 'gray';
     return 'green'; // Approved
   }
+  // Set by rsvBindItem whenever it opens the (cancellable) Reservation
+  // Details modal — read by the Cancel Reservation confirm modal below so it
+  // knows which real reservation to act on without needing its own copy of
+  // the clicked element.
+  let rsvCancelContext = null;
   // Every sourced time on this page is a plain on-the-hour/half-hour start
   // (e.g. "7:00 PM") with the modal always showing a 1-hour block, so the
   // end time is computed rather than needing its own attribute per item.
@@ -1752,7 +2046,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (displayHour === 0) displayHour = 12;
     return `${displayHour}:${m[2]} ${endAp}`;
   }
-  document.querySelectorAll('[data-action="open-reservation-details"]').forEach((el) => {
+  function rsvBindItem(el) {
     el.addEventListener('click', () => {
       const amenity = el.dataset.rsvAmenity;
       const date = el.dataset.rsvDate;
@@ -1775,6 +2069,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const backdrop = document.querySelector('[data-modal-backdrop="reservation-details"]');
       if (!backdrop) return;
+      rsvCancelContext = { amenity, date, start };
       backdrop.querySelector('[data-rsv-detail-status-dot]').className = `rmr-rsv-status__dot rmr-rsv-status__dot--${rsvStatusDotColor(status)}`;
       backdrop.querySelector('[data-rsv-detail-status-text]').textContent = status;
       backdrop.querySelector('[data-rsv-detail-amenity]').textContent = amenity;
@@ -1783,14 +2078,235 @@ document.addEventListener('DOMContentLoaded', () => {
       backdrop.querySelector('[data-rsv-detail-description]').textContent = info.description;
       backdrop.querySelector('[data-rsv-detail-fee]').textContent = info.fee;
       backdrop.querySelector('[data-rsv-detail-image]').src = info.image;
-      // A Completed reservation is already in the past — there's nothing left
-      // to cancel. The footer's own inline display:flex (for its
+      // A Completed or already-Canceled reservation has nothing left to
+      // cancel. The footer's own inline display:flex (for its
       // justify-content) beats [hidden] at equal specificity, same pitfall as
       // Violation Details' image wrap above — toggle display directly instead.
-      backdrop.querySelector('[data-rsv-detail-cancel]').style.display = status === 'Completed' ? 'none' : '';
+      backdrop.querySelector('[data-rsv-detail-cancel]').style.display = (status === 'Completed' || status === 'Canceled') ? 'none' : '';
       backdrop.hidden = false;
     });
-  });
+  }
+  document.querySelectorAll('[data-action="open-reservation-details"]').forEach(rsvBindItem);
+
+  // Cancel Reservation confirm — Figma node 2052:458919 ("Cancel
+  // Reservation"), reusing the same Delete-confirmation-modal component as
+  // Account Settings' "Delete Account" overlay (.rmr-acct-confirm). Confirming
+  // actually cancels: every real DOM node for this reservation — the "My
+  // Reservations" list item plus its calendar pill(s) across month/week/day
+  // views — shares the same data-rsv-amenity/date/time, so one query finds
+  // them all. The list item moves from Upcoming to Past Requests with a gray
+  // "Canceled" lozenge; each calendar pill stays put (per the design) but
+  // gets "Canceled" prefixed onto its time label and switches to the same
+  // muted --inactive treatment already used for Denied pills.
+  const rsvCancelConfirmBackdrop = document.querySelector('[data-modal-backdrop="cancel-reservation-confirm"]');
+  const rsvPastPanel = document.querySelector('[data-rsv-panel="past"]');
+  if (rsvCancelConfirmBackdrop && rsvPastPanel) {
+    document.querySelectorAll('[data-action="rsv-confirm-cancel"]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        if (!rsvCancelContext) return;
+        const { amenity, date, start } = rsvCancelContext;
+        document.querySelectorAll(`[data-rsv-amenity="${amenity}"][data-rsv-date="${date}"][data-rsv-time="${start}"]`).forEach((el) => {
+          el.dataset.rsvStatus = 'Canceled';
+          if (el.classList.contains('rmr-rsv-item')) {
+            const lozenge = el.querySelector('.rmr-rsv-lozenge');
+            if (lozenge) {
+              lozenge.className = 'rmr-rsv-lozenge rmr-rsv-lozenge--gray';
+              lozenge.textContent = 'Canceled';
+            }
+            rsvPastPanel.insertBefore(el, rsvPastPanel.firstChild);
+          } else if (el.classList.contains('rmr-rsv-event')) {
+            el.classList.remove('rmr-rsv-event--mine');
+            el.classList.add('rmr-rsv-event--inactive');
+            const timeEl = el.querySelector('.rmr-comm-cal__event-time');
+            if (timeEl) timeEl.textContent = `Canceled ${start}`;
+          }
+        });
+        rsvCancelConfirmBackdrop.hidden = true;
+      });
+    });
+  }
+
+  // Submit a New Reservation — same "actually adds a real record" pattern as
+  // Service Issues/Architectural Requests above: reads the real Amenity/
+  // Date/Start Time picked in Step 1, prepends a real "My Reservations" item
+  // built from them (status Pending, same as any reservation awaiting
+  // review), and reuses rsvBindItem so the new item opens the same real
+  // Reservation Details overlay as any other — instead of only ever showing
+  // Theater Room/10/15/26/5-6pm on the Step 3 confirmation screen no matter
+  // what was actually picked.
+  const RSV_ITEM_ICON_COLOR = { 'Theater Room': 'green', 'Clubhouse Room 1': 'yellow' };
+  const RSV_WEEKDAY_ABBR = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+  // Finds the Month view's day cell for a given date (matched on day-of-
+  // month only — every date this prototype can actually submit falls in the
+  // one month grid that's rendered, since month navigation is decorative).
+  function rsvFindMonthCell(dateStr) {
+    const d = drParseDate(dateStr);
+    // Scoped to the Reservations screen specifically — Community's own page
+    // has its own separate [data-comm-cal-view="month"] earlier in the DOM,
+    // which an unscoped lookup would find instead.
+    const monthView = document.querySelector('[data-screen-panel="reservations"] [data-comm-cal-view="month"]');
+    if (!d || !monthView) return null;
+    const cells = monthView.querySelectorAll('.rmr-comm-cal__cell:not(.rmr-comm-cal__cell--out)');
+    return Array.from(cells).find((c) => {
+      const num = c.querySelector(':scope > .rmr-comm-cal__daynum');
+      return num && Number(num.textContent.trim()) === d.getDate();
+    }) || null;
+  }
+  // Finds the Week view's hour cell for a given date/time (matched on the
+  // day column's own "Thu, 15" heading and the gutter row a time like
+  // "2:30 PM" falls into — floored to the hour, same coarse-bucket
+  // convention every other pill on this calendar already uses).
+  function rsvFindWeekHourCell(dateStr, timeStr) {
+    const d = drParseDate(dateStr);
+    const weekView = document.querySelector('[data-screen-panel="reservations"] [data-comm-cal-view="week"]');
+    if (!d || !weekView) return null;
+    const head = Array.from(weekView.querySelectorAll('.rmr-comm-cal__daycol-head'))
+      .find((h) => h.textContent.trim().endsWith(`, ${d.getDate()}`));
+    if (!head) return null;
+    const col = head.style.gridColumn;
+    const m = timeStr.trim().match(/^(\d{1,2}):(\d{2})\s*(AM|PM)/i);
+    if (!m) return null;
+    let hour = Number(m[1]) % 12;
+    if (m[3].toUpperCase() === 'PM') hour += 12;
+    const row = hour - 11 + 2; // gutter starts at 11 AM (row 2) through 8 PM (row 11)
+    if (row < 2 || row > 11) return null;
+    return weekView.querySelector(`.rmr-comm-cal__daycol-hour[style="grid-column:${col}; grid-row:${row}"]`);
+  }
+  // Builds one calendar pill, shared by the Month/Week views above — a
+  // "mine" pill (own reservation, amenity-tinted, opens Reservation Details)
+  // or an "other" one (someone else's, white/bordered, not interactive), per
+  // standing instruction.
+  function rsvBuildEventPill(amenity, date, time, status, mine, block) {
+    const el = document.createElement(mine ? 'button' : 'div');
+    el.className = `rmr-rsv-event ${mine ? 'rmr-rsv-event--mine' : 'rmr-rsv-event--other'}${block ? ' rmr-rsv-event--block' : ''}`;
+    if (mine) { el.type = 'button'; el.dataset.action = 'open-reservation-details'; }
+    el.dataset.rsvAmenity = amenity;
+    el.dataset.rsvDate = date;
+    el.dataset.rsvStatus = status;
+    el.dataset.rsvTime = time;
+    el.innerHTML = `<span class="rmr-comm-cal__event-time">${time}</span><span class="rmr-comm-cal__event-label">${amenity}</span>`;
+    return el;
+  }
+  const newres1Backdrop = document.querySelector('[data-modal-backdrop="new-reservation-1"]');
+  const newres3Backdrop = document.querySelector('[data-modal-backdrop="new-reservation-3"]');
+  // New Reservation — Date field (shared date picker in single-date mode)
+  // drives the side panel's day heading; the panel's ‹ › step the same
+  // date by one day, so the field and heading always agree.
+  const rsvDateField = newres1Backdrop ? newres1Backdrop.querySelector('[data-rsv-date-field]') : null;
+  const rsvSideTitle = newres1Backdrop ? newres1Backdrop.querySelector('[data-rsv-side-title]') : null;
+  const RSV_WEEKDAY_SHORT = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const RSV_MONTH_SHORT = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  function rsvSetFormDate(date) {
+    if (!rsvDateField || !date) return;
+    const span = rsvDateField.querySelector('span');
+    if (span) span.textContent = drFormatDate(date, false);
+    if (rsvSideTitle) rsvSideTitle.textContent = `${RSV_WEEKDAY_SHORT[date.getDay()]}, ${RSV_MONTH_SHORT[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+  }
+  // Select Amenity lists the same amenities as the calendar; picking one
+  // swaps in that amenity's own description, fee and image (RSV_AMENITIES,
+  // shared with Reservation Details) and recolors the side panel's
+  // schedule to that amenity's display color.
+  const rsvAmenitySelect = newres1Backdrop ? newres1Backdrop.querySelector('[data-rsv-amenity-select]') : null;
+  if (rsvAmenitySelect) {
+    const rsvSide = newres1Backdrop.querySelector('.rmr-rsv-side');
+    rsvAmenitySelect.querySelectorAll('[data-dropdown-option]').forEach((option) => {
+      option.addEventListener('click', () => {
+        const name = option.textContent.trim();
+        const info = RSV_AMENITIES[name];
+        if (!info) return;
+        const desc = newres1Backdrop.querySelector('[data-rsv-form-description]');
+        const fee = newres1Backdrop.querySelector('.rmr-rsv-fee-row strong');
+        const img = newres1Backdrop.querySelector('[data-rsv-form-image]');
+        if (desc) desc.textContent = info.description;
+        if (fee) fee.textContent = info.fee;
+        if (img) img.src = info.image;
+        if (rsvSide) rsvSide.dataset.rsvAmenity = name;
+      });
+    });
+  }
+  if (rsvDateField) {
+    rsvDateField.addEventListener('rmr-date-change', (e) => rsvSetFormDate(e.detail.date));
+    newres1Backdrop.querySelectorAll('[data-rsv-day-step]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const current = drParseDate(rsvDateField.querySelector('span').textContent) || new Date();
+        rsvSetFormDate(new Date(current.getFullYear(), current.getMonth(), current.getDate() + Number(btn.dataset.rsvDayStep)));
+      });
+    });
+  }
+  const rsvUpcomingPanel = document.querySelector('[data-rsv-panel="upcoming"]');
+  const rsvSubmitBtn = document.querySelector('[data-modal-target="new-reservation-3"]');
+  if (rsvSubmitBtn && newres1Backdrop && rsvUpcomingPanel) {
+    rsvSubmitBtn.addEventListener('click', () => {
+      const amenityEl = newres1Backdrop.querySelector('[data-dropdown-value]');
+      const amenity = (amenityEl && amenityEl.textContent.trim()) || 'Theater Room';
+      const dateEl = newres1Backdrop.querySelector('.rmr-rsv-date-btn span');
+      const date = (dateEl && dateEl.textContent.trim()) || '10/15/26';
+      const startEl = newres1Backdrop.querySelector('[data-rsv-field="start"]');
+      const start = (startEl && (startEl.value ?? startEl.textContent).trim()) || '2:30 PM';
+      const endEl = newres1Backdrop.querySelector('[data-rsv-field="end"]');
+      const end = (endEl && (endEl.value ?? endEl.textContent).trim()) || rsvEndTime(start);
+      const feeEl = newres1Backdrop.querySelector('.rmr-rsv-fee-row strong');
+      const fee = (feeEl && feeEl.textContent.trim()) || '$15.00';
+
+      const parsedDate = drParseDate(date);
+      const metaDate = parsedDate ? `${RSV_WEEKDAY_ABBR[parsedDate.getDay()]}, ${AP_MONTH_ABBR[parsedDate.getMonth()]} ${parsedDate.getDate()}` : date;
+      const iconColor = RSV_ITEM_ICON_COLOR[amenity] || 'green';
+
+      const item = document.createElement('button');
+      item.type = 'button';
+      item.className = 'rmr-rsv-item';
+      item.dataset.action = 'open-reservation-details';
+      item.dataset.rsvAmenity = amenity;
+      item.dataset.rsvDate = date;
+      item.dataset.rsvStatus = 'Pending';
+      item.dataset.rsvTime = start;
+      item.innerHTML = `
+        <span class="rmr-rsv-item__icon rmr-rsv-item__icon--${iconColor}">
+          <img alt="" height="20" src="assets/icons/reservations/calendar-month.svg" width="20" />
+        </span>
+        <span class="rmr-rsv-item__details">
+          <span class="rmr-rsv-item__title">Reservation: ${amenity}</span>
+          <span class="rmr-rsv-item__meta">${metaDate} @ ${start}</span>
+          <span class="rmr-rsv-lozenge rmr-rsv-lozenge--yellow">Pending</span>
+        </span>
+        <img alt="" class="rmr-rsv-item__more" height="20" src="assets/icons/reservations/more-vert.svg" width="20" />
+      `;
+      rsvBindItem(item);
+      rsvUpcomingPanel.insertBefore(item, rsvUpcomingPanel.firstChild);
+
+      // Reflect the new reservation on the calendar too, not just the "My
+      // Reservations" list — Month view always (a "mine" pill dropped into
+      // that date's cell), plus Week view when its currently-displayed week
+      // happens to include that date. Day view is a single fixed date in
+      // this prototype and isn't kept in sync, same documented scope limit
+      // as Month/Week's own decorative navigation.
+      const monthCell = rsvFindMonthCell(date);
+      if (monthCell) {
+        const pill = rsvBuildEventPill(amenity, date, start, 'Pending', true, false);
+        rsvBindItem(pill);
+        const moreTag = monthCell.querySelector('.rmr-comm-cal__more');
+        if (moreTag) monthCell.insertBefore(pill, moreTag);
+        else monthCell.appendChild(pill);
+      }
+      const weekCell = rsvFindWeekHourCell(date, start);
+      if (weekCell) {
+        const pill = rsvBuildEventPill(amenity, date, start, 'Pending', true, true);
+        rsvBindItem(pill);
+        weekCell.appendChild(pill);
+      }
+
+      // Step 3's confirmation reflects what was actually picked, not a
+      // hardcoded Theater Room/10/15/26 example.
+      if (newres3Backdrop) {
+        const rows = newres3Backdrop.querySelectorAll('.rmr-pmt-success__row-value');
+        if (rows[0]) rows[0].textContent = amenity;
+        if (rows[1]) rows[1].textContent = date;
+        if (rows[2]) rows[2].textContent = `${start} - ${end}`;
+        if (rows[3]) rows[3].textContent = fee;
+      }
+    });
+  }
 
   // Amenities filter (reservations.html's calendar) — hides the individual
   // event pill, not its whole day cell, so a day keeps showing its other
@@ -1900,9 +2416,52 @@ document.addEventListener('DOMContentLoaded', () => {
       const startLabel = minutesToLabel(startMin);
       const endLabel = minutesToLabel(startMin + durationMin);
       if (label) label.textContent = `${startLabel} - ${endLabel}`;
-      if (startField) startField.textContent = startLabel;
-      if (endField) endField.textContent = endLabel;
+      if (startField) startField.value = startLabel;
+      if (endField) endField.value = endLabel;
     };
+
+    // Start/End Time are real editable inputs, two-way bound to this block:
+    // typing a time (e.g. "4:15 PM", "4pm", "16:15") and pressing Enter or
+    // leaving the field moves the block to match — Start keeps the same
+    // duration, End changes it (min 30 minutes) — clamped to the day's
+    // schedule and snapped to 15 minutes. Anything unparseable just
+    // reverts to the current time.
+    const labelToMinutes = (text) => {
+      const m = String(text).trim().toLowerCase().match(/^(\d{1,2})(?::(\d{2}))?\s*(am|pm|a|p)?$/);
+      if (!m) return null;
+      let h = parseInt(m[1], 10);
+      const min = m[2] ? parseInt(m[2], 10) : 0;
+      if (min > 59) return null;
+      if (m[3]) {
+        if (h < 1 || h > 12) return null;
+        const pm = m[3].startsWith('p');
+        h = (h % 12) + (pm ? 12 : 0);
+      } else if (h > 23) return null;
+      return h * 60 + min;
+    };
+    const gridEndMin = gridStartMin + colHeightPx / pxPerMin;
+    const snapMinutes = (v) => Math.round(v / snapMin) * snapMin;
+    const commitField = (which) => {
+      const field = which === 'start' ? startField : endField;
+      const parsed = labelToMinutes(field.value);
+      const startMin = parseInt(slot.dataset.startMin, 10);
+      const durationMin = parseInt(slot.dataset.durationMin, 10);
+      if (parsed !== null) {
+        if (which === 'start') {
+          const newStart = Math.min(Math.max(snapMinutes(parsed), gridStartMin), gridEndMin - durationMin);
+          slot.dataset.startMin = newStart;
+        } else {
+          const newEnd = Math.min(Math.max(snapMinutes(parsed), startMin + minDurationMin), gridEndMin);
+          slot.dataset.durationMin = newEnd - startMin;
+        }
+      }
+      render();
+    };
+    [['start', startField], ['end', endField]].forEach(([which, field]) => {
+      if (!field) return;
+      field.addEventListener('change', () => commitField(which));
+      field.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); field.blur(); } });
+    });
 
     slot.addEventListener('pointerdown', (e) => {
       if (e.target === resizeTop || e.target === resizeBottom) return;
@@ -1997,6 +2556,45 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   });
+
+  // Attachment preview (node 2896:14311, "3.2.3 Add Service Issue -
+  // Attachment Expanded") — clicking any photo thumbnail anywhere in the app
+  // opens it full-size in one shared "Attachment" overlay, stacked on top of
+  // whatever overlay the thumbnail lives in. Delegated so it also covers
+  // thumbnails built later via innerHTML (Issue Details, messages, etc.).
+  const RMR_PREVIEW_IMG_SELECTOR = '.rmr-svc-attach__thumb-img, .rmr-svc-comments__attachments img';
+  let rmrPreviewBackdrop = null;
+  function rmrOpenImagePreview(src) {
+    if (!rmrPreviewBackdrop) {
+      rmrPreviewBackdrop = document.createElement('div');
+      rmrPreviewBackdrop.className = 'rmr-modal-backdrop';
+      rmrPreviewBackdrop.dataset.modalBackdrop = 'attachment-preview';
+      rmrPreviewBackdrop.hidden = true;
+      rmrPreviewBackdrop.innerHTML = `
+        <div class="rmr-modal rmr-modal--attachment" role="dialog" aria-modal="true" aria-labelledby="modal-attachment-preview-title" data-component="Overlays">
+          <div class="rmr-modal__header" data-component="Header">
+            <h2 class="rmr-modal__title" id="modal-attachment-preview-title">Attachment</h2>
+            <button class="rmr-modal__close" type="button" data-action="close-modal"><img src="assets/icons/payments/mp-close.svg" alt="Close" width="24" height="24" /></button>
+          </div>
+          <img class="rmr-attachment-preview__img" data-component="Template" alt="" />
+        </div>`;
+      rmrPreviewBackdrop.addEventListener('click', (e) => {
+        if (e.target === rmrPreviewBackdrop || e.target.closest('[data-action="close-modal"]')) closeModal(rmrPreviewBackdrop);
+      });
+      document.body.appendChild(rmrPreviewBackdrop);
+    }
+    rmrPreviewBackdrop.querySelector('.rmr-attachment-preview__img').src = src;
+    // Re-append so it always stacks above any overlay opened since.
+    document.body.appendChild(rmrPreviewBackdrop);
+    rmrPreviewBackdrop.hidden = false;
+  }
+  document.addEventListener('click', (e) => {
+    const img = e.target.closest(RMR_PREVIEW_IMG_SELECTOR);
+    if (!img || !img.getAttribute('src')) return;
+    e.preventDefault();
+    e.stopPropagation();
+    rmrOpenImagePreview(img.src);
+  }, true);
 
   // Add Service Issue overlay — removing an attached example file (each
   // thumbnail's own x badge) just removes that thumbnail from the DOM;
@@ -2696,8 +3294,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const apStatusDesc = document.querySelector('[data-ap-status-desc]');
     const apScheduledCard = document.querySelector('[data-ap-scheduled-card]');
     const apEditCard = document.querySelector('[data-ap-edit-card]');
-    const apTerms = document.querySelector('[data-ap-page-terms]');
-    const apSave = document.querySelector('[data-ap-page-save]');
+    const apPageFooter = document.querySelector('[data-ap-page-footer]');
 
     const showDisabled = () => {
       apPageRoot.dataset.apHasSchedule = 'false';
@@ -2706,6 +3303,7 @@ document.addEventListener('DOMContentLoaded', () => {
       apStatusDesc.hidden = false;
       apScheduledCard.hidden = true;
       apEditCard.hidden = true;
+      if (apPageFooter) apPageFooter.hidden = true;
     };
     const showScheduled = () => {
       apPageRoot.dataset.apHasSchedule = 'true';
@@ -2714,6 +3312,7 @@ document.addEventListener('DOMContentLoaded', () => {
       apStatusDesc.hidden = true;
       apScheduledCard.hidden = false;
       apEditCard.hidden = true;
+      if (apPageFooter) apPageFooter.hidden = true;
     };
     const showEdit = () => {
       apToggle.checked = true;
@@ -2721,19 +3320,59 @@ document.addEventListener('DOMContentLoaded', () => {
       apStatusDesc.hidden = true;
       apScheduledCard.hidden = true;
       apEditCard.hidden = false;
+      if (apPageFooter) apPageFooter.hidden = false;
     };
 
     if (rmrIsAutopayScheduled()) showScheduled();
     else showDisabled();
 
+    // Re-run on every visit (not just this DOMContentLoaded pass) — this
+    // panel stays in the DOM, hidden, between visits in the single-page
+    // prototype, so it otherwise keeps showing whatever state was true the
+    // first time it loaded even after AutoPay was scheduled/cancelled
+    // elsewhere (Dashboard hero, Payments card). Called by the nav script's
+    // goto('autopay'), same pattern as window.rmrApplyDocumentSign. Lands on
+    // "disabled" (never the edit/setup form) when nothing is scheduled — the
+    // form only opens once the user explicitly flips the toggle on.
+    window.rmrSyncAutopayPage = () => {
+      if (rmrIsAutopayScheduled()) showScheduled();
+      else showDisabled();
+    };
+
+    // Turning off needs confirmation (see the "Turn off Autopay?" modal
+    // below) — the checkbox itself flips immediately on click, so a Cancel
+    // has to flip it back rather than just leaving the modal open.
+    const apDisableConfirm = document.querySelector('[data-modal-backdrop="autopay-disable-confirm"]');
     apToggle.addEventListener('change', () => {
       if (apToggle.checked) {
         if (apPageRoot.dataset.apHasSchedule === 'true') showScheduled();
         else showEdit();
+      } else if (apDisableConfirm) {
+        apDisableConfirm.hidden = false;
       } else {
         rmrSetAutopayScheduled(false);
+        rmrSyncAutopayBanners(false);
         showDisabled();
       }
+    });
+
+    document.querySelector('[data-action="ap-disable-cancel"]')?.addEventListener('click', () => {
+      apToggle.checked = true;
+      if (apDisableConfirm) apDisableConfirm.hidden = true;
+    });
+
+    // Dismissing via the backdrop (rather than an explicit Cancel/Turn Off)
+    // is the same as cancelling — otherwise the toggle would sit unchecked
+    // while the page still shows the enabled/edit state underneath.
+    apDisableConfirm?.addEventListener('click', (e) => {
+      if (e.target === apDisableConfirm) apToggle.checked = true;
+    });
+
+    document.querySelector('[data-action="ap-disable-confirm"]')?.addEventListener('click', () => {
+      rmrSetAutopayScheduled(false);
+      rmrSyncAutopayBanners(false);
+      showDisabled();
+      if (apDisableConfirm) apDisableConfirm.hidden = true;
     });
 
     document.querySelector('[data-action="ap-page-edit"]')?.addEventListener('click', showEdit);
@@ -2743,15 +3382,61 @@ document.addEventListener('DOMContentLoaded', () => {
       else showDisabled();
     });
 
-    if (apTerms && apSave) {
-      apTerms.addEventListener('change', () => { apSave.disabled = !apTerms.checked; });
-    }
-
     document.querySelector('[data-action="ap-page-save"]')?.addEventListener('click', () => {
       rmrSetAutopayScheduled(true);
+      rmrSyncAutopayBanners(true);
       showScheduled();
     });
   }
+
+  // Community — Directory Overlay's "Property" dropdown. Riverview
+  // Apartments and Safe & Secure Storage are two real, separate contact
+  // lists (every row tagged [data-dir-property]); picking one filters the
+  // table down to just its rows and updates the "Showing X of X Contacts"
+  // footer, same live-count approach as the Leases & Documents property
+  // filter below.
+  document.querySelectorAll('[data-modal-backdrop="directory"] [data-dropdown-option]').forEach((option) => {
+    option.addEventListener('click', () => {
+      const modal = option.closest('.rmr-modal');
+      const selected = option.textContent.trim();
+      const rows = modal.querySelectorAll('[data-dir-property]');
+      rows.forEach((row) => { row.hidden = row.dataset.dirProperty !== selected; });
+      const footer = modal.querySelector('.rmr-comm-modal-footer');
+      if (footer) {
+        const shown = modal.querySelectorAll(`[data-dir-property="${CSS.escape(selected)}"]`).length;
+        footer.textContent = `Showing ${shown} of ${shown} Contacts`;
+      }
+    });
+  });
+
+  // Community — Helpful Resources Overlay's property tabs. Same idea as the
+  // Directory dropdown above, but as tabs (real underline Tabs component)
+  // instead of a dropdown, and the HOA Files folder's own expand/collapse
+  // state (data-doc-tree-expanded) has to be respected when a row's parent
+  // folder is re-shown rather than always revealing it.
+  document.querySelectorAll('[data-action="hr-tab"]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const modal = btn.closest('.rmr-modal');
+      const target = btn.dataset.hrTarget;
+      modal.querySelectorAll('[data-action="hr-tab"]').forEach((b) => {
+        const selected = b === btn;
+        b.classList.toggle('rmr-acct-tab--selected', selected);
+        b.setAttribute('aria-selected', String(selected));
+      });
+      modal.querySelectorAll('[data-hr-panel]').forEach((row) => {
+        const match = row.dataset.hrPanel === target;
+        const parentId = row.dataset.docTreeParent;
+        const parent = parentId ? modal.querySelector(`[data-doc-tree-id="${parentId}"]`) : null;
+        const parentExpanded = !parent || parent.dataset.docTreeExpanded === 'true';
+        row.hidden = !match || !parentExpanded;
+      });
+      const footer = modal.querySelector('.rmr-comm-modal-footer');
+      if (footer) {
+        const shown = modal.querySelectorAll(`[data-hr-panel="${CSS.escape(target)}"][data-hr-file]`).length;
+        footer.textContent = `Showing ${shown} of ${shown} Files`;
+      }
+    });
+  });
 
   // Document Center — Leases & Documents tree. Both the property level and
   // the lease-period level toggle collapsed/expanded (same real chevron

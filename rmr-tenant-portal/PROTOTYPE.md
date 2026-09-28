@@ -213,11 +213,17 @@ Sourced from a fourth Figma file (`NA7fceoWIE1dczLAJjYjSC`, "RMR UI Rewrite — 
 
 **Week/Day calendar views** (nodes `2036:3290` / `2046:3704`) use the same flexbox-hour-cell simplification as Community's own Week/Day views (real hour range 11 AM–8 PM, one flex column per day) rather than the source's own absolute per-event pixel offsets — same precedent, same reasoning.
 
-**Only one calendar event across the whole page opens a real overlay**: the Month view's Oct 24 "Theater Room" pill (green/`--status-success`, the only `<button>` among the sourced reservation instances) opens the real Pending Reservation Details. Every other calendar pill — including the Week/Day views' own Wed-17 "Clubhouse Room 1" instances, which the source itself marks as an `<a>` — is fake-submit, since no sourced Reservation Details content exists for anything but the Theater Room (Pending) and a second, unrelated Theater Room (Denied) reservation. Same "only one sourced example is wired, everything else fake-submits" precedent as Community's own Oct 15 Doggie Hangout.
+**Only one reservation across the whole page opens a real overlay**: the Oct 24 "Theater Room" pill/list item (green/`--status-success`) opens the real Pending Reservation Details, reused verbatim as a real `<button>` everywhere it now appears (sidebar, Month, and — since the Week view's default range was moved to include it, see below — Week too). Every other calendar pill is fake/read-only, since no sourced Reservation Details content exists for anything but the Theater Room (Pending) and a second, unrelated Theater Room (Denied) reservation. Same "only one sourced example is wired, everything else fake-submits" precedent as Community's own Oct 15 Doggie Hangout.
+
+**Current-date ("today") indicator — Oct 19** (matching this prototype's other "today" references, e.g. Architectural Requests' date-capping — see below), on both calendars and all views, per direct instruction. No sourced mock shows a today state at all; the first pass tried a separate filled-circle badge, but per direct correction the existing "selected day" look (`.rmr-comm-cal__cell--selected` in Month, `.rmr-comm-cal__daycol-head/hour--selected` in Week/Day — pale tint + thin blue border) IS the intended today treatment, simply moved onto the 19th instead of invented from scratch. The 15th (Month's original sourced "selected" cell, tied to its own Theater Room/Doggie Hangout content) goes back to being a plain, unselected cell — its event content stays put, only the highlight moved.
+
+**Week/Day views' default range moved to include the 19th** (Sun 18–24 / Mon the 19th, from the sourced Oct 11–17 / Sat the 17th), per direct instruction so "today" is actually visible there. Content for the new range is real, just relocated from cells that were always real in Month view but previously out of Week/Day's shown range: Oct 20's Movie Night + Board Meeting (Community) and Clubhouse Room 1 + Theater Room "other" bookings (Reservations) now stack in one hour cell — using `grid-row: <n> / span 2` on that cell (borrowing the empty 8 PM row beneath) rather than the usual single-row placement, since two `--block` pills (each a 60px-min-height, fill-the-cell component) don't fit one 64px row; and Oct 24's Theater Room Pending reservation (previously only reachable from Month/sidebar) now also appears in Week view, as the same real `<button>` described above. Community's Week view keeps its existing whole-column-disabled treatment on Sunday (now the 18th, still no bookable hours) since that's a weekday rule, not tied to the specific date.
 
 **Reservation Details — two real states**, both full overlays (not a single overlay with swapped content), matching the two separate sourced frames exactly:
 - **Pending** (node `2027:2947`, "2.0.6 Reservation Details"): Theater Room, 10/24/25, 7–8 PM, `$15.00` + "View Fee Breakdown", an Amenity Images photo, Notes ("Party of 15"), one attachment (`reservation_form.docx`), and a real "Cancel Reservation" footer button. Reachable from the sidebar's "Theater Room" (Pending) item and from the Month view's Oct 24 pill.
 - **Denied** (node `2059:459901`, "2.0.7 Reservation Details"): Theater Room, 10/13/25, 7–8 PM, a real "Reason" field ("The clubhouse is getting painted and is no longer available during this time."), no Amenity Images, a much longer Notes paragraph, the same attachment, and **no footer button** (a resolved/read-only state — confirmed by re-checking the node directly, not assumed). Both use the real dot-style "Status Lozenge" component (`.rmr-rsv-status`, node `12:1278` in the design-system file — Yellow dot `#F5B619` for Pending, Red dot `--status-error` for Denied), distinct from the sidebar's own filled-background "Lozenge" badges (`.rmr-rsv-lozenge`).
+
+**Cancel Reservation is real**, not fake-submit: the Pending/Approved Reservation Details footer button opens a real confirmation overlay (sourced separately from the same Figma file, node `2052:458919`, "Cancel Reservation"), reusing the existing "Delete confirmation modal" component wholesale (`.rmr-acct-confirm`, same one behind Account Settings' "Delete Account") rather than building a new one — icon, title ("Cancel this reservation?"), body copy, and the Keep Reservation/Cancel Reservation button pair all came straight off that node. Confirming actually cancels: the "My Reservations" item moves from Upcoming to Past Requests with a gray "Canceled" Lozenge, and every matching calendar pill (Month/Week/Day) stays in place per instruction but gets "Canceled" prefixed onto its time label and switches to the same muted `--inactive` treatment already used for the Denied pill — same "prefix the status onto the time" convention the Denied pill already established, not a new one invented for this.
 
 **Past Requests tab — one sourced item, one invented.** Per direct instruction to "add some Past requests," and since the Denied Theater Room reservation above (10/13/25) is real, sourced content that never appears anywhere in the Upcoming list or calendar, it was used as-is for the tab's first entry — genuinely sourced, not invented, just relocated to the tab it actually belongs in. A second entry ("Clubhouse Room 1", Fri Sep 26, a gray "Completed" Lozenge) was invented to make the tab read as more than one item, per instruction; it's fake-submit only, since no sourced "Completed" detail view exists to open. The gray Lozenge fill (`--color-neutrals-400: #dbe1e5`) and the red one (`--color-red-200: #f7d7d7`) both came from the real "Lozenge" component's Gray/Red `fill=yes` variants (design-system file, node `482:944` / `482:948`) — not picked arbitrarily.
 
@@ -1693,3 +1699,86 @@ a more typical rating-icon size. The sidebar's own "Polls" glyph reused `assets/
 (already present in the repo, unused until now) — confirmed an exact path-data match for this frame's
 own icon — inlined with `fill="currentColor"` per the standing sidebar-icon pattern rather than
 referenced as an `<img>`.
+
+### Correction: Submitting an Architectural Request or a New Reservation now actually creates a record
+
+Same gap as the earlier Service Issues correction above, found in two more places: the Architectural
+Request "Submit" button only ever switched to the static `arq-submitted` confirmation modal, and the
+New Reservation wizard's Step 2 "Submit" only ever switched to Step 3's confirmation — neither one read
+its own form fields, touched its register/list, or added an entry to the map its own Details overlay
+reads from, so a submitted request/reservation vanished once the confirmation modal closed instead of
+becoming something you could open again.
+
+Fixed in `app.js`, following the same pattern as Service Issues' own fix: Architectural Requests'
+Submit now reads the Add Request form's real Request/Description values, prepends a real row (today's
+date, Pending) to the My Requests table, and adds a matching `ARQ_REQUESTS['custom-<n>']` entry so the
+new row opens the same real Request Details overlay as any other (`arqBindDetailsRow`, factored out of
+the existing per-row binding so both the initial rows and this new one share one implementation); the
+My Requests tab count and table footer update to match, and the form resets to blank afterward.
+Reservations' Submit now reads Step 1's real Amenity/Date/Start Time/End Time/Fee, prepends a real "My
+Reservations" item (status Pending, reusing `rsvBindItem`) so it opens the same real Reservation
+Details overlay as any other, and Step 3's confirmation shows those real values instead of the
+original hardcoded Theater Room/10/15/26/5-6pm example. The Reservation Details overlay itself still
+only ever renders a fixed 1-hour block from a single start time (see `rsvEndTime` above) — an existing
+simplification this fix reuses rather than extends, so a reservation held to a longer duration in the
+picker still displays as 1 hour once saved, same as every other item in the list.
+
+### Correction: Calendar pills now distinguish the resident's own reservations from other residents', and reflect My Reservations
+
+Per standing instruction: reservations made by other residents should show a white background with a
+border in the amenity's own display color, and shouldn't be clickable; the resident's own reservations
+should be filled with the amenity's display color, matching that amenity's icon in the My Reservations
+list beside the calendar; and a Denied/Canceled reservation of the resident's own should appear grayed
+out with the status word prefixed to its time. None of that existed before — every `.rmr-rsv-event`
+pill used the same two ad hoc modifiers (`--pending` = yellow fill regardless of amenity, `--accent` =
+a plain blue border for Clubhouse Room 1 with no such treatment for Theater Room), which conflated
+status with amenity and didn't distinguish ownership at all — every pill was equally clickable
+regardless of whose reservation it actually was.
+
+Replaced both modifiers in `rmr.css` with the real rule set: `[data-rsv-amenity="…"]` sets
+`--rsv-amenity-color`/`--rsv-amenity-tint` per amenity (green for Theater Room, yellow for Clubhouse
+Room 1 — the same two custom properties, and the same amenity-to-color mapping, the New Reservation
+side panel already used for its own "booked by someone else" vs. "yours" slots above, just generalized
+here since this calendar shows both amenities side by side rather than one at a time), and
+`.rmr-rsv-event--mine`/`--other`/`--inactive` apply the fill/border/interactivity rules on top. In
+`Full-Product.html`, every pill across the Month/Week/Day views was hand-classified against the actual
+My Reservations list (`--mine` for the two that are really the signed-in resident's own — Clubhouse
+Room 1 10/17 and Theater Room 10/24, both corrected from a stray "Pending" to the real "Approved"/
+matching status — `--other` for the rest), and a `--inactive` Denied example (Theater Room, 10/13,
+matching the My Reservations "Past Requests" tab's own Denied entry) was added to the 13th so the
+grayed-out/prefixed-status rule has a real instance to see, since none of the existing pills were ever
+Denied/Canceled. "Other" pills lost their `data-action`/button semantics entirely (plain `<div>`s) so
+they're inert by construction rather than merely unstyled — the existing `open-reservation-details`
+binding only ever queries `[data-action="open-reservation-details"]`, so no separate "skip these"
+branch was needed there.
+
+Submitting a new reservation now also drops a matching `--mine` pill onto the calendar itself, not just
+the My Reservations list: `rsvFindMonthCell`/`rsvFindWeekHourCell` (both scoped under
+`[data-screen-panel="reservations"]`, since Community's own separate calendar earlier in the DOM has
+the same `[data-comm-cal-view]` structure and an unscoped lookup found it there first the first time
+this was implemented) locate that date's Month-view cell and, if the currently-displayed Week view
+happens to include it, its hour cell too — both via `rsvBuildEventPill`, sharing `rsvBindItem` with
+every other pill. Day view is a single fixed date here and isn't kept in sync, same "decorative
+navigation" scope limit the Month/Week views' own Prev/Next controls already carry.
+
+### QA pass — Full Product (2026-09-24)
+
+Clicked through all 12 nav pages and the 6 off-nav screens (Account, Payment Settings/Methods, AutoPay, Document Sign, Verification Sent), including about 160 controls inside 32 overlays, at desktop and tablet widths. Fixed:
+- **The tab title got stuck after Sign Document.** `showPanel` in `templates/Full-Product.html` now resets `document.title` on every panel switch.
+- **Sign Document showed the wrong document on a second visit.** After viewing a policy doc (Parking or Pet), opening the Lease Renewal letter still showed the policy. `rmrApplyDocumentSign` in `app.js` now saves the lease letter's hero title, body, and Sign target before any policy doc overwrites them, and restores them.
+- **Browser Back/Forward did nothing.** History entries now record their panel, and a `popstate` handler brings that panel back.
+- **`--component-input-default` was never defined.** It was used with a fallback but missing from `:root`. It is now defined from the real Figma token `Component/Input-default` (#ffffff).
+
+Open: `--spacing-lg` (20px fallback, used by Service Issues' scheduling UI and the Reservations side panel) has no matching `Spacing/*` token in the Figma library, whose scale jumps md 16 → xl 24. It is left as-is pending confirmation in Zeplin.
+
+## Attachment preview overlay (shared)
+
+Sourced from file `41cZMQjGcwZBmHWS8NggER`, node `2896:14311` ("3.2.3 Add Service Issue - Attachment Expanded"). Clicking any photo thumbnail opens that photo full-size in one shared "Attachment" overlay. That covers every `.rmr-svc-attach__thumb-img` and every image inside `.rmr-svc-comments__attachments` (Service Issues, Architectural Requests, Violations, Notes, Reservations, and chat messages). The overlay is 552×445 (`.rmr-modal--attachment`), and the image fills the body with `object-fit: cover` and an 8px radius. It is built lazily by `app.js` and re-appended to `<body>` each time it opens, so it always sits on top of whatever overlay the thumbnail belongs to. That gives two stacked Ghosting scrims, matching the mock. Closing it (the X or a click on the backdrop) closes only the preview. File-type attachments (PDF/DOCX tiles) and every non-attachment image (icons, avatars, logos, hero photos) are deliberately left out.
+
+**Violation Image (LANDSCAPE row):** `assets/images/violations/overgrown-lawn.jpg` is a free stock photo from Pexels (Pexels License), used as a stand-in because the Figma mock's real photo isn't available: https://www.pexels.com/photo/charming-cottage-with-overgrown-garden-and-vintage-awning-36349626/ (800px width). It replaces the earlier stand-in, which reused Architectural Requests' `attach-1.png`.
+
+**"Paint the door" attachment:** `assets/images/architectural-requests/front-door.jpg` is a free Pexels stock photo (Pexels License), used as a stand-in: https://www.pexels.com/photo/facade-of-a-house-with-yellow-door-16726604/ (800px width). It replaces the two earlier stand-ins (`attach-1.png`/`attach-2.png`) in both Request Details and Vote Details.
+
+**Date Range — removing one date:** To remove a single date, highlight it (drag across it or double-click it) and press Backspace or Delete. You can also click the date so its picker opens, then press Backspace or Delete. Only that date is removed. Its side of the field shows blank, with no "Start date"/"End date" placeholder, keeps its width, and filters open-ended until a new date is picked: on or after the start, or on or before the end. The placeholders return only when both dates are empty, and then the date filter is off entirely. The picker's own Clear button still clears both dates. This lives in `drSetField` plus a keydown handler in `app.js`, shared by every Date Range field on both tracks.
+
+**Clubhouse Room 1 image:** `assets/images/reservations/clubhouse.jpg` is a free Pexels stock photo (Pexels License), used as a stand-in: https://www.pexels.com/photo/bar-counter-and-stools-in-spacious-room-17158667/ (800px width). It replaces `room-1.png` in `RSV_AMENITIES`, which feeds both New Reservation's Amenity Images and Reservation Details.

@@ -72,6 +72,7 @@
   --component-button-accent: #5597e7;
   --component-selector: #f6fafe; /* selected-card background, e.g. Make a Payment's selector cards */
   --component-button-disabled: #82b3ed;
+  --component-input-default: #ffffff;
   --component-input-disabled: #f1f3f5; /* same hex as --component-footer, kept as its own real token per that component's own source value */
   --component-footer: #f1f3f5; /* other-party comment bubble background, Issue Details' Messages panel */
 
@@ -896,6 +897,12 @@ button {
 
 .rmr-modal--wide { width: 624px; }
 
+/* Attachment preview (node 2896:14311) — fixed 552x445 overlay, image fills
+   the remaining height below the header (object-fit: cover, 8px radius). */
+.rmr-modal--attachment { width: 552px; height: 445px; }
+.rmr-attachment-preview__img { flex: 1; min-height: 0; width: 100%; object-fit: cover; border-radius: var(--spacing-xs); background: var(--background-primary); display: block; }
+.rmr-svc-attach__thumb-img, .rmr-svc-comments__attachments img { cursor: pointer; }
+
 .rmr-modal__header {
   display: flex;
   align-items: center;
@@ -1154,7 +1161,9 @@ textarea:-webkit-autofill:focus {
   z-index: 30;
   max-height: 240px;
   overflow-y: auto;
-  padding-right: var(--spacing-xs);
+  /* No reserved scrollbar gutter/padding: short menus (most of them) would
+     otherwise show an empty strip beside every option's selected/hover fill. */
+  scrollbar-gutter: auto;
   background: var(--background-primary);
   border: 1px solid var(--border-border);
   border-radius: var(--spacing-xs);
@@ -1823,6 +1832,7 @@ textarea:-webkit-autofill:focus {
 .rmr-pmm-type-card__label { margin: 0; font-size: var(--font-size-md); font-weight: var(--font-weight-bold); color: var(--text-primary); }
 
 .rmr-pmm-footer { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+.rmr-pmm-footer[hidden] { display: none; }
 .rmr-pmm-footer__actions { display: flex; align-items: center; gap: var(--spacing-md); }
 
 .rmr-btn[disabled] { background: var(--component-button-disabled); cursor: not-allowed; }
@@ -2659,32 +2669,36 @@ tr.rmr-pay-table__empty-row td.rmr-pay-table__empty {
 .rmr-acct-field__label { font-size: var(--font-size-sm); color: var(--text-secondary); letter-spacing: 0.28px; }
 .rmr-acct-field__value { margin: 0; font-size: var(--font-size-sm); color: var(--text-primary); letter-spacing: 0.28px; }
 
-/* Kebab ("more_vert") menu next to Account Details — same floating-card
-   shape as the header's account menu, positioned off the kebab button
-   instead of the avatar. */
+/* Kebab ("more_vert") menu next to Account Details — same menu styling as
+   every other dropdown in the app (.rmr-dropdown__menu / __option):
+   1px border, 8px radius, dropdown shadow, 40px rows, primary text. */
 .rmr-acct-kebab { position: relative; }
 .rmr-acct-kebab-menu {
   position: absolute;
-  top: calc(100% + var(--spacing-xxs));
+  top: calc(100% + 4px);
   right: 0;
-  z-index: 20;
+  z-index: 30;
   min-width: 180px;
   background: var(--background-primary);
-  border-radius: 4px;
-  box-shadow: var(--dropshadow-around);
-  padding: var(--spacing-xxs) 0;
+  border: 1px solid var(--border-border);
+  border-radius: var(--spacing-xs);
+  box-shadow: var(--dropshadow-dropdown);
+  overflow: hidden;
 }
 .rmr-acct-kebab-menu[hidden] { display: none; }
 .rmr-acct-kebab-menu button {
-  display: block;
+  display: flex;
+  align-items: center;
   width: 100%;
-  padding: var(--spacing-xs);
+  min-height: 40px;
+  padding: var(--spacing-xs) var(--spacing-xs) var(--spacing-xs) 16px;
   border: none;
   background: none;
   text-align: left;
+  white-space: nowrap;
   font-family: var(--font-family-main);
   font-size: var(--font-size-sm);
-  color: var(--text-blue);
+  color: var(--text-primary);
   cursor: pointer;
 }
 .rmr-acct-kebab-menu button:hover { background: var(--interaction-hover-blue); }
@@ -3292,6 +3306,11 @@ tr.rmr-pay-table__empty-row td.rmr-pay-table__empty {
   padding-right: var(--spacing-sm);
   box-sizing: border-box;
 }
+/* Helpful Resources overlay: top-level files with no parent folder (Screenshot,
+   Payment Options, etc.) sit outside the HOA Files tree entirely, so they skip
+   .rmr-doc-tree__row-inner's own left padding and sit flush under the "File /
+   Folder Name" header instead of inheriting the folder row's indent. */
+.rmr-doc-tree__row-inner--flush { padding-left: 0; }
 .rmr-doc-tree__icon { flex-shrink: 0; }
 .rmr-doc-tree__spacer { display: inline-block; width: 20px; height: 20px; flex-shrink: 0; }
 .rmr-doc-tree__toggle { display: flex; align-items: center; justify-content: center; width: 20px; height: 20px; padding: 0; background: none; border: none; cursor: pointer; flex-shrink: 0; }
@@ -3762,6 +3781,12 @@ body[data-screen="document-sign"] .rmr-settings-page--fit { padding-bottom: 0; }
    is handed over to it, otherwise the bar ends up floating 24px in from the
    edge with a dead gap after it instead of before it. */
 .rmr-modal--comm { width: 1128px; overflow-y: hidden; padding-right: var(--spacing-xs); }
+/* Helpful Resources overlay: fixed height so switching the Riverview
+   Apartments / Safe & Secure Storage tabs (7 files vs. 3) never resizes the
+   overlay itself — only .rmr-pay-table-wrap's own content scrolls/shrinks
+   inside it, same fixed-box idea as the Directory overlay always being full
+   of enough contacts to hit max-height on its own. */
+.rmr-modal--resources { height: 613px; }
 .rmr-modal--comm .rmr-modal__body { width: 100%; flex: 1; min-height: 0; overflow: hidden; }
 .rmr-modal--comm .rmr-modal__header,
 .rmr-modal--comm .rmr-comm-modal-filters,
@@ -3776,8 +3801,16 @@ body[data-screen="document-sign"] .rmr-settings-page--fit { padding-bottom: 0; }
 
 .rmr-comm-event-title { margin: 0; font-size: var(--font-size-lg); line-height: var(--line-height-xl); color: var(--text-primary); }
 .rmr-comm-event-row { display: flex; gap: var(--spacing-md); width: 100%; }
+/* Event Details' category lozenge — only the dot matches whichever color
+   that event's own pill uses on the calendar (see .rmr-comm-cal__event and
+   its --movie/--board/--error modifiers above); the label text always
+   stays --text-primary regardless of category. Default (no modifier) dot
+   is Community Event's --status-success green. */
 .rmr-comm-lozenge { display: inline-flex; align-items: center; gap: var(--spacing-xs); padding: var(--spacing-xxs) 0; font-size: var(--font-size-sm); color: var(--text-primary); }
-.rmr-comm-lozenge::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--color-blue-500); }
+.rmr-comm-lozenge::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--status-success); }
+.rmr-comm-lozenge--movie::before { background: var(--color-red-400); }
+.rmr-comm-lozenge--board::before { background: var(--border-button-tertiary); }
+.rmr-comm-lozenge--error::before { background: var(--status-error); }
 
 /* Week/Day calendar views — nodes 2183:16063 ("Week View") / 2183:16237 ("Day View"), same
    Figma file as the Month view. Built as a real time-grid (gutter of hour labels + one column per
@@ -3814,11 +3847,26 @@ body[data-screen="document-sign"] .rmr-settings-page--fit { padding-bottom: 0; }
 .rmr-comm-cal__gutter-hour { grid-column: 1; box-sizing: border-box; padding: var(--spacing-xxs); font-size: 12px; letter-spacing: 0.24px; color: var(--text-primary); box-shadow: inset 0 -2px 0 0 var(--border-border), inset -2px 0 0 0 var(--border-border); background: var(--background-primary); background-image: repeating-linear-gradient(to bottom, transparent 0, transparent 31px, var(--border-border) 31px, var(--border-border) 32px); position: sticky; left: 0; z-index: 3; }
 .rmr-comm-cal__daycol-head { grid-row: 1; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: var(--font-size-sm); color: var(--text-primary); letter-spacing: 0.28px; box-shadow: inset 0 -2px 0 0 var(--border-border), inset -2px 0 0 0 var(--border-border); position: sticky; top: 0; z-index: 2; background: var(--background-secondary); }
 .rmr-comm-cal__daycol-hour { box-sizing: border-box; padding: 2px var(--spacing-xxs); display: flex; flex-direction: column; gap: 2px; box-shadow: inset 0 -2px 0 0 var(--border-border), inset -2px 0 0 0 var(--border-border); background: var(--background-secondary); background-image: repeating-linear-gradient(to bottom, transparent 0, transparent 31px, var(--border-border) 31px, var(--border-border) 32px); }
-.rmr-comm-cal__daycol-head--selected, .rmr-comm-cal__daycol-hour--selected { background: var(--background-page); }
-.rmr-comm-cal__daycol-head--selected { box-shadow: inset 0 2px 0 0 var(--border-button-tertiary), inset 0 -2px 0 0 var(--border-button-tertiary), inset 2px 0 0 0 var(--border-button-tertiary), inset -2px 0 0 0 var(--border-button-tertiary); }
-.rmr-comm-cal__daycol-hour--selected { box-shadow: inset 0 -2px 0 0 var(--border-border), inset 2px 0 0 0 var(--border-button-tertiary), inset -2px 0 0 0 var(--border-button-tertiary); }
-/* A day with no bookable hours (source: Thursday) gets its whole column shaded. */
-.rmr-comm-cal__daycol-head--disabled, .rmr-comm-cal__daycol-hour--disabled { background: var(--component-input-disabled); }
+/* background-color (not the `background` shorthand) so the base rule's own
+   background-image (the half-hour tick stripe) survives — a shorthand here
+   would reset it to none and erase the tick for the selected column. */
+.rmr-comm-cal__daycol-head--selected, .rmr-comm-cal__daycol-hour--selected { background-color: var(--background-page); }
+/* 1px on every side, per the real node — a 2px blue rule (previously used
+   here) reads noticeably heavier than the source's thin outline. The head's
+   own bottom edge stays the ordinary gray divider (never blue): the source
+   shows one continuous outline around the whole selected column, not a
+   separate box around the day label. */
+.rmr-comm-cal__daycol-head--selected { box-shadow: inset 0 1px 0 0 var(--border-button-tertiary), inset 0 -2px 0 0 var(--border-border), inset 1px 0 0 0 var(--border-button-tertiary), inset -1px 0 0 0 var(--border-button-tertiary); }
+/* The blue side shadows are listed BEFORE the gray bottom one so they paint
+   on top at each cell's corners (box-shadow stacks first-on-top) — with the
+   gray first, its full-width bottom edge cut a visible gray notch through
+   the blue column border at every hour boundary. */
+.rmr-comm-cal__daycol-hour--selected { box-shadow: inset 1px 0 0 0 var(--border-button-tertiary), inset -1px 0 0 0 var(--border-button-tertiary), inset 0 -2px 0 0 var(--border-border); }
+/* A day with no bookable hours (source: Thursday) gets its whole column shaded.
+   background-color (not the `background` shorthand) so the base rule's own
+   background-image (the half-hour tick stripe) survives — same fix as the
+   --selected rule above. */
+.rmr-comm-cal__daycol-head--disabled, .rmr-comm-cal__daycol-hour--disabled { background-color: var(--component-input-disabled); }
 
 /* Week/Day event pill — same component as Month's .rmr-comm-cal__event, but the source's own
    time-grid instance uses a thicker 4px left accent (vs Month's 2px) and fills its hour cell
@@ -3827,7 +3875,10 @@ body[data-screen="document-sign"] .rmr-settings-page--fit { padding-bottom: 0; }
   flex-direction: column;
   align-items: flex-start;
   gap: 2px;
-  height: 100%;
+  /* flex:1 (not height:100%) so that when an hour cell holds more than one
+     same-hour block — e.g. Oct 20's Movie Night + Board Meeting — they share
+     the row instead of each independently claiming its full height. */
+  flex: 1 0 auto;
   min-height: 60px;
   padding: var(--spacing-xxs) var(--spacing-xs);
   border-left-width: 4px;
@@ -3860,7 +3911,7 @@ body[data-screen="document-sign"] .rmr-settings-page--fit { padding-bottom: 0; }
   background: var(--background-primary);
   border-style: solid;
   border-width: 0.5px 0.5px 0.5px 2px;
-  border-color: var(--status-success);
+  border-color: var(--rsv-amenity-color, var(--status-success));
   border-radius: 2px 4px 4px 2px;
   line-height: var(--line-height-md);
   text-align: left;
@@ -3868,13 +3919,40 @@ body[data-screen="document-sign"] .rmr-settings-page--fit { padding-bottom: 0; }
   overflow: hidden;
   cursor: pointer;
 }
-.rmr-rsv-event--pending { background: var(--color-yellow-200); border-color: var(--color-yellow-500); }
-.rmr-rsv-event--accent { border-color: var(--border-accent); }
+/* Per-amenity display color, keyed off each pill's own data-rsv-amenity —
+   same --rsv-amenity-color/--rsv-amenity-tint custom properties as the New
+   Reservation side panel below, generalized here to both real amenities
+   since this calendar (unlike that single-amenity side panel) shows them
+   side by side. Per standing instruction: Theater Room's is green (this
+   page's original default), Clubhouse Room 1's is yellow (its own sidebar
+   icon color) rather than the plain accent-blue border it used before. */
+[data-rsv-amenity="Theater Room"] { --rsv-amenity-color: var(--status-success); --rsv-amenity-tint: var(--color-green-200); }
+[data-rsv-amenity="Clubhouse Room 1"] { --rsv-amenity-color: var(--color-yellow-500); --rsv-amenity-tint: var(--color-yellow-200); }
+
+/* Someone else's reservation — white fill (the default above), amenity-
+   colored border only, and not interactive: per standing instruction, other
+   residents' bookings are read-only on this calendar. */
+.rmr-rsv-event--other { cursor: default; }
+
+/* The signed-in resident's own reservation — filled with the amenity's own
+   tint so it visually matches its entry in the My Reservations list beside
+   the calendar, per standing instruction. */
+.rmr-rsv-event--mine { background: var(--rsv-amenity-tint); }
+
+/* Denied/Canceled — always one of the resident's own (a request that never
+   happened isn't shown to anyone else) — grayed out regardless of amenity;
+   the status word itself is prefixed to the displayed time by app.js rather
+   than only being visible once opened, per standing instruction. */
+.rmr-rsv-event--inactive { background: var(--background-secondary); border-color: var(--border-border); color: var(--text-secondary); }
+
 .rmr-rsv-event--block {
   flex-direction: column;
   align-items: flex-start;
   gap: 2px;
-  height: 100%;
+  /* flex:1 (not height:100%) so that when an hour cell holds more than one
+     same-hour reservation — e.g. Oct 20's Clubhouse + Theater Room — they
+     share the row instead of each independently claiming its full height. */
+  flex: 1 0 auto;
   min-height: 60px;
   padding: var(--spacing-xxs) var(--spacing-xs);
   border-left-width: 4px;
@@ -3960,7 +4038,11 @@ body[data-screen="document-sign"] .rmr-settings-page--fit { padding-bottom: 0; }
 .rmr-modal--resdetails { width: 622px; }
 .rmr-rsv-value { margin: 0; font-size: var(--font-size-sm); color: var(--text-primary); }
 .rmr-rsv-form-row { display: flex; gap: var(--spacing-md); width: 100%; }
-.rmr-rsv-form__label { margin: 0 0 var(--spacing-xs); font-size: 14px; color: var(--secondary-text); }
+/* .rmr-modal__body p resets every <p>'s margin to 0 (higher specificity:
+   one class + the p type beats this single class alone), which was
+   silently swallowing this label's own bottom margin — scope the override
+   to .rmr-modal__body too so it actually wins and the 8px gap renders. */
+.rmr-rsv-form__label, .rmr-modal__body .rmr-rsv-form__label { margin: 0 0 var(--spacing-xs); font-size: 14px; color: var(--secondary-text); }
 .rmr-rsv-fee-row { display: flex; gap: var(--spacing-md); align-items: center; width: 100%; font-size: var(--font-size-sm); }
 
 
@@ -4040,6 +4122,7 @@ body[data-screen="document-sign"] .rmr-settings-page--fit { padding-bottom: 0; }
    custom properties, so a future multi-amenity Select Amenity would only
    need to update them, not the rules themselves. */
 .rmr-rsv-side { --rsv-amenity-color: var(--status-success); --rsv-amenity-tint: var(--color-green-200); }
+.rmr-rsv-side[data-rsv-amenity="Clubhouse Room 1"] { --rsv-amenity-color: var(--color-yellow-500); --rsv-amenity-tint: var(--color-yellow-200); }
 /* Booked by someone else — read-only, same anatomy as the main calendar's
    own .rmr-rsv-event default state (white fill, thin border, a thicker
    colored left edge). */
@@ -4221,3 +4304,22 @@ body[data-screen="polls"] .rmr-comm-layout {
    it in full instead of requiring an internal scroll to see the rest. */
 .rmr-modal:has(.rmr-dropdown--open[data-dropdown-no-flip]) { overflow: visible; }
 .rmr-svc-details-modal--arq .rmr-svc-details { flex: 1; min-height: 0; }
+
+/* Centered table column (e.g. Contacts' "Primary Phone" radio). */
+.rmr-pay-table th.rmr-cell--center, .rmr-pay-table td.rmr-cell--center { text-align: center; }
+.rmr-cell--center > .rmr-pmt-radio { display: inline-block; vertical-align: middle; }
+
+/* Contact Information modal — "Phone Numbers" header + register grouped
+   with an 8px gap (node 2570:9138), inside the modal's own 24px gap. */
+.rmr-acct-phone-group { display: flex; flex-direction: column; gap: var(--spacing-xs); width: 100%; }
+
+/* Header language picker — the globe icon is the trigger for a standard
+   .rmr-dropdown menu (same styling as every other dropdown), right-aligned
+   under the icon instead of stretched to the trigger's width. */
+.rmr-lang { width: auto; }
+.rmr-lang__trigger { display: flex; align-items: center; justify-content: center; padding: 0; border: none; background: none; cursor: pointer; }
+.rmr-lang .rmr-dropdown__menu { left: auto; right: 0; top: calc(100% + 4px); width: 160px; }
+/* Page translation list is display-only: no hover state, not selectable. */
+.rmr-lang .rmr-dropdown__option { cursor: default; }
+.rmr-lang .rmr-dropdown__option:hover { background: none; }
+.rmr-lang .rmr-dropdown__option--selected:hover { background: var(--interaction-selected-blue); }
