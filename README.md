@@ -4,6 +4,11 @@ Presentation-only click-through prototype for LCS's rmResident Portal (RMR), bui
 RMR Figma design system. See [`rmr-tenant-portal/PROTOTYPE.md`](rmr-tenant-portal/PROTOTYPE.md) for
 full sourcing notes, scope decisions, and what's built vs. pending.
 
+## Live prototypes (GitHub Pages)
+
+- **MVP:** https://igeza.github.io/rmr-portal-prototype/mvp/ (the site root, https://igeza.github.io/rmr-portal-prototype/, also opens MVP)
+- **Full Product:** https://igeza.github.io/rmr-portal-prototype/full-product/
+
 ## Running it locally
 
 No build step or dependencies — it's static HTML/CSS/JS. Any static file server works, e.g.:
