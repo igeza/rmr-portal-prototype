@@ -1,0 +1,596 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="rmx-skill" content="4.5.2">
+<title>Activation Options — Exploration</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/tokens-local.css">
+<link rel="stylesheet" href="assets/type.css">
+<link rel="stylesheet" href="assets/rmx.css">
+<link rel="stylesheet" href="assets/proto.css">
+<link rel="stylesheet" href="assets/rollout.css">
+<style>
+/* Exploration sheet only. Nothing here is shared with the rollout screens. */
+body.rmx { background: var(--background-ui-primary); }
+.ex-page { max-width: 1480px; margin: 0 auto; padding: var(--spacing-xl) var(--spacing-xl) var(--spacing-2xl); display: flex; flex-direction: column; gap: var(--spacing-lg); }
+.ex-page h1 { margin: 0; font: var(--type-heading-xl-semibold); color: var(--text-primary); }
+.ex-page p { margin: 0; font: var(--type-paragraph-l-regular); color: var(--text-primary); max-width: 900px; }
+.ex-eyebrow { font: var(--type-label-m-semibold); color: var(--text-link); text-transform: uppercase; letter-spacing: .04em; }
+.ex-req { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--spacing-md); }
+.ex-req > div { background: var(--container-primary); border: 1px solid var(--border-primary); border-radius: var(--radius-sm); padding: var(--spacing-md); display: flex; flex-direction: column; gap: var(--spacing-xxs); }
+.ex-req b { font: var(--type-paragraph-s-semibold); color: var(--text-secondary); }
+.ex-req span { font: var(--type-paragraph-s-regular); color: var(--text-primary); }
+.ex-tabs { border-bottom: 1px solid var(--border-primary); }
+
+.ex-option { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: var(--spacing-lg); padding: var(--spacing-lg) 0; border-bottom: 1px solid var(--border-primary); }
+.ex-option:last-child { border-bottom: 0; }
+.ex-side { display: flex; flex-direction: column; gap: var(--spacing-sm); }
+.ex-tag { align-self: flex-start; font: var(--type-label-m-semibold); color: var(--text-inverse); background: var(--background-primary-button); border-radius: var(--radius-sm); padding: 2px var(--spacing-xs); }
+.ex-side h2 { margin: 0; font: var(--type-heading-m-semibold); color: var(--text-secondary); }
+.ex-side p { font: var(--type-paragraph-s-regular); }
+.ex-notes { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: var(--spacing-xs); font: var(--type-paragraph-s-regular); color: var(--text-primary); }
+.ex-notes li { display: flex; gap: var(--spacing-xs); }
+.ex-notes li::before { content: "+"; flex: none; width: 16px; font: var(--type-paragraph-s-semibold); color: var(--text-success); }
+.ex-notes li.w::before { content: "!"; color: var(--text-error); }
+.ex-try { font: var(--type-label-s-italic); color: var(--text-primary); }
+.ex-reset { align-self: flex-start; border: 0; background: transparent; padding: 0; color: var(--text-link); font: var(--type-label-m-regular); cursor: pointer; }
+.ex-reset:hover { text-decoration: underline; }
+
+/* The stage stands in for the Administration page; overlays are contained so options can sit side by side. */
+.ex-stage { position: relative; height: 620px; overflow: hidden; background: var(--container-primary); border: 1px solid var(--border-primary); border-radius: var(--radius-sm); }
+.ex-adm { height: 100%; overflow: auto; padding: var(--spacing-md) var(--spacing-xl); display: flex; flex-direction: column; gap: var(--spacing-md); }
+.ex-sechead { display: flex; align-items: center; justify-content: space-between; gap: var(--spacing-md); }
+.ex-sechead .ro-sectitle { flex: none; }
+.ex-sechead__right { display: flex; align-items: center; gap: var(--spacing-xs); position: relative; }
+.ex-stage .ro-scrim { position: absolute; z-index: 20; }
+.ex-stage .ro-dialog { position: absolute; z-index: 21; width: min(820px, calc(100% - 32px)); max-height: calc(100% - 32px); }
+.ex-stage .ro-dialog--sm { width: min(480px, calc(100% - 32px)); }
+.ex-stage .ro-dialog--md { width: min(620px, calc(100% - 32px)); }
+.ex-stage .ro-dialog--tall { height: calc(100% - 32px); }
+.ex-stage .rmx-overlay__header { height: 48px; }
+.ex-dbody { padding: var(--spacing-md); background: var(--container-primary); display: flex; flex-direction: column; gap: var(--spacing-md); overflow: auto; flex: 1; min-height: 0; }
+.ex-dbody p { margin: 0; font: var(--type-paragraph-s-regular); color: var(--text-primary); }
+.ex-dbody h3 { margin: 0; font: var(--type-heading-s-semibold); color: var(--text-secondary); }
+.ex-list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: var(--spacing-xs); font: var(--type-paragraph-s-regular); color: var(--text-primary); }
+.ex-list li { display: flex; gap: var(--spacing-xs); align-items: flex-start; }
+.ex-list .rmx-icon { width: 20px; height: 20px; flex: none; color: var(--icon-success); }
+.ex-foot { display: flex; align-items: center; justify-content: flex-end; gap: var(--spacing-xs); padding: 0 var(--spacing-md); height: 56px; flex: none; border-top: 1px solid var(--border-primary); background: var(--container-primary); }
+.ex-foot__l { margin-right: auto; font: var(--type-label-m-regular); color: var(--text-primary); }
+.ex-foot--note { height: auto; padding: var(--spacing-xs) var(--spacing-md); justify-content: space-between; }
+.ex-btn-off { opacity: .45; pointer-events: none; }
+.ex-linkbtn { border: 0; background: transparent; padding: 0 var(--spacing-xs); height: 36px; color: var(--text-link); font: var(--type-label-m-regular); cursor: pointer; }
+.ex-linkbtn:hover { text-decoration: underline; }
+
+/* choice cards */
+.ex-choices { display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-md); }
+.ex-choice { text-align: left; display: flex; flex-direction: column; gap: var(--spacing-xs); padding: var(--spacing-md); background: var(--container-primary); border: 1px solid var(--border-primary); border-radius: var(--radius-sm); cursor: pointer; font: inherit; color: inherit; }
+.ex-choice:hover { border-color: var(--border-secondary); }
+.ex-choice[aria-checked="true"] { border-color: var(--border-secondary); box-shadow: inset 0 0 0 1px var(--border-secondary); background: color-mix(in srgb, var(--background-brand-secondary) 25%, white); }
+.ex-choice__top { display: flex; align-items: center; gap: var(--spacing-xs); }
+.ex-choice__top img { width: 40px; height: 40px; }
+.ex-choice__top .rmx-radio { margin-left: auto; }
+.ex-choice b { font: var(--type-paragraph-l-semibold); color: var(--text-secondary); }
+.ex-choice span { font: var(--type-paragraph-s-regular); color: var(--text-primary); }
+.ex-paths { display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-md); }
+.ex-path { display: flex; gap: var(--spacing-md); align-items: flex-start; padding: var(--spacing-md); background: var(--container-primary); border: 1px solid var(--border-primary); border-radius: var(--radius-sm); }
+.ex-path img { width: 48px; height: 48px; flex: none; }
+.ex-path > div { flex: 1; display: flex; flex-direction: column; gap: var(--spacing-xs); align-items: flex-start; }
+.ex-path b { font: var(--type-paragraph-l-semibold); color: var(--text-secondary); }
+.ex-path span { font: var(--type-paragraph-s-regular); color: var(--text-primary); }
+
+/* split button */
+.ex-split { position: relative; display: inline-flex; flex: none; }
+.ex-split > .rmx-btn:first-child { border-radius: var(--radius-sm) 0 0 var(--radius-sm); }
+.ex-split__caret { border-radius: 0 var(--radius-sm) var(--radius-sm) 0 !important; padding: 0 var(--spacing-xxs) !important; border-left: 1px solid color-mix(in srgb, white 45%, transparent) !important; min-width: 32px; }
+.ex-split__caret .rmx-icon { width: 20px; height: 20px; }
+.ex-menu { position: absolute; top: 40px; right: 0; z-index: 10; min-width: 240px; background: var(--container-primary); border: 1px solid var(--border-primary); border-radius: var(--radius-sm); box-shadow: var(--dropshadow-md); padding: var(--spacing-xxs) 0; display: flex; flex-direction: column; }
+.ex-menu button { border: 0; background: transparent; text-align: left; padding: var(--spacing-xs) var(--spacing-md); font: var(--type-label-m-regular); color: var(--text-secondary); cursor: pointer; display: flex; flex-direction: column; gap: 2px; }
+.ex-menu button small { font: var(--type-label-s-regular); color: var(--text-primary); }
+.ex-menu button:hover { background: var(--component-register-row-hover); }
+.ex-menu hr { border: 0; border-top: 1px solid var(--border-primary); margin: var(--spacing-xxs) 0; }
+.ex-kebab { width: 32px; height: 32px; border: 0; border-radius: var(--radius-sm); background: transparent; color: var(--icon-primary); display: grid; place-items: center; cursor: pointer; }
+.ex-kebab:hover { background: var(--component-register-row-hover); }
+.ex-switch { font: var(--type-label-m-regular); color: var(--text-link); cursor: pointer; border: 0; background: transparent; padding: 0; text-align: left; }
+.ex-switch:hover { text-decoration: underline; }
+
+/* reasons */
+.ex-reasons { display: flex; flex-direction: column; gap: var(--spacing-xs); }
+.ex-reasons button { all: unset; display: flex; align-items: center; gap: var(--spacing-xs); font: var(--type-paragraph-s-regular); color: var(--text-secondary); cursor: pointer; }
+.ex-reasons .rmx-radio__dot { width: 16px; height: 16px; }
+
+/* guided setup: shared step content */
+.ex-step { display: flex; flex-direction: column; gap: var(--spacing-md); }
+.ex-step__head { display: flex; gap: var(--spacing-md); align-items: center; }
+.ex-tile { width: 64px; height: 64px; flex: none; border-radius: var(--radius-sm); display: grid; place-items: center; }
+.ex-tile img { width: 40px; height: 40px; }
+.ex-step__head h3 { margin: 0; font: var(--type-heading-l-semibold); color: var(--text-primary); }
+.ex-step__head small { font: var(--type-label-m-regular); color: var(--text-primary); }
+.ex-step__lead { margin: 0; font: var(--type-paragraph-l-regular); color: var(--text-primary); }
+.ex-step ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: var(--spacing-xs); }
+.ex-step li { display: flex; gap: var(--spacing-xs); font: var(--type-paragraph-s-regular); color: var(--text-primary); }
+.ex-step li::before { content: ""; width: 6px; height: 6px; margin-top: 7px; border-radius: 50%; background: var(--icon-primary); flex: none; }
+.ex-step li b { font: var(--type-paragraph-s-semibold); color: var(--text-secondary); }
+.ex-step--compact .ex-step__head h3 { font: var(--type-heading-m-semibold); }
+.ex-step--compact .ex-tile { width: 48px; height: 48px; }
+.ex-step--compact .ex-tile img { width: 32px; height: 32px; }
+.ex-step--compact .ex-step__lead { font: var(--type-paragraph-s-regular); }
+
+/* horizontal stepper */
+.ex-hsteps { display: flex; padding: var(--spacing-md) var(--spacing-md) var(--spacing-xs); background: var(--container-primary); border-bottom: 1px solid var(--border-primary); flex: none; }
+.ex-hstep { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: var(--spacing-xxs); position: relative; border: 0; background: transparent; padding: 0 0 var(--spacing-xs); cursor: pointer; font: var(--type-label-s-regular); color: var(--text-primary); text-align: center; }
+.ex-hstep::before { content: ""; position: absolute; top: 13px; left: -50%; right: 50%; height: 2px; background: var(--border-primary); }
+.ex-hstep:first-child::before { display: none; }
+.ex-hstep.is-done::before, .ex-hstep.is-cur::before, .ex-hstep.is-skip::before { background: var(--icon-success); }
+.ex-dot { position: relative; z-index: 1; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: var(--container-primary); border: 2px solid var(--border-primary); font: var(--type-label-m-semibold); color: var(--text-primary); }
+.ex-dot .rmx-icon { width: 18px; height: 18px; }
+.is-cur .ex-dot { background: var(--border-secondary); border-color: var(--border-secondary); color: var(--text-inverse); }
+.is-done .ex-dot { background: var(--icon-success); border-color: var(--icon-success); color: var(--text-inverse); }
+.is-skip .ex-dot { border-color: var(--icon-success); color: var(--text-primary); }
+.is-cur { font: var(--type-label-s-semibold); color: var(--text-secondary); }
+
+/* vertical rail */
+.ex-wiz { display: flex; flex: 1; min-height: 0; }
+.ex-rail { width: 264px; flex: none; background: var(--container-tertiary); border-right: 1px solid var(--border-primary); padding: var(--spacing-md) var(--spacing-xs); display: flex; flex-direction: column; gap: var(--spacing-xxs); overflow: auto; }
+.ex-rail .ro-bar { padding: 0 var(--spacing-xs) var(--spacing-xs); flex-direction: column; align-items: stretch; gap: var(--spacing-xxs); }
+.ex-rail .ro-bar__pct { text-align: left; white-space: nowrap; }
+.ex-rail .ro-bar__track { flex: none; }
+.ex-rstep { display: flex; align-items: center; gap: var(--spacing-xs); padding: var(--spacing-xs); border: 0; border-radius: var(--radius-sm); background: transparent; cursor: pointer; text-align: left; font: var(--type-label-m-regular); color: var(--text-secondary); }
+.ex-rstep:hover { background: var(--component-register-row-hover); }
+.ex-rstep.is-cur { background: var(--container-primary); box-shadow: inset 3px 0 0 var(--border-secondary); font: var(--type-label-m-semibold); }
+.ex-rstep .ex-dot { width: 24px; height: 24px; flex: none; font: var(--type-label-s-semibold); }
+.ex-rstep .ex-dot .rmx-icon { width: 16px; height: 16px; }
+.ex-rstep small { display: block; font: var(--type-label-s-regular); color: var(--text-primary); }
+.ex-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+
+/* docked guide */
+.ex-dock { position: absolute; z-index: 20; top: 12px; right: 12px; bottom: 12px; width: 360px; background: var(--container-primary); border: 1px solid var(--border-primary); border-radius: var(--radius-sm); box-shadow: var(--dropshadow-lg); display: flex; flex-direction: column; overflow: hidden; }
+.ex-dock__head { display: flex; align-items: center; justify-content: space-between; height: 48px; padding: 0 var(--spacing-md); flex: none; border-bottom: 1px solid var(--border-primary); font: var(--type-heading-s-semibold); color: var(--text-secondary); }
+.ex-dock__head div { display: flex; gap: var(--spacing-xs); }
+.ex-dock__head button { border: 0; background: transparent; color: var(--icon-primary); display: grid; place-items: center; cursor: pointer; padding: 0; }
+.ex-dock__body { flex: 1; min-height: 0; overflow: auto; padding: var(--spacing-md); display: flex; flex-direction: column; gap: var(--spacing-md); }
+.ex-dock__list { display: flex; flex-direction: column; gap: 2px; border-top: 1px solid var(--border-primary); padding-top: var(--spacing-xs); }
+.ex-pill { position: absolute; z-index: 20; right: 16px; bottom: 16px; display: inline-flex; align-items: center; gap: var(--spacing-xs); height: 40px; padding: 0 var(--spacing-md); border: 0; border-radius: 20px; background: var(--background-primary-button); color: var(--text-inverse); font: var(--type-label-m-semibold); box-shadow: var(--dropshadow-md); cursor: pointer; }
+.ex-hl { outline: 2px solid var(--border-secondary); outline-offset: 6px; border-radius: var(--radius-sm); background: color-mix(in srgb, var(--background-brand-secondary) 25%, white); }
+.ex-adm.is-docked { padding-right: 396px; }
+.ex-adm.is-docked .ro-items { grid-template-columns: 1fr 1fr; row-gap: var(--spacing-lg); }
+
+/* open questions */
+.ex-open { background: var(--container-primary); border: 1px solid var(--border-primary); border-radius: var(--radius-sm); padding: var(--spacing-md); display: flex; flex-direction: column; gap: var(--spacing-xs); }
+.ex-open h3 { margin: 0; font: var(--type-heading-s-semibold); color: var(--text-secondary); }
+.ex-open ul { margin: 0; padding-left: var(--spacing-md); font: var(--type-paragraph-s-regular); color: var(--text-primary); display: flex; flex-direction: column; gap: var(--spacing-xxs); }
+
+@media (max-width: 1100px) {
+  .ex-option { grid-template-columns: 1fr; }
+  .ex-req { grid-template-columns: 1fr; }
+  .ex-choices, .ex-paths { grid-template-columns: 1fr; }
+  .ex-page { padding: var(--spacing-md); }
+}
+</style>
+</head>
+<body class="rmx">
+
+<div class="ex-page" data-rmx-tabscope>
+  <div>
+    <div class="ex-eyebrow">Exploration · not connected to the rollout screens</div>
+    <h1>Activation, guided setup and switching back</h1>
+  </div>
+  <p>The checklist is out. Activating is now one action with two outcomes, and it is reversible. Each option below is a live mock on a stand-in Administration page. Click through them, then tell me which pieces to keep.</p>
+
+  <div class="ex-req">
+    <div><b>1 · Activate, no guidance</b><span>Click Activate and rmResident Portal is on. No tour, no setup, nothing to finish first.</span></div>
+    <div><b>2 · Activate with guided setup</b><span>Click Activate, rmResident Portal is on, and a stepper walks through the new portal and each thing they can set up.</span></div>
+    <div><b>3 · Switch back to TWA</b><span>After activating, an admin can return to TWA, and activate again later.</span></div>
+  </div>
+
+  <div class="rmx-tabrow ex-tabs" data-rmx-tabs>
+    <button class="rmx-tab" data-rmx-component="Tab" aria-selected="true" data-panel="activate">Activating</button>
+    <button class="rmx-tab" data-rmx-component="Tab" aria-selected="false" data-panel="guided">Guided setup</button>
+    <button class="rmx-tab" data-rmx-component="Tab" aria-selected="false" data-panel="switch">Switching back</button>
+  </div>
+
+  <!-- ============ ACTIVATING ============ -->
+  <section data-tab-panel="activate">
+    <article class="ex-option">
+      <div class="ex-side">
+        <span class="ex-tag">1A</span>
+        <h2>One Activate, then choose</h2>
+        <p>The banner keeps a single button. Clicking it asks how they want to start, and the same dialog carries the “all residents will see this” warning.</p>
+        <ul class="ex-notes">
+          <li>One CTA, so the banner stays calm</li>
+          <li>The warning and the choice live in one place</li>
+          <li class="w">Always two clicks, even for people who know what they want</li>
+        </ul>
+        <div class="ex-try">Try: Activate rmResident Portal, pick either card.</div>
+        <button class="ex-reset" data-ex="reset">Reset this mock</button>
+      </div>
+      <div class="ex-stage" id="s1A"></div>
+    </article>
+
+    <article class="ex-option">
+      <div class="ex-side">
+        <span class="ex-tag">1B</span>
+        <h2>Split button</h2>
+        <p>The primary action activates with no guidance. The caret holds the alternative. A small confirm still protects against an accidental click.</p>
+        <ul class="ex-notes">
+          <li>Fastest path for the “no guided experience” user</li>
+          <li>Familiar pattern, takes no extra room</li>
+          <li class="w">The guided path is hidden behind a caret, so it will be missed</li>
+          <li class="w">Not in the RMX library yet (no split button component)</li>
+        </ul>
+        <div class="ex-try">Try: the caret next to Activate.</div>
+        <button class="ex-reset" data-ex="reset">Reset this mock</button>
+      </div>
+      <div class="ex-stage" id="s1B"></div>
+    </article>
+
+    <article class="ex-option">
+      <div class="ex-side">
+        <span class="ex-tag">1C</span>
+        <h2>Two paths on the page</h2>
+        <p>Both outcomes are visible in the section. The choice is made by which button they press, then a short confirm.</p>
+        <ul class="ex-notes">
+          <li>No hidden path, each outcome is explained up front</li>
+          <li>Reads well for first-time admins</li>
+          <li class="w">Takes the most space and makes “Activate” feel like a bigger decision</li>
+          <li class="w">Guided carries the stronger button, so it nudges. Flip if you want it neutral</li>
+        </ul>
+        <div class="ex-try">Try: either Activate button.</div>
+        <button class="ex-reset" data-ex="reset">Reset this mock</button>
+      </div>
+      <div class="ex-stage" id="s1C"></div>
+    </article>
+  </section>
+
+  <!-- ============ GUIDED SETUP ============ -->
+  <section data-tab-panel="guided" hidden>
+    <p style="padding-top:var(--spacing-md)">All three share the same seven steps: What’s new, Portal Profiles, Payment Policies, Portal Login, rmResident App, Team access, Notify residents. Because portal is already on when the stepper starts, every step is optional and skippable, which is what separates this from the old checklist.</p>
+    <article class="ex-option">
+      <div class="ex-side">
+        <span class="ex-tag">2A</span>
+        <h2>Wizard with a top stepper</h2>
+        <p>A focused dialog. The numbered line across the top shows where they are and what is done.</p>
+        <ul class="ex-notes">
+          <li>Most familiar. Easy to follow, easy to finish</li>
+          <li>Steps can be clicked to jump</li>
+          <li class="w">Seven labels get tight at narrow widths</li>
+          <li class="w">Modal, so “Open Portal Profiles” has to leave and come back</li>
+        </ul>
+        <div class="ex-try">Try: Next, Skip for now, then Finish.</div>
+        <button class="ex-reset" data-ex="reset">Reset this mock</button>
+      </div>
+      <div class="ex-stage" id="s2A"></div>
+    </article>
+
+    <article class="ex-option">
+      <div class="ex-side">
+        <span class="ex-tag">2B</span>
+        <h2>Wizard with a side rail</h2>
+        <p>The same dialog with the steps listed down the left and a progress bar. Closer to a table of contents than a line of dots.</p>
+        <ul class="ex-notes">
+          <li>Names every step, with room to add a subtitle</li>
+          <li>Better for people who want to jump to just one thing</li>
+          <li class="w">Feels closer to the old checklist, so check it does not read as one</li>
+          <li class="w">Takes 264px from the content</li>
+        </ul>
+        <div class="ex-try">Try: click any step in the rail.</div>
+        <button class="ex-reset" data-ex="reset">Reset this mock</button>
+      </div>
+      <div class="ex-stage" id="s2B"></div>
+    </article>
+
+    <article class="ex-option">
+      <div class="ex-side">
+        <span class="ex-tag">2C</span>
+        <h2>Docked guide over the real page</h2>
+        <p>No modal. A panel docks to the right of Administration and highlights the setting it is talking about, so they learn by doing.</p>
+        <ul class="ex-notes">
+          <li>Not blocking. They can poke at the page and come back</li>
+          <li>The action is real: “Open Portal Profiles” is the primary button</li>
+          <li>Minimizes to a pill, and resumes later</li>
+          <li class="w">Steps without a page behind them (What’s new, Team access, Notify) have nothing to highlight</li>
+          <li class="w">Most to build and most to maintain</li>
+        </ul>
+        <div class="ex-try">Try: Next, the minus icon, then the pill.</div>
+        <button class="ex-reset" data-ex="reset">Reset this mock</button>
+      </div>
+      <div class="ex-stage" id="s2C"></div>
+    </article>
+  </section>
+
+  <!-- ============ SWITCHING BACK ============ -->
+  <section data-tab-panel="switch" hidden>
+    <article class="ex-option">
+      <div class="ex-side">
+        <span class="ex-tag">3A</span>
+        <h2>Text link in the active banner</h2>
+        <p>Plain “Switch back to TWA” link in the success banner. The dialog explains what happens and asks (optionally) why.</p>
+        <ul class="ex-notes">
+          <li>Discoverable exactly where they activated</li>
+          <li>Lightest to build</li>
+          <li class="w">Easy to hit by accident next to the main message</li>
+          <li class="w">The banner has to stay on the page forever</li>
+        </ul>
+        <div class="ex-try">Try: Switch back to TWA, then Activate again.</div>
+        <button class="ex-reset" data-ex="reset">Reset this mock</button>
+      </div>
+      <div class="ex-stage" id="s3A"></div>
+    </article>
+
+    <article class="ex-option">
+      <div class="ex-side">
+        <span class="ex-tag">3B</span>
+        <h2>TWA / rmResident Portal switch</h2>
+        <p>A two-state control in the section header shows which portal residents are on and makes both directions feel equal. Moving to rmResident Portal reuses the Activate choice from 1A.</p>
+        <ul class="ex-notes">
+          <li>Always shows the current state, no banner needed</li>
+          <li>Reversible by design, not buried as an escape hatch</li>
+          <li class="w">Looks like a casual toggle for a change that affects every resident</li>
+          <li class="w">Reuses an existing control, but a real switch needs a decision from the team</li>
+        </ul>
+        <div class="ex-try">Try: click TWA, then rmResident Portal.</div>
+        <button class="ex-reset" data-ex="reset">Reset this mock</button>
+      </div>
+      <div class="ex-stage" id="s3B"></div>
+    </article>
+
+    <article class="ex-option">
+      <div class="ex-side">
+        <span class="ex-tag">3C</span>
+        <h2>Overflow menu</h2>
+        <p>A quiet “more” menu on the section title holds Switch back to TWA, along with Restart guided setup and Take the tour.</p>
+        <ul class="ex-notes">
+          <li>Hard to trigger by accident</li>
+          <li>One home for the secondary actions, including resuming guided setup</li>
+          <li class="w">Least discoverable, so someone who wants out may not find it</li>
+        </ul>
+        <div class="ex-try">Try: the ⋮ menu beside the title.</div>
+        <button class="ex-reset" data-ex="reset">Reset this mock</button>
+      </div>
+      <div class="ex-stage" id="s3C"></div>
+    </article>
+  </section>
+
+  <div class="ex-open">
+    <h3>Open questions for the team</h3>
+    <ul>
+      <li>When someone is on TWA after switching back, can they still edit their rmResident Portal setup? These mocks hide it until they activate again.</li>
+      <li>Do changes made on TWA while switched back come across when they reactivate?</li>
+      <li>Who is allowed to switch? Every admin, or only users with the new portal privilege?</li>
+      <li>Does a stepper that has been closed stay resumable, and for how long? These mocks keep it for the session.</li>
+      <li>Is the reason question on switch back useful research, or friction? It is optional here.</li>
+    </ul>
+  </div>
+</div>
+
+<script src="assets/app.js"></script>
+<script>
+(function () {
+  'use strict';
+  var IC = 'assets/icons.svg#';
+  var R = 'assets/rollout/';
+  var ic = function (n, cls) { return '<svg class="rmx-icon' + (cls ? ' ' + cls : '') + '"><use href="' + IC + n + '"></use></svg>'; };
+
+  /* ---- guided setup content (copy reused from the rollout screens) ---- */
+  var STEPS = [
+    { id: 'new', label: 'What’s new', sub: 'A quick look', img: R + 'imgTour.svg', bg: '#afcef4', title: 'Welcome to rmResident Portal',
+      lead: 'Residents are already on the new portal, so nothing here is required. This is a quick look at what changed and what you can set up, in your own time.',
+      pts: ['<b>Multiple Profiles.</b> A unique portal experience for each property type.', '<b>Modern New Look.</b> A refreshed UI from day one.', '<b>Portal Preview.</b> See what residents see before a change goes live.', '<b>Access Control.</b> Portal management kept separate from system settings.'] },
+    { id: 'profiles', label: 'Portal Profiles', sub: 'Colors, logo, pages', img: R + 'imgFrame1618873801.svg', bg: '#f9d57b', title: 'Make it yours', chip: 'Carried over from TWA', hl: 0, action: 'Open Portal Profiles',
+      lead: 'Your TWA settings carried over to the Default profile. Add a profile for any property type that needs its own look.',
+      pts: ['Colors and themes', 'Logo and page settings', 'Assign profiles to property types'] },
+    { id: 'payments', label: 'Payment Policies', sub: 'Per property', img: R + 'imgMoney.svg', bg: '#c9e5c3', title: 'Set up payment policies', hl: 2, action: 'Open Payment Policies',
+      lead: 'Decide how residents pay, property by property.',
+      pts: ['A default policy for every property', 'Specific policies for the properties that need them', 'Which charge types residents can pay'] },
+    { id: 'login', label: 'Portal Login', sub: 'Prospects and tenants', img: R + 'imgFrame1618873664.svg', bg: '#dbe1e5', title: 'Customize the login', hl: 1, action: 'Open Portal Login',
+      lead: 'Choose what prospects and tenants see when they sign in.',
+      pts: ['The login experience for prospects and tenants', 'Turn portal access off for specific properties'] },
+    { id: 'app', label: 'rmResident App', sub: 'Notifications, inspections', img: R + 'imgFrame1618873789.svg', bg: '#afcef4', title: 'Tune the resident app', hl: 3, action: 'Open App Settings',
+      lead: 'Manage how the rmResident app behaves for your residents.',
+      pts: ['Push notifications', 'Tenant self-inspections'] },
+    { id: 'access', label: 'Team access', sub: 'Who can manage it', img: R + 'tour-setting.svg', bg: '#c9e5c3', title: 'Decide who manages the portal', action: 'Open User Privileges',
+      lead: 'New privileges keep portal management separate from your system settings, so you can give your team the access they need.',
+      pts: ['Give people portal access without system access', 'Review who can manage the portal today'] },
+    { id: 'notify', label: 'Notify residents', sub: 'Ready-to-send templates', img: R + 'imgMailOutline.svg', bg: '#f9d57b', title: 'Tell your residents', action: 'Open Templates',
+      lead: 'Give residents a heads up so they know what to expect. We’ve put together ready-to-send templates.',
+      pts: ['Ready-to-send templates', 'Preview before you send'] }
+  ];
+  var N = STEPS.length;
+  var cnt = function (st) { return st.status.filter(Boolean).length; };
+  var REASONS = ['I need more time to set things up', 'My residents had trouble with it', 'Something I need is missing', 'Other'];
+  var ITEMS = [
+    ['imgFrame1618873801.svg', 'Portal Profiles', 'Customize colors, themes, logos, and page settings by property type to match your brand.'],
+    ['imgFrame1618873664.svg', 'Portal Login', 'Customize the login experience for prospects and tenants, and disable portal access by property.'],
+    ['imgMoney.svg', 'Payment Policies', 'Set up payment policies per property'],
+    ['imgFrame1618873789.svg', 'rmResident App Settings', 'Manage rmResident app settings like push notifications, and tenant self-inspections']
+  ];
+
+  /* ---- per-stage config ---- */
+  var CFG = {
+    s1A: { act: 'dialog', stepper: 'h' }, s1B: { act: 'split', stepper: 'h' }, s1C: { act: 'cards', stepper: 'h' },
+    s2A: { on: 1, stepper: 'h' }, s2B: { on: 1, stepper: 'v' }, s2C: { on: 1, stepper: 'dock' },
+    s3A: { on: 1, act: 'dialog', sw: 'link' }, s3B: { on: 1, act: 'dialog', sw: 'seg' }, s3C: { on: 1, act: 'dialog', sw: 'kebab', partial: 1 }
+  };
+  var S = {};
+
+  function fresh(id) {
+    var c = CFG[id], st = { id: id, cfg: c, mode: c.on ? 'on' : 'ready', dlg: null, choice: null, reason: null, menu: false, min: false,
+      step: 0, status: [], open: false, guided: 'none' };
+    if (id.charAt(1) === '2') { st.guided = 'partial'; st.open = true; st.step = 2; st.status = ['done', 'done']; }
+    if (c.partial) { st.guided = 'partial'; st.step = 2; st.status = ['done', 'done']; }
+    return st;
+  }
+
+  /* ---- admin page behind everything ---- */
+  function banner(st) {
+    var c = st.cfg, m = st.mode, h;
+    if (m === 'on') {
+      var resume = st.guided === 'partial' && !st.open ? ' <button class="ex-switch" data-ex="resume">Resume guided setup (' + cnt(st) + ' of ' + N + ')</button>' : '';
+      var sw = c.sw === 'link' ? '<button class="ex-switch" data-ex="sw-open">Switch back to TWA</button>' : '';
+      return '<div class="ro-banner ro-banner--done" data-rmx-component="Callout"><span class="ro-banner__icon ro-banner__icon--green"><img src="' + R + 'imgCampaignOutline.svg" alt=""></span>' +
+        '<div class="ro-banner__text"><span class="ro-banner__title">rmResident Portal is active</span><p class="ro-banner__body">Your residents are using the new portal. You can fine-tune everything below at any time.' + resume + '</p></div>' + sw + '</div>';
+    }
+    var title = m === 'twa' ? 'You’re using TWA' : 'New rmResident Portal is now available';
+    var body = m === 'twa' ? 'Your rmResident Portal setup is saved. Activate again whenever you’re ready.'
+      : 'The new portal is built for property managers who want more control, more flexibility, and a better experience for their residents.';
+    var cta = '';
+    if (c.act === 'dialog') cta = '<button class="rmx-btn ro-btn--green" data-ex="act-open">Activate rmResident Portal</button>';
+    if (c.act === 'split') cta = '<div class="ex-split"><button class="rmx-btn ro-btn--green" data-ex="ask" data-v="quick">Activate</button><button class="rmx-btn ro-btn--green ex-split__caret" aria-label="More activation options" data-ex="menu">' + ic('keyboard-arrow-down') + '</button>' +
+      (st.menu ? '<div class="ex-menu"><button data-ex="ask" data-v="quick">Activate now<small>Residents see the new portal right away</small></button><button data-ex="ask" data-v="guided">Activate with guided setup<small>We walk you through what you can set up</small></button></div>' : '') + '</div>';
+    h = '<div class="ro-banner ro-banner--start"><span class="ro-banner__icon"><img src="' + R + 'imgCampaignOutline.svg" alt=""></span><div class="ro-banner__text"><span class="ro-banner__title">' + title + '</span><p class="ro-banner__body">' + body + '</p></div>' + cta + '</div>';
+    if (c.act === 'cards') {
+      h += '<div class="ex-paths"><div class="ex-path"><img src="' + R + 'imgCheckCircleFilled.svg" alt=""><div><b>Activate</b><span>Residents see rmResident Portal right away. Your TWA settings carry over to the Default profile, and you can fine-tune anytime.</span><button class="rmx-btn rmx-btn--secondary" data-ex="ask" data-v="quick">Activate</button></div></div>' +
+        '<div class="ex-path"><img src="' + R + 'imgTour.svg" alt=""><div><b>Activate with guided setup</b><span>Same, plus a step-by-step walk through the new portal and everything you can set up. Skip any step.</span><button class="rmx-btn ro-btn--green" data-ex="ask" data-v="guided">Activate with guided setup</button></div></div></div>';
+    }
+    return h;
+  }
+  function sechead(st) {
+    var right = '', c = st.cfg;
+    if (c.sw === 'seg') right = '<div class="ro-seg" role="group" aria-label="Portal in use"><button class="' + (st.mode !== 'on' ? 'on' : '') + '" data-ex="seg" data-v="twa">TWA</button><button class="' + (st.mode === 'on' ? 'on' : '') + '" data-ex="seg" data-v="rmr">rmResident Portal</button></div>';
+    if (c.sw === 'kebab' && st.mode === 'on') {
+      right = '<button class="ex-kebab" aria-label="More" data-ex="menu">' + ic('more-vert') + '</button>' + (st.menu ?
+        '<div class="ex-menu"><button data-todo>Take the tour</button><button data-ex="restart">Restart guided setup</button><hr><button data-ex="sw-open">Switch back to TWA</button></div>' : '');
+    }
+    return '<div class="ex-sechead"><div class="ro-sectitle">rmResident Portal <span class="ro-tour"><img src="' + R + 'imgTour.svg" alt=""></span></div><div class="ex-sechead__right">' + right + '</div></div>';
+  }
+  function items(st) {
+    if (st.mode !== 'on') return '';
+    var hl = -1;
+    if (st.open && st.cfg.stepper === 'dock' && STEPS[st.step] && STEPS[st.step].hl !== undefined) hl = STEPS[st.step].hl;
+    return '<div class="ro-items">' + ITEMS.map(function (i, k) {
+      return '<a class="ro-item' + (k === hl ? ' ex-hl' : '') + '" href="#" data-todo><img src="' + R + i[0] + '" alt=""><div><h4>' + i[1] + '</h4><p>' + i[2] + '</p></div></a>';
+    }).join('') + '</div>';
+  }
+
+  /* ---- dialogs ---- */
+  function dlg(cls, title, body, foot, closeAct) {
+    return '<div class="ro-scrim" data-ex="' + (closeAct || 'cancel') + '"></div><div class="ro-dialog ' + cls + '" role="dialog" aria-label="' + title + '">' +
+      '<div class="rmx-overlay__header" data-rmx-component="Overlay Header"><span>' + title + '</span><a href="#" aria-label="Close" data-ex="' + (closeAct || 'cancel') + '">' + ic('close') + '</a></div>' + body + foot + '</div>';
+  }
+  function choiceDlg(st) {
+    var c = st.choice;
+    function card(v, img, t, d) { return '<button class="ex-choice" role="radio" aria-checked="' + (c === v) + '" data-ex="choice" data-v="' + v + '"><div class="ex-choice__top"><img src="' + R + img + '" alt=""><span class="rmx-radio" data-checked="' + (c === v) + '"><span class="rmx-radio__dot"></span></span></div><b>' + t + '</b><span>' + d + '</span></button>'; }
+    var body = '<div class="ex-dbody"><p>All residents will see the new rmResident Portal as soon as you activate. Your TWA settings carry over to the Default profile.</p><h3>How would you like to get started?</h3><div class="ex-choices" role="radiogroup">' +
+      card('quick', 'imgCheckCircleFilled.svg', 'Just turn it on', 'Residents see rmResident Portal right away. No tour, no setup. Fine-tune anything later from Administration.') +
+      card('guided', 'imgTour.svg', 'Turn it on with guided setup', 'We walk you through the new portal and everything you can set up, one step at a time. Skip any step.') + '</div></div>';
+    var foot = '<div class="ex-foot ex-foot--note"><span class="ex-foot__l" style="margin:0">You can switch back to TWA any time.</span><div style="display:flex;gap:var(--spacing-xs)"><button class="rmx-btn rmx-btn--text" data-ex="cancel">Cancel</button><button class="rmx-btn ro-btn--green' + (c ? '' : ' ex-btn-off') + '" data-ex="go" data-v="' + c + '">Activate</button></div></div>';
+    return dlg('ro-dialog--md', 'Activate rmResident Portal', body, foot);
+  }
+  function confirmDlg(st) {
+    var g = st.dlg === 'confirm-guided';
+    var body = '<div class="ex-dbody"><p>All residents will see the new rmResident Portal as soon as you activate, and TWA will be retired for them. You can switch back any time.</p>' + (g ? '<p>After activating, we’ll start a guided setup so you can look around and set things up.</p>' : '') + '</div>';
+    var foot = '<div class="ex-foot"><button class="rmx-btn rmx-btn--text" data-ex="cancel">Cancel</button><button class="rmx-btn ro-btn--green" data-ex="go" data-v="' + (g ? 'guided' : 'quick') + '">' + (g ? 'Activate and start setup' : 'Activate') + '</button></div>';
+    return dlg('ro-dialog--sm', 'Activate rmResident Portal?', body, foot);
+  }
+  function switchDlg(st) {
+    var body = '<div class="ex-dbody"><ul class="ex-list"><li>' + ic('check-circle') + 'Residents go back to TWA right away.</li><li>' + ic('check-circle') + 'Your rmResident Portal profiles, payment policies and login settings are saved.</li><li>' + ic('check-circle') + 'You can activate rmResident Portal again whenever you’re ready.</li></ul>' +
+      '<h3>Why are you switching back? <span class="rmx-type-label-m-regular" style="font-weight:400">(optional)</span></h3><div class="ex-reasons">' +
+      REASONS.map(function (r, k) { return '<button data-ex="reason" data-v="' + k + '"><span class="rmx-radio" data-checked="' + (st.reason === k) + '"><span class="rmx-radio__dot"></span></span>' + r + '</button>'; }).join('') + '</div></div>';
+    var foot = '<div class="ex-foot"><button class="rmx-btn rmx-btn--text" data-ex="cancel">Cancel</button><button class="rmx-btn rmx-btn--primary" data-ex="sw-go">Switch back to TWA</button></div>';
+    return dlg('ro-dialog--md', 'Switch back to TWA?', body, foot);
+  }
+
+  /* ---- guided stepper ---- */
+  function stepBody(st, compact) {
+    if (st.step >= N) {
+      var rows = STEPS.map(function (s, i) { return '<li>' + ic(st.status[i] === 'skipped' ? 'remove' : 'check-circle') + '<span><b>' + s.label + '</b> · ' + (st.status[i] === 'skipped' ? 'Skipped' : 'Reviewed') + '</span></li>'; }).join('');
+      return '<div class="ex-step' + (compact ? ' ex-step--compact' : '') + '"><div class="ex-step__head"><span class="ex-tile" style="background:#c9e5c3"><img src="' + R + 'imgCheckCircleFilled.svg" alt=""></span><div><h3>You’re all set</h3><small>rmResident Portal is active. You can come back to anything from Administration.</small></div></div><ul class="ex-list">' + rows + '</ul></div>';
+    }
+    var s = STEPS[st.step];
+    return '<div class="ex-step' + (compact ? ' ex-step--compact' : '') + '"><div class="ex-step__head"><span class="ex-tile" style="background:' + s.bg + '"><img src="' + s.img + '" alt=""></span><div><h3>' + s.title + '</h3>' +
+      (s.chip ? '<span class="rmx-lozenge rmx-lozenge--success" data-rmx-component="Lozenge">' + s.chip + '</span>' : '<small>Step ' + (st.step + 1) + ' of ' + N + ' · optional</small>') + '</div></div>' +
+      '<p class="ex-step__lead">' + s.lead + '</p><ul>' + s.pts.map(function (p) { return '<li><span>' + p + '</span></li>'; }).join('') + '</ul>' +
+      (s.action ? '<div><button class="rmx-btn ' + (compact ? 'rmx-btn--primary' : 'rmx-btn--secondary') + '" data-todo>' + s.action + '</button></div>' : '') + '</div>';
+  }
+  function stepFoot(st) {
+    var last = st.step >= N;
+    if (last) return '<div class="ex-foot"><button class="ex-linkbtn" data-ex="back">Back</button><button class="rmx-btn rmx-btn--primary" data-ex="finish">Finish</button></div>';
+    return '<div class="ex-foot"><span class="ex-foot__l">Step ' + (st.step + 1) + ' of ' + N + '</span>' + (st.step > 0 ? '<button class="rmx-btn rmx-btn--secondary" data-ex="back">Back</button>' : '') +
+      '<button class="ex-linkbtn" data-ex="skip">Skip for now</button><button class="rmx-btn rmx-btn--primary" data-ex="next">' + (st.step === N - 1 ? 'Finish' : 'Next') + '</button></div>';
+  }
+  function dotHTML(st, i) { var d = st.status[i]; return '<span class="ex-dot">' + (d === 'done' ? ic('check') : i + 1) + '</span>'; }
+  function cls(st, i) { return st.step === i ? 'is-cur' : (st.status[i] === 'done' ? 'is-done' : (st.status[i] === 'skipped' ? 'is-skip' : '')); }
+  function hStepper(st) {
+    return '<div class="ex-hsteps">' + STEPS.map(function (s, i) { return '<button class="ex-hstep ' + cls(st, i) + '" data-ex="goto" data-v="' + i + '">' + dotHTML(st, i) + s.label + '</button>'; }).join('') + '</div>';
+  }
+  function stepperHTML(st) {
+    var t = st.cfg.stepper, closeAct = 'close-step';
+    if (t === 'h') return dlg('ro-dialog--tall', 'Set up rmResident Portal', hStepper(st) + '<div class="ex-dbody">' + stepBody(st) + '</div>' + stepFoot(st), '', closeAct);
+    if (t === 'v') {
+      var done = cnt(st);
+      var rail = '<div class="ex-rail"><div class="ro-bar"><span class="rmx-type-label-m-semibold" style="color:var(--text-secondary)">Setup guide</span><div class="ro-bar__track"><div class="ro-bar__fill" style="--pct:' + Math.round(done / N * 100) + '"></div></div><span class="ro-bar__pct">' + done + ' of ' + N + ' reviewed</span></div>' +
+        STEPS.map(function (s, i) { return '<button class="ex-rstep ' + cls(st, i) + '" data-ex="goto" data-v="' + i + '">' + dotHTML(st, i) + '<span>' + s.label + '<small>' + s.sub + '</small></span></button>'; }).join('') + '</div>';
+      return dlg('ro-dialog--tall', 'Set up rmResident Portal', '<div class="ex-wiz">' + rail + '<div class="ex-main"><div class="ex-dbody">' + stepBody(st) + '</div>' + stepFoot(st) + '</div></div>', '', closeAct);
+    }
+    return '';
+  }
+  function dockHTML(st) {
+    if (st.min) return '<button class="ex-pill" data-ex="unmin">' + ic('check-circle') + 'Setup guide · ' + cnt(st) + ' of ' + N + '</button>';
+    var done = cnt(st);
+    var list = STEPS.map(function (s, i) { return '<button class="ex-rstep ' + cls(st, i) + '" data-ex="goto" data-v="' + i + '">' + dotHTML(st, i) + '<span>' + s.label + '</span></button>'; }).join('');
+    return '<aside class="ex-dock" aria-label="Setup guide"><div class="ex-dock__head">Setup guide<div><button aria-label="Minimize" data-ex="min">' + ic('remove') + '</button><button aria-label="Close" data-ex="close-step">' + ic('close') + '</button></div></div>' +
+      '<div class="ex-dock__body"><div class="ro-bar"><div class="ro-bar__track"><div class="ro-bar__fill" style="--pct:' + Math.round(done / N * 100) + '"></div></div><span class="ro-bar__pct" style="min-width:64px">' + done + ' of ' + N + '</span></div>' + stepBody(st, true) + '<div class="ex-dock__list">' + list + '</div></div>' + stepFoot(st) + '</aside>';
+  }
+
+  function render(st) {
+    var el = document.getElementById(st.id), o = '';
+    var docked = st.open && st.cfg.stepper === 'dock';
+    if (st.dlg === 'choice') o = choiceDlg(st);
+    else if (st.dlg === 'confirm-quick' || st.dlg === 'confirm-guided') o = confirmDlg(st);
+    else if (st.dlg === 'switch') o = switchDlg(st);
+    else if (st.open && st.mode === 'on') o = docked ? dockHTML(st) : stepperHTML(st);
+    el.innerHTML = '<div class="ex-adm' + (docked && !st.min ? ' is-docked' : '') + '">' + sechead(st) + banner(st) + items(st) + '</div>' + o;
+  }
+
+  function activate(st, kind) {
+    st.mode = 'on'; st.dlg = null; st.menu = false;
+    if (kind === 'guided') { st.guided = 'partial'; st.step = 0; st.status = []; st.open = true; st.min = false; }
+    else { st.open = false; }
+    render(st);
+    RMX.toast('rmResident Portal is now active', 'success');
+  }
+
+  document.addEventListener('click', function (e) {
+    var t = e.target.closest('[data-ex],[data-todo]');
+    if (!t) { document.querySelectorAll('.ex-stage').forEach(function (el) { var st = S[el.id]; if (st && st.menu) { st.menu = false; render(st); } }); return; }
+    if (t.hasAttribute('data-todo')) { e.preventDefault(); return; }
+    var a = t.dataset.ex, v = t.dataset.v;
+    if (a === 'reset') { var id = t.closest('.ex-option').querySelector('.ex-stage').id; S[id] = fresh(id); render(S[id]); return; }
+    var stage = t.closest('.ex-stage'); if (!stage) return;
+    e.preventDefault();
+    var st = S[stage.id];
+    switch (a) {
+      case 'act-open': st.dlg = 'choice'; st.choice = null; break;
+      case 'choice': st.choice = v; break;
+      case 'go': if (v && v !== 'null') return activate(st, v); break;
+      case 'ask': st.menu = false; st.dlg = 'confirm-' + v; break;
+      case 'menu': st.menu = !st.menu; break;
+      case 'cancel': st.dlg = null; st.menu = false; break;
+      case 'sw-open': st.menu = false; st.dlg = 'switch'; st.reason = null; break;
+      case 'reason': st.reason = +v; break;
+      case 'sw-go': st.mode = 'twa'; st.dlg = null; st.open = false; render(st); RMX.toast('Switched back to TWA', 'success'); return;
+      case 'seg':
+        if (v === 'twa' && st.mode === 'on') { st.dlg = 'switch'; st.reason = null; }
+        if (v === 'rmr' && st.mode !== 'on') { st.dlg = 'choice'; st.choice = null; }
+        break;
+      case 'next': if (st.status[st.step] !== 'skipped') st.status[st.step] = 'done'; st.step++; break;
+      case 'skip': st.status[st.step] = 'skipped'; st.step++; break;
+      case 'back': st.step = Math.max(0, st.step - 1); break;
+      case 'goto': st.step = +v; break;
+      case 'close-step': st.open = false; break;
+      case 'finish': st.open = false; st.guided = 'done'; break;
+      case 'min': st.min = true; break;
+      case 'unmin': st.min = false; break;
+      case 'resume': st.open = true; st.min = false; break;
+      case 'restart': st.menu = false; st.step = 0; st.status = []; st.guided = 'partial'; st.open = true; break;
+    }
+    render(st);
+  });
+
+  Object.keys(CFG).forEach(function (id) { S[id] = fresh(id); render(S[id]); });
+})();
+</script>
+</body>
+</html>

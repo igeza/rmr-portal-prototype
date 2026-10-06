@@ -1,0 +1,832 @@
+[
+ {
+  "section": "Preferences",
+  "groups": [
+   {
+    "group": null,
+    "items": [
+     {
+      "title": "System Preferences",
+      "description": "Define settings that impact the Rent Manager features available and how they work for all users.",
+      "icon": "admin/system-preferences.svg"
+     },
+     {
+      "title": "System Web Preferences",
+      "description": "Control the content and display of Tenant Web Access, Owner Web Access, Online Applications, and more.",
+      "icon": "admin/system-web-preferences.svg"
+     },
+     {
+      "title": "Personal Preferences",
+      "description": "Customize display, search, and email settings for your Rent Manager user account only.",
+      "icon": "admin/personal-preferences.svg"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "section": "Rental Info",
+  "groups": [
+   {
+    "group": "Assets",
+    "items": [
+     {
+      "title": "Asset Types",
+      "description": "Create categories to classify different kinds of assets created in Rent Manager.",
+      "icon": "admin/asset-types.svg"
+     },
+     {
+      "title": "Asset Manufacturers",
+      "description": "Define manufacturers to assign assets you manage. Maintain contact information of each manufacturer.",
+      "icon": "admin/asset-manufacturers.svg"
+     },
+     {
+      "title": "Asset Statuses",
+      "description": "Create categories to apply to assets that describe the condition or current position in your asset workflow.",
+      "icon": "admin/asset-statuses.svg"
+     },
+     {
+      "title": "Asset Tile Statuses",
+      "description": "Define categories to apply to assets that describe the current state of an asset’s title.",
+      "icon": "admin/asset-tile-statuses.svg"
+     },
+     {
+      "title": "Asset Workflow",
+      "description": "Create custom workflows to move an asset through available statuses.",
+      "icon": "admin/asset-workflow.svg"
+     },
+     {
+      "title": "Unit to Asset Conversion Wizard",
+      "description": "Convert items that were previously set up as units to assets in Rent Manager.",
+      "icon": "admin/unit-to-asset-conversion-wizard.svg"
+     },
+     {
+      "title": "Homeowner Statuses & Site Classifications",
+      "description": "Customize homeowner statuses and their corresponding site classifications.",
+      "icon": "admin/homeowner-statuses-and-site-classifications.svg"
+     }
+    ]
+   },
+   {
+    "group": "Tenants / Prospects",
+    "items": [
+     {
+      "title": "Lead Sources",
+      "description": "Define available lead sources to track how prospects are finding your available units.",
+      "icon": "admin/lead-sources.svg"
+     },
+     {
+      "title": "Owner Prospect Lead Sources",
+      "description": "Define available lead sources to track how owners are finding your management company.",
+      "icon": "admin/owner-prospect-lead-sources.svg"
+     },
+     {
+      "title": "Contact Types",
+      "description": "Create categories that can be assigned to tenant, prospect, or vendor contacts for easy identification.",
+      "icon": "admin/contact-types.png"
+     },
+     {
+      "title": "Account Groups",
+      "description": "Manage existing tenant account groups. Update the master account, remove tenant from a group, or delete the entire group.",
+      "icon": "admin/account-groups.svg"
+     },
+     {
+      "title": "History Categories",
+      "description": "Create tags to assign to History/Notes to help filter, search, and share notes.",
+      "icon": "admin/history-categories.svg"
+     },
+     {
+      "title": "Lease Terms",
+      "description": "Define default lease duration that can be selected when adding or renewing tenant leases.",
+      "icon": "admin/lease-terms.png"
+     },
+     {
+      "title": "Lease Term Adjustment Tool",
+      "description": "Update the lease terms on multiple existing leases at once.",
+      "icon": "admin/lease-term-adjustment-tool.svg"
+     },
+     {
+      "title": "Month to Month Adjustment Tool",
+      "description": "Use this tool to set the lease term to MTM for leases with start dates or expired leases with no move out date.",
+      "icon": "admin/month-to-month-adjustment-tool.svg"
+     },
+     {
+      "title": "Prospect Stages",
+      "description": "Define stages through which your prospects progress and assign triggers to automatically move them through the process.",
+      "icon": "admin/prospect-stages.svg"
+     },
+     {
+      "title": "Lost Reasons",
+      "description": "Customize the list of available reasons a prospect is marked as lost to help standardize reporting.",
+      "icon": "admin/lost-reasons.svg"
+     },
+     {
+      "title": "Pet Types",
+      "description": "Define the different pets allowed at your properties and set custom charge and deposit amounts for each.",
+      "icon": "admin/pet-types.svg"
+     }
+    ]
+   },
+   {
+    "group": "Properties / Units",
+    "items": [
+     {
+      "title": "Property Groups",
+      "description": "Group multiple properties together to easily select them for posting, reporting, and filtering.",
+      "icon": "admin/property-groups.png"
+     },
+     {
+      "title": "Floors",
+      "description": "Create and manage the names of floors available in your properties. Floors are added to units to provide detailed information about a unit’s location.",
+      "icon": "admin/floors.svg"
+     },
+     {
+      "title": "Amenities",
+      "description": "Add or manage features available at your rental units. These can be assigned to units and used to help match prospects to a unit.",
+      "icon": "admin/amenities.png"
+     },
+     {
+      "title": "Assign Amenities",
+      "description": "Assign applicable amenities to properties and units to help match prospects to the perfect space.",
+      "icon": "admin/assign-amenities.svg"
+     },
+     {
+      "title": "Subsidies",
+      "description": "Manage subsidy types offered to your tenants. Define the program from which payment is received and the charge type to which the payment can apply.",
+      "icon": "admin/subsidies.svg"
+     },
+     {
+      "title": "Unit Status Types",
+      "description": "Customize the statuses available for your units. Control if units show as vacant and/or available for each status.",
+      "icon": "admin/unit-status-types.png"
+     },
+     {
+      "title": "Association Committees",
+      "description": "Add and manage committees for you Homeowner Association properties. Tenants can be assigned to a committee via the property’s Association tab.",
+      "icon": "admin/association-committees.svg"
+     }
+    ]
+   },
+   {
+    "group": "Violations",
+    "items": [
+     {
+      "title": "Violation Categories",
+      "description": "Define and manage labels to organize violation codes and group them together.",
+      "icon": "admin/violation-categories.png"
+     },
+     {
+      "title": "Violation Code Groups",
+      "description": "Create code groups to organize violation categories and violation codes together.",
+      "icon": "admin/violation-code-groups.svg"
+     }
+    ]
+   },
+   {
+    "group": "Short Term Rentals",
+    "items": [
+     {
+      "title": "STR Payment Policies",
+      "description": "Establish rules for when the balance of an STR reservation is due. Set the amount due at booking and when any remaining balance will be due from the guest.",
+      "icon": "admin/str-payment-policies.png"
+     },
+     {
+      "title": "STR Promotions",
+      "description": "Create promotion codes guests can use to redeem a discount when making a reservation.",
+      "icon": "admin/str-promotions.svg"
+     }
+    ]
+   },
+   {
+    "group": "Evictions",
+    "items": [
+     {
+      "title": "Eviction Workflows",
+      "description": "Manage tenant eviction workflows and customize eviction stages.",
+      "icon": "admin/eviction-workflows.svg"
+     },
+     {
+      "title": "Eviction Reasons",
+      "description": "Customize the list of available reasons a tenant is marked as evicted to help in reporting the eviction process.",
+      "icon": "admin/eviction-reasons.svg"
+     },
+     {
+      "title": "Eviction Outcomes",
+      "description": "Define the different outcomes for the eviction process to help track the tenants that are evicted and not evicted.",
+      "icon": "admin/eviction-outcomes.svg"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "section": "Accounting",
+  "groups": [
+   {
+    "group": "General",
+    "items": [
+     {
+      "title": "Beginning Balances",
+      "description": "Enter the balances of your general ledger accounts as of the day prior to using Rent Manager.",
+      "icon": "admin/beginning-balances.svg"
+     },
+     {
+      "title": "Tax Types",
+      "description": "Define tax rates and the charge types to which they can be applied on your invoices.",
+      "icon": "admin/tax-types.svg"
+     },
+     {
+      "title": "Terms",
+      "description": "Customize the selectable terms on bills to quickly set due dates based on the date of the bill.",
+      "icon": "admin/terms.svg"
+     },
+     {
+      "title": "CPI",
+      "description": "Record adjustments to the Consumer Price Index that can be applied when batch modifying recurring charges or market rents.",
+      "icon": "admin/cpi.svg"
+     },
+     {
+      "title": "Budget",
+      "description": "Create or import budgets by property or add comments to existing budgets.",
+      "icon": "admin/budget.svg"
+     },
+     {
+      "title": "Forecast Models",
+      "description": "Enter assumptions about GL accounts and future occupancy that can be used to project future earnings and expenses.",
+      "icon": "admin/forecast-models.svg"
+     },
+     {
+      "title": "Vendor 1099 Adjustment Tool",
+      "description": "Quickly find and update multiple checks that have the incorrect 1099 status selected.",
+      "icon": "admin/vendor-1099-adjustment-tool.svg"
+     },
+     {
+      "title": "Job Types",
+      "description": "Create categories to classify different kinds of jobs created in Rent Manager.",
+      "icon": "admin/job-types.svg"
+     },
+     {
+      "title": "Accounting Periods",
+      "description": "Create accounting periods to allow certain reports to run by the established period.",
+      "icon": "admin/accounting-periods.svg"
+     },
+     {
+      "title": "Bank Sync Setup",
+      "description": "Connect your online banking to a Rent Manager general ledger account to sync transactions for reconciliation.",
+      "icon": "admin/bank-sync-setup.svg"
+     },
+     {
+      "title": "Manage Aliases",
+      "description": "Control the content and display of Tenant Web Access, Owner Web Access, Online Applications, and more.",
+      "icon": "admin/manage-aliases.svg"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "section": "Owners",
+  "groups": [
+   {
+    "group": null,
+    "items": [
+     {
+      "title": "Owner Groups",
+      "description": "Group multiple owners together to easily select them for posting, reporting, and filtering.",
+      "icon": "admin/owner-groups.svg"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "section": "Payables",
+  "groups": [
+   {
+    "group": null,
+    "items": [
+     {
+      "title": "Purchase Order Workflows",
+      "description": "Specify the order of tasks and users assigned to reviewing, approving, and fulfilling a PO.",
+      "icon": "admin/purchase-order-workflows.svg"
+     },
+     {
+      "title": "Digital Signatures",
+      "description": "Upload images of handwritten signatures that can be saved and printed on checks.",
+      "icon": "admin/digital-signatures.svg"
+     },
+     {
+      "title": "Positive Pay Formats",
+      "description": "Create and assign templates for your bank's Positive Pay file structure to send check details to your bank prior to checks being cashed.",
+      "icon": "admin/positive-pay-formats.svg"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "section": "Receivables",
+  "groups": [
+   {
+    "group": null,
+    "items": [
+     {
+      "title": "Memorized Comments",
+      "description": "Create custom messages that can be quickly inserted into the comment field on invoices and statements.",
+      "icon": "admin/memorized-comments.svg"
+     },
+     {
+      "title": "Allocation Order",
+      "description": "Set the order in which charge types are paid when a payment is recorded.",
+      "icon": "admin/allocation-order.svg"
+     },
+     {
+      "title": "Rentable Security Deposit Management",
+      "description": "Streamline deposit collection, ensure total compliance with legislation, and offer tenants flexible payment options.",
+      "icon": "admin/rentable-security-deposit-management.svg"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "section": "Service",
+  "groups": [
+   {
+    "group": "Service Manager",
+    "items": [
+     {
+      "title": "Priorities",
+      "description": "Create and color code the priority levels that are selectable on service issues.",
+      "icon": "admin/priorities.svg"
+     },
+     {
+      "title": "Issue Categories",
+      "description": "Customize and color code categories used to classify your service issues.",
+      "icon": "admin/issue-categories.svg"
+     },
+     {
+      "title": "Statuses",
+      "description": "Define and color code issue statuses used to track progress of your service issues.",
+      "icon": "admin/statuses.svg"
+     },
+     {
+      "title": "Maintenance Techs",
+      "description": "Designate users as maintenance techs to manage work schedules and time off. A tech's workload can be managed using the Maintenance Schedule.",
+      "icon": "admin/maintenance-techs.svg"
+     },
+     {
+      "title": "Maintenance Groups",
+      "description": "Define the team of technicians servicing specific properties and the days and time blocks they are available for scheduling. These groups allow you to easily manage your maintenance scheduling.",
+      "icon": "admin/maintenance-groups.svg"
+     }
+    ]
+   },
+   {
+    "group": "Make Ready",
+    "items": [
+     {
+      "title": "Make Ready Actions",
+      "description": "Manage the available categories for issues and inspections in your make ready process. These actions are column headers to organize your make ready board.",
+      "icon": "admin/make-ready-actions.svg"
+     }
+    ]
+   },
+   {
+    "group": "Community",
+    "items": [
+     {
+      "title": "Community Calendar Event Types",
+      "description": "Create labels and define colors that can be used to categorize the different events offered in your community.",
+      "icon": "admin/community-calendar-event-types.svg"
+     }
+    ]
+   },
+   {
+    "group": "Utilities",
+    "items": [
+     {
+      "title": "Meter Estimates",
+      "description": "Set default values for estimate limits and estimation methods.",
+      "icon": "admin/meter-estimates.svg"
+     },
+     {
+      "title": "High / Low Settings",
+      "description": "Set how flagged meter readings are reviewed, define exception reasons, and choose if approvals are needed before posting charges.",
+      "icon": "admin/high-low-settings.svg"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "section": "Users",
+  "groups": [
+   {
+    "group": null,
+    "items": [
+     {
+      "title": "Users",
+      "description": "Create and manage Rent Manager user accounts. Assign privileges, roles, reports, letters, dashboards, and menus.",
+      "icon": "admin/users.svg"
+     },
+     {
+      "title": "User Roles",
+      "description": "Establish privileges, reports, letters, dashboard, and menu settings that can be applied to multiple users who share the same job.",
+      "icon": "admin/user-roles.svg"
+     },
+     {
+      "title": "Merge Users",
+      "description": "Combine duplicate Rent Manager user accounts into a single user record.",
+      "icon": "admin/merge-users.svg"
+     },
+     {
+      "title": "Manage Rent Manager Sessions",
+      "description": "View all currently logged in Rent Manager users and log off users as needed.",
+      "icon": "admin/manage-rent-manager-sessions.svg"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "section": "Customization",
+  "groups": [
+   {
+    "group": null,
+    "items": [
+     {
+      "title": "Colors",
+      "description": "Define custom display colors for Rent Manager records such as tenants, owners, prospects, tasks, and more.",
+      "icon": "admin/colors.svg"
+     },
+     {
+      "title": "My Layouts",
+      "description": "Customize the way information is displayed on entity detail pages, including tenants, prospects, issues, and more.",
+      "icon": "admin/my-layouts.svg"
+     },
+     {
+      "title": "System Layouts",
+      "description": "Customize the way information is displayed on entity detail pages, including tenants, prospects, issues, and more.",
+      "icon": "admin/system-layouts.svg"
+     },
+     {
+      "title": "My Dashboards",
+      "description": "Design and manage dashboards for your Rent Manager user account.",
+      "icon": "admin/my-dashboards.svg"
+     },
+     {
+      "title": "System Dashboards",
+      "description": "Create and manage dashboards that can be shared with and assigned to other Rent Manager users.",
+      "icon": "admin/system-dashboards.svg"
+     },
+     {
+      "title": "Scoreboards",
+      "description": "Create and manage scoreboards that can be assigned to other Rent Manager users.",
+      "icon": "admin/scoreboards.svg"
+     },
+     {
+      "title": "Image Types",
+      "description": "Create categories to classify and assign to property, unit, unit type, and asset images.",
+      "icon": "admin/image-types.svg"
+     },
+     {
+      "title": "Manage Text Numbers",
+      "description": "Control which numbers are available for broadcasts, Automated Notifications, AR Automation, and individual texts.",
+      "icon": "admin/manage-text-numbers.svg"
+     },
+     {
+      "title": "Manage Web hooks",
+      "description": "Create webhooks to send information from your database to a secure web address when an event occurs in Rent Manager.",
+      "icon": "admin/manage-web-hooks.svg"
+     },
+     {
+      "title": "User Defined Fields",
+      "description": "Manage custom fields to track information that Rent Manager doesn't track by default.",
+      "icon": "admin/user-defined-fields.svg"
+     },
+     {
+      "title": "System UDF Values",
+      "description": "Add or update the data stored in your system-level user defined fields.",
+      "icon": "admin/system-udf-values.svg"
+     },
+     {
+      "title": "System Filters",
+      "description": "Create and assign custom filters that make it easier to find what you need in Rent Manager.",
+      "icon": "admin/system-filters.svg"
+     },
+     {
+      "title": "Guest Card Templates",
+      "description": "Create and manage the questions that appear on your guest cards and how they are mapped to fields in Rent Manager.",
+      "icon": "admin/guest-card-templates.svg"
+     },
+     {
+      "title": "Unit Migration Wizard",
+      "description": "Move units from one property to another. This will move all transactions associated with the unit as well.",
+      "icon": "admin/unit-migration-wizard.svg"
+     },
+     {
+      "title": "Online Template Library",
+      "description": "Download templates for letters, reports, and inspections that can then be modified to meet your exact needs.",
+      "icon": "admin/online-template-library.svg"
+     },
+     {
+      "title": "Address Types",
+      "description": "Define categories for the different addresses stored on each of your entities in Rent Manager.",
+      "icon": "admin/address-types.svg"
+     },
+     {
+      "title": "Phone Number Types",
+      "description": "Define categories for the different phone numbers stored on each of your entities in Rent Manager.",
+      "icon": "admin/phone-number-types.svg"
+     },
+     {
+      "title": "Custom Add Wizards",
+      "description": "Design your own add wizards with just the fields you need for adding prospects, moving tenants in/out, creating assets, and more.",
+      "icon": "admin/custom-add-wizards.svg"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "section": "Rollback",
+  "groups": [
+   {
+    "group": null,
+    "items": [
+     {
+      "title": "Posting Rollback",
+      "description": "Reverse postings such as recurring charges, reconciliations, imports, late fees, and more.",
+      "icon": "admin/posting-rollback.svg"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "section": "Automation",
+  "groups": [
+   {
+    "group": "General",
+    "items": [
+     {
+      "title": "Automated Notifications",
+      "description": "Send customized emails and texts automatically based on events in Rent Manager or set schedules.",
+      "icon": "admin/automated-notifications.svg"
+     }
+    ]
+   },
+   {
+    "group": "Task Automation",
+    "items": [
+     {
+      "title": "Recurring Charges",
+      "description": null,
+      "icon": null
+     },
+     {
+      "title": "Late Fees",
+      "description": null,
+      "icon": null
+     },
+     {
+      "title": "Loans Receivable Late Fees",
+      "description": null,
+      "icon": null
+     },
+     {
+      "title": "Loans Receivable",
+      "description": null,
+      "icon": null
+     },
+     {
+      "title": "Management Fees",
+      "description": null,
+      "icon": null
+     },
+     {
+      "title": "GPR",
+      "description": null,
+      "icon": null
+     },
+     {
+      "title": "Recurring ePay",
+      "description": null,
+      "icon": null
+     },
+     {
+      "title": "Utilities",
+      "description": null,
+      "icon": null
+     },
+     {
+      "title": "Accounts Receivable",
+      "description": null,
+      "icon": null
+     },
+     {
+      "title": "Tenant Statements",
+      "description": null,
+      "icon": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "section": "Import",
+  "groups": [
+   {
+    "group": "General",
+    "items": [
+     {
+      "title": "Manage Import Templates",
+      "description": "View details of, rename, or delete existing import templates.",
+      "icon": "admin/manage-import-templates.svg"
+     }
+    ]
+   },
+   {
+    "group": "Import Records",
+    "items": [
+     {
+      "title": "Import Properties",
+      "description": null,
+      "icon": null
+     },
+     {
+      "title": "Import Unit Types",
+      "description": null,
+      "icon": null
+     },
+     {
+      "title": "Import Units",
+      "description": null,
+      "icon": null
+     },
+     {
+      "title": "Import Tenants",
+      "description": null,
+      "icon": null
+     },
+     {
+      "title": "Import Prospects",
+      "description": null,
+      "icon": null
+     },
+     {
+      "title": "Import Tenant / Prospect Contacts",
+      "description": null,
+      "icon": null
+     },
+     {
+      "title": "Import Charges",
+      "description": null,
+      "icon": null
+     },
+     {
+      "title": "Import Recurring Charges",
+      "description": null,
+      "icon": null
+     },
+     {
+      "title": "Import STR Guests",
+      "description": null,
+      "icon": null
+     },
+     {
+      "title": "Import STR Guest Prospects",
+      "description": null,
+      "icon": null
+     },
+     {
+      "title": "Import STR Reservations",
+      "description": null,
+      "icon": null
+     },
+     {
+      "title": "Import Payments",
+      "description": null,
+      "icon": null
+     },
+     {
+      "title": "Import Vendors",
+      "description": null,
+      "icon": null
+     },
+     {
+      "title": "Import Owners",
+      "description": null,
+      "icon": null
+     },
+     {
+      "title": "Import Journals",
+      "description": null,
+      "icon": null
+     },
+     {
+      "title": "Import Jobs",
+      "description": null,
+      "icon": null
+     },
+     {
+      "title": "Import Assets",
+      "description": null,
+      "icon": null
+     },
+     {
+      "title": "Import Deprecation Setup",
+      "description": null,
+      "icon": null
+     },
+     {
+      "title": "Import Budget",
+      "description": null,
+      "icon": null
+     },
+     {
+      "title": "Import Chart of Accounts",
+      "description": null,
+      "icon": null
+     },
+     {
+      "title": "Import Owner Contracts",
+      "description": null,
+      "icon": null
+     },
+     {
+      "title": "Import Owner Prospects",
+      "description": null,
+      "icon": null
+     },
+     {
+      "title": "Import Owner Prospects Properties",
+      "description": null,
+      "icon": null
+     },
+     {
+      "title": "Import Inventory Items",
+      "description": null,
+      "icon": null
+     },
+     {
+      "title": "Import Violation Codes",
+      "description": null,
+      "icon": null
+     },
+     {
+      "title": "Import Bills",
+      "description": null,
+      "icon": null
+     },
+     {
+      "title": "Import Meter Information",
+      "description": null,
+      "icon": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "section": "Integrations",
+  "groups": [
+   {
+    "group": null,
+    "items": [
+     {
+      "title": "Available Integrations",
+      "description": "Browse available Rent Manager integrations with our partners and directly request activation.",
+      "icon": "admin/available-integrations.svg"
+     },
+     {
+      "title": "My Integrations",
+      "description": "Review your active integrations. Find contact information for vendors, deactivate, or modify associated settings.",
+      "icon": "admin/my-integrations.svg"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "section": "Locations",
+  "groups": [
+   {
+    "group": null,
+    "items": [
+     {
+      "title": "Manage Locations",
+      "description": "Add, edit, delete, or switch to additional database locations.",
+      "icon": "admin/manage-locations.svg"
+     },
+     {
+      "title": "Change Locations",
+      "description": "Switch to a different database location.",
+      "icon": "admin/change-locations.svg"
+     }
+    ]
+   }
+  ]
+ }
+]

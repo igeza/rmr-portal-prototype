@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="rmx-skill" content="4.5.2">
+<meta name="rmx-tokens" content="a6dff32542cd">
+<title>rmResident Portal Rollout — Rent Manager Express</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/tokens-local.css">
+<link rel="stylesheet" href="assets/megamenu.css">
+<link rel="stylesheet" href="assets/type.css">
+<link rel="stylesheet" href="assets/rmx.css">
+<link rel="stylesheet" href="assets/proto.css">
+<link rel="stylesheet" href="assets/responsive.css">
+</head>
+<body class="rmx">
+
+<div class="rmx-index">
+  <h1 class="rmx-h1">rmResident Portal Rollout</h1>
+  <p class="rmx-text" style="color:var(--text-primary);margin:4px 0 24px">
+    Rollout flow for existing TWA users: from the dashboard announcement, through conversion setup and the checklist, to activating rmResident Portal. Start at screen 1 and click through, or open any state from the list.
+  </p>
+
+  <p class="rmx-text" style="margin:0 0 16px"><a class="rmx-text--link" href="screens/admin-get-started.html?reset=1">Reset walkthrough</a> — clears what has been started, marked Ready or activated. Progress is otherwise remembered between visits.</p>
+  <ul class="rmx-index__list">
+    <li class="rmx-index__item">
+      <a class="rmx-text rmx-text--link" href="screens/dashboard.html">1. Dashboard</a>
+      <p class="rmx-index__note">Existing TWA user’s My Workspace with the new rmResident Portal announcement. Start here — “Learn More” opens the announcement.</p>
+    </li>
+    <li class="rmx-index__item">
+      <a class="rmx-text rmx-text--link" href="screens/announcement-learn-more.html">2. Announcement — Learn More</a>
+      <p class="rmx-index__note">The “rmResident Portal is here” overlay. “Go to Administration” continues the flow.</p>
+    </li>
+    <li class="rmx-index__item">
+      <a class="rmx-text rmx-text--link" href="screens/admin-get-started.html">3. Administration — Get started</a>
+      <p class="rmx-index__note">rmResident Portal section with the “New rmResident Portal is now available” banner. “Start Conversion” continues.</p>
+    </li>
+    <li class="rmx-index__item">
+      <a class="rmx-text rmx-text--link" href="screens/admin-conversion-started.html">4. Administration — Conversion started</a>
+      <p class="rmx-index__note">Setup banner at 33% with the four portal settings. “View My Checklist” opens the checklist.</p>
+    </li>
+    <li class="rmx-index__item">
+      <a class="rmx-text rmx-text--link" href="screens/setup-guide.html">5. Setup guide (Guided Setup stepper; replaces the checklist)</a>
+      <p class="rmx-index__note">New Portal Setup overlay at 0% with What’s new and Notify your residents expanded. Items turn Ready for real as you complete them.</p>
+    </li>
+    <li class="rmx-index__item">
+      <a class="rmx-text rmx-text--link" href="screens/checklist-in-progress.html">6. Checklist — In progress</a>
+      <p class="rmx-index__note">33% complete, single Default profile. Designed state; the live checklist is screen 5.</p>
+    </li>
+    <li class="rmx-index__item">
+      <a class="rmx-text rmx-text--link" href="screens/checklist-multiple-locations.html">7. Checklist — Multiple locations</a>
+      <p class="rmx-index__note">Two locations (Default and Blooming Floral Co.). Designed state with two locations.</p>
+    </li>
+    <li class="rmx-index__item">
+      <a class="rmx-text rmx-text--link" href="screens/checklist-ready-to-activate.html">8. Checklist — Ready to activate</a>
+      <p class="rmx-index__note">All items Ready, with the “Ready to go live?” banner. “Activate rmResident Portal” opens the confirmation.</p>
+    </li>
+    <li class="rmx-index__item">
+      <a class="rmx-text rmx-text--link" href="screens/confirm-activation.html">9. Confirm Activation</a>
+      <p class="rmx-index__note">Pop Up for accounts with multiple locations (retires TWA across all locations). “Activate” completes the rollout.</p>
+    </li>
+    <li class="rmx-index__item">
+      <a class="rmx-text rmx-text--link" href="screens/confirm-activation-single-location.html">9b. Confirm Activation — single location</a>
+      <p class="rmx-index__note">Variant copy for a single-location account. Reached from this list only.</p>
+    </li>
+    <li class="rmx-index__item">
+      <a class="rmx-text rmx-text--link" href="screens/admin-ready-to-activate.html">10. Administration — Ready to activate</a>
+      <p class="rmx-index__note">Setup banner at 100% (checklist closed once complete), with “Activate rmResident Portal”.</p>
+    </li>
+    <li class="rmx-index__item">
+      <a class="rmx-text rmx-text--link" href="screens/admin-activated.html">11. Administration — Portal activated</a>
+      <p class="rmx-index__note">Banner gone, success Toast shown. End of flow.</p>
+    </li>
+    <li class="rmx-index__item">
+      <a class="rmx-text rmx-text--link" href="screens/admin-menu.html">12. Administration — full menu</a>
+      <p class="rmx-index__note">Opened from the Mega Menu’s Administration tab. All 14 sections with their items; the left menu jumps to each section, and rmResident Portal opens screen 3.</p>
+    </li>
+    <li class="rmx-index__item">
+      <a class="rmx-text rmx-text--link" href="screens/tour-welcome.html">13. Tour — Welcome to rmResident Portal</a>
+      <p class="rmx-index__note">Opened from the tour icon beside “rmResident Portal” on any Administration page. Learn More continues through Why use it?, What can residents do?, and Preview before Publishing; Finish or X returns to where you started.</p>
+    </li>
+    <li class="rmx-index__item">
+      <a class="rmx-text rmx-text--link" href="screens/profiles-register.html">14. Portal Profiles register</a>
+      <p class="rmx-index__note">Opened from Portal Profiles in Administration. Profile actions (Make Default, Make Inactive / Active) work from each row’s menu.</p>
+    </li>
+    <li class="rmx-index__item">
+      <a class="rmx-text rmx-text--link" href="screens/profile-branding.html?p=default&from=checklist">15. Profile Details — Portal Branding</a>
+      <p class="rmx-index__note">Opened by Review on a profile in the checklist. Edit profile, assign property types, reassignment warnings, Portal Preview, Save Draft and Publish all work. Publish marks the profile Ready and returns to the checklist.</p>
+    </li>
+    <li class="rmx-index__item">
+      <a class="rmx-text rmx-text--link" href="screens/profile-settings.html?p=default&from=checklist">16. Profile Details — Portal Settings</a>
+      <p class="rmx-index__note">Second tab of the same profile. Page Settings and Account Management are not designed yet.</p>
+    </li>
+    <li class="rmx-index__item">
+      <a class="rmx-text rmx-text--link" href="screens/user-privileges.html">17. User — Privileges</a>
+      <p class="rmx-index__note">The new rmResident Portal privileges (Manage Portal Profiles, Portal Log-In, Payment Policies, App Settings). Reached from this list only.</p>
+    </li>
+    <li class="rmx-index__item">
+      <a class="rmx-text rmx-text--link" href="screens/payments-register.html">19. Payment Policies register</a>
+      <p class="rmx-index__note">Opened from Payment Policies in Administration. Row click or Add Policy Settings opens Payment Policy Details (settings update the preview live); Make Default / Make Inactive work from each row’s menu.</p>
+    </li>
+    <li class="rmx-index__item">
+      <a class="rmx-text rmx-text--link" href="screens/checklist-in-progress.html">20. Payment Policy Details — from setup checklist</a>
+      <p class="rmx-index__note">Opened by Review on a policy in the checklist: the Payment Policy Details overlay opens over the checklist. Ready to Publish closes the overlay and the policy’s row turns Ready; Cancel or X closes without changes.</p>
+    </li>
+    <li class="rmx-index__item">
+      <a class="rmx-text rmx-text--link" href="screens/ptour-welcome.html">18. Portal Customization tour</a>
+      <p class="rmx-index__note">Opened from the info icon in the Portal Profiles context bar. Welcome → Custom Portal for Each Property Type → Add Your Brand Identity → Control Exactly Which Pages Tenants Can Access → Take Control of Account Settings → Publish When You’re Ready.</p>
+    </li>
+  </ul>
+</div>
+
+<script src="assets/megamenu.js"></script>
+</body>
+</html>

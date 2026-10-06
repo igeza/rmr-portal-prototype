@@ -1,0 +1,164 @@
+{
+  "source": "Figma 384ANNrhOViFkokiSNnW8C node 3720:39625",
+  "note": "Theme photos render at 50% opacity in the mock. Unselected presets use grey ring radios; the 'Use Custom ...' radios are the selected ones.",
+  "sections": [
+    {
+      "id": "colors",
+      "title": "Colors",
+      "subtitle": "Select colors to match your brand.",
+      "presetOptions": [
+        {
+          "label": "Ocean Blue",
+          "image": "assets/rollout/branding/color-ocean-blue.png",
+          "selected": false
+        },
+        {
+          "label": "Forest Green",
+          "image": "assets/rollout/branding/color-forest-green.png",
+          "selected": false
+        },
+        {
+          "label": "Sunset Orange",
+          "image": "assets/rollout/branding/color-sunset-orange.png",
+          "selected": false
+        },
+        {
+          "label": "Royal Purple",
+          "image": "assets/rollout/branding/color-royal-purple.png",
+          "selected": false
+        },
+        {
+          "label": "Crimson Red",
+          "image": "assets/rollout/branding/color-crimson-red.png",
+          "selected": false
+        },
+        {
+          "label": "Charcoal Gray",
+          "image": "assets/rollout/branding/color-charcoal-gray.png",
+          "selected": false
+        }
+      ],
+      "presetLayout": "3 columns x 2 rows of radio + 204x111 thumbnail (thumbnail PNGs are renders of the mini portal mockup)",
+      "divider": "assets/rollout/branding/divider-line.svg",
+      "customOption": {
+        "label": "Use Custom Colors",
+        "selected": true,
+        "swatches": [
+          {
+            "label": "Main Color",
+            "hex": "#1b64bb"
+          },
+          {
+            "label": "Button Color",
+            "hex": "#1b64bb"
+          },
+          {
+            "label": "Accent Color",
+            "hex": "#5597e7"
+          }
+        ],
+        "swatchSize": 32
+      }
+    },
+    {
+      "id": "themes",
+      "title": "Themes",
+      "subtitle": "Choose a theme to customize the look of your portal.",
+      "presetOptions": [
+        {
+          "label": "Residential 1",
+          "image": "assets/rollout/branding/theme-residential-1.jpg",
+          "selected": false
+        },
+        {
+          "label": "Residential 2",
+          "image": "assets/rollout/branding/theme-residential-2.jpg",
+          "selected": false
+        },
+        {
+          "label": "Commercial 1",
+          "image": "assets/rollout/branding/theme-commercial-1.jpg",
+          "selected": false
+        },
+        {
+          "label": "Commercial 2",
+          "image": "assets/rollout/branding/theme-commercial-2.jpg",
+          "selected": false
+        },
+        {
+          "label": "Manufactured Housing 1",
+          "image": "assets/rollout/branding/theme-manufactured-housing-1.jpg",
+          "selected": false
+        },
+        {
+          "label": "Manufactured Housing 2",
+          "image": "assets/rollout/branding/theme-manufactured-housing-2.jpg",
+          "selected": false
+        },
+        {
+          "label": "Associations 1",
+          "image": "assets/rollout/branding/theme-associations-1.jpg",
+          "selected": false
+        },
+        {
+          "label": "Associations 2",
+          "image": "assets/rollout/branding/theme-associations-2.jpg",
+          "selected": false
+        }
+      ],
+      "presetLayout": "2 columns x 4 rows, radio + label, 120px-high photo tile (object-cover, 50% opacity), 32px column gap",
+      "divider": "assets/rollout/branding/divider-line-themes.svg",
+      "customOption": {
+        "label": "Use Custom Theme Image",
+        "selected": true,
+        "helper": "Recommended size: 1920x1080px",
+        "dropzone": {
+          "height": 120,
+          "icon": "assets/rollout/branding/icon-cloud-upload.svg",
+          "linkText": "Click to Upload",
+          "secondaryText": "or drop them here"
+        }
+      }
+    },
+    {
+      "id": "logo",
+      "title": "Logo",
+      "subtitle": "Replace our default logo with your own to create a more personalized experience.",
+      "customOption": {
+        "label": "Use Custom Logo",
+        "selected": true,
+        "helper": "Recommended size: 300x100px",
+        "uploaded": {
+          "companyName": "SUMMIT Property Management",
+          "image": "assets/rollout/branding/logo-summit.png",
+          "imageSize": "350x105",
+          "fileName": "img_4321.jpg",
+          "removeIcon": "assets/rollout/branding/icon-close.svg"
+        },
+        "uploadBar": {
+          "uploadIcon": "assets/rollout/branding/icon-cloud-upload-sm.svg",
+          "uploadText": "Upload",
+          "separator": "assets/rollout/branding/icon-upload-divider.svg",
+          "pasteIcon": "assets/rollout/branding/icon-paste.svg",
+          "pasteText": "Paste"
+        }
+      },
+      "udfOption": {
+        "label": "Use Property UDF",
+        "selected": false,
+        "dropdown": {
+          "value": "Logo",
+          "width": 248,
+          "chevron": "assets/rollout/branding/icon-chevron-down.svg"
+        }
+      }
+    }
+  ],
+  "hiddenSections": [
+    {
+      "nodeId": "3720:39626",
+      "note": "Hidden autopay-settings frame ('Choose what payment options tenants can select for AutoPay'); skipped"
+    }
+  ],
+  "furtherSections": "None below Logo (no Favicon). Only 3 visible sections."
+}
