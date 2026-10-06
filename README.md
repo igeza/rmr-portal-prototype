@@ -8,6 +8,7 @@ full sourcing notes, scope decisions, and what's built vs. pending.
 
 - **MVP:** https://igeza.github.io/rmr-portal-prototype/mvp/ (the site root, https://igeza.github.io/rmr-portal-prototype/, also opens MVP)
 - **Full Product:** https://igeza.github.io/rmr-portal-prototype/full-product/
+- **Rollout (existing TWA users → activate rmResident Portal):** https://igeza.github.io/rmr-portal-prototype/rmx-rollout-portal-activation/ (single-file version: [`rollout.html`](https://igeza.github.io/rmr-portal-prototype/rmx-rollout-portal-activation/rollout.html))
 
 ## Running it locally
 
