@@ -943,3 +943,8 @@ details.ro-sub > summary { height: 46px; min-height: 46px; box-sizing: border-bo
 .sg-select--l span { color: var(--text-secondary); }
 .sg-sec .sg-sec { margin-top: var(--spacing-xs); }
 .sg-step:not(:last-child)::after { height: 26px; }
+/* Activate split button on the Administration banner (after Save & Don't Activate) */
+.ro-split { position: relative; display: inline-block; flex: none; }
+.ro-split .rmx-split__main, .ro-split .rmx-split__caret { background: var(--icon-attention); color: var(--text-inverse); }
+.ro-split .rmx-split__caret .rmx-icon { width: 20px; height: 20px; }
+.ro-split__menu { left: auto; right: 0; min-width: 100%; white-space: nowrap; }

@@ -119,7 +119,7 @@
     wrap.querySelector(".sg-content").scrollTop = 0;
   }
   function leave(activated) {
-    var st = window.RO.get(); if (activated) { st.converted = true; st.activated = true; window.RO.save(st); }
+    var st = window.RO.get(); if (activated) { st.converted = true; st.activated = true; } else { st.guidedSaved = true; } window.RO.save(st);
     location.href = activated ? 'admin-activated.html' : 'admin-get-started.html';
   }
   document.addEventListener('DOMContentLoaded', function () {

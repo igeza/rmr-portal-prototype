@@ -40,6 +40,27 @@
     });
     document.addEventListener('keydown', function esc(e) { if (e.key === 'Escape') { w.remove(); document.removeEventListener('keydown', esc); } });
   }
+  /* After "Save & Don't Activate" the banner CTA becomes a split button: Activate / Finish Guided Setup. */
+  function splitUp() {
+    var s = window.RO && window.RO.get();
+    if (!s || !s.guidedSaved || s.activated) return;
+    var b = document.querySelector('[data-ro-activate-open]');
+    if (!b) return;
+    var w = document.createElement('div');
+    w.className = 'ro-split';
+    w.innerHTML = '<div class="rmx-split ro-split__btn"><button type="button" class="rmx-split__main" data-act-go="activate">Activate</button><button type="button" class="rmx-split__caret" aria-label="More options" aria-haspopup="menu" aria-expanded="false">' + icon('arrow-drop-down') + '</button></div>' +
+      '<div class="rmx-menu ro-split__menu" role="menu" hidden><button type="button" data-value="activate" role="menuitem" data-act-go="activate">Activate</button><button type="button" data-value="finish" role="menuitem" data-act-go="finish">Finish Guided Setup</button></div>';
+    b.replaceWith(w);
+    var caret = w.querySelector('.rmx-split__caret'), menu = w.querySelector('.ro-split__menu');
+    caret.addEventListener('click', function (e) { e.stopPropagation(); menu.hidden = !menu.hidden; caret.setAttribute('aria-expanded', String(!menu.hidden)); });
+    document.addEventListener('click', function () { menu.hidden = true; caret.setAttribute('aria-expanded', 'false'); });
+    w.addEventListener('click', function (e) {
+      var g = e.target.closest('[data-act-go]'); if (!g) return;
+      if (g.dataset.actGo === 'activate') { var s2 = window.RO.get(); s2.converted = true; s2.activated = true; window.RO.save(s2); location.href = 'admin-activated.html'; }
+      else location.href = 'setup-guide.html?step=9';
+    });
+  }
+  document.addEventListener('DOMContentLoaded', splitUp);
   document.addEventListener('click', function (e) {
     if (e.target.closest('[data-ro-activate-open]')) { e.preventDefault(); choice = 'just'; open(); }
   });
