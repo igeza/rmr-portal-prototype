@@ -11,7 +11,7 @@ import base64, json, os, re, sys, urllib.request
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SCREENS = os.path.join(ROOT, 'screens')
-START = 'dashboard.html'
+START = 'admin-get-started.html'
 OUT = os.path.join(ROOT, 'rollout.html')
 MIME = {'png': 'image/png', 'jpg': 'image/jpeg', 'jpeg': 'image/jpeg', 'gif': 'image/gif', 'svg': 'image/svg+xml', 'webp': 'image/webp'}
 
