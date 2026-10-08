@@ -177,7 +177,7 @@
     var tourStore = RO.get();
     var rememberReturn = function () { try { sessionStorage.setItem('roPtourReturn', location.pathname.split('/').pop() + location.search); } catch (e) {} };
     if ((dFile === 'profile-branding.html' || dFile === 'profile-settings.html') && !tourStore.tourSeen) {
-      tourStore.tourSeen = true; RO.save(tourStore); rememberReturn(); location.replace('ptour-welcome.html'); return;
+      tourStore.tourSeen = true; RO.save(tourStore); if (window.ROPTOUR) window.ROPTOUR.open();
     }
     if (dFile.indexOf('ptour-') === 0 && !tourStore.tourSeen) { tourStore.tourSeen = true; RO.save(tourStore); }
     document.addEventListener('click', function (e) { if (e.target.closest('[data-ro-ptour]')) rememberReturn(); }, true);

@@ -24,6 +24,12 @@
   }
   function save(s) { try { localStorage.setItem(KEY, JSON.stringify(s)); } catch (e) {} }
   function reset() { try { localStorage.removeItem(KEY); } catch (e) {} }
+  /* ?reset=1 clears the walkthrough once, as the page loads, then drops itself from the URL so links
+     that carry the query string (Profile Details tabs, etc.) don't wipe the state again. */
+  if (/[?&]reset=1/.test(location.search)) {
+    reset();
+    try { history.replaceState(null, '', location.pathname + location.search.replace(/([?&])reset=1&?/, '$1').replace(/[?&]$/, '') + location.hash); } catch (e) {}
+  }
 
   /* ---- readiness ---- */
   function isReady(s, key) {
@@ -165,7 +171,6 @@
   window.RO = { get: get, save: save, reset: reset, fresh: fresh, TYPES: TYPES, hydrate: hydrate, typesLabel: typesLabel, summary: summary, isReady: isReady };
 
   document.addEventListener('DOMContentLoaded', function () {
-    if (/[?&]reset=1/.test(location.search)) reset();
     hydrate();
     persistCards();
   });
