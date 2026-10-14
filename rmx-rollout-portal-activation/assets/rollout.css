@@ -765,7 +765,7 @@ details.ro-sub > summary { height: 46px; min-height: 46px; box-sizing: border-bo
 .ro-act__desc { padding: var(--spacing-xs) var(--spacing-xxs) 0; font: var(--type-paragraph-s-regular); color: var(--text-primary); }
 .ro-act__note { display: flex; align-items: center; gap: var(--spacing-xs); font: var(--type-paragraph-s-regular); color: var(--text-primary); }
 .ro-act__note .rmx-icon { width: 20px; height: 20px; color: var(--icon-primary); }
-.ro-act__foot { display: flex; justify-content: flex-end; }
+.ro-act__foot { display: flex; justify-content: space-between; align-items: center; }
 
 /* Setup guide stepper (assets/setup-guide.js) — specs from Figma "Workflow Stepper" */
 .sg-dialog { position: fixed; z-index: 950; top: 50%; left: 50%; transform: translate(-50%, -50%); width: min(976px, calc(100vw - 48px)); height: min(718px, calc(100vh - 28px)); display: flex; flex-direction: column; background: var(--container-primary); border: 1px solid var(--border-primary); border-radius: var(--radius-sm); box-shadow: var(--dropshadow-lg); overflow: hidden; }
@@ -955,3 +955,34 @@ details.ro-sub > summary { height: 46px; min-height: 46px; box-sizing: border-bo
 .ro-ptour-ov .ro-scrim { z-index: 1100; }
 .ro-ptour-ov .ro-dialog { z-index: 1110; }
 .ro-nav { --mm-blue: var(--background-megamenu, #0071aa); }
+.ro-act__dialog { max-height: calc(100vh - 28px); overflow: auto; }
+.ro-act__dialog .ro-tourart { width: 100%; max-width: 100%; }
+.ro-act__dialog .ro-tourart { width: 420px; max-width: 100%; align-self: center; }
+.ro-items[hidden] { display: none; }
+.ro-act__dialog .ro-tourart { width: 540px; max-width: 100%; }
+
+/* Review Settings stepper — Portal Pages toggles, link cards, Activate step (Figma 2961:72215) */
+.sg-foot .rmx-btn--secondary { background: var(--background-secondary-button, #fff); }
+.sg-card { display: flex; align-items: center; gap: var(--spacing-md); padding: var(--spacing-md); background: var(--container-primary); border-radius: 4px; box-shadow: var(--dropshadow-md); }
+.sg-card img { flex: none; }
+.sg-card > div { min-width: 0; display: flex; flex-direction: column; gap: var(--spacing-xs); }
+.sg-card h4 { margin: 0; font: 400 14px/normal Roboto, sans-serif; color: var(--text-secondary); }
+.sg-card p { margin: 0; font: var(--type-label-s-italic); color: var(--text-primary); }
+.sg-pgs { display: flex; flex-direction: column; }
+.sg-pg { display: flex; align-items: center; gap: var(--spacing-xs); padding: var(--spacing-xs) 0; color: var(--text-secondary); }
+.sg-pg--sub { padding-left: var(--spacing-md); }
+.sg-pg > span { flex: 1; min-width: 0; }
+.sg-pg__dot { width: 8px; height: 8px; border-radius: 50%; background: var(--icon-success); flex: none; }
+.sg-pg__dot.is-off { background: var(--container-tertiary-dark, #737373); }
+.sg-ticks p, .sg-opt p { margin: 0; line-height: 20px; }
+.sg-opt b { font-weight: 600; color: var(--text-secondary); line-height: 20px; }
+.sg-h--next { margin-top: var(--spacing-xs); }
+.sg-prevbtn .rmx-icon { width: 20px; height: 20px; }
+
+/* Confirm Activation (Figma 2972:56232): content hugs its text, icon top-aligned, 24px top/bottom */
+.sg-confirm .ro-popup .ro-dialog__body { align-items: flex-start; min-height: 0; padding: var(--spacing-xl) var(--spacing-xs) var(--spacing-xl) var(--spacing-md); gap: var(--spacing-md); }
+.sg-confirm .ro-popup .ro-dialog__body .rmx-icon { flex: none; }
+.sg-confirm .ro-popup .ro-dialog__body p { max-width: 400px; padding-right: var(--spacing-xs); }
+.sg-confirm__icons { display: flex; align-items: center; gap: var(--spacing-xs); }
+.sg-confirm__icons a { display: grid; place-items: center; width: 24px; height: 24px; color: var(--icon-primary); }
+.sg-confirm__icons .rmx-icon { width: 24px; height: 24px; }

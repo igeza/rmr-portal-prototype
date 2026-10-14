@@ -1,5 +1,5 @@
 /* Setup guide — the guided path (Figma "Stepper"). Replaces the old checklist.
-   8 steps in one dialog over Administration. Prototype only: fields are not saved. */
+   5 steps in one dialog over Administration. Prototype only: fields are not saved. */
 (function () {
   'use strict';
   var I = '../assets/icons.svg#', B = '../assets/rollout/branding/', L = '../assets/rollout/login/';
@@ -55,24 +55,15 @@
     pvT(48, 108, 7.6, 'Date', '#4b5b6d') + pvT(94, 108, 7.6, 'Type', '#4b5b6d') + pvT(190, 108, 7.6, 'Details', '#4b5b6d') + pvT(288, 108, 7.6, 'Charge Amount', '#4b5b6d') + pvT(364, 108, 7.6, 'Pay Amount', '#4b5b6d') + '<line x1="18" y1="113" x2="442" y2="113" stroke="#d3dbe4"/>' +
     [0, 1, 2].map(function (r) { var y = 118 + r * 25; return '<rect x="20" y="' + (y + 4) + '" width="11" height="11" rx="2" fill="#1e63b5"/><path d="M22.6 ' + (y + 9.6) + ' l2.6 2.6 l4.2-4.8" fill="none" stroke="#fff" stroke-width="1.5"/><rect x="40" y="' + (y + 4) + '" width="38" height="12" rx="3" fill="#eef2f7"/><rect x="86" y="' + (y + 4) + '" width="96" height="12" rx="3" fill="#eef2f7"/><rect x="190" y="' + (y + 4) + '" width="86" height="12" rx="3" fill="#eef2f7"/><rect x="284" y="' + (y + 4) + '" width="58" height="12" rx="3" fill="#eef2f7"/><rect x="358" y="' + (y + 1) + '" width="76" height="18" rx="4" fill="#fff" stroke="#d3dbe4"/><line x1="18" y1="' + (y + 24) + '" x2="442" y2="' + (y + 24) + '" stroke="#e1e8f0"/>'; }).join('') + '</svg>';
 
+  function card(img, h, p) { return '<div class="sg-card"><img src="../assets/rollout/' + img + '" alt=""><div><h4>' + h + '</h4><p>' + p + '</p></div></div>'; }
+  function pg(label, on, sub) { return '<div class="sg-pg' + (sub ? ' sg-pg--sub' : '') + '"><i class="sg-pg__dot' + (on ? '' : ' is-off') + '"></i><span>' + label + '</span><button type="button" class="ro-toggle" data-checked="' + on + '" aria-label="' + label + '"><span>' + ic('check') + '</span></button></div>'; }
   var STEPS = [
-    { n: "What’s new", t: "What’s new", h:
-      '<p class="sg-lead">Welcome to rmResident Portal! This is a quick look at what changed and what you can set up, in your own time.</p><div class="ro-new-list">' +
-      tile('#f9d57b', '<img class="ro-tile-img" src="../assets/rollout/tour-checklist.svg" alt="">', 'Multiple Profiles', 'Create a unique portal experience for each property type in your portfolio.') +
-      tile('#dbe1e5', '<img class="ro-tile-img" src="../assets/rollout/tour-event.svg" alt="">', 'Modern New Look', 'rmResident Portal features a refreshed, modern UI for a better experience for your residents from day one.') +
-      tile('#afcef4', ic('visibility'), 'Portal Preview', 'See exactly what your residents will see before a single change goes live.') +
-      tile('#c9e5c3', '<img class="ro-tile-img" src="../assets/rollout/tour-setting.svg" alt="">', 'Access Control', 'New privileges keep portal management separate from your system settings, so you can confidently give your team the access they need.') + '</div>' },
-    { n: 'Portal Login', t: 'Portal Login', h:
-      '<p class="sg-lead">Choose what prospects and tenants see when they sign in.</p>' +
-      sec('Logo', 'Replace the rmResident Portal logo with your own to create a more personalized login experience.', '<div class="sg-attach sg-attach--plain">' + drop() + '</div>') +
-      sec('Colors', 'Select colors to match your brand.', '<div class="sg-box"><div class="sg-colors sg-colors--login">' + colors.map(function (c) { return '<div class="sg-color">' + rad(c[0], false, 'lcolor') + '<img src="' + L + 'color-' + c[1] + '.png" alt=""></div>'; }).join('') + '</div>' +
-        '<div class="sg-custom">' + rad('Use Custom Colors', true, 'lcolor') + '<div class="sg-sw"><i style="background:#86b4ea"></i>Main Color</div><div class="sg-sw"><i style="background:#1a5fb4"></i>Button Color</div></div></div>') +
-      sec('Login Page Message', 'Display a custom message under your logo to welcome users or communicate important information.', rte(150, 'Welcome to Riverview Apartments Tenant Portal! Log in to gain access to online payments, maintenance requests, and more.', true)) +
-      sec('Property Settings', '', '<p class="sg-label">Disable rmResident Portal for Selected Properties</p><div class="rmx-field__box sg-select sg-select--full">' + ic('keyboard-arrow-down') + '</div>') +
-      sec('Signup Settings', '', chk('Allow tenants to sign up for new accounts from the portal') + '<p class="sg-sub sg-sub--ind">Account # is always required to verify a new account. Select more fields for extra security.</p><div class="sg-stack sg-stack--signup">' +
-        '<div class="sg-inline">' + chk('Phone Number', false) + '</div><div class="sg-inline">' + chk('Social Security #', false) + chk('Only use last four digits', false, true) + '</div><div class="sg-inline">' + chk('Birth Date', false) + '</div>' +
-        [1, 2, 3].map(function () { return '<div class="sg-inline sg-inline--udf">' + chk('User Defined Field', false) + '<div class="rmx-field__box sg-select sg-select--full is-dis">' + ic('keyboard-arrow-down') + '</div></div>'; }).join('') + '</div>') },
+    { n: 'Portal Profiles', t: 'Portal Profiles', h:
+      '<div class="sg-sec"><p class="sg-lead">We’ve done the heavy lifting for you. Your current TWA settings have been moved into a Default profile, so your portal is ready to go. Let’s review it together and look at what’s new.</p></div>' +
+      '<p class="sg-lead">With rmResident Portal, you can also create more profiles, each with its own look, pages, and settings for different property types. Find this later: Admin &gt; rmResident Portal &gt; Portal Profiles</p>' +
+      card('imgFrame1618873801.svg', 'Portal Profiles', 'Customize colors, themes, logos, and page settings by property type to match your brand.') },
     { n: 'Portal Branding', t: 'Portal Branding', h:
+      '<p class="sg-lead">Keep your brand consistent with new color options, image themes on the dashboard, and a logo that appears on every page. We’ve carried over your TWA settings. Review them here, or change them anytime in Portal Profiles.</p>' +
       sec('Colors', 'Select colors to match your brand.', colorGrid(true)) +
       sec('Themes', 'Choose a theme to customize the look of your portal.', '<div class="sg-box sg-box--themes"><div class="sg-themes">' + themes.map(function (n, i) { return '<div class="sg-theme">' + rad(n.replace(/-/g, ' ').replace(/\b\w/g, function (c) { return c.toUpperCase(); }), false, 'theme') + '<img src="' + B + 'theme-' + n + '.jpg" alt=""></div>'; }).join('') + '</div>' +
         '<div class="sg-sep"></div>' + rad('Use Custom Theme Image', true, 'theme') + '<div class="sg-ind"><p class="sg-hint sg-hint--mut">Recommended size: 1920x1080px</p>' +
@@ -80,56 +71,24 @@
       sec('Logo', 'Replace our default logo with your own to create a more personalized experience.', '<div class="sg-box sg-box--themes">' + rad('Use Custom Logo', true, 'logo') + '<div class="sg-ind"><p class="sg-hint sg-hint--mut">Recommended size: 300x100px</p>' +
         '<div class="sg-attach"><img class="sg-logo" src="' + B + 'logo-summit.png" alt="Summit Property Management"><a class="sg-file" href="#">img_4321.jpg <img src="' + B + 'icon-close.svg" alt=""></a>' + drop() + '</div></div>' +
         rad('Use Property UDF', false, 'logo') + '<div class="sg-ind">' + sel('Logo') + '</div></div>') },
-    { n: 'Portal Settings', t: 'Portal Settings', h:
-      sec('Dashboard Announcement', 'Display an announcement on top of the dashboard to all users.', '<div class="sg-box sg-box--tight"><div class="ro-togglerow"><button type="button" class="ro-toggle" data-checked="true" aria-label="Show Announcement Message"><span>' + ic('check') + '</span></button>Show Announcement Message</div>' +
-        '<div class="sg-sec"><p class="sg-label sg-label--link"><span>Tenant Announcement Message</span><a class="ro-link" href="#">Open Script Builder</a></p>' + rte(150, 'Welcome to your new home at [Property.Name]! We’re so excited to have you as part of our community. Please don’t hesitate to reach out if you have any questions.', false, true) + '</div>' +
-        '<div class="sg-sec"><p class="sg-label sg-label--link"><span>Prospect Announcement Message</span><a class="ro-link" href="#">Open Script Builder</a></p>' + rte(150, 'Welcome to [Property.Name]!! We’re so excited about your interest. Please complete all actions in order to ensure quick processing of your application.', false, true) + '</div></div>') +
-      sec('Site Settings', '', '<div class="sg-box sg-box--tight">' + chk('Use Management Company Name as Property Name') + '<div class="sg-inline">' + chk('Allow Tenants to Purchase Insurance') + '<span class="sg-info">' + ic('info') + '</span></div>' +
-        '<div class="sg-inline sg-inline--days0"><span>Past tenants remain active for</span><span class="rmx-field__box sg-num"><input value="60"></span><span>days after move out.</span><span class="sg-info">' + ic('info') + '</span></div>' +
-        sec('rmResident User Settings', '', '<div class="sg-box sg-box--tight"><p class="sg-label">How do you want to refer to rmResident Portal users?</p><div class="sg-stack sg-stack--tight">' + rad('Tenant', true, 'ref') + rad('Tenant Entity Name', false, 'ref') + rad('Customize', false, 'ref') + '</div><div class="sg-ind"><span class="rmx-field__box sg-fullbox is-dis"><input></span></div></div>') +
-        sec('Email Settings', '', '<div class="sg-box sg-box--tight">' + chk('Allow Tenants to Email Property Manager') + '<div class="sg-ind"><p class="sg-label">Select History / Note Category for Emails</p><div class="rmx-field__box sg-select sg-select--full"><span></span>' + ic('keyboard-arrow-down') + '</div></div>' +
-          '<p class="sg-label">Email Signature</p><div class="sg-stack sg-stack--tight">' + rad('Use Property Contact Info', true, 'sig') + rad('Override Property Contact Info', false, 'sig') + '</div>' +
-          '<div class="sg-ind">' + field('Name', '', 'sg-field--dis') + field('Email', '', 'sg-field--dis') + '</div></div>') +
-        sec('Time Zone', '', '<div class="sg-box sg-box--tight"><p class="sg-label">Time Zone</p><div class="rmx-field__box sg-select sg-select--full sg-select--l"><span>(UTC -5:00 Eastern Time)</span>' + ic('keyboard-arrow-down') + '</div>' + chk('Observe Daylight Savings Time') + '</div>') + '</div>') },
-    { n: 'Charges and Payments', t: 'Charges and Payments', h:
-      '<div><div class="sg-row">' + field('Menu Title *', 'Charges &amp; Payments') + field('Page Title *', 'Charges &amp; Payments') + '</div>' +
-      '<a class="ro-link sg-restore" href="#">' + ic('autorenew') + 'Restore Default</a></div>' +
-      lab('Banner Message', rte(167)) + chk('Show all transaction activity') +
-      '<div class="sg-pvbox">' + chargesPrev + '</div>' +
-      sec('Autopay Settings', '', '<div class="sg-box sg-box--tight"><div class="ro-togglerow"><button type="button" class="ro-toggle" data-checked="true" aria-label="Allow tenants to enroll in Autopay"><span>' + ic('check') + '</span></button>Allow tenants to enroll in Autopay</div>' +
-        '<h4 class="sg-h sg-h--pad">Payment Frequencies</h4><p class="sg-sub">Select payment frequencies that users can choose from.</p>' +
-        '<div class="sg-box sg-box--tight"><div class="sg-inline">' + chk('Weekly', false) + '<span class="sg-info">' + ic('info') + '</span></div>' + chk('Monthly') +
-        '<div class="sg-indent sg-inline sg-inline--days"><span>Days that tenant can select</span>' + sel('Any Day') + '</div>' + chk('Quarterly', false) + chk('Semi-annually', false) + chk('Annually', false) + '</div></div>') },
-    { n: 'Make a Payment', t: 'Make a Payment', h:
-      '<div class="ro-togglerow"><button type="button" class="ro-toggle" data-checked="true" aria-label="Allow tenants to Make a Payment"><span>' + ic('check') + '</span></button>Allow tenants to Make a Payment</div>' +
-      lab('Banner Message', rte(167)) + '<div class="sg-stack">' + chk('Exclude from prospects') + chk('Allow tenants to enroll in flexible rent') + '</div>' +
-      sec('Payment Disclaimers', '', '<div class="sg-box sg-box--tight">' + chk('Require tenant to acknowledge a disclaimer') + '<div class="rmx-field__box sg-textarea"></div></div>') },
-    { n: 'Payment Policy', t: 'Payment Policy', h:
-      sec('General', '', '<div class="sg-row sg-row--assign">' + field('Payment Policy Name *', 'Riverview Policies') + '<div class="sg-assign">' + field('Assign to Property', 'Riverview Apartments') + '<button type="button" class="rmx-btn rmx-btn--primary">Select Properties</button></div></div>' + field('Description', '', 'sg-field--full') + chk('Active')) +
-      sec('Payment Policy Settings', 'These settings determine which payment options are available to your residents in the portal. Changes are reflected live in the preview on the right.',
-        '<div class="sg-stack sg-stack--policy">' + chk('Pay less than current balance') + chk('Pay future charges early') + chk('Overpay available charges') +
-        '<div class="sg-indent"><div class="sg-inline">' + rad('Apply to oldest charges first', false, 'over') + '<span class="sg-info">' + ic('info') + '</span></div>' + rad('Preallocate to specific charge type', true, 'over') +
-        '<div class="sg-indent">' + sel('RC') + chk('Override with first charge type in property allocation order when one exists') + '</div></div>' + chk('Choose what charges they want to pay') + '</div>' +
-        policyPrev) +
-      sec('Shared Billing Options', '', chk('Display account group charges for each tenant and automatically apply payments to the entire group.', false)) },
-    { n: 'Service Issues', t: 'Service Issues', h:
-      '<div class="sg-sec sg-sec--q"><p class="sg-q">What do you want to call service issues in the portal?</p><div class="sg-stack sg-stack--tight">' +
-      rad('Service Issues', true, 'si') + rad('Maintenance Requests', false, 'si') + rad('Work Orders', false, 'si') + rad('Other', false, 'si') + '</div></div>' +
-      lab('Banner Message', rte(167) + '<p class="sg-count">0/255</p>') +
-      '<div class="sg-sec sg-sec--q"><p class="sg-q">What service issues do you want to display?</p><div class="sg-stack sg-stack--tight">' +
-      rad('All issues', true, 'sd') + rad('Issues created by tenant', false, 'sd') + rad('Issues with the selected categories', false, 'sd') + '</div>' + sel('Select categories') + '</div>' +
-      chk('Display issues for all tenants in the account group', false) +
-      '<div class="sg-pvbox">' + issuesPrev + '</div>' +
-      '<div class="sg-sec sg-sec--comm"><h4 class="sg-h sg-h--info">Service Issue Communication<span class="sg-info">' + ic('info') + '</span></h4><p class="sg-sub">Share notes, comments, and updates with tenants on open service issues.</p>' +
-        '<div class="ro-togglerow sg-toggle"><button type="button" class="ro-toggle" data-checked="true" aria-label="Enable Communication"><span>' + ic('check') + '</span></button>Enable Communication</div>' +
-        '<div class="sg-box sg-box--tight sg-box--comm"><div class="sg-inline sg-inline--wide">' + rad('One-Way', true, 'comm') + rad('Two-Way', false, 'comm') + chk('Share History/Notes', false) + '</div>' +
-        '<div class="sg-indent sg-indent--comm"><p class="sg-hint">Send comments to tenants in rmResident. Tenants cannot respond.</p>' + chk('Notify tenant via email') + '</div></div></div>' +
-      '' },
-    { n: 'Review & Activate', t: 'Review & Activate', h:
-      '<p class="sg-lead">Additional pages are also enabled and were not changed in this setup guide. They will display when you activate, and you can review their settings anytime in Portal Profiles:</p>' +
-      '<ul class="sg-list"><li>Document Center</li><li>Applications</li><li>Notes</li></ul>' +
-      '<p class="sg-lead">Explore Portal Profiles for more pages and features that can make your and your residents’ experience even better.</p>' +
-      '<p class="sg-lead">Choose <b>Activate</b> to make the new portal live for all residents, or <b>Save &amp; Don’t Activate</b> to keep your changes and activate later from Administration.</p>' }
+    { n: 'Portal Pages', t: 'Portal Pages', h:
+      '<p class="sg-lead">We’ve redesigned many of your TWA pages to give residents a better experience. Choose which pages to turn on in your Default profile.</p>' +
+      '<p class="sg-lead">To rename pages or change their content and settings, go to Portal Profiles &gt; Page Settings after setup.</p>' +
+      '<div class="sg-pgs">' + pg('Charges &amp; Payments', true) + pg('Make a Payment', true, true) + pg('Service Issues', true) + pg('Add Service Issue', true, true) + pg('Violations', true) + pg('Metered Utilities', false) +
+      pg('Document Center', true) + pg('Zego Statements', true) + pg('Notes', true) + pg('Community', true) + pg('Amenity Reservations', true) + pg('Polls', true) + pg('Applications', true) + pg('Reports', true) + pg('Architectural Requests', true) + '</div>' },
+    { n: 'Other Settings', t: 'Other Settings', h:
+      '<p class="sg-lead">There are additional settings that you can customize with the new portal.</p>' +
+      card('imgFrame1618873664.svg', 'Portal Login', 'Customize the login experience for prospects and tenants, and disable portal access by property.') +
+      '<p class="sg-lead">Customize the look and messaging of the login screen your residents see. It currently matches your TWA settings.</p><p class="sg-lead">Find this later in rmResident Portal &gt; Portal Login.</p>' +
+      card('imgMoney.svg', 'Payment Policies', 'Set up payment policies per property') +
+      '<p class="sg-lead">Create policy profiles that match the payment rules for each of your properties. Settings are now organized so you can build and preview policies before residents see them.</p><p class="sg-lead">Find this later in rmResident Portal &gt; Payment Policies</p>' },
+    { n: 'Review & Finish', t: 'Activate', h:
+      '<p class="sg-lead">You’re all set up. Here’s what’s ready in your Default profile:</p>' +
+      '<div class="sg-ticks"><p>✓ Branding</p><p>✓ Pages turned on for residents</p><p>✓ Portal login and payment policies ready to review</p></div>' +
+      '<div><button type="button" class="rmx-btn rmx-btn--primary sg-prevbtn"><svg class="rmx-icon"><use href="../assets/icons-local.svg#play-arrow"></use></svg>Preview Portal</button></div>' +
+      '<h4 class="sg-h sg-h--next">What would you like to do next?</h4>' +
+      '<div class="sg-opt"><b>Save as draft (recommended)</b><p>Take your time to explore. Create and preview additional profiles for other property types, fine-tune pages and policies, update the login page look and feel. Residents won’t see any changes until you activate.</p></div>' +
+      '<div class="sg-opt"><b>Activate now</b><p>Your residents will see the new portal right away. You can find all of the settings anytime in Admin &gt; rmResident Portal.</p></div>' }
   ];
 
   var cur = 0, wrap;
@@ -145,7 +104,7 @@
     wrap.querySelector('.sg-nav').innerHTML = nav();
     wrap.querySelector('.sg-main').innerHTML = '<h3 class="sg-title">' + s.t.replace('&', '&amp;') + '</h3><div class="sg-content">' + s.h + '</div>' +
       '<div class="sg-foot">' + (cur ? '<button type="button" class="rmx-btn rmx-btn--secondary" data-back>Back</button>' : '<span></span>') +
-      (last ? '<span class="sg-foot__r"><button type="button" class="rmx-btn rmx-btn--primary" data-save>Save &amp; Don’t Activate</button><button type="button" class="rmx-btn rmx-btn--primary" data-activate>Activate</button></span>'
+      (last ? '<span class="sg-foot__r"><button type="button" class="rmx-btn rmx-btn--primary" data-activate>Activate</button><button type="button" class="rmx-btn rmx-btn--primary" data-save>Save as Draft</button></span>'
             : '<button type="button" class="rmx-btn rmx-btn--primary" data-next>Next</button>') + '</div>';
     wrap.querySelector(".sg-content").scrollTop = 0;
   }
@@ -153,12 +112,20 @@
     var st = window.RO.get(); if (activated) { st.converted = true; st.activated = true; } else { st.guidedSaved = true; } window.RO.save(st);
     location.href = activated ? 'admin-activated.html' : 'admin-get-started.html';
   }
+  function confirmActivate() {
+    var d = document.createElement('div'); d.className = 'sg-confirm';
+    d.innerHTML = '<div class="ro-scrim" style="z-index:990"></div><div class="ro-dialog ro-popup" role="alertdialog" aria-label="Confirm Activation" style="z-index:1000">' +
+      '<div class="rmx-overlay__header" data-rmx-component="Overlay Header"><span>Confirm Activation</span><span class="sg-confirm__icons"><a href="#" aria-label="Help">' + ic('help') + '</a><a href="#" data-confirm-close aria-label="Close">' + ic('close') + '</a></span></div>' +
+      '<div class="ro-dialog__body">' + ic('info-filled') + '<p>Activating will make rmResident Portal the live experience for all residents and retire TWA across all locations.</p></div>' +
+      '<div class="rmx-overlay__footer" data-rmx-component="Overlay Footer"><button type="button" class="rmx-btn rmx-btn--primary" data-confirm-go>Activate</button><button type="button" class="rmx-btn rmx-btn--secondary" data-confirm-close>Cancel</button></div></div>';
+    wrap.appendChild(d);
+  }
   document.addEventListener('DOMContentLoaded', function () {
     wrap = document.querySelector('.sg');
     if (!wrap) return;
     var q = /[?&]step=(\d)/.exec(location.search); if (q) cur = Math.min(STEPS.length - 1, Math.max(0, +q[1] - 1));
-    wrap.innerHTML = '<div class="ro-scrim"></div><div class="sg-dialog" role="dialog" aria-label="Setup guide"><div class="sg-top"><a href="admin-get-started.html" aria-label="Close">' + ic('close') + '</a></div>' +
-      '<div class="sg-body"><aside class="sg-side"><h2>Setup guide</h2><ol class="sg-nav"></ol></aside><section class="sg-main"></section></div></div>';
+    wrap.innerHTML = '<div class="ro-scrim"></div><div class="sg-dialog" role="dialog" aria-label="Review Settings"><div class="sg-top"><a href="admin-get-started.html" aria-label="Close">' + ic('close') + '</a></div>' +
+      '<div class="sg-body"><aside class="sg-side"><h2>Review Settings</h2><ol class="sg-nav"></ol></aside><section class="sg-main"></section></div></div>';
     render();
     wrap.addEventListener('click', function (e) {
       var t = e.target;
@@ -166,7 +133,9 @@
       if (t.closest('[data-next]')) { cur++; return render(); }
       if (t.closest('[data-back]')) { cur--; return render(); }
       if (t.closest('[data-save]')) return leave(false);
-      if (t.closest('[data-activate]')) return leave(true);
+      if (t.closest('[data-activate]')) return confirmActivate();
+      if (t.closest('[data-confirm-close]')) { [].forEach.call(wrap.querySelectorAll('.sg-confirm'), function (n) { n.remove(); }); return; }
+      if (t.closest('[data-confirm-go]')) return leave(true);
       var c = t.closest('.sg-check'); if (c) return c.setAttribute('aria-checked', String(c.getAttribute('aria-checked') !== 'true'));
       var r = t.closest('.sg-radio'); if (r) { [].forEach.call(wrap.querySelectorAll('.sg-radio[data-name="' + r.dataset.name + '"]'), function (x) { x.setAttribute('aria-checked', String(x === r)); }); return; }
       var tg = t.closest('.ro-toggle'); if (tg) tg.dataset.checked = String(tg.dataset.checked !== 'true');

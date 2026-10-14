@@ -5,7 +5,7 @@
   'use strict';
   var I = '../assets/icons.svg#', R = '../assets/rollout/';
   function icon(id) { return '<svg class="rmx-icon"><use href="' + I + id + '"></use></svg>'; }
-  var choice = 'just';
+  var choice = 'guided';
   function open() {
     if (document.querySelector('.ro-act')) return;
     var w = document.createElement('div');
@@ -14,13 +14,13 @@
       '<div class="ro-act__dialog" role="dialog" aria-label="Activate rmResident Portal">' +
       '<div class="ro-act__icons"><button type="button" aria-label="Help">' + icon('help') + '</button><button type="button" data-act-close aria-label="Close">' + icon('close') + '</button></div>' +
       '<h2 class="ro-act__title">Activate rmResident Portal</h2>' +
-      '<p class="ro-act__lead">Your TWA settings carry over to the Default profile. All residents will see the new rmResident Portal as soon as you activate.  How would you like to get started?</p>' +
+      '<p class="ro-act__lead">Once you activate, all your TWA settings will be copied over to the Default profile and all residents will see the new rmResident Portal. How would you like to get started?</p>' +
       '<div class="ro-act__opts" role="radiogroup">' +
-      '<button type="button" class="ro-act__opt" role="radio" data-opt="just"><span class="ro-act__radio"></span><span class="ro-act__body"><span class="ro-act__head"><svg class="rmx-icon ro-act__ic"><use href="' + I + 'check-circle-filled"></use></svg>Just Activate</span><span class="ro-act__desc">I have reviewed the settings or will review them after portal is published to my residents.</span></span></button>' +
-      '<button type="button" class="ro-act__opt" role="radio" data-opt="guided"><span class="ro-act__radio"></span><span class="ro-act__body"><span class="ro-act__head"><img class="ro-act__ic" src="' + R + 'imgTour.svg" alt="">Review Settings</span><span class="ro-act__desc">I want a walk through all the updated settings before I publish the portal to my residents.</span></span></button>' +
+      '<button type="button" class="ro-act__opt" role="radio" data-opt="guided"><span class="ro-act__radio"></span><span class="ro-act__body"><span class="ro-act__head"><img class="ro-act__ic" src="' + R + 'imgTour.svg" alt="">Review Settings</span><span class="ro-act__desc">I want to review and update my portal settings before I activate the portal for my residents.</span></span></button>' +
+      '<button type="button" class="ro-act__opt" role="radio" data-opt="just"><span class="ro-act__radio"></span><span class="ro-act__body"><span class="ro-act__head"><svg class="rmx-icon ro-act__ic"><use href="' + I + 'check-circle-filled"></use></svg>Activate Now</span><span class="ro-act__desc">I want to activate the portal to my residents with a copy of my current TWA settings.</span></span></button>' +
       '</div>' +
-      '<div class="ro-act__note">' + icon('info') + 'You can switch back to TWA at any point.</div>' +
-      '<div class="ro-act__foot"><a class="rmx-btn rmx-btn--primary" href="#" data-act-next data-rmx-component="Button">Next</a></div>' +
+      '<img class="ro-tourart" src="' + R + 'announcement-art.png" alt="Preview of the new rmResident Portal tenant dashboard">' +
+      '<div class="ro-act__foot"><div class="ro-act__note">' + icon('info') + 'You can switch back to TWA at any point.</div><a class="rmx-btn rmx-btn--primary" href="#" data-act-next data-rmx-component="Button">Next</a></div>' +
       '</div>';
     document.body.appendChild(w);
     function sel(v) {
@@ -57,11 +57,17 @@
     w.addEventListener('click', function (e) {
       var g = e.target.closest('[data-act-go]'); if (!g) return;
       if (g.dataset.actGo === 'activate') { var s2 = window.RO.get(); s2.converted = true; s2.activated = true; window.RO.save(s2); location.href = 'admin-activated.html'; }
-      else location.href = 'setup-guide.html?step=9';
+      else location.href = 'setup-guide.html?step=5';
     });
   }
   document.addEventListener('DOMContentLoaded', splitUp);
+  /* The four portal settings stay hidden while the Get Started banner is showing, i.e. until the portal is activated
+     (the Activated page is a different state and shows them). */
+  (function () {
+    var items = document.querySelector('.ro-banner--start + .ro-items');
+    if (items) items.hidden = true;
+  })();
   document.addEventListener('click', function (e) {
-    if (e.target.closest('[data-ro-activate-open]')) { e.preventDefault(); choice = 'just'; open(); }
+    if (e.target.closest('[data-ro-activate-open]')) { e.preventDefault(); choice = 'guided'; open(); }
   });
 })();
