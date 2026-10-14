@@ -6,6 +6,23 @@
   var I = '../assets/icons.svg#', R = '../assets/rollout/';
   function icon(id) { return '<svg class="rmx-icon"><use href="' + I + id + '"></use></svg>'; }
   var choice = 'guided';
+  /* Confirm Activation (Figma 2972:56232) — shared by every Activate button. */
+  function confirmActivate(onYes) {
+    if (document.querySelector('.sg-confirm')) return;
+    var d = document.createElement('div'); d.className = 'sg-confirm';
+    d.innerHTML = '<div class="ro-scrim" style="z-index:990"></div><div class="ro-dialog ro-popup" role="alertdialog" aria-label="Confirm Activation" style="z-index:1000">' +
+      '<div class="rmx-overlay__header" data-rmx-component="Overlay Header"><span>Confirm Activation</span><span class="sg-confirm__icons"><a href="#" data-confirm-close aria-label="Close">' + icon('close') + '</a></span></div>' +
+      '<div class="ro-dialog__body">' + icon('info-filled') + '<p>Activating will make rmResident Portal the live experience for all residents and retire TWA across all locations.</p></div>' +
+      '<div class="rmx-overlay__footer" data-rmx-component="Overlay Footer"><button type="button" class="rmx-btn rmx-btn--primary" data-confirm-go>Activate</button><button type="button" class="rmx-btn rmx-btn--secondary" data-confirm-close>Cancel</button></div></div>';
+    d.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (e.target.closest('[data-confirm-close]')) { e.preventDefault(); d.remove(); }
+      else if (e.target.closest('[data-confirm-go]')) onYes();
+    });
+    document.body.appendChild(d);
+  }
+  window.ROConfirmActivate = confirmActivate;
+  function goActivated() { var s = window.RO.get(); s.converted = true; s.activated = true; window.RO.save(s); location.href = 'admin-activated.html'; }
   function open() {
     if (document.querySelector('.ro-act')) return;
     var w = document.createElement('div');
@@ -34,38 +51,33 @@
       if (e.target.closest('[data-act-close]') || e.target.classList.contains('ro-scrim')) return w.remove();
       if (e.target.closest('[data-act-next]')) {
         e.preventDefault();
-        if (choice === 'just') { var s = window.RO.get(); s.converted = true; s.activated = true; window.RO.save(s); }
-        location.href = choice === 'just' ? 'admin-activated.html' : 'setup-guide.html';
+        if (choice === 'just') return confirmActivate(goActivated);
+        var rs = window.RO.get(); rs.reviewing = true; window.RO.save(rs);
+        location.href = 'setup-guide.html';
       }
     });
     document.addEventListener('keydown', function esc(e) { if (e.key === 'Escape') { w.remove(); document.removeEventListener('keydown', esc); } });
   }
-  /* After "Save & Don't Activate" the banner CTA becomes a split button: Activate / Finish Guided Setup. */
+  /* After "Save as Draft" the banner button becomes Activate (opens the confirmation). */
   function splitUp() {
     var s = window.RO && window.RO.get();
     if (!s || !s.guidedSaved || s.activated) return;
     var b = document.querySelector('[data-ro-activate-open]');
     if (!b) return;
-    var w = document.createElement('div');
-    w.className = 'ro-split';
-    w.innerHTML = '<div class="rmx-split ro-split__btn"><button type="button" class="rmx-split__main" data-ro-activate-open>Get Started</button><button type="button" class="rmx-split__caret" aria-label="More options" aria-haspopup="menu" aria-expanded="false">' + icon('arrow-drop-down') + '</button></div>' +
-      '<div class="rmx-menu ro-split__menu" role="menu" hidden><button type="button" data-value="activate" role="menuitem" data-act-go="activate">Activate</button><button type="button" data-value="finish" role="menuitem" data-act-go="finish">Finish Guided Setup</button></div>';
-    b.replaceWith(w);
-    var caret = w.querySelector('.rmx-split__caret'), menu = w.querySelector('.ro-split__menu');
-    caret.addEventListener('click', function (e) { e.stopPropagation(); menu.hidden = !menu.hidden; caret.setAttribute('aria-expanded', String(!menu.hidden)); });
-    document.addEventListener('click', function () { menu.hidden = true; caret.setAttribute('aria-expanded', 'false'); });
-    w.addEventListener('click', function (e) {
-      var g = e.target.closest('[data-act-go]'); if (!g) return;
-      if (g.dataset.actGo === 'activate') { var s2 = window.RO.get(); s2.converted = true; s2.activated = true; window.RO.save(s2); location.href = 'admin-activated.html'; }
-      else location.href = 'setup-guide.html?step=5';
-    });
+    b.removeAttribute('data-ro-activate-open');
+    b.textContent = 'Activate';
+    var body = document.querySelector('.ro-banner--start .ro-banner__body');
+    if (body) body.textContent = 'Make sure all settings you updated are marked as Ready to Publish before activating.';
+    var ttl = document.querySelector('.ro-banner--start .ro-banner__title');
+    if (ttl) ttl.textContent = 'Activate your portal';
+    b.addEventListener('click', function (e) { e.preventDefault(); confirmActivate(goActivated); });
   }
   document.addEventListener('DOMContentLoaded', splitUp);
   /* The four portal settings stay hidden while the Get Started banner is showing, i.e. until the portal is activated
      (the Activated page is a different state and shows them). */
   (function () {
-    var items = document.querySelector('.ro-banner--start + .ro-items');
-    if (items) items.hidden = true;
+    var items = document.querySelector('.ro-banner--start + .ro-items'), rs = window.RO && window.RO.get();
+    if (items && !(rs && (rs.reviewing || rs.guidedSaved))) items.hidden = true;
   })();
   document.addEventListener('click', function (e) {
     if (e.target.closest('[data-ro-activate-open]')) { e.preventDefault(); choice = 'guided'; open(); }

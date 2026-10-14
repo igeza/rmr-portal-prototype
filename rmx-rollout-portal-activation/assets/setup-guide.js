@@ -85,12 +85,25 @@
     { n: 'Review & Finish', t: 'Activate', h:
       '<p class="sg-lead">You’re all set up. Here’s what’s ready in your Default profile:</p>' +
       '<div class="sg-ticks"><p>✓ Branding</p><p>✓ Pages turned on for residents</p><p>✓ Portal login and payment policies ready to review</p></div>' +
-      '<div><button type="button" class="rmx-btn rmx-btn--primary sg-prevbtn"><svg class="rmx-icon"><use href="../assets/icons-local.svg#play-arrow"></use></svg>Preview Portal</button></div>' +
+      '<div><button type="button" class="rmx-btn rmx-btn--primary sg-prevbtn" data-sg-preview><svg class="rmx-icon"><use href="../assets/icons-local.svg#play-arrow"></use></svg>Preview Portal</button></div>' +
       '<h4 class="sg-h sg-h--next">What would you like to do next?</h4>' +
       '<div class="sg-opt"><b>Save as draft (recommended)</b><p>Take your time to explore. Create and preview additional profiles for other property types, fine-tune pages and policies, update the login page look and feel. Residents won’t see any changes until you activate.</p></div>' +
       '<div class="sg-opt"><b>Activate now</b><p>Your residents will see the new portal right away. You can find all of the settings anytime in Admin &gt; rmResident Portal.</p></div>' }
   ];
 
+  /* Colors / Themes: the side that isn't selected is dimmed (preset swatches vs the custom option) */
+  function dim(name) {
+    var radios = [].slice.call(wrap.querySelectorAll('.sg-radio[data-name="' + name + '"]'));
+    var custom = radios.filter(function (r) { return window.PB.slug(r.textContent) === 'custom'; })[0];
+    if (!custom) return;
+    var isCustom = custom.getAttribute('aria-checked') === 'true';
+    radios.forEach(function (r) {
+      var preset = r !== custom, nodes = [];
+      if (preset) nodes = [r.closest('.sg-color, .sg-theme')];
+      else nodes = [r.closest('.sg-custom') || r, r.nextElementSibling && r.nextElementSibling.classList.contains('sg-ind') ? r.nextElementSibling : null];
+      nodes.forEach(function (n) { if (n) n.classList.toggle('is-dim', preset ? isCustom : !isCustom); });
+    });
+  }
   var cur = 0, wrap;
   function nav() {
     return STEPS.map(function (s, i) {
@@ -106,20 +119,31 @@
       '<div class="sg-foot">' + (cur ? '<button type="button" class="rmx-btn rmx-btn--secondary" data-back>Back</button>' : '<span></span>') +
       (last ? '<span class="sg-foot__r"><button type="button" class="rmx-btn rmx-btn--primary" data-activate>Activate</button><button type="button" class="rmx-btn rmx-btn--primary" data-save>Save as Draft</button></span>'
             : '<button type="button" class="rmx-btn rmx-btn--primary" data-next>Next</button>') + '</div>';
+    var b = window.PB.brand(), pg = window.PB.pages();
+    [].forEach.call(wrap.querySelectorAll('.sg-radio'), function (r) { var v = b[r.dataset.name]; if (v) r.setAttribute('aria-checked', String(window.PB.slug(r.textContent) === v)); });
+    [].forEach.call(wrap.querySelectorAll('.sg-pg'), function (row) {
+      var on = pg[row.querySelector('span').textContent.replace(/&amp;/g, '&')]; if (on === undefined) return;
+      var t = row.querySelector('.ro-toggle'); t.dataset.checked = String(on); row.querySelector('.sg-pg__dot').classList.toggle('is-off', !on);
+    });
+    dim('color'); dim('theme');
     wrap.querySelector(".sg-content").scrollTop = 0;
   }
   function leave(activated) {
-    var st = window.RO.get(); if (activated) { st.converted = true; st.activated = true; } else { st.guidedSaved = true; } window.RO.save(st);
+    var st = window.RO.get(); if (activated) { st.converted = true; st.activated = true; } else {
+      st.guidedSaved = true; st.touched = true; st.ready = st.ready || {};
+      /* Save as Draft marks every admin page Ready to Publish */
+      Object.keys(st.profiles).forEach(function (k) { if (st.profiles[k].active) st.profiles[k].status = 'ready'; });
+      st.ready['pay:default'] = true; st.ready['login:default'] = true;
+    } window.RO.save(st);
     location.href = activated ? 'admin-activated.html' : 'admin-get-started.html';
   }
-  function confirmActivate() {
-    var d = document.createElement('div'); d.className = 'sg-confirm';
-    d.innerHTML = '<div class="ro-scrim" style="z-index:990"></div><div class="ro-dialog ro-popup" role="alertdialog" aria-label="Confirm Activation" style="z-index:1000">' +
-      '<div class="rmx-overlay__header" data-rmx-component="Overlay Header"><span>Confirm Activation</span><span class="sg-confirm__icons"><a href="#" aria-label="Help">' + ic('help') + '</a><a href="#" data-confirm-close aria-label="Close">' + ic('close') + '</a></span></div>' +
-      '<div class="ro-dialog__body">' + ic('info-filled') + '<p>Activating will make rmResident Portal the live experience for all residents and retire TWA across all locations.</p></div>' +
-      '<div class="rmx-overlay__footer" data-rmx-component="Overlay Footer"><button type="button" class="rmx-btn rmx-btn--primary" data-confirm-go>Activate</button><button type="button" class="rmx-btn rmx-btn--secondary" data-confirm-close>Cancel</button></div></div>';
-    wrap.appendChild(d);
-  }
+  /* Portal Preview overlay is the same markup as on Profile Details; close and Draft/Published toggle live here */
+  document.addEventListener('click', function (e) {
+    var pv = document.getElementById('ov-preview'); if (!pv) return;
+    if (e.target.closest('#ov-preview [data-ro-close]')) { e.preventDefault(); pv.hidden = true; return; }
+    var sg = e.target.closest('#ov-preview [data-ro-seg]');
+    if (sg) [].forEach.call(pv.querySelectorAll('[data-ro-seg]'), function (b) { b.classList.toggle('on', b === sg); });
+  });
   document.addEventListener('DOMContentLoaded', function () {
     wrap = document.querySelector('.sg');
     if (!wrap) return;
@@ -129,16 +153,18 @@
     render();
     wrap.addEventListener('click', function (e) {
       var t = e.target;
+      if (t.closest('[data-sg-preview]')) { window.PB.preview(); document.getElementById('ov-preview').hidden = false; return; }
       var g = t.closest('[data-go]'); if (g) { cur = +g.dataset.go; return render(); }
       if (t.closest('[data-next]')) { cur++; return render(); }
       if (t.closest('[data-back]')) { cur--; return render(); }
       if (t.closest('[data-save]')) return leave(false);
-      if (t.closest('[data-activate]')) return confirmActivate();
-      if (t.closest('[data-confirm-close]')) { [].forEach.call(wrap.querySelectorAll('.sg-confirm'), function (n) { n.remove(); }); return; }
-      if (t.closest('[data-confirm-go]')) return leave(true);
+      if (t.closest('[data-activate]')) return window.ROConfirmActivate(function () { leave(true); });
       var c = t.closest('.sg-check'); if (c) return c.setAttribute('aria-checked', String(c.getAttribute('aria-checked') !== 'true'));
-      var r = t.closest('.sg-radio'); if (r) { [].forEach.call(wrap.querySelectorAll('.sg-radio[data-name="' + r.dataset.name + '"]'), function (x) { x.setAttribute('aria-checked', String(x === r)); }); return; }
-      var tg = t.closest('.ro-toggle'); if (tg) tg.dataset.checked = String(tg.dataset.checked !== 'true');
+      var r = t.closest('.sg-radio'); if (r) { [].forEach.call(wrap.querySelectorAll('.sg-radio[data-name="' + r.dataset.name + '"]'), function (x) { x.setAttribute('aria-checked', String(x === r)); }); window.PB.saveBrand(r.dataset.name, window.PB.slug(r.textContent)); dim(r.dataset.name); return; }
+      var tg = t.closest('.ro-toggle'); if (tg) {
+        tg.dataset.checked = String(tg.dataset.checked !== 'true');
+        var dot = tg.parentNode.querySelector('.sg-pg__dot'); if (dot) { dot.classList.toggle('is-off', tg.dataset.checked !== 'true'); window.PB.savePage(tg.parentNode.querySelector('span').textContent, tg.dataset.checked === 'true'); }
+      }
       if (t.closest('a[href="#"]')) e.preventDefault();
     });
   });

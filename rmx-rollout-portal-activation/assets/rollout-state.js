@@ -168,6 +168,35 @@
     });
   }
 
+  /* Before activation nothing goes live, so every Publish button reads "Ready to Publish" (and "Save & Publish" reads
+     "Save & Ready to Publish"). After activation they are Publish again. Buttons are relabelled as the pages set their text. */
+  (function () {
+    var raf = 0;
+    function relabel() {
+      raf = 0;
+      if (get().activated) return;
+      [].forEach.call(document.querySelectorAll('.rmx-btn'), function (b) {
+        var m = /^(Save & )?Publish$/.exec(b.textContent.trim());
+        if (m) b.textContent = (m[1] || '') + 'Ready to Publish';
+      });
+    }
+    function queue() { if (!raf) raf = requestAnimationFrame(relabel); }
+    document.addEventListener('DOMContentLoaded', function () {
+      relabel();
+      new MutationObserver(queue).observe(document.body, { childList: true, subtree: true, characterData: true });
+    });
+  })();
+
+  /* The Portal Preview's "View: Draft | Published" switch only makes sense once the portal is live. */
+  document.addEventListener('DOMContentLoaded', function () {
+    var live = !!get().activated;
+    [].forEach.call(document.querySelectorAll('.ro-hdricons .ro-seg'), function (seg) {
+      var w = seg.previousSibling && seg.previousSibling.nodeType === 3 ? seg.parentNode.insertBefore(document.createElement('span'), seg.previousSibling) : null;
+      if (!w) return;
+      w.appendChild(w.nextSibling); w.appendChild(seg); w.className = 'ro-view'; w.hidden = !live;
+    });
+  });
+
   window.RO = { get: get, save: save, reset: reset, fresh: fresh, TYPES: TYPES, hydrate: hydrate, typesLabel: typesLabel, summary: summary, isReady: isReady };
 
   document.addEventListener('DOMContentLoaded', function () {

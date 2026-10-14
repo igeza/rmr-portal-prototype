@@ -48,7 +48,10 @@ document.addEventListener('click', function (e) {
   var gap = document.createElement('div'); gap.setAttribute('aria-hidden', 'true'); gap.style.cssText = 'flex:none;width:1px;';
   main.appendChild(gap);
   function size() { var p = document.getElementById('rmresident-portal'); gap.style.height = p ? Math.max(0, main.clientHeight - p.offsetHeight - 48) + 'px' : '0'; }
-  size(); window.addEventListener('resize', size);
+  size(); window.addEventListener('resize', size); window.addEventListener('load', size);
+  /* the portal section changes height after load (e.g. its four items are hidden until activation), so keep the gap in step */
+  var rp = document.getElementById('rmresident-portal');
+  if (rp && window.ResizeObserver) new ResizeObserver(size).observe(rp);
   main.addEventListener('scroll', spy, { passive: true });
   var top = /[?&]top=1/.test(location.search) || location.pathname.split('/').pop() === 'admin-menu.html';
   var portal = document.getElementById('rmresident-portal');

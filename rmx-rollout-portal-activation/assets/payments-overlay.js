@@ -15,14 +15,15 @@
   function seed() {
     return {
       'default': { id: 'default', name: 'Default Payment Policy', desc: 'Default policy settings', active: true, isDefault: true, by: '', on: '',
-        props: ['Flagstone Manufactured Housing', 'Mesa Verde Townhomes'], set: SET({ future: true, over: true, choose: true }) },
-      'assoc': { id: 'assoc', name: 'Association Policies', desc: 'Payment policies for all associations.', active: true, isDefault: false, by: 'cward', on: '01/31/2026',
-        props: ['Summerlin HOA', 'Desert Ridge HOA'], set: SET({ shared: true }) },
-      'riverview': { id: 'riverview', name: 'Riverview Policies', desc: '', active: true, isDefault: false, by: 'cward', on: '02/02/2026',
-        props: ['Riverview Apartments'], set: SET({ future: true, over: true, mode: 'specific', charge: 'RC', override: true, choose: true }) }
+        props: ['Flagstone Manufactured Housing', 'Mesa Verde Townhomes'], set: SET({ future: true, over: true, choose: true }) }
     };
   }
-  function store() { var s = RO.get(); if (!s.policies) { s.policies = seed(); RO.save(s); } return s; }
+  function store() {
+    var s = RO.get(); if (!s.policies) { s.policies = seed(); RO.save(s); }
+    /* only the Default policy exists; drop the sample ones an older saved state may still hold */
+    if (s.policies.assoc || s.policies.riverview) { delete s.policies.assoc; delete s.policies.riverview; RO.save(s); }
+    return s;
+  }
 
   var work = null, onPublish = null, wired = false;
 

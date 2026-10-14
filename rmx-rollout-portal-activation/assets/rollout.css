@@ -986,3 +986,24 @@ details.ro-sub > summary { height: 46px; min-height: 46px; box-sizing: border-bo
 .sg-confirm__icons { display: flex; align-items: center; gap: var(--spacing-xs); }
 .sg-confirm__icons a { display: grid; place-items: center; width: 24px; height: 24px; color: var(--icon-primary); }
 .sg-confirm__icons .rmx-icon { width: 24px; height: 24px; }
+
+.ro-view { display: inline-flex; align-items: center; gap: inherit; }
+.ro-view[hidden] { display: none; }
+
+/* Stepper's Portal Preview fits the dialog without scrolling; the tiles hug their content */
+.ro-preview--sg .ro-preview__body { overflow: hidden; display: flex; flex-direction: column; }
+.ro-preview--sg .rp { flex: 1 1 0; min-height: 0; }
+.ro-preview--sg .rp-body { flex: 1 1 0; min-height: 0; }
+.ro-preview--sg .rp-main { overflow: hidden; }
+.ro-preview--sg .rp-content { flex: 1 1 0; min-height: 0; }
+.ro-preview--sg .rp-cards { flex: 1 1 0; min-height: 0; align-items: stretch; }
+.ro-preview--sg .rp-menu { overflow: hidden; }
+.ro-preview--sg { height: calc(100vh - 24px); max-height: 900px; }
+
+/* Preview dialog: no reserved scrollbar gutter, so the header and its line span the full width and the buttons sit at the edge */
+.ro-dialog.ro-preview { scrollbar-gutter: auto; }
+.ro-preview--sg .ro-preview__body { scrollbar-gutter: auto; }
+.ro-preview .ro-hdricons .rmx-icon { width: 24px; height: 24px; }
+
+/* Stepper: the unselected side of Colors / Themes is dimmed but stays clickable */
+.sg .is-dim { opacity: .45; }
