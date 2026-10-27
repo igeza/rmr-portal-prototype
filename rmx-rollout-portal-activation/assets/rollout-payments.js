@@ -35,7 +35,7 @@
     $('#pf-count').textContent = rows.length + ' of ' + all.length + ' Policies';
   }
 
-  function openPolicy(id) { PP.open(id, { onPublish: function () { render(); if (window.RMX && RMX.toast) RMX.toast('Payment policy published', 'success'); } }); }
+  function openPolicy(id) { PP.open(id, { onPublish: render }); }
   function openOv(id) { var e = document.getElementById(id); if (e) e.hidden = false; }
   function closeOv(el) { var o = el.closest('.ro-ov'); if (o) o.hidden = true; }
 
