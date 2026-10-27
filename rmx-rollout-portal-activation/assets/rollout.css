@@ -1139,3 +1139,8 @@ details.ro-sub > summary { height: 46px; min-height: 46px; box-sizing: border-bo
 .ro-rs__done { display: flex; align-items: center; gap: var(--spacing-xs); flex-wrap: wrap; }
 .ro-rs__done .ro-rs__ok .rmx-icon { width: 20px; height: 20px; }
 .ro-rs__done .ro-rs__ok, .ro-rs__done .ro-rs__ok .rmx-icon { color: var(--icon-success); fill: var(--icon-success); }
+
+/* "Next step" callout */
+.ro-rs__next { display: flex; flex-direction: column; gap: var(--spacing-xxs); padding: var(--spacing-md); background: var(--background-ui-primary); border: 1px solid var(--border-primary); border-left: 4px solid var(--border-focus, #008dd5); border-radius: var(--radius-sm); font: var(--type-paragraph-l-regular); color: var(--text-primary); }
+.ro-rs__nextlbl { font: var(--type-label-m-semibold, 600 12px/16px Roboto, sans-serif); letter-spacing: .5px; text-transform: uppercase; color: var(--text-secondary); }
+.ro-rs__next b { font: var(--type-heading-m-semibold, 600 18px/24px Roboto, sans-serif); color: var(--text-secondary); }

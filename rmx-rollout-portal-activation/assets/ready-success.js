@@ -18,7 +18,7 @@
     w.innerHTML = '<div class="ro-scrim" style="z-index:1190"></div><div class="ro-dialog ro-popup ro-rs__dialog" role="alertdialog" aria-label="Ready to Publish" style="z-index:1200">' +
       '<div class="rmx-overlay__header" data-rmx-component="Overlay Header"><span>Ready to Publish</span>' +
       '<a href="#" data-rs-stay aria-label="Close">' + icon('close') + '</a></div>' +
-      '<div class="ro-dialog__body ro-rs__body"><p class="ro-rs__done"><span class="ro-rs__ok">' + icon('check-circle-filled') + '</span><b>' + st.done + ' checked</b></p><p>' + st.what + '</p><p><b>Next step: ' + st.next + '.</b> ' + st.text + '</p></div>' +
+      '<div class="ro-dialog__body ro-rs__body"><p class="ro-rs__done"><span class="ro-rs__ok">' + icon('check-circle-filled') + '</span><b>' + st.done + ' checked</b></p><p>' + st.what + '</p><div class="ro-rs__next"><span class="ro-rs__nextlbl">Next step</span><b>' + st.next + '</b><span>' + st.text + '</span></div></div>' +
       '<div class="rmx-overlay__footer" data-rmx-component="Overlay Footer"><button type="button" class="rmx-btn rmx-btn--primary" data-rs-next>Review Next Step</button><button type="button" class="rmx-btn rmx-btn--secondary" data-rs-stay>Stay on This Page</button></div></div>';
     w.addEventListener('click', function (e) {
       e.stopPropagation();
