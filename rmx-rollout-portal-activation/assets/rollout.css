@@ -1101,4 +1101,5 @@ details.ro-sub > summary { height: 46px; min-height: 46px; box-sizing: border-bo
 .ro-colresizing, .ro-colresizing * { cursor: col-resize !important; user-select: none; }
 
 /* My Workspace background (Figma RMX_Background) */
-.ro-dash { background: var(--background-ui-primary) url("../assets/rollout/dashboard-bg.png") center / cover no-repeat; }
+.ro-dash { background: var(--background-ui-primary) url("../assets/rollout/dashboard-bg.png") center bottom / cover no-repeat fixed; }
+.ro-dash .ro-dtile { background: var(--component-workspace-tile); }
