@@ -133,11 +133,15 @@ SHELL = r'''<!doctype html>
 (function () {
   var SCREENS = __SCREENS__, A = __ASSETS__, CSS = __CSS__, JS = __JS__, FONTS = __FONTS__, START = __START__;
   /* walkthrough state lives in memory: every open of this file starts fresh */
-  function store() { var m = {}; return { getItem: function (k) { return k in m ? m[k] : null; }, setItem: function (k, v) { m[k] = String(v); }, removeItem: function (k) { delete m[k]; } }; }
-  window.__ls = store(); window.__ss = store();
+  /* a tab opened from another copy of this file (a profile opened in a new tab) starts from that tab's state and writes changes back to it */
+  var peer = null; try { peer = window.opener && window.opener.__ls && window.opener.__ls._m ? window.opener : null; } catch (e) {}
+  function store(p) { var m = {}; return { _m: m, getItem: function (k) { return k in m ? m[k] : null; }, setItem: function (k, v) { m[k] = String(v); if (p) try { p.setItem(k, v); } catch (e) {} }, removeItem: function (k) { delete m[k]; if (p) try { p.removeItem(k); } catch (e) {} } }; }
+  window.__ls = store(peer && peer.__ls); window.__ss = store();
+  if (peer) for (var k in peer.__ls._m) window.__ls._m[k] = peer.__ls._m[k];
+  window.__ropen = function (u) { var w = window.open(location.href.split(/[?#]/)[0] + '?go=' + encodeURIComponent(u), '_blank'); if (!w) window.__rgo(u); };
   var f = document.getElementById('f'), cur = null;
   var BOOT = '<script>(function(){var P=parent;window.__loc={pathname:"/screens/"+P.__cur.name,search:P.__cur.search,hash:"",href:"/screens/"+P.__cur.name+P.__cur.search};' +
-    'window.__go=function(u){P.__rgo(String(u))};window.__ls=P.__ls;window.__ss=P.__ss;' +
+    'window.__go=function(u){P.__rgo(String(u))};window.__open=function(u){P.__ropen(String(u))};window.__ls=P.__ls;window.__ss=P.__ss;' +
     'document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest("a[href]");if(!a||a.hasAttribute("data-ro-tour"))return;var h=a.getAttribute("href");' +
     'if(/^[\\w-]+\\.html/.test(h)||/^(\\.\\.\\/)?screens\\/[\\w-]+\\.html/.test(h)){e.preventDefault();P.__rgo(h);}},true);' +
     'var fix=function(n){if(n.nodeType!==1)return;var l=n.matches&&n.matches("img[src]")?[n]:[].slice.call(n.querySelectorAll?n.querySelectorAll("img[src]"):[]);l.forEach(function(i){var s=i.getAttribute("src");' +
@@ -158,7 +162,8 @@ SHELL = r'''<!doctype html>
     f.srcdoc = build(cur);
   };
   var __g = (location.search.match(/[?&]guide=(\w+)/) || [])[1];
-  window.__rgo(START + (__g ? '?guide=' + __g : ''));
+  var __to = (location.search.match(/[?&]go=([^&]+)/) || [])[1];
+  window.__rgo(__to ? decodeURIComponent(__to) : START + (__g ? '?guide=' + __g : ''));
 })();
 </script></body></html>
 '''

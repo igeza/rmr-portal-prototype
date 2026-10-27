@@ -113,15 +113,18 @@
       }).join('');
       $('#pf-count').textContent = rows.length + ' of ' + Object.keys(s.profiles).length + ' Customizations';
     };
+    /* a profile opens in its own browser tab; the register refreshes when this tab is shown again */
+    var openTab = function (h) { if (window.__open) window.__open(h); else window.open(h, '_blank'); };
+    document.addEventListener('visibilitychange', function () { if (!document.hidden) render(); });
     render();
     $('#pf-search input').addEventListener('input', render);
     $('#pf-body').addEventListener('click', function (e) {
       if (e.target.closest('[data-ro-kebab], [data-ro-typelist]')) return;
-      var tr = e.target.closest('tr[data-href]'); if (tr) location.href = tr.dataset.href;
+      var tr = e.target.closest('tr[data-href]'); if (tr) openTab(tr.dataset.href);
     });
     $('#pf-body').addEventListener('keydown', function (e) {
       if (e.key !== 'Enter') return;
-      var tr = e.target.closest('tr[data-href]'); if (tr) location.href = tr.dataset.href;
+      var tr = e.target.closest('tr[data-href]'); if (tr) openTab(tr.dataset.href);
     });
 
     document.addEventListener('click', function (e) {
