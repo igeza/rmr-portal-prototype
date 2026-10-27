@@ -1120,3 +1120,12 @@ details.ro-sub > summary { height: 46px; min-height: 46px; box-sizing: border-bo
 .ro-preview { height: calc(100vh - 28px); }
 .ro-preview:not(.ro-preview--sg) .ro-preview__body { display: flex; flex-direction: column; }
 .ro-preview:not(.ro-preview--sg) .rp { flex: 1 0 auto; }
+
+/* What's-new tour keeps the sizes from the mocks (Learn More): 768 wide; 477 / 577 / 603 tall. Only the customization tour uses the shared 700px card. */
+.ro-tour-ov .ro-tourcard { height: auto; padding-bottom: var(--spacing-xl); overflow: hidden; }
+.ro-tour-ov .ro-tourcard .ro-tournav { position: static; padding: 0; margin-top: 0; }
+.ro-tour-ov .ro-tourcard[aria-label="Why use it?"] { height: 477px; }
+.ro-tour-ov .ro-tourcard[aria-label="What can residents do?"] { height: 577px; }
+.ro-tour-ov .ro-tourcard[aria-label="Preview before Publishing"] { height: 603px; }
+.ro-tour-ov .ro-welcome { height: 358px; box-sizing: border-box; }
+.ro-tour-ov .ro-tourrow h5 { line-height: 19px; }
