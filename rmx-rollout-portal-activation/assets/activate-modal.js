@@ -11,7 +11,7 @@
     if (document.querySelector('.sg-confirm')) return;
     var d = document.createElement('div'); d.className = 'sg-confirm';
     d.innerHTML = '<div class="ro-scrim" style="z-index:990"></div><div class="ro-dialog ro-popup" role="alertdialog" aria-label="Confirm Publish" style="z-index:1000">' +
-      '<div class="rmx-overlay__header" data-rmx-component="Overlay Header"><span>Confirm Publish</span><span class="sg-confirm__icons"><a href="#" aria-label="Help">' + icon('help') + '</a><a href="#" data-confirm-close aria-label="Close">' + icon('close') + '</a></span></div>' +
+      '<div class="rmx-overlay__header" data-rmx-component="Overlay Header"><span>Confirm Publish</span><span class="sg-confirm__icons"><a href="#" data-confirm-close aria-label="Close">' + icon('close') + '</a></span></div>' +
       '<div class="ro-dialog__body">' + icon('info-filled') + '<div class="sg-confirm__text">' + (kind === 'skip' ? '<p>Publishing now will make rmResident Portal the live experience for all residents and retire TWA across all locations using the default settings.</p><p>Do you want to continue?</p>' : '<p>Publishing will make rmResident Portal the live experience for all residents and retire TWA across all locations.</p>') + '</div></div>' +
       '<div class="rmx-overlay__footer" data-rmx-component="Overlay Footer"><button type="button" class="rmx-btn rmx-btn--primary" data-confirm-go data-ro-final>Publish</button><button type="button" class="rmx-btn rmx-btn--secondary" data-confirm-close>Cancel</button></div></div>';
     d.addEventListener('click', function (e) {
