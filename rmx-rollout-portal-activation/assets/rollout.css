@@ -1115,3 +1115,8 @@ details.ro-sub > summary { height: 46px; min-height: 46px; box-sizing: border-bo
 
 /* registers always span the full width: shrinking a column redistributes the space instead of leaving white on the right */
 .ro-pftable .rmx-register { min-width: 100%; }
+
+/* Portal Preview fills the whole dialog: the content stretches to the bottom instead of leaving white space (scrolls when shorter than its content) */
+.ro-preview { height: calc(100vh - 28px); }
+.ro-preview:not(.ro-preview--sg) .ro-preview__body { display: flex; flex-direction: column; }
+.ro-preview:not(.ro-preview--sg) .rp { flex: 1 0 auto; }
