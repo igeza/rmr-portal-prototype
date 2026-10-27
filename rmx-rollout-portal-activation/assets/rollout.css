@@ -1099,3 +1099,6 @@ details.ro-sub > summary { height: 46px; min-height: 46px; box-sizing: border-bo
 .ro-colgrip { position: absolute; top: 0; right: -4px; width: 8px; height: 100%; cursor: col-resize; z-index: 2; }
 .ro-colgrip:hover { background: rgba(255, 255, 255, .25); }
 .ro-colresizing, .ro-colresizing * { cursor: col-resize !important; user-select: none; }
+
+/* My Workspace background (Figma RMX_Background) */
+.ro-dash { background: var(--background-ui-primary) url("../assets/rollout/dashboard-bg.png") center / cover no-repeat; }
