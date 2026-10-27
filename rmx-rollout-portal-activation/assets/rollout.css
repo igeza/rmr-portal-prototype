@@ -1094,3 +1094,8 @@ details.ro-sub > summary { height: 46px; min-height: 46px; box-sizing: border-bo
 /* register headers: grey bar, white 13px semibold labels with wide tracking, soft column dividers (matches the Rent Manager register) */
 .ro-pftable .rmx-register th { background: #707070; color: #fff; font: 600 13px/16px Roboto, sans-serif; letter-spacing: 1px; height: 30px; padding: 0 var(--spacing-xs); border-right: 1px solid rgba(255, 255, 255, .3); vertical-align: middle; }
 .ro-pftable .rmx-register th:last-child { border-right: 0; }
+/* column resize grip sits on the header divider */
+.ro-pftable .rmx-register th { position: relative; }
+.ro-colgrip { position: absolute; top: 0; right: -4px; width: 8px; height: 100%; cursor: col-resize; z-index: 2; }
+.ro-colgrip:hover { background: rgba(255, 255, 255, .25); }
+.ro-colresizing, .ro-colresizing * { cursor: col-resize !important; user-select: none; }
