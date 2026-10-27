@@ -1104,14 +1104,16 @@ details.ro-sub > summary { height: 46px; min-height: 46px; box-sizing: border-bo
 .ro-dash { background: var(--background-ui-primary) url("../assets/rollout/dashboard-bg.png") center bottom / cover no-repeat fixed; }
 .ro-dash .ro-dtile { background: var(--component-workspace-tile); }
 
-/* Ready to Publish success overlay */
-.ro-rs__dialog { width: min(520px, calc(100vw - 48px)); gap: var(--spacing-md); align-items: stretch; }
-.ro-rs__ok { display: grid; place-items: center; color: var(--icon-success, #3a9a3d); padding-top: var(--spacing-sm); }
-.ro-rs__ok .rmx-icon { width: 48px; height: 48px; }
-.ro-rs__what { margin: 0; text-align: center; font: var(--type-paragraph-l-regular); color: var(--text-primary); }
-.ro-rs__next { display: flex; flex-direction: column; gap: var(--spacing-xxs); padding: var(--spacing-md); background: var(--background-ui-primary); border-radius: var(--spacing-xs); font: var(--type-paragraph-l-regular); color: var(--text-primary); }
-.ro-rs__next b { font: var(--type-paragraph-l-semibold); color: var(--text-secondary); }
-.ro-rs__foot { display: flex; justify-content: flex-end; gap: var(--spacing-md); }
+/* Ready to Publish success overlay: standard popup, small check inline with the step name */
+.ro-rs__dialog { width: min(500px, calc(100vw - 48px)); }
+.ro-rs__title { display: inline-flex; align-items: center; gap: var(--spacing-xs); }
+.ro-rs__ok { display: inline-grid; place-items: center; color: var(--icon-success); }
+.ro-rs__ok .rmx-icon { width: 20px; height: 20px; }
+.ro-rs .rmx-overlay__header a { display: grid; place-items: center; color: var(--icon-primary); }
+.ro-rs .rmx-overlay__header a .rmx-icon { width: 24px; height: 24px; }
+.ro-rs__body { flex-direction: column; align-items: stretch; gap: var(--spacing-md); padding: var(--spacing-xl) var(--spacing-md); }
+.ro-rs__body p { margin: 0; font: var(--type-paragraph-l-regular); color: var(--text-primary); }
+.ro-rs__body b { font: var(--type-paragraph-l-semibold); }
 
 /* registers always span the full width: shrinking a column redistributes the space instead of leaving white on the right */
 .ro-pftable .rmx-register { min-width: 100%; }
@@ -1132,3 +1134,8 @@ details.ro-sub > summary { height: 46px; min-height: 46px; box-sizing: border-bo
 
 .ro-crumb { cursor: pointer; }
 .ro-crumb:hover { text-decoration: underline; }
+.ro-popup .ro-dialog__body.ro-rs__body { flex-direction: column; align-items: stretch; min-height: 0; gap: var(--spacing-md); padding: var(--spacing-xl) var(--spacing-md); }
+
+.ro-rs__done { display: flex; align-items: center; gap: var(--spacing-xs); flex-wrap: wrap; }
+.ro-rs__done .ro-rs__ok .rmx-icon { width: 20px; height: 20px; }
+.ro-rs__done .ro-rs__ok, .ro-rs__done .ro-rs__ok .rmx-icon { color: var(--icon-success); fill: var(--icon-success); }
