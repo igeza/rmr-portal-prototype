@@ -1129,3 +1129,6 @@ details.ro-sub > summary { height: 46px; min-height: 46px; box-sizing: border-bo
 .ro-tour-ov .ro-tourcard[aria-label="Preview before Publishing"] { height: 603px; }
 .ro-tour-ov .ro-welcome { height: 358px; box-sizing: border-box; }
 .ro-tour-ov .ro-tourrow h5 { line-height: 19px; }
+
+.ro-crumb { cursor: pointer; }
+.ro-crumb:hover { text-decoration: underline; }

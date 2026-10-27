@@ -23,6 +23,17 @@ document.addEventListener('click', function (e) {
   location.href = logo ? 'dashboard.html' : 'admin-get-started.html';
 }, true);
 
+/* Clicking "Profile Details" in the context bar goes back to the Portal Profiles register. */
+document.addEventListener('DOMContentLoaded', function () {
+  var t = document.querySelector('.rmx-contextbar__title');
+  if (!t || t.textContent.trim() !== 'Profile Details') return;
+  t.classList.add('ro-crumb');
+  t.setAttribute('role', 'link'); t.setAttribute('tabindex', '0');
+  var go = function () { location.href = 'profiles-register.html'; };
+  t.addEventListener('click', go);
+  t.addEventListener('keydown', function (e) { if (e.key === 'Enter') go(); });
+});
+
 /* Administration pages: the left menu follows the section at the top of the scroll area, and clicking an item scrolls to it.
    Arriving from the Mega Menu (admin-menu.html / ?top=1) starts at the top; every other arrival lands on rmResident Portal. */
 (function () {
