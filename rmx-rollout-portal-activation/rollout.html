@@ -12,7 +12,7 @@
   var f = document.getElementById('f'), cur = null;
   var BOOT = '<script>(function(){var P=parent;window.__loc={pathname:"/screens/"+P.__cur.name,search:P.__cur.search,hash:"",href:"/screens/"+P.__cur.name+P.__cur.search};' +
     'window.__go=function(u){P.__rgo(String(u))};window.__ls=P.__ls;window.__ss=P.__ss;' +
-    'document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest("a[href]");if(!a)return;var h=a.getAttribute("href");' +
+    'document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest("a[href]");if(!a||a.hasAttribute("data-ro-tour"))return;var h=a.getAttribute("href");' +
     'if(/^[\\w-]+\\.html/.test(h)||/^(\\.\\.\\/)?screens\\/[\\w-]+\\.html/.test(h)){e.preventDefault();P.__rgo(h);}},true);' +
     'var fix=function(n){if(n.nodeType!==1)return;var l=n.matches&&n.matches("img[src]")?[n]:[].slice.call(n.querySelectorAll?n.querySelectorAll("img[src]"):[]);l.forEach(function(i){var s=i.getAttribute("src");' +
     'var k=s&&s.replace(/^(\\.\\.\\/)+/,"");if(k&&P.__A[k]&&s.indexOf("data:")!==0)i.setAttribute("src",P.__A[k]);});};' +
