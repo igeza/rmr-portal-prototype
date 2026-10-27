@@ -1083,3 +1083,10 @@ details.ro-sub > summary { height: 46px; min-height: 46px; box-sizing: border-bo
 /* tour cards share one size (the tallest step); shorter viewports scroll the card, nav stays pinned */
 .ro-tourcard { height: min(700px, calc(100vh - 32px)); padding-bottom: 0; box-sizing: border-box; }
 .ro-tourcard .ro-tournav { position: sticky; bottom: 0; margin-top: auto; background: var(--container-primary); padding: var(--spacing-md) 0 var(--spacing-xl); }
+
+/* Confirm Publish: text runs the full width of the dialog body (Figma 2972:56232) */
+.sg-confirm .ro-popup .ro-dialog__body { padding-right: var(--spacing-md); }
+.sg-confirm .ro-popup .ro-dialog__body p, .sg-confirm__text p { max-width: none; padding-right: 0; }
+.sg-confirm__text { flex: 1; min-width: 0; }
+/* small popups never reserve a scrollbar gutter, so header/body/footer reach both edges */
+.ro-popup.ro-dialog, .sg-confirm .ro-popup { scrollbar-gutter: auto; }
