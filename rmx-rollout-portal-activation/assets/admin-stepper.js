@@ -92,5 +92,8 @@
     document.body.appendChild(w);
   }
 
-  document.addEventListener('DOMContentLoaded', function () { render(); live(); });
+  document.addEventListener('DOMContentLoaded', function () {
+    render(); live();
+    var a = RO.get(); if (a.autoOpen === 'login' && window.PL) { a.autoOpen = ''; RO.save(a); window.PL.open({ onPublish: render }); }
+  });
 })();

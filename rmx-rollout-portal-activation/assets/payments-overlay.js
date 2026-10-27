@@ -86,6 +86,7 @@
       s.touched = true; RO.save(s);
       close();
       if (onPublish) onPublish(id);
+      if (id === 'default' && window.ROReadySuccess) window.ROReadySuccess('pay:default');
     });
   }
   function close() { $('#ov-policy').hidden = true; }

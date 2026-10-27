@@ -341,7 +341,7 @@
       if (act === 'publish') {
         commit('ready');
         $$('.ro-ov').forEach(function (o) { o.hidden = true; });
-        if (!work.isDefault) openOv('ov-ready');
+        if (!work.isDefault) openOv('ov-ready'); else if (window.ROReadySuccess) window.ROReadySuccess('prof:default');
       }
       if (act === 'cancel') location.href = back;
     });

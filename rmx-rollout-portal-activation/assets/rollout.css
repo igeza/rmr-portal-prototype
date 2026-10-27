@@ -1103,3 +1103,12 @@ details.ro-sub > summary { height: 46px; min-height: 46px; box-sizing: border-bo
 /* My Workspace background (Figma RMX_Background) */
 .ro-dash { background: var(--background-ui-primary) url("../assets/rollout/dashboard-bg.png") center bottom / cover no-repeat fixed; }
 .ro-dash .ro-dtile { background: var(--component-workspace-tile); }
+
+/* Ready to Publish success overlay */
+.ro-rs__dialog { width: min(520px, calc(100vw - 48px)); gap: var(--spacing-md); align-items: stretch; }
+.ro-rs__ok { display: grid; place-items: center; color: var(--icon-success, #3a9a3d); padding-top: var(--spacing-sm); }
+.ro-rs__ok .rmx-icon { width: 48px; height: 48px; }
+.ro-rs__what { margin: 0; text-align: center; font: var(--type-paragraph-l-regular); color: var(--text-primary); }
+.ro-rs__next { display: flex; flex-direction: column; gap: var(--spacing-xxs); padding: var(--spacing-md); background: var(--background-ui-primary); border-radius: var(--spacing-xs); font: var(--type-paragraph-l-regular); color: var(--text-primary); }
+.ro-rs__next b { font: var(--type-paragraph-l-semibold); color: var(--text-secondary); }
+.ro-rs__foot { display: flex; justify-content: flex-end; gap: var(--spacing-md); }

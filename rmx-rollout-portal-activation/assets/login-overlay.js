@@ -73,6 +73,7 @@
       var s = RO.get(); s.loginCfg = cfg; s.ready = s.ready || {}; s.ready['login:default'] = true; s.touched = true; RO.save(s);
       $('#ov-login').hidden = true;
       if (onPublish) onPublish();
+      if (window.ROReadySuccess) window.ROReadySuccess('login:default');
     });
   }
   function open(opts) {
