@@ -155,15 +155,27 @@ SHELL = r'''<!doctype html>
     html = html.replace(/@@A:([^@]+)@@/g, function (m, p) { return A[p] || ''; });
     return html.replace('<head>', function () { return '<head><style>' + FONTS + '</style>' + BOOT; });
   }
-  window.__rgo = function (u) {
+  /* every screen change is a history entry, so the browser's back/forward arrows move between screens */
+  var base = location.href.split(/[?#]/)[0];
+  function mark(u, replace) { try { history[replace ? 'replaceState' : 'pushState'](null, '', base + '?go=' + encodeURIComponent(u)); } catch (e) {} }
+  function show(u) {
     var m = String(u).match(/([\w-]+\.html)(\?[^#]*)?/);
-    if (!m || !SCREENS[m[1]]) return;
+    if (!m || !SCREENS[m[1]]) return false;
     cur = window.__cur = { name: m[1], search: m[2] || '' };
     f.srcdoc = build(cur);
-  };
+    return true;
+  }
+  window.__rgo = function (u, replace) { if (show(u)) mark(String(u).replace(/^(\.\.\/)?screens\//, ''), replace); };
+  window.addEventListener('popstate', function () {
+    var g = (location.search.match(/[?&]go=([^&]+)/) || [])[1];
+    show(g ? decodeURIComponent(g) : START);
+  });
   var __g = (location.search.match(/[?&]guide=(\w+)/) || [])[1];
   var __to = (location.search.match(/[?&]go=([^&]+)/) || [])[1];
-  window.__rgo(__to ? decodeURIComponent(__to) : START + (__g ? '?guide=' + __g : ''));
+  var __first = __to ? decodeURIComponent(__to) : START + (__g ? '?guide=' + __g : '');
+  /* a profile opened in its own tab sits on top of the register, so Back lands there */
+  if (/^profile-/.test(__first)) { show('profiles-register.html'); mark('profiles-register.html', true); window.__rgo(__first); }
+  else window.__rgo(__first, true);
 })();
 </script></body></html>
 '''
