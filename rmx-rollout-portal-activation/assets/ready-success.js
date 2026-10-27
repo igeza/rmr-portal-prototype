@@ -19,10 +19,11 @@
       '<div class="rmx-overlay__header" data-rmx-component="Overlay Header"><span>Ready to Publish</span>' +
       '<a href="#" data-rs-stay aria-label="Close">' + icon('close') + '</a></div>' +
       '<div class="ro-dialog__body ro-rs__body"><p class="ro-rs__done"><span class="ro-rs__ok">' + icon('check-circle-filled') + '</span><b>' + st.done + ' reviewed</b></p><p>' + st.what + '</p><div class="ro-rs__next"><span class="ro-rs__nextlbl">Next step</span><b>' + st.next + '</b><span>' + st.text + '</span></div></div>' +
-      '<div class="rmx-overlay__footer" data-rmx-component="Overlay Footer"><button type="button" class="rmx-btn rmx-btn--primary" data-rs-next>Review Next Step</button><button type="button" class="rmx-btn rmx-btn--secondary" data-rs-stay>Stay on This Page</button></div></div>';
+      '<div class="rmx-overlay__footer" data-rmx-component="Overlay Footer"><button type="button" class="rmx-btn rmx-btn--primary" data-rs-next>Review Next Step</button><button type="button" class="rmx-btn rmx-btn--secondary" data-rs-admin>Back to Administration</button></div></div>';
     w.addEventListener('click', function (e) {
       e.stopPropagation();
       if (e.target.closest('[data-rs-stay]')) { e.preventDefault(); w.remove(); }
+      else if (e.target.closest('[data-rs-admin]')) { e.preventDefault(); w.remove(); location.href = 'admin-get-started.html'; }
       else if (e.target.closest('[data-rs-next]')) {
         e.preventDefault(); w.remove();
         if (st.go === 'login') { var t = RO.get(); t.autoOpen = 'login'; RO.save(t); location.href = 'admin-get-started.html'; }
