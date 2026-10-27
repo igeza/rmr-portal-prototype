@@ -1007,3 +1007,69 @@ details.ro-sub > summary { height: 46px; min-height: 46px; box-sizing: border-bo
 
 /* Stepper: the unselected side of Colors / Themes is dimmed but stays clickable */
 .sg .is-dim { opacity: .45; }
+
+/* Lighter Review Settings guides (assets/setup-guide-lite.js) */
+.sg-dialog--single { width: min(720px, calc(100vw - 48px)); }
+.sg-dialog--single .sg-body { grid-template-columns: 1fr; }
+.sg-cards { display: flex; flex-direction: column; gap: var(--spacing-sm); }
+.sg-card--link { cursor: pointer; text-decoration: none; }
+.sg-card--link > div { flex: 1; }
+.sg-card--link .ro-link { flex: none; margin-left: auto; }
+.sg-hint--note { display: flex; align-items: center; gap: var(--spacing-xs); color: var(--text-primary); }
+.sg-hint--note .rmx-icon { width: 20px; height: 20px; color: var(--icon-primary); flex: none; }
+.sg-opts { display: flex; flex-direction: column; gap: var(--spacing-sm); }
+.sg-prevbtn.rmx-btn--secondary .rmx-icon { color: var(--icon-primary); }
+
+/* Way back into the Review Settings guide */
+.ro-backguide { position: fixed; left: var(--spacing-md); bottom: var(--spacing-xs); z-index: 800; box-shadow: var(--dropshadow-md); text-decoration: none; }
+.ro-backguide .rmx-icon { width: 20px; height: 20px; }
+.ro-banner__btns { display: flex; gap: var(--spacing-xs); flex: none; align-items: center; }
+
+.sg-where { display: block; margin-top: var(--spacing-xxs); font: var(--type-label-s-regular, 400 12px/16px Roboto, sans-serif); color: var(--text-primary); opacity: .8; }
+.sg-eye { width: 50px; height: 50px; flex: none; border-radius: 8px; background: #afcef4; display: grid; place-items: center; color: var(--icon-primary); }
+.sg-eye .rmx-icon { width: 28px; height: 28px; }
+
+/* Explore guide tips */
+.sg-tips { display: flex; flex-direction: column; gap: var(--spacing-sm); }
+.sg-tip { display: flex; align-items: center; gap: var(--spacing-md); padding: var(--spacing-md); background: var(--container-primary); border-radius: 4px; box-shadow: var(--dropshadow-md); text-decoration: none; cursor: pointer; }
+.sg-tip__ic { width: 32px; height: 32px; flex: none; border-radius: 50%; background: #afcef4; display: grid; place-items: center; color: var(--icon-primary); }
+.sg-tip__ic .rmx-icon { width: 20px; height: 20px; }
+.sg-tip > div { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: var(--spacing-xxs); }
+.sg-tip b { font-weight: 500; color: var(--text-secondary); }
+.sg-tip p { margin: 0; color: var(--text-primary); }
+.sg-tip .ro-link { flex: none; }
+
+/* Review Settings stepper — inline on Administration (Figma "Stepper") */
+.ro-stepper { display: flex; align-items: center; gap: var(--spacing-md); padding: var(--spacing-md) var(--spacing-md) var(--spacing-sm); border: 1px solid var(--border-primary); border-radius: var(--radius-sm); background: color-mix(in srgb, var(--background-brand-secondary) 22%, white); }
+.ro-stepper__main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: var(--spacing-sm); }
+.ro-stepper__steps { list-style: none; margin: 0; padding: 0; display: flex; align-items: center; gap: var(--spacing-xs); max-width: 880px; }
+.ro-stepper__step { display: flex; align-items: center; gap: var(--spacing-xs); font: var(--type-paragraph-s-regular); color: var(--text-primary); white-space: nowrap; }
+.ro-stepper__step.is-cur { font-weight: 600; color: var(--text-secondary); }
+.ro-stepper__dot { width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; flex: none; background: var(--icon-tertiary); color: #fff; font: 500 12px/1 Roboto, sans-serif; }
+.ro-stepper__step.is-cur .ro-stepper__dot { background: var(--background-brand-primary); }
+.ro-stepper__step.is-done .ro-stepper__dot { background: var(--icon-success); }
+.ro-stepper__dot .rmx-icon { width: 18px; height: 18px; }
+.ro-stepper__line { flex: 1; height: 1px; background: var(--border-primary); list-style: none; }
+.ro-stepper__text { margin: 0; font: var(--type-paragraph-s-regular); color: var(--text-primary); }
+.ro-stepper__btns { display: flex; gap: var(--spacing-xs); flex: none; align-self: center; }
+.ro-stepper + .ro-items { margin-top: var(--spacing-md); }
+.ro-items--stepper { gap: 0; }
+.ro-items--stepper .ro-item { padding: var(--spacing-xxs); border: 1px solid transparent; border-radius: var(--radius-sm); }
+.sg-confirm__text { display: flex; flex-direction: column; gap: var(--spacing-md); }
+.sg-confirm__text p { max-width: 400px; }
+
+/* "rmResident Portal is now live!" */
+.ro-live__dialog { width: min(768px, calc(100vw - 48px)); gap: var(--spacing-md); }
+.ro-live__mail { height: 230px; overflow: hidden; box-sizing: border-box; border: 1px solid var(--border-primary); padding: 34px 34px 0; align-self: center; width: min(592px, 100%); display: flex; flex-direction: column; gap: 14px; font: 400 10px/14px Roboto, sans-serif; color: #000; }
+.ro-live__mail b { font-weight: 600; }
+.ro-live__foot { display: flex; justify-content: flex-end; }
+.ro-items--stepper .ro-item.is-current h4 { font-weight: 600; color: var(--text-secondary); }
+.rmx-appbar__user { cursor: pointer; }
+
+/* Tour: brand-blue flag beside the section title; in the Get Started banner it is a "Take a tour" button left of Get Started (Figma) */
+.ro-tour { color: var(--icon-rm12); }
+.ro-tour .ro-tour__ic { width: 20px; height: 20px; display: block; }
+.ro-banner__tour { display: inline-flex; align-items: center; justify-content: center; gap: var(--spacing-xxs); flex: none; color: var(--text-link); font: var(--type-label-m-regular, 400 14px/1 Roboto, sans-serif); text-decoration: none; white-space: nowrap; cursor: pointer; }
+.ro-banner__tour:hover { text-decoration: underline; }
+.ro-banner__tour .ro-tour__ic { width: 20px; height: 20px; flex: none; }
+.ro-section:has(.ro-banner--start) .ro-sectitle .ro-tour { display: none; }

@@ -31,6 +31,9 @@
     try { history.replaceState(null, '', location.pathname + location.search.replace(/([?&])reset=1&?/, '$1').replace(/[?&]$/, '') + location.hash); } catch (e) {}
   }
 
+  /* ?guide=simple | single | full picks which Review Settings guide the chooser opens (remembered in the state) */
+  (function () { var g = /[?&]guide=(simple|single|full)/.exec(location.search); if (g) { var s = get(); s.guide = g[1]; save(s); } })();
+
   /* ---- readiness ---- */
   function isReady(s, key) {
     if (key.indexOf('prof:') === 0) {
@@ -144,7 +147,6 @@
     if ((file === 'admin-get-started.html' || file === 'admin-menu.html') && !/[?&]reset=1/.test(location.search)) {
       var q = file === 'admin-menu.html' ? '?top=1' : '';
       if (st.activated) location.replace('admin-activated.html' + q);
-      else if (st.converted) location.replace((pctFromState(st) >= 100 ? 'admin-ready-to-activate.html' : 'admin-conversion-started.html') + q);
     }
     document.addEventListener('click', function (e) {
       var c = e.target.closest('[data-ro-convert], [data-ro-activate]');
@@ -176,6 +178,7 @@
       raf = 0;
       if (get().activated) return;
       [].forEach.call(document.querySelectorAll('.rmx-btn'), function (b) {
+        if (b.hasAttribute('data-ro-final')) return;
         var m = /^(Save & )?Publish$/.exec(b.textContent.trim());
         if (m) b.textContent = (m[1] || '') + 'Ready to Publish';
       });
@@ -197,7 +200,13 @@
     });
   });
 
-  window.RO = { get: get, save: save, reset: reset, fresh: fresh, TYPES: TYPES, hydrate: hydrate, typesLabel: typesLabel, summary: summary, isReady: isReady };
+  /* Where the Review Settings guide lives for the chosen version (?guide=single [default] | simple | full) */
+  function guideUrl(step) {
+    var g = get().guide;
+    return (g === 'simple' ? 'setup-guide-simple.html' : g === 'full' ? 'setup-guide.html' : 'setup-guide-single.html') + (step ? '?step=' + step : '');
+  }
+
+  window.RO = { guideUrl: guideUrl, get: get, save: save, reset: reset, fresh: fresh, TYPES: TYPES, hydrate: hydrate, typesLabel: typesLabel, summary: summary, isReady: isReady };
 
   document.addEventListener('DOMContentLoaded', function () {
     hydrate();

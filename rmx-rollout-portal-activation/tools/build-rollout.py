@@ -157,7 +157,8 @@ SHELL = r'''<!doctype html>
     cur = window.__cur = { name: m[1], search: m[2] || '' };
     f.srcdoc = build(cur);
   };
-  window.__rgo(START);
+  var __g = (location.search.match(/[?&]guide=(\w+)/) || [])[1];
+  window.__rgo(START + (__g ? '?guide=' + __g : ''));
 })();
 </script></body></html>
 '''

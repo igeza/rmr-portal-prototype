@@ -82,13 +82,13 @@
       '<p class="sg-lead">Customize the look and messaging of the login screen your residents see. It currently matches your TWA settings.</p><p class="sg-lead">Find this later in rmResident Portal &gt; Portal Login.</p>' +
       card('imgMoney.svg', 'Payment Policies', 'Set up payment policies per property') +
       '<p class="sg-lead">Create policy profiles that match the payment rules for each of your properties. Settings are now organized so you can build and preview policies before residents see them.</p><p class="sg-lead">Find this later in rmResident Portal &gt; Payment Policies</p>' },
-    { n: 'Review & Finish', t: 'Activate', h:
+    { n: 'Review & Finish', t: 'Review & Finish', h:
       '<p class="sg-lead">You’re all set up. Here’s what’s ready in your Default profile:</p>' +
       '<div class="sg-ticks"><p>✓ Branding</p><p>✓ Pages turned on for residents</p><p>✓ Portal login and payment policies ready to review</p></div>' +
       '<div><button type="button" class="rmx-btn rmx-btn--primary sg-prevbtn" data-sg-preview><svg class="rmx-icon"><use href="../assets/icons-local.svg#play-arrow"></use></svg>Preview Portal</button></div>' +
       '<h4 class="sg-h sg-h--next">What would you like to do next?</h4>' +
-      '<div class="sg-opt"><b>Save as draft (recommended)</b><p>Take your time to explore. Create and preview additional profiles for other property types, fine-tune pages and policies, update the login page look and feel. Residents won’t see any changes until you activate.</p></div>' +
-      '<div class="sg-opt"><b>Activate now</b><p>Your residents will see the new portal right away. You can find all of the settings anytime in Admin &gt; rmResident Portal.</p></div>' }
+      '<div class="sg-opt"><b>Save as draft (recommended)</b><p>Take your time to explore. Create and preview additional profiles for other property types, fine-tune pages and policies, update the login page look and feel. Residents won’t see any changes until you publish.</p></div>' +
+      '<div class="sg-opt"><b>Publish now</b><p>Your residents will see the new portal right away. You can find all of the settings anytime in Admin &gt; rmResident Portal.</p></div>' }
   ];
 
   /* Colors / Themes: the side that isn't selected is dimmed (preset swatches vs the custom option) */
@@ -117,7 +117,7 @@
     wrap.querySelector('.sg-nav').innerHTML = nav();
     wrap.querySelector('.sg-main').innerHTML = '<h3 class="sg-title">' + s.t.replace('&', '&amp;') + '</h3><div class="sg-content">' + s.h + '</div>' +
       '<div class="sg-foot">' + (cur ? '<button type="button" class="rmx-btn rmx-btn--secondary" data-back>Back</button>' : '<span></span>') +
-      (last ? '<span class="sg-foot__r"><button type="button" class="rmx-btn rmx-btn--primary" data-activate>Activate</button><button type="button" class="rmx-btn rmx-btn--primary" data-save>Save as Draft</button></span>'
+      (last ? '<span class="sg-foot__r"><button type="button" class="rmx-btn rmx-btn--primary" data-activate data-ro-final>Publish</button><button type="button" class="rmx-btn rmx-btn--primary" data-save>Save as Draft</button></span>'
             : '<button type="button" class="rmx-btn rmx-btn--primary" data-next>Next</button>') + '</div>';
     var b = window.PB.brand(), pg = window.PB.pages();
     [].forEach.call(wrap.querySelectorAll('.sg-radio'), function (r) { var v = b[r.dataset.name]; if (v) r.setAttribute('aria-checked', String(window.PB.slug(r.textContent) === v)); });

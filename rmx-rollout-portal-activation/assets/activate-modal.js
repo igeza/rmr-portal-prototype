@@ -7,13 +7,13 @@
   function icon(id) { return '<svg class="rmx-icon"><use href="' + I + id + '"></use></svg>'; }
   var choice = 'guided';
   /* Confirm Activation (Figma 2972:56232) — shared by every Activate button. */
-  function confirmActivate(onYes) {
+  function confirmActivate(onYes, kind) {
     if (document.querySelector('.sg-confirm')) return;
     var d = document.createElement('div'); d.className = 'sg-confirm';
-    d.innerHTML = '<div class="ro-scrim" style="z-index:990"></div><div class="ro-dialog ro-popup" role="alertdialog" aria-label="Confirm Activation" style="z-index:1000">' +
-      '<div class="rmx-overlay__header" data-rmx-component="Overlay Header"><span>Confirm Activation</span><span class="sg-confirm__icons"><a href="#" data-confirm-close aria-label="Close">' + icon('close') + '</a></span></div>' +
-      '<div class="ro-dialog__body">' + icon('info-filled') + '<p>Activating will make rmResident Portal the live experience for all residents and retire TWA across all locations.</p></div>' +
-      '<div class="rmx-overlay__footer" data-rmx-component="Overlay Footer"><button type="button" class="rmx-btn rmx-btn--primary" data-confirm-go>Activate</button><button type="button" class="rmx-btn rmx-btn--secondary" data-confirm-close>Cancel</button></div></div>';
+    d.innerHTML = '<div class="ro-scrim" style="z-index:990"></div><div class="ro-dialog ro-popup" role="alertdialog" aria-label="Confirm Publish" style="z-index:1000">' +
+      '<div class="rmx-overlay__header" data-rmx-component="Overlay Header"><span>Confirm Publish</span><span class="sg-confirm__icons"><a href="#" aria-label="Help">' + icon('help') + '</a><a href="#" data-confirm-close aria-label="Close">' + icon('close') + '</a></span></div>' +
+      '<div class="ro-dialog__body">' + icon('info-filled') + '<div class="sg-confirm__text">' + (kind === 'skip' ? '<p>Publishing now will make rmResident Portal the live experience for all residents and retire TWA across all locations using the default settings.</p><p>Do you want to continue?</p>' : '<p>Publishing will make rmResident Portal the live experience for all residents and retire TWA across all locations.</p>') + '</div></div>' +
+      '<div class="rmx-overlay__footer" data-rmx-component="Overlay Footer"><button type="button" class="rmx-btn rmx-btn--primary" data-confirm-go data-ro-final>Publish</button><button type="button" class="rmx-btn rmx-btn--secondary" data-confirm-close>Cancel</button></div></div>';
     d.addEventListener('click', function (e) {
       e.stopPropagation();
       if (e.target.closest('[data-confirm-close]')) { e.preventDefault(); d.remove(); }
@@ -22,19 +22,19 @@
     document.body.appendChild(d);
   }
   window.ROConfirmActivate = confirmActivate;
-  function goActivated() { var s = window.RO.get(); s.converted = true; s.activated = true; window.RO.save(s); location.href = 'admin-activated.html'; }
+  function goActivated() { var s = window.RO.get(); s.converted = true; s.activated = true; s.justLive = true; window.RO.save(s); location.href = 'admin-activated.html'; }
   function open() {
     if (document.querySelector('.ro-act')) return;
     var w = document.createElement('div');
     w.className = 'ro-act';
     w.innerHTML = '<div class="ro-scrim"></div>' +
-      '<div class="ro-act__dialog" role="dialog" aria-label="Activate rmResident Portal">' +
+      '<div class="ro-act__dialog" role="dialog" aria-label="Get started with rmResident Portal">' +
       '<div class="ro-act__icons"><button type="button" aria-label="Help">' + icon('help') + '</button><button type="button" data-act-close aria-label="Close">' + icon('close') + '</button></div>' +
-      '<h2 class="ro-act__title">Activate rmResident Portal</h2>' +
-      '<p class="ro-act__lead">Once you activate, all your TWA settings will be copied over to the Default profile and all residents will see the new rmResident Portal. How would you like to get started?</p>' +
+      '<h2 class="ro-act__title">Get started with rmResident Portal</h2>' +
+      '<p class="ro-act__lead">We’ll do the heavy lifting for you! After this step, all your TWA settings will be automatically copied to their respective rmResident Portal settings. You can review each area and mark it Ready to Publish, or skip the review and publish now. Your residents won’t see the new portal until you publish.</p>' +
       '<div class="ro-act__opts" role="radiogroup">' +
-      '<button type="button" class="ro-act__opt" role="radio" data-opt="guided"><span class="ro-act__radio"></span><span class="ro-act__body"><span class="ro-act__head"><img class="ro-act__ic" src="' + R + 'imgTour.svg" alt="">Review Settings</span><span class="ro-act__desc">I want to review and update my portal settings before I activate the portal for my residents.</span></span></button>' +
-      '<button type="button" class="ro-act__opt" role="radio" data-opt="just"><span class="ro-act__radio"></span><span class="ro-act__body"><span class="ro-act__head"><svg class="rmx-icon ro-act__ic"><use href="' + I + 'check-circle-filled"></use></svg>Activate Now</span><span class="ro-act__desc">I want to activate the portal to my residents with a copy of my current TWA settings.</span></span></button>' +
+      '<button type="button" class="ro-act__opt" role="radio" data-opt="guided"><span class="ro-act__radio"></span><span class="ro-act__body"><span class="ro-act__head"><img class="ro-act__ic" src="' + R + 'imgTour.svg" alt="">Review Settings</span><span class="ro-act__desc">I want to review and update my portal settings before I publish the portal for my residents.</span></span></button>' +
+      '<button type="button" class="ro-act__opt" role="radio" data-opt="just"><span class="ro-act__radio"></span><span class="ro-act__body"><span class="ro-act__head"><svg class="rmx-icon ro-act__ic"><use href="' + I + 'check-circle-filled"></use></svg>Publish Now</span><span class="ro-act__desc">I want to publish the portal with a copy of my current TWA settings.</span></span></button>' +
       '</div>' +
       '<img class="ro-tourart" src="' + R + 'announcement-art.png" alt="Preview of the new rmResident Portal tenant dashboard">' +
       '<div class="ro-act__foot"><div class="ro-act__note">' + icon('info') + 'You can switch back to TWA at any point.</div><a class="rmx-btn rmx-btn--primary" href="#" data-act-next data-rmx-component="Button">Next</a></div>' +
@@ -51,9 +51,10 @@
       if (e.target.closest('[data-act-close]') || e.target.classList.contains('ro-scrim')) return w.remove();
       if (e.target.closest('[data-act-next]')) {
         e.preventDefault();
-        if (choice === 'just') return confirmActivate(goActivated);
+        if (choice === 'just') return confirmActivate(goActivated, 'skip');
         var rs = window.RO.get(); rs.reviewing = true; window.RO.save(rs);
-        location.href = 'setup-guide.html';
+        w.remove();
+        if (window.ROStepper) window.ROStepper(); else location.href = 'admin-get-started.html';
       }
     });
     document.addEventListener('keydown', function esc(e) { if (e.key === 'Escape') { w.remove(); document.removeEventListener('keydown', esc); } });
@@ -65,12 +66,17 @@
     var b = document.querySelector('[data-ro-activate-open]');
     if (!b) return;
     b.removeAttribute('data-ro-activate-open');
-    b.textContent = 'Activate';
+    b.textContent = 'Publish'; b.setAttribute('data-ro-final', '');
     var body = document.querySelector('.ro-banner--start .ro-banner__body');
-    if (body) body.textContent = 'Make sure all settings you updated are marked as Ready to Publish before activating.';
+    if (body) body.textContent = 'Make sure all settings you updated are marked as Ready to Publish before publishing.';
     var ttl = document.querySelector('.ro-banner--start .ro-banner__title');
-    if (ttl) ttl.textContent = 'Activate your portal';
+    if (ttl) ttl.textContent = 'Publish your portal';
     b.addEventListener('click', function (e) { e.preventDefault(); confirmActivate(goActivated); });
+    /* a way back into the guide next to Publish */
+    var wrapB = document.createElement('div'); wrapB.className = 'ro-banner__btns';
+    b.parentNode.insertBefore(wrapB, b);
+    var back = document.createElement('a'); back.className = 'rmx-btn rmx-btn--secondary'; back.href = window.RO.guideUrl(); back.textContent = 'Review Settings';
+    wrapB.appendChild(back); wrapB.appendChild(b);
   }
   document.addEventListener('DOMContentLoaded', splitUp);
   /* The four portal settings stay hidden while the Get Started banner is showing, i.e. until the portal is activated

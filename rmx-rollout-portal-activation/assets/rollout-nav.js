@@ -13,13 +13,14 @@ document.addEventListener('click', function (e) {
   location.href = target;
 }, true);
 
-/* Clicking the Rent Manager logo in the app bar resets the walkthrough and returns to the start. */
+/* Clicking the Rent Manager logo resets the walkthrough and opens the dashboard; clicking the account (top right)
+   resets it and returns to Administration with the Get Started banner. */
 document.addEventListener('click', function (e) {
-  var logo = e.target.closest('.rmx-appbar__leading');
-  if (!logo) return;
+  var logo = e.target.closest('.rmx-appbar__leading'), acct = e.target.closest('.rmx-appbar__user');
+  if (!logo && !acct) return;
   e.preventDefault();
   try { localStorage.removeItem('roState'); sessionStorage.removeItem('roPtourReturn'); } catch (x) {}
-  location.href = 'admin-get-started.html';
+  location.href = logo ? 'dashboard.html' : 'admin-get-started.html';
 }, true);
 
 /* Administration pages: the left menu follows the section at the top of the scroll area, and clicking an item scrolls to it.
