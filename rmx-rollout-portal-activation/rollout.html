@@ -9,9 +9,16 @@
   /* walkthrough state lives in memory: every open of this file starts fresh */
   /* a tab opened from another copy of this file (a profile opened in a new tab) starts from that tab's state and writes changes back to it */
   var peer = null; try { peer = window.opener && window.opener.__ls && window.opener.__ls._m ? window.opener : null; } catch (e) {}
-  function store(p) { var m = {}; return { _m: m, getItem: function (k) { return k in m ? m[k] : null; }, setItem: function (k, v) { m[k] = String(v); if (p) try { p.setItem(k, v); } catch (e) {} }, removeItem: function (k) { delete m[k]; if (p) try { p.removeItem(k); } catch (e) {} } }; }
-  window.__ls = store(peer && peer.__ls); window.__ss = store();
-  if (peer) for (var k in peer.__ls._m) window.__ls._m[k] = peer.__ls._m[k];
+  /* the walkthrough state is also mirrored into this tab's sessionStorage, so it survives a full page load of a ?go= link
+     (a profile opened in the same tab, the browser's back arrow). A plain open of the file still starts fresh. */
+  var SKEY = 'roBundleState', mirror = false;
+  function save(m) { if (mirror) try { sessionStorage.setItem(SKEY, JSON.stringify(m)); } catch (e) {} }
+  function store(p, keep) { var m = {}; return { _m: m, getItem: function (k) { return k in m ? m[k] : null; }, setItem: function (k, v) { m[k] = String(v); if (keep) save(m); if (p) try { p.setItem(k, v); } catch (e) {} }, removeItem: function (k) { delete m[k]; if (keep) save(m); if (p) try { p.removeItem(k); } catch (e) {} } }; }
+  window.__ls = store(peer && peer.__ls, true); window.__ss = store();
+  mirror = true;
+  if (/[?&]go=/.test(location.search)) { try { var saved = JSON.parse(sessionStorage.getItem(SKEY) || 'null'); if (saved) for (var sk in saved) window.__ls._m[sk] = saved[sk]; } catch (e) {} }
+  else { try { sessionStorage.removeItem(SKEY); } catch (e) {} }
+  if (peer) { for (var k in peer.__ls._m) window.__ls._m[k] = peer.__ls._m[k]; save(window.__ls._m); }
   window.__ropen = function (u) { var w = window.open(location.href.split(/[?#]/)[0] + '?go=' + encodeURIComponent(u), '_blank'); if (!w) window.__rgo(u); };
   var f = document.getElementById('f'), cur = null;
   var BOOT = '<script>(function(){var P=parent;window.__loc={pathname:"/screens/"+P.__cur.name,search:P.__cur.search,hash:"",href:"/screens/"+P.__cur.name+P.__cur.search};' +
