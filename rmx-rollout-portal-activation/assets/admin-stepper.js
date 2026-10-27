@@ -20,12 +20,12 @@
     for (var i = 0; i < 3; i++) if (!RO.isReady(s, STEPS[i].key)) return i;
     return 3;
   }
-  function publish(kind) {
-    window.ROConfirmActivate(function () {
-      var s = RO.get(); s.converted = true; s.activated = true; s.justLive = true; RO.save(s);
-      location.href = 'admin-activated.html';
-    }, kind);
+  function goLive() {
+    var s = RO.get(); s.converted = true; s.activated = true; s.justLive = true; RO.save(s);
+    location.href = 'admin-activated.html';
   }
+  /* only Skip & Publish All asks for confirmation; Publish Now on the last step goes straight through */
+  function publish(kind) { if (kind === 'final') goLive(); else window.ROConfirmActivate(goLive, kind); }
   function review(i) {
     if (i === 0) location.href = 'profiles-register.html';
     else if (i === 1) { if (window.PL) window.PL.open({ onPublish: render }); }
