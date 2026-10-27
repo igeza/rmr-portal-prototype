@@ -27,9 +27,10 @@
   /* only Skip & Publish All asks for confirmation; Publish Now on the last step goes straight through */
   function publish(kind) { if (kind === 'final') goLive(); else window.ROConfirmActivate(goLive, kind); }
   function review(i) {
-    if (i === 0) location.href = 'profiles-register.html';
+    /* Review goes straight into the Default profile / Default payment policy */
+    if (i === 0) location.href = 'profile-branding.html?p=default';
     else if (i === 1) { if (window.PL) window.PL.open({ onPublish: render }); }
-    else location.href = 'payments-register.html';
+    else { var t = RO.get(); t.autoOpen = 'policy'; RO.save(t); location.href = 'payments-register.html'; }
   }
 
   function render() {

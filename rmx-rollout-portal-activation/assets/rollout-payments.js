@@ -97,4 +97,6 @@
   });
 
   render();
+  /* arriving from Review: open the Default policy straight away */
+  var auto = RO.get(); if (auto.autoOpen === 'policy') { auto.autoOpen = ''; RO.save(auto); openPolicy('default'); }
 })();

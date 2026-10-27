@@ -27,7 +27,7 @@
       else if (e.target.closest('[data-rs-next]')) {
         e.preventDefault(); w.remove();
         if (st.go === 'login') { var t = RO.get(); t.autoOpen = 'login'; RO.save(t); location.href = 'admin-get-started.html'; }
-        else location.href = st.go;
+        else { if (st.go === 'payments-register.html') { var u = RO.get(); u.autoOpen = 'policy'; RO.save(u); } location.href = st.go; }
       }
     });
     document.body.appendChild(w);
