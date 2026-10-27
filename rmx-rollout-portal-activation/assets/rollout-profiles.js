@@ -212,6 +212,8 @@
       setIn($('#pd-status'), lozenge(st));
       $$('[data-ro-status]').forEach(function (n) { setIn(n, lozenge(st)); });
       $$('[data-ro-act="publish"]').forEach(function (b) { b.textContent = dirty ? 'Save & Publish' : 'Publish'; });
+      /* once marked Ready to Publish there is nothing left to save: hide the Save Draft / Publish footers until something changes */
+      $$('.ro-pdfoot, .rmx-overlay__footer').forEach(function (f) { if (f.querySelector('[data-ro-act="save"]')) f.hidden = st === 'ready'; });
     };
     paint();
     $$('[data-ro-keep]').forEach(function (a) { a.setAttribute('href', a.getAttribute('href') + (location.search || '')); });

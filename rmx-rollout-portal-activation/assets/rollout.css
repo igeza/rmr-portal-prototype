@@ -1073,3 +1073,5 @@ details.ro-sub > summary { height: 46px; min-height: 46px; box-sizing: border-bo
 .ro-banner__tour:hover { text-decoration: underline; }
 .ro-banner__tour .ro-tour__ic { width: 20px; height: 20px; flex: none; }
 .ro-section:has(.ro-banner--start) .ro-sectitle .ro-tour { display: none; }
+
+.ro-pdfoot[hidden], .rmx-overlay__footer[hidden] { display: none !important; }
