@@ -1090,3 +1090,7 @@ details.ro-sub > summary { height: 46px; min-height: 46px; box-sizing: border-bo
 .sg-confirm__text { flex: 1; min-width: 0; }
 /* small popups never reserve a scrollbar gutter, so header/body/footer reach both edges */
 .ro-popup.ro-dialog, .sg-confirm .ro-popup { scrollbar-gutter: auto; }
+
+/* register headers: grey bar, white 13px semibold labels with wide tracking, soft column dividers (matches the Rent Manager register) */
+.ro-pftable .rmx-register th { background: #707070; color: #fff; font: 600 13px/16px Roboto, sans-serif; letter-spacing: 1px; height: 30px; padding: 0 var(--spacing-xs); border-right: 1px solid rgba(255, 255, 255, .3); vertical-align: middle; }
+.ro-pftable .rmx-register th:last-child { border-right: 0; }
