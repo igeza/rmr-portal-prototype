@@ -81,13 +81,10 @@
     s.justLive = false; RO.save(s);
     var w = document.createElement('div'); w.className = 'ro-act ro-live';
     w.innerHTML = '<div class="ro-scrim"></div><div class="ro-act__dialog ro-live__dialog" role="dialog" aria-label="rmResident Portal is now live">' +
-      '<div class="ro-act__icons"><button type="button" aria-label="Help">' + icon('help') + '</button><button type="button" data-live-close aria-label="Close">' + icon('close') + '</button></div>' +
+      '<div class="ro-act__icons"><button type="button" data-live-close aria-label="Close">' + icon('close') + '</button></div>' +
       '<h2 class="ro-act__title">rmResident Portal is now live!</h2>' +
       '<p class="ro-act__lead">All your residents are now using rmResident Portal. To help them get started, download resident-ready guides from the Online Template Library. If you need to switch back to Tenant Web Access (TWA), you can do that anytime in Web Preferences.</p>' +
-      '<div class="ro-live__mail"><b>Subject: Introducing the NEW Online Resident Portal</b><span>Hello [FirstName()],</span>' +
-      '<span>We’re excited to introduce the redesigned online portal—rmResident!</span>' +
-      '<span>This revision of the previous portal, TWA, makes everyday tasks faster, easier to find, and simpler to manage with updated graphics and a centralized dashboard.</span>' +
-      '<span>While the experience looks new, rmResident retains the core capabilities you know. You’ll still be able to make payments, manage autopay, submit service issues, and more, all with your existing login credentials.</span></div>' +
+      '<div class="ro-live__docs"><img src="../assets/rollout/live/doc-app.png" alt="Download the New rmResident App"><img src="../assets/rollout/live/doc-faq.png" alt="Frequently Asked Questions"><img src="../assets/rollout/live/doc-email.png" alt="Introducing the New Online Resident Portal email"></div>' +
       '<div class="ro-live__foot"><button type="button" class="rmx-btn rmx-btn--primary" data-live-close data-ro-final>Download Documents</button></div></div>';
     w.addEventListener('click', function (e) {
       if (e.target.closest('[data-live-close]') || e.target.classList.contains('ro-scrim')) w.remove();
