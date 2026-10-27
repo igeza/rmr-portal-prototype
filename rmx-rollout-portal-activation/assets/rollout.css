@@ -1112,3 +1112,6 @@ details.ro-sub > summary { height: 46px; min-height: 46px; box-sizing: border-bo
 .ro-rs__next { display: flex; flex-direction: column; gap: var(--spacing-xxs); padding: var(--spacing-md); background: var(--background-ui-primary); border-radius: var(--spacing-xs); font: var(--type-paragraph-l-regular); color: var(--text-primary); }
 .ro-rs__next b { font: var(--type-paragraph-l-semibold); color: var(--text-secondary); }
 .ro-rs__foot { display: flex; justify-content: flex-end; gap: var(--spacing-md); }
+
+/* registers always span the full width: shrinking a column redistributes the space instead of leaving white on the right */
+.ro-pftable .rmx-register { min-width: 100%; }
