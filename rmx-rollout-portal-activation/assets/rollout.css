@@ -1145,3 +1145,7 @@ details.ro-sub > summary { height: 46px; min-height: 46px; box-sizing: border-bo
 .ro-rs__nextlbl { font: var(--type-label-m-semibold, 600 12px/16px Roboto, sans-serif); letter-spacing: .5px; text-transform: uppercase; color: var(--text-secondary); }
 .ro-rs__next b { font: var(--type-heading-m-semibold, 600 18px/24px Roboto, sans-serif); color: var(--text-secondary); }
 .ro-rs__body .ro-rs__done b { color: var(--text-secondary); }
+
+/* Next steps overlay per Figma "Next Steps": light-blue callout, grey label */
+.ro-rs__next { background: var(--background-swim-lane, #e8f6fa); }
+.ro-rs__nextlbl { color: var(--text-primary); }

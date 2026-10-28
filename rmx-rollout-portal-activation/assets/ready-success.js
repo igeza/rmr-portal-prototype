@@ -8,7 +8,7 @@
   var STEPS = {
     'prof:default': { done: 'Portal Profiles', what: 'The Default profile is marked Ready to Publish.', next: 'Portal Login', text: 'Your login page is the same for every resident, no matter which portal profile their property uses. Review it and mark it Ready to Publish.', go: 'login' },
     'login:default': { done: 'Portal Login', what: 'The login page is marked Ready to Publish.', next: 'Payment Policies', text: 'Set up different payment policies for each property. Review the Default policy and mark it Ready to Publish.', go: 'payments-register.html' },
-    'pay:default': { done: 'Payment Policies', what: 'The Default payment policy is marked Ready to Publish.', next: 'Publish', text: 'You’ve now reviewed everything. Publish to make rmResident Portal available to your residents.', go: 'admin-get-started.html' }
+    'pay:default': { done: 'Payment Policies', what: 'The Default payment policy is marked Ready to Publish.', next: 'Publish', text: 'You’ve now reviewed everything. Publish to make rmResident Portal available to your residents.', go: 'admin-get-started.html', primary: 'Publish Now', live: true }
   };
 
   window.ROReadySuccess = function (key) {
@@ -19,13 +19,14 @@
       '<div class="rmx-overlay__header" data-rmx-component="Overlay Header"><span>Ready to Publish</span>' +
       '<a href="#" data-rs-stay aria-label="Close">' + icon('close') + '</a></div>' +
       '<div class="ro-dialog__body ro-rs__body"><p class="ro-rs__done"><span class="ro-rs__ok">' + icon('check-circle-filled') + '</span><b>' + st.done + ' reviewed</b></p><p>' + st.what + '</p><div class="ro-rs__next"><span class="ro-rs__nextlbl">Next step</span><b>' + st.next + '</b><span>' + st.text + '</span></div></div>' +
-      '<div class="rmx-overlay__footer" data-rmx-component="Overlay Footer"><button type="button" class="rmx-btn rmx-btn--primary" data-rs-next>Review Next Step</button><button type="button" class="rmx-btn rmx-btn--secondary" data-rs-admin>Back to Administration</button></div></div>';
+      '<div class="rmx-overlay__footer" data-rmx-component="Overlay Footer"><button type="button" class="rmx-btn rmx-btn--primary" data-rs-next>' + (st.primary || 'Review Next Step') + '</button><button type="button" class="rmx-btn rmx-btn--secondary" data-rs-admin>Back to Administration</button></div></div>';
     w.addEventListener('click', function (e) {
       e.stopPropagation();
       if (e.target.closest('[data-rs-stay]')) { e.preventDefault(); w.remove(); }
       else if (e.target.closest('[data-rs-admin]')) { e.preventDefault(); w.remove(); location.href = 'admin-get-started.html'; }
       else if (e.target.closest('[data-rs-next]')) {
         e.preventDefault(); w.remove();
+        if (st.live) { var g = RO.get(); g.converted = true; g.activated = true; g.justLive = true; RO.save(g); location.href = 'admin-activated.html'; return; }
         if (st.go === 'login') { var t = RO.get(); t.autoOpen = 'login'; RO.save(t); location.href = 'admin-get-started.html'; }
         else { if (st.go === 'payments-register.html') { var u = RO.get(); u.autoOpen = 'policy'; RO.save(u); } location.href = st.go; }
       }
