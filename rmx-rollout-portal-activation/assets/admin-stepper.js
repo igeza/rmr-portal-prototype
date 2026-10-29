@@ -12,7 +12,7 @@
   var STEPS = [
     { n: 'Portal Profiles', key: 'prof:default', text: 'You can create separate portals for different property types, each with its own look and page settings. To continue, review the Default profile and mark it Ready to Publish.' },
     { n: 'Portal Login', key: 'login:default', text: 'Your login page is the same for every resident, no matter which portal profile their property uses. To continue, review it and mark it Ready to Publish.' },
-    { n: 'Payment Policies', key: 'pay:default', text: 'Set up different payment policies for each property. To continue, review the Default policy and mark it Ready to Publish.' },
+    { n: 'Payment Policies', key: 'pay:default', text: 'Your portal payment settings have been consolidated into Payment Policies for improved oversight and greater flexibility. You can create a separate policy for each property and customize exactly what tenants see in the portal. To get started, review your Default policy and mark it Ready to Publish.' },
     { n: 'Publish', text: 'You’ve now reviewed everything. Publish now to make rmResident Portal available to your residents.' }
   ];
   function current() {
