@@ -1081,7 +1081,7 @@ details.ro-sub > summary { height: 46px; min-height: 46px; box-sizing: border-bo
 .ro-live__docs img { width: 153px; height: 202px; display: block; }
 
 /* tour cards share one size (the tallest step); shorter viewports scroll the card, nav stays pinned */
-.ro-tourcard { height: min(700px, calc(100vh - 32px)); padding-bottom: 0; box-sizing: border-box; }
+.ro-tourcard { height: min(747px, calc(100vh - 32px)); padding-bottom: 0; box-sizing: border-box; }
 .ro-tourcard .ro-tournav { position: sticky; bottom: 0; margin-top: auto; background: var(--container-primary); padding: var(--spacing-md) 0 var(--spacing-xl); }
 
 /* Confirm Publish: text runs the full width of the dialog body (Figma 2972:56232) */
