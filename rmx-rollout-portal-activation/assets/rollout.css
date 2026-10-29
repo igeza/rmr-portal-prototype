@@ -1149,3 +1149,7 @@ details.ro-sub > summary { height: 46px; min-height: 46px; box-sizing: border-bo
 /* Next steps overlay per Figma "Next Steps": light-blue callout, grey label */
 .ro-rs__next { background: var(--background-swim-lane, #e8f6fa); }
 .ro-rs__nextlbl { color: var(--text-primary); }
+
+/* tour text: lighter rendering (grayscale antialiasing) so Roboto 400 doesn't look heavy */
+.ro-tourcard, .ro-tourcard * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+.ro-tourart { image-rendering: auto; }
